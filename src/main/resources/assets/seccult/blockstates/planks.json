@@ -1,0 +1,6 @@
+{
+    "variants": 
+    {
+        "variant=everything": { "model": "oak_planks" }
+    }
+}

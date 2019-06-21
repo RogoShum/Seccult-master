@@ -1,0 +1,44 @@
+{
+   "parent": "item/generated",
+   "textures": {
+       "layer0": "seccult:items/wand"
+   },
+   "overrides": [
+	{
+      "predicate": {
+        "seccult:wandstyle": 1
+      },
+      "model": "seccult:item/wand1"
+    },
+	{
+      "predicate": {
+        "seccult:wandstyle": 2
+      },
+      "model": "seccult:item/wand2"
+    },
+	{
+      "predicate": {
+        "seccult:wandstyle": 3
+      },
+      "model": "seccult:item/wand3"
+    },
+	{
+      "predicate": {
+        "seccult:wandstyle": 4
+      },
+      "model": "seccult:item/wand4"
+    },
+		{
+      "predicate": {
+        "seccult:wandstyle": 5
+      },
+      "model": "seccult:item/wand5"
+    },
+	{
+      "predicate": {
+        "seccult:wandstyle": 6
+      },
+      "model": "seccult:item/wand6"
+    }
+  ]
+}

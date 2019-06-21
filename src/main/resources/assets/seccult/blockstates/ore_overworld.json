@@ -1,0 +1,6 @@
+{
+    "variants":
+    {
+        "variant=unterra": { "model": "seccult:ore_overworld_unterra" }
+    }
+}

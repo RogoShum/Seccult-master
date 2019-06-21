@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "check_decay=true,decayable=true,variant=everything": { "model": "oak_leaves" },
+        "check_decay=true,decayable=false,variant=everything": { "model": "oak_leaves" },
+        "check_decay=false,decayable=true,variant=everything": { "model": "oak_leaves" },
+        "check_decay=false,decayable=false,variant=everything": { "model": "oak_leaves" }
+    }
+}

@@ -1,0 +1,6 @@
+{
+   "parent": "block/cube_all",
+   "textures": {
+       "all": "seccult:blocks/ore_overworld_unterra"
+   }
+}

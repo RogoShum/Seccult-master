@@ -1,0 +1,111 @@
+{
+   "parent": "item/generated",
+   "textures": {
+       "layer0": "seccult:items/light"
+   },
+   "display": {
+    "gui": {
+      "rotation": [ 0, -20, -40 ],
+      "translation": [ 0, 0, 0 ],
+      "scale": [ 1.4, 1.4, 1.4 ]
+    },
+    "ground": {
+      "rotation": [ 0, 0, 0 ],
+      "translation": [ 0, 0, 0 ],
+      "scale": [ 1.4, 1.4, 1.4 ]
+    },
+    "fixed": {
+      "rotation": [ 0, 0, 0 ],
+      "translation": [ 0, 0, 0 ],
+      "scale": [ 1.45, 1.45, 1.45 ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [ 0, 90, 0 ],
+      "translation": [ 0, 0, 0 ],
+      "scale": [ 1.1, 1.4, 1.4 ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [ 0, -90, 0 ],
+      "translation": [ 0, 0, 0 ],
+      "scale": [ 1.4, 1.4, 1.4 ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [ 10, 80, -5 ],
+      "translation": [ 0, 0, 0 ],
+      "scale": [ 1.45, 1.45, 1.45 ]
+    },
+    "firstperson_righthand": {
+      "rotation": [ 10, -80, 5 ],
+      "translation": [ 0, 0, 0 ],
+      "scale": [ 1.45, 1.45, 1.45 ]
+    }
+	},
+   "overrides": [
+    {
+      "predicate": {
+        "seccult:projectile": 0
+      },
+      "model": "seccult:item/enchant_beam"
+    },
+	{
+      "predicate": {
+        "seccult:projectile": 1
+      },
+      "model": "seccult:item/terra_beam"
+    },
+	{
+      "predicate": {
+        "seccult:projectile": 4
+      },
+      "model": "seccult:item/excalibur_beam"
+    },
+	{
+      "predicate": {
+        "seccult:projectile": 9
+      },
+      "model": "seccult:item/influx_waver_beam"
+    },
+	{
+      "predicate": {
+        "seccult:projectile": 10
+      },
+      "model": "seccult:item/meow_beam"
+    },
+		{
+      "predicate": {
+        "seccult:projectile": 11
+      },
+      "model": "seccult:item/beam_sword_beam"
+    },
+	{
+      "predicate": {
+        "seccult:projectile": 12
+      },
+      "model": "seccult:item/vampire_knife_beam"
+    },
+	{
+      "predicate": {
+        "seccult:projectile": 13
+      },
+      "model": "seccult:item/daybreak"
+    },
+	{
+      "predicate": {
+        "seccult:projectile": 15
+      },
+      "model": "seccult:item/solar_eruption_beam_a"
+    },
+	{
+      "predicate": {
+        "seccult:projectile": 16
+      },
+      "model": "seccult:item/solar_eruption_beam_c"
+    },
+	{
+      "predicate": {
+        "seccult:projectile": 17
+      },
+      "model": "seccult:item/solar_eruption_beam_b"
+    }
+  ]
+}

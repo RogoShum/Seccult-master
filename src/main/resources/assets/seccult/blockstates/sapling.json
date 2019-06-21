@@ -1,0 +1,7 @@
+{
+    "variants": 
+    {
+        "stage=0,variant=everything": { "model": "oak_sapling" },
+        "stage=1,variant=everything": { "model": "oak_sapling" }
+    }
+}
