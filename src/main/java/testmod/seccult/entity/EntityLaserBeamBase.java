@@ -2,6 +2,7 @@ package testmod.seccult.entity;
 
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,6 +16,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import testmod.seccult.client.FX.SuperLaserBeamFX;
 import testmod.seccult.util.MathHelper.MathHelper;
 
 public class EntityLaserBeamBase extends Entity{
@@ -33,6 +35,7 @@ public class EntityLaserBeamBase extends Entity{
 	private int lifetime;
 	private double[] position = new double[3];
 	private LaserLengthChecker lengthchecker = new LaserLengthChecker();
+	private SuperLaserBeamFX laserbeam;
 	
 	public EntityLaserBeamBase(World worldIn) {
 		super(worldIn);
@@ -137,7 +140,30 @@ public class EntityLaserBeamBase extends Entity{
     	if(this.getMyWidth() == 1)
     		return;
     	this.collideWithNearbyEntities();
+    	if(isTail)
+    	{
+    	 	if(laserbeam == null || (laserbeam != null && !laserbeam.isAlive()))
+    	 	{
+    	 		//System.out.println("QAQ???");
+    	 		createLaser(this.world, this.posX, this.posY, this.posZ, this, 20);
+    	 	}
+    	 	else if(laserbeam != null)
+    	 	{
+    	 		//System.out.println(laserbeam);
+    	 		//System.out.println("QAQ???");
+    	 		//System.out.println(laserbeam.isAlive());
+    	 		laserbeam.setHeight(20);
+    	 	}
+    	}
     }
+    
+	public void createLaser(World worldIn, double posXIn, double posYIn, double posZIn, Entity player, float height)
+	{
+		//System.out.println("QAQ");
+			SuperLaserBeamFX laser =  new SuperLaserBeamFX(worldIn, posXIn, posYIn, posZIn, player, height);
+			Minecraft.getMinecraft().effectRenderer.addEffect(laser);
+			this.laserbeam = (SuperLaserBeamFX) laser;
+	}
     
     protected void collideWithNearbyEntities()
     {

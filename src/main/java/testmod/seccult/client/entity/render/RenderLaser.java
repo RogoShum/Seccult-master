@@ -2,10 +2,13 @@ package testmod.seccult.client.entity.render;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Cylinder;
+import org.lwjgl.util.glu.Disk;
 import org.lwjgl.util.glu.GLU;
 
+import net.minecraft.block.BlockBeacon;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -13,13 +16,16 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.ClientProxy;
 import testmod.seccult.Seccult;
+import testmod.seccult.client.FX.SuperLaserBeamFX;
 import testmod.seccult.client.entity.model.*;
 import testmod.seccult.entity.EntityLaserBeamBase;
 
@@ -30,6 +36,7 @@ public class RenderLaser extends Render<EntityLaserBeamBase>
 	private static ResourceLocation darkPTexture = new ResourceLocation("seccult:textures/entity/darktexture.png");
 	private final ModelBase laser = new ModelLaser();
 	private final ModelBase laserLayer = new ModelLaserLayer();
+	private SuperLaserBeamFX laserbeam;
 	
 	public int cylinderIdOutside;
 	public int cylinderIdInside;
@@ -38,6 +45,7 @@ public class RenderLaser extends Render<EntityLaserBeamBase>
 	{
 		super(renderManager);
 		this.shadowSize = 0F;
+		this.laserbeam = null;
 	}
 	
 	@Override
@@ -95,99 +103,92 @@ public class RenderLaser extends Render<EntityLaserBeamBase>
 		GlStateManager.popMatrix();
 		*/
 		
-		
-		if(entity.getMyWidth() == 1) {
-		if(entity.getMyTag().hasKey("X")) {
+		if(!(entity.getMyWidth() == 1)) return;
+		if(!entity.getMyTag().hasKey("X")) return;
 		double x2 = entity.getMyTag().getDouble("X");
 		double y2 = entity.getMyTag().getDouble("Y");
 		double z2 = entity.getMyTag().getDouble("Z");
+		float dx = (float) (x2 - x);
+	    float dy = (float) (y2 - y);
+		float dz = (float) (z2 - z);
+		float distance = (float) Math.sqrt(dx*dx + dy*dy + dz*dz);
+		
 		Vec3d lok = entity.getLookVec();
-		 	Vec3d position = new Vec3d(x,y,z);
-		 	Vec3d QAQ = position.addVector(lok.x * 2, lok.y * 1, lok.z * 1);
-		GlStateManager.pushMatrix();
-	    GlStateManager.translate((float)QAQ.x, (float)QAQ.y + (entity.height / 3), (float)QAQ.z);
-	    int i = 15728880;
-        int j = i % 65536;
-        int k = i / 65536;
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
-		DrawChannel(-(float)x, -(float)y + (entity.height/2), -(float)z, -(float)(x2+x), -(float)(y2+y) + (entity.height/2), -(float)(z2+z), yaw, entity.rotationPitch);
-		GlStateManager.popMatrix();
-		}
-		}
+		Vec3d position = new Vec3d(x,y,z);
+	 	Vec3d QAQ = position.addVector(lok.x * 2, lok.y * 5, lok.z * 2);
+		//DrawChannel(-(float)x, -(float)y + (entity.height/2), -(float)z, -(float)(x2+x), -(float)(y2+y) + (entity.height/2), -(float)(z2+z), yaw, entity.rotationPitch);
+	 	//System.out.println(x);
+	 	
+	 	if(laserbeam == null || (laserbeam != null && !laserbeam.isAlive()))
+	 	{
+	 		//System.out.println("QAQ???");
+	 		createLaser(entity.world, QAQ.x, QAQ.y, QAQ.z, entity, distance - 1);
+	 	}
+	 	else if(laserbeam != null)
+	 	{
+	 		//System.out.println(laserbeam);
+	 		//System.out.println("QAQ???");
+	 		//System.out.println(laserbeam.isAlive());
+	 		laserbeam.setHeight(distance - 1);
+	 	}
+	 	
+	}
+	
+	public void createLaser(World worldIn, double posXIn, double posYIn, double posZIn, Entity player, float height)
+	{
+		//System.out.println("QAQ");
+			SuperLaserBeamFX laser =  new SuperLaserBeamFX(worldIn, posXIn, posYIn, posZIn, player, height);
+			Minecraft.getMinecraft().effectRenderer.addEffect(laser);
+			this.laserbeam = (SuperLaserBeamFX) laser;
 	}
 	
 	public void cylinderRender(float radius, float height) {
-		Cylinder Cylinder = new Cylinder();
-		//Set up paramters that are common to both outside and inside.
-
-		//GLU_FILL as a solid.
-		Cylinder.setDrawStyle(GLU.GLU_FILL);
-		//GLU_SMOOTH will try to smoothly apply lighting
-		Cylinder.setNormals(GLU.GLU_NONE);
-		Cylinder.setTextureFlag(true);
-		//First make the call list for the outside of the sphere
-
-		Cylinder.setOrientation(GLU.GLU_OUTSIDE);
-
-		cylinderIdOutside = GlStateManager.glGenLists(1);
-		//Create a new list to hold our sphere data.
-		GlStateManager.glNewList(cylinderIdOutside, GL11.GL_COMPILE);
-		//binds the texture 
-		//The drawing the sphere is automatically doing is getting added to our list. Careful, the last 2 variables
-		//control the detail, but have a massive impact on performance. 32x32 is a good balance on my machine.s
-		Cylinder.draw(radius, radius, height, 64, 64);
-		GlStateManager.glEndList();
-
-		//Now make the call list for the inside of the sphere
-		Cylinder.setOrientation(GLU.GLU_INSIDE);
-		cylinderIdInside = GlStateManager.glGenLists(1);
-		//Create a new list to hold our sphere data.
-		GlStateManager.glNewList(cylinderIdInside, GL11.GL_COMPILE);
-		Cylinder.draw(radius, radius, height, 64, 64);
-		GlStateManager.glEndList();
+		Cylinder cylinder = new Cylinder();
+		cylinder.setDrawStyle(GLU.GLU_FILL);		
+		cylinder.setNormals(GLU.GLU_NONE);
+		//cylinder.setTextureFlag(true);
+		cylinder.draw(radius, radius, height, 32, 32);
+		//System.out.println(radius);
 	}
 	
-	public void Cylinder(float radius, float height, float alpha)
-	{
-		cylinderRender(radius, height);
-	    GlStateManager.pushMatrix();
-	    if(alpha == 1)
-	    	GlStateManager.color(1.0F, 1F, 1.0F, alpha);
-	    else
-        GlStateManager.color(0.0F, 1.0F, 0.0F, alpha);
-        GlStateManager.enableNormalize();
-        GlStateManager.depthMask(false);
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-		Minecraft.getMinecraft().getTextureManager().bindTexture(darkPTexture);
-	    GlStateManager.callList(cylinderIdOutside);
-	    GlStateManager.callList(cylinderIdInside);
-	    GlStateManager.depthMask(true);
-        GlStateManager.disableBlend();
-        GlStateManager.disableNormalize();
-	    GlStateManager.popMatrix();
+	public void diskRender(float radius) {
+		Disk cylinder = new Disk();
+		cylinder.setDrawStyle(GLU.GLU_FILL);		
+		cylinder.setNormals(GLU.GLU_NONE);
+		//cylinder.setTextureFlag(true);
+		cylinder.draw(0, radius, 32, 32);
 	}
 	
-	public void Sphere(float sizee)
+	public void Cylinder(float radius, float height, float alpha, float red, float green, float blue)
 	{
-	    GlStateManager.pushMatrix();
-	    GlStateManager.scale(sizee, sizee, sizee);
-	    GlStateManager.color(0.0F, 1F, 0.0F, 0.5F);
         GlStateManager.enableNormalize();
-        GlStateManager.depthMask(false);
+        //GlStateManager.depthMask(true);
         GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.enableAlpha();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_CONSTANT_ALPHA);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(darkPTexture);
-	    GlStateManager.callList(ClientProxy.sphereIdOutside);
-	    GlStateManager.callList(ClientProxy.sphereIdInside);
-	    GlStateManager.depthMask(true);
+	    for(float r = radius / 3; r < radius;)
+	    {
+	    	GlStateManager.pushMatrix();
+		    if(r == radius / 3)
+		    	GlStateManager.color(1.0F, 1F, 1.0F, alpha);
+		    else
+		    	GlStateManager.color(red, green, blue, 0.1001F);
+	    	cylinderRender(r, height);
+		    r += 0.01F;
+		    
+			GlStateManager.pushMatrix();
+			GlStateManager.rotate(180, 0.0F, 1.0F, 0.0F);
+			diskRender(r - 0.01F);
+			GlStateManager.popMatrix();
+			GlStateManager.popMatrix();
+	    }
+		//GlStateManager.depthMask(false);
         GlStateManager.disableBlend();
         GlStateManager.disableNormalize();
-	    GlStateManager.popMatrix();
 	}
 	
 	public void DrawChannel(float x1, float y1, float z1, float x2, float y2, float z2, float yaw, float pitch){
-		//System.out.println(x1+" "+y1+" "+z1+" "+x2+" "+y2+" "+z2);
 		float dx = x2 - x1;
 	    float dy = y2 - y1;
 		float dz = z2 - z1;
@@ -197,30 +198,42 @@ public class RenderLaser extends Render<EntityLaserBeamBase>
 	    GlStateManager.translate(x1,y1,z1); 
 	    GlStateManager.rotate(-yaw  * 0.017453292F * (180F / (float)Math.PI), 0.0F, 1.0F, 0.0F);
 	    GlStateManager.rotate(pitch * 0.017453292F * (180F / (float)Math.PI), 1.0F, 0.0F, 0.0F);
-	    GlStateManager.pushMatrix();
-	    Cylinder(0.1F,distance, 1F);
-	    Cylinder(0.18F,distance, 0.1001F);
-	    Cylinder(0.22F,distance, 0.1001F);
-	    Cylinder(0.25F,distance, 0.1001F);
-	    Cylinder(0.28F,distance, 0.1001F);
-	    Cylinder(0.31F,distance, 0.1001F);
-	    //Cylinder(0.34F,distance, 0.1001F);
-	    //Cylinder(0.37F,distance, 0.1001F);
-	    //Cylinder(0.4F,distance, 0.1001F);
-	    GlStateManager.popMatrix();
+	    Cylinder(0.3F,distance, 0.7F, 1F, 0.5F, 0F);
 	    GlStateManager.popMatrix();
 	    
 	    GlStateManager.pushMatrix();
-	    GlStateManager.translate(x1,y1,z1);   
-	    Sphere(0.6F);
+	    GlStateManager.translate(x1 + 1,y1 + 1,z1 + 1); 
+	    GlStateManager.rotate(-yaw  * 0.017453292F * (180F / (float)Math.PI), 0.0F, 1.0F, 0.0F);
+	    GlStateManager.rotate(pitch * 0.017453292F * (180F / (float)Math.PI), 1.0F, 0.0F, 0.0F);
+	    Cylinder(0.25F,distance, 0.7F, 0F,0F,0.5F);
 	    GlStateManager.popMatrix();
 	    
-	   
-	    
-
 	    GlStateManager.pushMatrix();
-	    GlStateManager.translate(x2,y2,z2);   
-	    Sphere(0.8F);       
+	    GlStateManager.translate(x1 + 2,y1 -1,z1 + 2); 
+	    GlStateManager.rotate(-yaw  * 0.017453292F * (180F / (float)Math.PI), 0.0F, 1.0F, 0.0F);
+	    GlStateManager.rotate(pitch * 0.017453292F * (180F / (float)Math.PI), 1.0F, 0.0F, 0.0F);
+	    Cylinder(0.2F,distance, 0.7F, 0F,0.5F,0.5F);
+	    GlStateManager.popMatrix();
+	    
+	    GlStateManager.pushMatrix();
+	    GlStateManager.translate(x1 + 3,y1 -1,z1 + 2); 
+	    GlStateManager.rotate(-yaw  * 0.017453292F * (180F / (float)Math.PI), 0.0F, 1.0F, 0.0F);
+	    GlStateManager.rotate(pitch * 0.017453292F * (180F / (float)Math.PI), 1.0F, 0.0F, 0.0F);
+	    Cylinder(0.2F,distance, 0.7F, 1F,0.0F,0.5F);
+	    GlStateManager.popMatrix();
+	    
+	    GlStateManager.pushMatrix();
+	    GlStateManager.translate(x1 - 3,y1 -1,z1 + 2); 
+	    GlStateManager.rotate(-yaw  * 0.017453292F * (180F / (float)Math.PI), 0.0F, 1.0F, 0.0F);
+	    GlStateManager.rotate(pitch * 0.017453292F * (180F / (float)Math.PI), 1.0F, 0.0F, 0.0F);
+	    Cylinder(0.25F,distance, 0.7F, 1F,0.0F,0.0F);
+	    GlStateManager.popMatrix();
+	    
+	    GlStateManager.pushMatrix();
+	    GlStateManager.translate(x1 - 2,y1 +2,z1 + 2); 
+	    GlStateManager.rotate(-yaw  * 0.017453292F * (180F / (float)Math.PI), 0.0F, 1.0F, 0.0F);
+	    GlStateManager.rotate(pitch * 0.017453292F * (180F / (float)Math.PI), 1.0F, 0.0F, 0.0F);
+	    Cylinder(0.3F,distance, 0.7F, 1F,0.0F,1.0F);
 	    GlStateManager.popMatrix();
 	}
 	

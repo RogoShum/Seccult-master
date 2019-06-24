@@ -25,13 +25,15 @@ public class SpellButton extends GuiButton{
 	public String spellPower_name;
 	public String spellAttribute_name;
     float r,g,b;
-
+    int colorR,colorG,colorB;
+    
 	public SpellButton getLinked;
 	public SpellButton prveLinked;
 	public boolean hasLinked;
 	private boolean clicked;
 	private boolean displayLayer;
 	public boolean isMagickButton;
+	public float rotationAngle;
 	
 	public int[] Sort;
 	public int[] Power;
@@ -42,21 +44,8 @@ public class SpellButton extends GuiButton{
 		this.displayLayer = display;
 		defineAttribute();
 		if(isMagickButton)
-		{
-		Random rand = new Random();
-	    r = 256 - buttonId * rand.nextInt(buttonId * buttonId);
-	    b = 256 - buttonId * rand.nextInt(buttonId * buttonId);
-	    g = 256 - buttonId * rand.nextInt(buttonId * buttonId);
-	    while(r < 0)
-	    	r += 256;
-	    while(g < 0)
-	    	g += 256;
-	    while(b < 0)
-	    	b += 256;
-	    r = r/256;
-	    g = g/256;
-	    b = b/256;
-		}
+			handleColor(buttonId);
+		
 	}
 	
 	public void defineAttribute()
@@ -80,8 +69,33 @@ public class SpellButton extends GuiButton{
 		}
 	}
 	
+	public void handleColor(int id)
+	{
+		Random rand = new Random();
+	    r = 256 - id * rand.nextInt(id * id);
+	    b = 256 - id * rand.nextInt(id * id);
+	    g = 256 - id * rand.nextInt(id * id);
+	    while(r < 0)
+	    	r += 256;
+	    while(g < 0)
+	    	g += 256;
+	    while(b < 0)
+	    	b += 256;
+	    
+	    colorR = (int) r;
+	    colorG = (int) g;
+	    colorB = (int) b;
+	    
+	    r = r/256;
+	    g = g/256;
+	    b = b/256;
+	}
+	
 	@Override
 	public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+		rotationAngle++;
+		if(rotationAngle > 360)
+			rotationAngle = 0;
 		checkLinkedSort();
 		checkLinked();
 		if(spellPower < 0)
@@ -100,26 +114,17 @@ public class SpellButton extends GuiButton{
 		{
 	        if(this.getLinked != null)
 	        {
-	        	int xDis = this.x - this.getLinked.x;
-	        	int yDis = this.y - this.getLinked.y;
+	        	int xDis = this.getLinked.x - this.x;
+	        	int yDis = this.getLinked.y - this.y;
 	        	int[] center = new int[2];
 	        	center[0] = this.x + 8;
 	        	center[1] = this.y + 8;
-	        	if(xDis < 0)
-	        		xDis = -xDis;
-	        	if(yDis < 0)
-	        		yDis = -yDis;
-
-	            int x=Math.abs(xDis);
-	            int y=Math.abs(yDis);
-	            double z=Math.sqrt(x*x+y*y);
-	            int angle = Math.round((float)(Math.asin(y/z)/Math.PI*180));
-	            //System.out.println(angle);
-	        	//System.out.println(angle);
+	        	double radian = Math.atan2(yDis, xDis);
+	        	
+	            float angle = (float) (radian*(180/Math.PI));
 	        	double distance = Math.sqrt(xDis * xDis + yDis * yDis);
 	        	GlStateManager.pushMatrix();
-	        	//this.drawHorizontalLine(20, 30, 1, 0xFFFF1493);
-	        	this.SdrawHorizontalLine(0, (int)distance, 1, 0xFFFF1493, 0xFF00FFFF, angle, center);
+	        	this.SdrawHorizontalLine(0, (int)distance, 1, angle, center);
 	        	GlStateManager.popMatrix();
 	        }
 			drawLayer(mc);
@@ -268,15 +273,27 @@ public class SpellButton extends GuiButton{
 		if(this.hasLinked && displayLayer)
 		{
 			GlStateManager.pushMatrix();
+			GlStateManager.color(r,b,g, 1F);
+	        mc.getTextureManager().bindTexture(TEXTURE);
 			if(!this.isMagickButton)
 			{
+				this.colorR = this.getLinked.colorR;
+				this.colorG = this.getLinked.colorG;
+				this.colorB = this.getLinked.colorB;
+				
 				this.r = this.getLinked.r;
 				this.g = this.getLinked.g;
 				this.b = this.getLinked.b;
 			}
-
-				GlStateManager.color(r,b,g);
-	        mc.getTextureManager().bindTexture(TEXTURE);
+			else
+			{
+				GlStateManager.pushMatrix();
+				GlStateManager.translate(this.x+7.5, this.y+7.5, this.zLevel);
+				GlStateManager.rotate(rotationAngle, 0, 0, 1);
+				this.drawTexturedModalRect(-9, -9, 32, 192, 18, 18);
+				GlStateManager.popMatrix();
+			}
+			
 	        this.drawTexturedModalRect(this.x-1, this.y-1, 32, 192, 18, 18);
 	        GlStateManager.popMatrix();
 		}
@@ -309,7 +326,7 @@ public class SpellButton extends GuiButton{
 			return null;
 	}
 	
-    protected void SdrawHorizontalLine(int startX, int endX, int y, int startColor, int endColor, int angle, int[] center)
+    protected void SdrawHorizontalLine(int startX, int endX, int y, float angle, int[] center)
     {
         if (endX < startX)
         {
@@ -318,19 +335,11 @@ public class SpellButton extends GuiButton{
             endX = i;
         }
 
-        drawGradientRect(startX, y, endX + 1, y + 1, startColor, endColor, angle, center);
+        drawGradientRect(startX, y, endX + 1, y + 1, angle, center);
     }
 	
-    protected void drawGradientRect(int left, int top, int right, int bottom, int startColor, int endColor, int angle, int[] center)
+    protected void drawGradientRect(int left, int top, int right, int bottom, float angle, int[] center)
     {
-        float f = (float)(startColor >> 24 & 255) / 255.0F;
-        float f1 = (float)(startColor >> 16 & 255) / 255.0F;
-        float f2 = (float)(startColor >> 8 & 255) / 255.0F;
-        float f3 = (float)(startColor & 255) / 255.0F;
-        float f4 = (float)(endColor >> 24 & 255) / 255.0F;
-        float f5 = (float)(endColor >> 16 & 255) / 255.0F;
-        float f6 = (float)(endColor >> 8 & 255) / 255.0F;
-        float f7 = (float)(endColor & 255) / 255.0F;
         GlStateManager.translate(center[0], center[1], this.zLevel);
         GlStateManager.rotate(angle, 0, 0, 1);
         GlStateManager.disableTexture2D();
@@ -341,41 +350,12 @@ public class SpellButton extends GuiButton{
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
-        bufferbuilder.pos((double)right, (double)top, (double)this.zLevel).color(f1, f2, f3, f).endVertex();
-        bufferbuilder.pos((double)left, (double)top, (double)this.zLevel).color(f1, f2, f3, f).endVertex();
-        bufferbuilder.pos((double)left, (double)bottom, (double)this.zLevel).color(f5, f6, f7, f4).endVertex();
-        bufferbuilder.pos((double)right, (double)bottom, (double)this.zLevel).color(f5, f6, f7, f4).endVertex();
+        bufferbuilder.pos((double)right, (double)top, (double)this.zLevel).color(colorR, colorG, colorB, 1).endVertex();
+        bufferbuilder.pos((double)left, (double)top, (double)this.zLevel).color(256 - colorR, 256 - colorG, 256 - colorB, 1F).endVertex();
+        bufferbuilder.pos((double)left, (double)bottom, (double)this.zLevel).color(256 - colorR, 256 - colorG, 256 - colorB, 1F).endVertex();
+        bufferbuilder.pos((double)right, (double)bottom, (double)this.zLevel).color(colorR, colorG, colorB, 1).endVertex();
         tessellator.draw();
         GlStateManager.shadeModel(7424);
-        GlStateManager.disableBlend();
-        GlStateManager.enableAlpha();
-        GlStateManager.enableTexture2D();
-    }
-    
-    protected void SdrawGradientRect(int x1, int y1, int x2, int y2, int startColor, int endColor, int angle, int[] center)
-    {
-        float f = (float)(startColor >> 24 & 255) / 255.0F;
-        float f1 = (float)(startColor >> 16 & 255) / 255.0F;
-        float f2 = (float)(startColor >> 8 & 255) / 255.0F;
-        float f3 = (float)(startColor & 255) / 255.0F;
-        float f4 = (float)(endColor >> 24 & 255) / 255.0F;
-        float f5 = (float)(endColor >> 16 & 255) / 255.0F;
-        float f6 = (float)(endColor >> 8 & 255) / 255.0F;
-        float f7 = (float)(endColor & 255) / 255.0F;
-        GlStateManager.disableTexture2D();
-        GlStateManager.enableBlend();
-        GlStateManager.disableAlpha();
-        //GlStateManager.translate(center[0], center[1], this.zLevel);
-        //GlStateManager.rotate(angle, 1, 0, 0);
-        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferbuilder = tessellator.getBuffer();
-        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
-        bufferbuilder.pos((double)x1, (double)y2, 0.0D).endVertex();
-        bufferbuilder.pos((double)x2, (double)y2, 0.0D).endVertex();
-        bufferbuilder.pos((double)x2, (double)y1, 0.0D).endVertex();
-        bufferbuilder.pos((double)x1, (double)y1, 0.0D).endVertex();
-        tessellator.draw();
         GlStateManager.disableBlend();
         GlStateManager.enableAlpha();
         GlStateManager.enableTexture2D();

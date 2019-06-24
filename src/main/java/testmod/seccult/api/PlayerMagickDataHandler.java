@@ -54,19 +54,16 @@ public class PlayerMagickDataHandler {
 	private static NBTTagList PgetDataListForPlayer(EntityPlayer player) {
 		NBTTagCompound forgeData = player.getEntityData();
 		if(!forgeData.hasKey(EntityPlayer.PERSISTED_NBT_TAG)) {
-			System.out.println("QQQ");
 			forgeData.setTag(EntityPlayer.PERSISTED_NBT_TAG, new NBTTagCompound());
 		}
 
 		NBTTagCompound persistentData = forgeData.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
 		if(!persistentData.hasKey(Seccult.Data)) {
-			System.out.println("QWQ");
 			persistentData.setTag(Seccult.Data, new NBTTagCompound());
 		}
 		
 		if(!persistentData.getCompoundTag(Seccult.Data).hasKey(Seccult.MagickData)) 
 		{
-			System.out.println("QAQ");
 			NBTTagList list = new NBTTagList();
 			persistentData.getCompoundTag(Seccult.Data).setTag(Seccult.MagickData, list);
 		}

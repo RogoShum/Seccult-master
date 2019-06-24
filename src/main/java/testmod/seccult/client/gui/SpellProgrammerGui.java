@@ -47,6 +47,7 @@ public class SpellProgrammerGui extends GuiScreen
     private SpellButton clicked;
     private SpellButton selected;
     private SpellButton chooseToLink;
+    private boolean ismagickButton;
     protected List<GuiButton> PanelButtonList = Lists.<GuiButton>newArrayList();
     protected List<SpellButton> SelectedButtonList = Lists.<SpellButton>newArrayList();
 	public List<String> tooltip = new ArrayList();
@@ -303,17 +304,28 @@ public class SpellProgrammerGui extends GuiScreen
     private void addMagickButton()
     {
 		int hdis = 0;
-		int wdis = -16;
+		int wdis = 0;
+		int z = 0;
     	for(int i = 0; i < magick.length; i++)
     	{
-
-    		if((i < 5 && i % 4 == 0) || (i>=5) && (i-1)%4 == 0) 
+    		
+    		if(!ismagickButton && magick[i] >= 5)
+    		{
+    			ismagickButton = true;
+    			z = 5;
+    		}
+    		else
+    		{
+    			z++;
+    		}
+    		
+    		if((z < 5 && z % 4 == 0) || (z>5) && (z-1)%4 == 0) 
     		{
     			hdis = 0;
     			wdis += 17;
     		}
     		
-    		if(i == 5) 
+    		if(z == 5) 
     		{
     			wdis = 49;
     			hdis = 0;
