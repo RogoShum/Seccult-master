@@ -40,6 +40,7 @@ public class Seccult
 	public static final String VERSION = "0.1";
 	
 	public static final String Data = MODID + ":data";
+	public static final String AccessorieData = MODID + ":accessorie_data";
 	public static final String MagickData = "MagickData";
 	public static final String MagickList = "MagickList";
 	

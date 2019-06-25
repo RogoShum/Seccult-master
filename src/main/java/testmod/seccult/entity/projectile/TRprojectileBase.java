@@ -159,19 +159,19 @@ public class TRprojectileBase extends Entity{
 		}
 	}
 	
-	protected int getID() {
+	public int getID() {
 		return this.id;
 	}
 	
-	protected int getDamage() {
+	public int getDamage() {
 		return this.Damage;
 	}
 	
-	protected EntityPlayer getPlayer() {
+	public EntityPlayer getPlayer() {
 		return this.player;
 	}
 	
-	protected int getSpeed() {
+	public int getSpeed() {
 		return this.Speed;
 	}
 	

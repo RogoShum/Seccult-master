@@ -84,11 +84,6 @@ public class ItemWeaponBase extends ItemBase{
 	{
 		super.onUsingTick(stack, player, count);
 		EntityPlayer pl = (EntityPlayer) player;
-		if(laser != null)
-		{
-			
-			laser.addLifeTime();
-		}
 	}
 	
 	@Nonnull

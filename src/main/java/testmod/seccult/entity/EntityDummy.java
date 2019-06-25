@@ -1,5 +1,7 @@
 package testmod.seccult.entity;
 
+import java.util.UUID;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityItem;
@@ -25,6 +27,21 @@ public class EntityDummy extends Entity
   {
     this.Entity = entity;
     setPositionAndRotation(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+    if(!this.world.isRemote && this.Entity != null)
+    {
+        NBTTagCompound entityNBT = new NBTTagCompound();
+        ResourceLocation className = EntityList.getKey(this.Entity.getClass());
+	    if(className != null) 
+	    {
+	    	entityNBT.setString("id", className.toString());
+	    	setTag(this.Entity.writeToNBT(entityNBT));
+	    }
+	    else if(this.Entity instanceof EntityItem)
+	    {
+	    	entityNBT.setString("id", EntityList.getKey(EntityItem.class).toString());
+	    	setTag(this.Entity.writeToNBT(entityNBT));
+	    }
+    }
   }
   
   public void setTag(NBTTagCompound nbt) 
@@ -54,22 +71,7 @@ public class EntityDummy extends Entity
     
   public void onUpdate()
   {
-	    if(!this.world.isRemote && this.Entity != null)
-	    {
-	        NBTTagCompound entity = new NBTTagCompound();
-	        ResourceLocation className = EntityList.getKey(this.Entity.getClass());
-		    if(className != null) 
-		    {
-		    	entity.setString("id", className.toString());
-		    	setTag(this.Entity.writeToNBT(entity));
-		    }
-		    else if(this.Entity instanceof EntityItem)
-		    {
-		    	entity.setString("id", EntityList.getKey(EntityItem.class).toString());
-		    	setTag(this.Entity.writeToNBT(entity));
-		    }
-	    }
-	    else if(this.world.isRemote && this.Entity == null)
+	    if(this.world.isRemote && this.Entity == null)
 	    {
 	      NBTTagCompound nbt = getTag();
 	      if (nbt != null && !(getTag().getString("id").equals("")))
@@ -84,37 +86,19 @@ public class EntityDummy extends Entity
   }
   
   @Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-      NBTTagCompound nbt = getTag();
-      /*if (nbt != null)
-      {
-          this.Entity = EntityList.createEntityFromNBT(getTag(), world);
-          if(this.Entity != null) {
-          this.Entity.readFromNBT(nbt);
-          this.Entity.setPositionAndRotation(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
-          this.setDead();
-          }
-      }*/
-	 return getTag();
-  }
-  
-  /*@Override
-	public void readFromNBT(NBTTagCompound compound) {
-      NBTTagCompound nbt = getTag();
+	public void readEntityFromNBT(NBTTagCompound compound) {
+      /*NBTTagCompound nbt = getTag();
       if (nbt != null)
       {
           this.Entity = EntityList.createEntityFromNBT(getTag(), world);
           if(this.Entity != null) {
-          this.Entity.readFromNBT(nbt);
           this.Entity.setPositionAndRotation(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
+          world.spawnEntity(Entity);
           this.setDead();
           }
-      }
-	  super.readFromNBT(compound);
-	}*/
+      }*/
+	}
   
-  @Override
-  protected void readEntityFromNBT(NBTTagCompound nbttagcompound){} 
   @Override
   protected void writeEntityToNBT(NBTTagCompound nbttagcompound){}
 

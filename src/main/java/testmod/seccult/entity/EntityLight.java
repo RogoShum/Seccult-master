@@ -23,6 +23,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import testmod.seccult.client.FX.ATFX;
+import testmod.seccult.client.FX.SuperLaserBeamFX;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.util.ChunkCoordinates;
 import testmod.seccult.util.MathHelper.MathHelper;
@@ -286,7 +287,17 @@ public class EntityLight extends EntityMob
 		this.world.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, d0, d1, d2, 0.2, 0, 0.2);
 	    }
 	    this.world.spawnParticle(EnumParticleTypes.PORTAL, this.lastTickPosX, this.lastTickPosY, this.lastTickPosZ, 0.2, 0.2, 0.2);
+	    //createLaser(world, posX, posY, posZ, this, 20);
     }
+    
+	public void createLaser(World worldIn, double posXIn, double posYIn, double posZIn, Entity player, float height)
+	{
+			SuperLaserBeamFX laser =  new SuperLaserBeamFX(worldIn, posXIn, posYIn, posZIn, player, height);
+			laser.setRBGColorF(1, 0.5F, 0);
+			laser.setAlphaF(1F);
+			laser.setMaxAge(2);
+			Minecraft.getMinecraft().effectRenderer.addEffect(laser);
+	}
     
     @Override
     public void fall(float distance, float damageMultiplier) {

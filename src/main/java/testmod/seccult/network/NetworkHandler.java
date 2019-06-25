@@ -11,6 +11,7 @@ public class NetworkHandler {
 	{
 		network.registerMessage(NetworkPlayerWandData.PacketMessageHandler.class, NetworkPlayerWandData.class, 0, Side.CLIENT);
 		network.registerMessage(NetworkPlayerMagickData.PacketMessageHandler.class, NetworkPlayerMagickData.class, 1, Side.CLIENT);
+		network.registerMessage(NetworkPlayerParticleData.PacketMessageHandler.class, NetworkPlayerParticleData.class, 2, Side.CLIENT);
 	}
 	
 	public static SimpleNetworkWrapper getNetwork()

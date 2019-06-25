@@ -9,9 +9,9 @@ import net.minecraft.util.DamageSource;
 import testmod.seccult.Seccult;
 import testmod.seccult.creativetab.CreativeTabsLoader;
 import testmod.seccult.init.ModItems;
-import testmod.seccult.util.WaNB;
+import testmod.seccult.util.registerModel;
 
-public class SwordTool extends Item implements WaNB
+public class SwordTool extends Item implements registerModel
 {
 	public static final DamageSource VOID = (new DamageSource("Void")).setDamageAllowedInCreativeMode().setDamageBypassesArmor().setDamageIsAbsolute();
 	

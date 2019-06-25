@@ -11,6 +11,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 import testmod.seccult.api.PlayerDataHandler;
+import testmod.seccult.api.PlayerMagickDataHandler;
+import testmod.seccult.api.accessorie.PlayerAccessorieHandler;
 import testmod.seccult.init.ModDamage;
 
 public class PlayerDataUpdateEvent {
@@ -31,6 +33,7 @@ public class PlayerDataUpdateEvent {
 		if(event.getEntityLiving() instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) event.getEntityLiving();
 			PlayerDataHandler.get(player).tick();
+			PlayerAccessorieHandler.get(player).tick();
 		}
 	}
 	
@@ -39,6 +42,7 @@ public class PlayerDataUpdateEvent {
 	{
 		if(event.phase == Phase.END) {
 			PlayerDataHandler.cleanup();
+			PlayerAccessorieHandler.cleanup();
 		}
 	}
 	

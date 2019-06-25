@@ -12,7 +12,7 @@ import testmod.seccult.client.entity.render.RenderHandler;
 import testmod.seccult.entity.ModEntity;
 import testmod.seccult.init.ModBlocks;
 import testmod.seccult.init.ModItems;
-import testmod.seccult.util.WaNB;
+import testmod.seccult.util.registerModel;
 import testmod.seccult.world.gen.WorldGenCustomOres;
 import testmod.seccult.world.gen.WorldGenCustomTrees;
 
@@ -37,17 +37,17 @@ public class RegistryHandler
 	{
 		for(Item item : ModItems.ITEMS)
 		{
-			if(item instanceof WaNB) 
+			if(item instanceof registerModel) 
 			{
-				((WaNB)item).registerModels();
+				((registerModel)item).registerModels();
 			}
 		}
 		
 		for(Block block : ModBlocks.BLOCKS)
 		{
-			if(block instanceof WaNB) 
+			if(block instanceof registerModel) 
 			{
-				((WaNB)block).registerModels();
+				((registerModel)block).registerModels();
 			}
 		}
 	}

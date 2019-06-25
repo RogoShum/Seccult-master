@@ -17,10 +17,10 @@ import testmod.seccult.client.gui.GuiElementLoader;
 import testmod.seccult.creativetab.CreativeTabsLoader;
 import testmod.seccult.init.ModBlocks;
 import testmod.seccult.init.ModItems;
-import testmod.seccult.util.WaNB;
+import testmod.seccult.util.registerModel;
 import testmod.seccult.util.WaNP;
 
-public class SpellProgrammer extends Block implements WaNB, WaNP{
+public class SpellProgrammer extends Block implements registerModel, WaNP{
 
 	private int x;
 	private int y;

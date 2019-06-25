@@ -32,7 +32,6 @@ public class EntityLaserBeamBase extends Entity{
 	private boolean isTail;
 	private int Damage;
 	private EnumHand hand = EnumHand.MAIN_HAND;
-	private int lifetime;
 	private double[] position = new double[3];
 	private LaserLengthChecker lengthchecker = new LaserLengthChecker();
 	private SuperLaserBeamFX laserbeam;
@@ -40,7 +39,6 @@ public class EntityLaserBeamBase extends Entity{
 	public EntityLaserBeamBase(World worldIn) {
 		super(worldIn);
 		this.setSize(1F, 1F);
-		lifetime = 5;
 	}
 
     protected void entityInit()
@@ -48,11 +46,6 @@ public class EntityLaserBeamBase extends Entity{
         this.dataManager.register(Length, Float.valueOf(0));
         this.dataManager.register(Width, Float.valueOf(0));
         this.dataManager.register(TAG, new NBTTagCompound());
-    }
-    
-    public void addLifeTime()
-    {
-    	lifetime = 100;
     }
     
     public void setTail() {
@@ -78,8 +71,6 @@ public class EntityLaserBeamBase extends Entity{
     		this.setDead();
     	}*/
     	
-    	lifetime--;
-    	
     	if(follower == null)
     	{
     		double[] p = new double[3];
@@ -92,11 +83,24 @@ public class EntityLaserBeamBase extends Entity{
     	if(isTail)
     	{
     		position = lengthchecker.getPosition();
-    		NBTTagCompound nbt = new NBTTagCompound();
+    		float dx = (float) (position[0] - this.posX);
+    	    float dy = (float) (position[1] - this.posY);
+    		float dz = (float) (position[2] - this.posZ);
+    		float distance = (float) Math.sqrt(dx*dx + dy*dy + dz*dz);
+    		
+    	 	if(laserbeam == null || (laserbeam != null && !laserbeam.isAlive()))
+    	 	{
+    	 		createLaser(this.world, this.posX, this.posY, this.posZ, this, distance);
+    	 	}
+    	 	else if(laserbeam != null)
+    	 	{
+    	 		laserbeam.setHeight(distance);
+    	 	}
+    		/*NBTTagCompound nbt = new NBTTagCompound();
     		nbt.setDouble("X", this.posX - position[0]);
     		nbt.setDouble("Y", this.posY - position[1]);
     		nbt.setDouble("Z", this.posZ - position[2]);
-    		setTag(nbt);
+    		setTag(nbt);*/
     	}
     	
     	if(!this.world.isRemote)
@@ -110,6 +114,10 @@ public class EntityLaserBeamBase extends Entity{
        		 	if(!owner.isEntityAlive())
        		 		this.setDead();
         	}
+    		else
+    		{
+    			setDead();
+    		}
     		
     		if(this.world.isAirBlock(getPosition()) && follower == null && this.Num <= 120)
     		{
@@ -140,27 +148,14 @@ public class EntityLaserBeamBase extends Entity{
     	if(this.getMyWidth() == 1)
     		return;
     	this.collideWithNearbyEntities();
-    	if(isTail)
-    	{
-    	 	if(laserbeam == null || (laserbeam != null && !laserbeam.isAlive()))
-    	 	{
-    	 		//System.out.println("QAQ???");
-    	 		createLaser(this.world, this.posX, this.posY, this.posZ, this, 20);
-    	 	}
-    	 	else if(laserbeam != null)
-    	 	{
-    	 		//System.out.println(laserbeam);
-    	 		//System.out.println("QAQ???");
-    	 		//System.out.println(laserbeam.isAlive());
-    	 		laserbeam.setHeight(20);
-    	 	}
-    	}
     }
-    
+
 	public void createLaser(World worldIn, double posXIn, double posYIn, double posZIn, Entity player, float height)
 	{
-		//System.out.println("QAQ");
 			SuperLaserBeamFX laser =  new SuperLaserBeamFX(worldIn, posXIn, posYIn, posZIn, player, height);
+			laser.setRBGColorF(1, 0.5F, 0);
+			laser.setAlphaF(1F);
+			laser.setMaxAge(2);
 			Minecraft.getMinecraft().effectRenderer.addEffect(laser);
 			this.laserbeam = (SuperLaserBeamFX) laser;
 	}

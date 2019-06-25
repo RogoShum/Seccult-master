@@ -26,11 +26,11 @@ import testmod.seccult.blocks.item.ItemBlockVariants;
 import testmod.seccult.creativetab.CreativeTabsLoader;
 import testmod.seccult.init.ModBlocks;
 import testmod.seccult.init.ModItems;
-import testmod.seccult.util.WaNB;
+import testmod.seccult.util.registerModel;
 import testmod.seccult.util.WaNP;
 import testmod.seccult.util.handlers.TreeHandler;
 
-public class Leaf extends BlockLeaves implements WaNB, WaNP
+public class Leaf extends BlockLeaves implements registerModel, WaNP
 {
 	public static final PropertyEnum<TreeHandler.EnumType> VARIANT = PropertyEnum.<TreeHandler.EnumType>create("variant", TreeHandler.EnumType.class, new Predicate<TreeHandler.EnumType>()
 	{

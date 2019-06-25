@@ -384,6 +384,7 @@ public class PlayerDataHandler {
 		public float getControlAbility() {
 			return ControlAbility;
 		}
+		
 		public void tick() {
 			if(regenCooldown == 0) {
 					ManaValue = Math.min(MaxManaValue, ManaValue + getRegenPerTick());

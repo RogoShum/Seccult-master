@@ -4,9 +4,9 @@ import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import testmod.seccult.Seccult;
 import testmod.seccult.init.ModItems;
-import testmod.seccult.util.WaNB;
+import testmod.seccult.util.registerModel;
 
-public class ProjectileBase extends Item implements WaNB
+public class ProjectileBase extends Item implements registerModel
 	{
 		ResourceLocation EOWres = new ResourceLocation("seccult:trueeaterofworlds");
 		public ProjectileBase(String name)

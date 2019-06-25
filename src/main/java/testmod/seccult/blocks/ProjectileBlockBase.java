@@ -8,10 +8,10 @@ import net.minecraft.item.ItemStack;
 import testmod.seccult.Seccult;
 import testmod.seccult.init.ModBlocks;
 import testmod.seccult.init.ModItems;
-import testmod.seccult.util.WaNB;
+import testmod.seccult.util.registerModel;
 import testmod.seccult.util.WaNP;
 
-public class ProjectileBlockBase extends Block implements WaNB, WaNP{
+public class ProjectileBlockBase extends Block implements registerModel, WaNP{
 
 		public ProjectileBlockBase(String name, Material material)
 		{

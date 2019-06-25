@@ -5,6 +5,7 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -49,7 +50,7 @@ public class TRBladeBeam extends TRprojectileBase{
 		}
 		super.onUpdate();
 		particles();
-		addLight();
+		//addLight();
 		if (this.isDead) {
 			BlockPos pos = new BlockPos((int) this.posX, (int) this.posY, (int) this.posZ);
 			this.world.checkLightFor(EnumSkyBlock.BLOCK, pos);
@@ -311,5 +312,23 @@ public class TRBladeBeam extends TRprojectileBase{
 		 double Z = this.posZ + ran;
 		 Vec3d vec = new Vec3d(X, Y, Z);
 		 return vec;
+	}
+	
+	@Override
+	protected void readEntityFromNBT(NBTTagCompound nbt) {
+		super.readEntityFromNBT(nbt);
+		if(nbt.hasKey("isAvatar")) {
+			isAvatar = nbt.getBoolean("isAvatar");
+			hasSplitAvatar = nbt.getBoolean("hasSplitAvatar");
+		}
+	}
+
+	@Override
+	protected void writeEntityToNBT(NBTTagCompound nbt) {
+		super.writeEntityToNBT(nbt);
+		if(!nbt.hasKey("isAvatar")) {
+			nbt.setBoolean("isAvatar", isAvatar);
+			nbt.setBoolean("hasSplitAvatar", hasSplitAvatar);
+		}
 	}
 }

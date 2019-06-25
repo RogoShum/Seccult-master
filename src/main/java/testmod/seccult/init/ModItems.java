@@ -11,9 +11,12 @@ import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraftforge.common.util.EnumHelper;
 import testmod.seccult.items.*;
+import testmod.seccult.items.Accessories.ALastStruggle;
+import testmod.seccult.items.Accessories.AMadeInHeaven;
 import testmod.seccult.items.TRprojectile.ItemLight;
 import testmod.seccult.items.TRprojectile.ItemTerraBeam;
 import testmod.seccult.items.armor.ArmorBase;
+import testmod.seccult.items.armor.RecoveryArmor;
 import testmod.seccult.items.tools.*;
 import testmod.seccult.items.tools.TRWeapon.*;
 
@@ -38,12 +41,6 @@ public class ModItems
 	//Tools
 	public static final Item SPA_SOWRD = new SwordTool("spa_sword");
 	public static final ItemPickaxe SPA_PICKAXE = new PickaxeTool("spa_pickaxe", MATERIAL_SPA);
-	
-	//Armor
-	public static final Item SPA_HELMET = new ArmorBase("spa_helmet", ARMOR_MATERIAL_SPA, 1, EntityEquipmentSlot.HEAD);
-	public static final Item SPA_CHEST = new ArmorBase("spa_chest", ARMOR_MATERIAL_SPA, 1, EntityEquipmentSlot.CHEST);
-	public static final Item SPA_LEGGINGS = new ArmorBase("spa_leggings", ARMOR_MATERIAL_SPA, 2, EntityEquipmentSlot.LEGS);
-	public static final Item SPA_BOOTS = new ArmorBase("spa_boots", ARMOR_MATERIAL_SPA, 1, EntityEquipmentSlot.FEET);
 	
 	//TRWeapon
 	public static final Item Enchanted_Sword = new EnchantedSword("enchanted_sword");
@@ -81,4 +78,16 @@ public class ModItems
 	//TRprojectile
 	public static final Item Beam = new ItemTerraBeam("light");
 	public static final Item StarFury_Beam = new ItemTerraBeam("starfury_beam");
+	
+	//Armor
+	public static final Item SPA_HELMET = new ArmorBase("spa_helmet", ARMOR_MATERIAL_SPA, 1, EntityEquipmentSlot.HEAD);
+	public static final Item SPA_CHEST = new ArmorBase("spa_chest", ARMOR_MATERIAL_SPA, 1, EntityEquipmentSlot.CHEST);
+	public static final Item SPA_LEGGINGS = new ArmorBase("spa_leggings", ARMOR_MATERIAL_SPA, 2, EntityEquipmentSlot.LEGS);
+	public static final Item SPA_BOOTS = new ArmorBase("spa_boots", ARMOR_MATERIAL_SPA, 1, EntityEquipmentSlot.FEET);
+	
+	public static final Item RECOVERY_HELMET = new RecoveryArmor();
+	
+	//Accessories
+	public static final Item A_LAST_STRUGGLE = new ALastStruggle("last_struggle");
+	public static final Item A_MADE_IN_HEAVEN = new AMadeInHeaven("made_in_heaven");
 }

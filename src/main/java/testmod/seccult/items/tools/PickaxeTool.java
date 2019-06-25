@@ -4,9 +4,9 @@ import net.minecraft.item.ItemPickaxe;
 import testmod.seccult.Seccult;
 import testmod.seccult.creativetab.CreativeTabsLoader;
 import testmod.seccult.init.ModItems;
-import testmod.seccult.util.WaNB;
+import testmod.seccult.util.registerModel;
 
-public class PickaxeTool extends ItemPickaxe implements WaNB 
+public class PickaxeTool extends ItemPickaxe implements registerModel 
 {
 	
 	public PickaxeTool(String name, ToolMaterial material)

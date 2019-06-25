@@ -24,6 +24,7 @@ import testmod.seccult.Seccult;
 import testmod.seccult.api.PlayerDataHandler;
 import testmod.seccult.api.PlayerDataHandler.PlayerData;
 import testmod.seccult.api.PlayerMagickDataHandler;
+import testmod.seccult.api.accessorie.PlayerAccessorieHandler;
 import testmod.seccult.client.gui.GuiElementLoader;
 import testmod.seccult.magick.ActiveHandler;
 import testmod.seccult.magick.ImplemrntationHandler;
@@ -53,16 +54,11 @@ public class ItemWand extends ItemBase{
 	        {
 	            if (player.isSneaking())
 	            {
-	            	PlayerMagickDataHandler.setMagickData(player, ActiveHandler.DamageMagick);
-	            	PlayerMagickDataHandler.setMagickData(player, ActiveHandler.FlameMagick);
-	            	PlayerMagickDataHandler.setMagickData(player, ImplemrntationHandler.FocuseI);
-	            	PlayerMagickDataHandler.setMagickData(player, ImplemrntationHandler.CircleI);
-	            	PlayerMagickDataHandler.setMagickData(player, ImplemrntationHandler.GroupI);
-	            	PlayerMagickDataHandler.setMagickData(player, ImplemrntationHandler.ProjectileI);
+	            	player.openGui(Seccult.instance, GuiElementLoader.GUI_Accessories, world, (int)player.posX, (int)player.posY, (int)player.posZ);
 	            }
 	            else
 	            {
-	            	MagickHandler.decompileMagick(getMagickCode(stack), player);
+	            	PlayerAccessorieHandler.get(player).cleanAccessories();
 	            }
 	        }
 			return ActionResult.newResult(EnumActionResult.SUCCESS, stack);

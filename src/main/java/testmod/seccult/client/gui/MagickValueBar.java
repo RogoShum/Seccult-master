@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import testmod.seccult.api.PlayerDataHandler;
 import testmod.seccult.api.PlayerDataHandler.PlayerData;
 
@@ -16,7 +17,10 @@ public class MagickValueBar {
     { 	
 		data = PlayerDataHandler.get(this.mc.player);
         this.mc.mcProfiler.startSection("magickBar");
+        GlStateManager.pushMatrix();
+        GlStateManager.color(0, 0, 1);
         this.mc.getTextureManager().bindTexture(Gui.ICONS);
+        GlStateManager.popMatrix();
         int i = (int) data.getMaxMana();
 
         if (i > 0)
@@ -24,11 +28,11 @@ public class MagickValueBar {
             int j = 182;
             int k = (int)(data.getMana() * 183.0F);
             int l = scaledRes.getScaledHeight() - 32 + 3;
-            gui.drawTexturedModalRect(x, l, 0, 64, 182, 5);
+            gui.drawTexturedModalRect(x + 10, l, 0, 64, 182, 5);
 
             if (k > 0)
             {
-            	gui.drawTexturedModalRect(x, l, 0, 69, k, 5);
+            	gui.drawTexturedModalRect(x + 10, l, 0, 69, k, 5);
             }
         }
 

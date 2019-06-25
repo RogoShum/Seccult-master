@@ -1,6 +1,6 @@
 package testmod.seccult.util;
 
-public interface WaNB 
+public interface registerModel 
 {
 	public void registerModels();
 }

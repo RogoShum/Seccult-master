@@ -9,9 +9,9 @@ import testmod.seccult.Seccult;
 import testmod.seccult.creativetab.CreativeTabsLoader;
 import testmod.seccult.init.ModBlocks;
 import testmod.seccult.init.ModItems;
-import testmod.seccult.util.WaNB;
+import testmod.seccult.util.registerModel;
 
-public class BlockBase extends Block implements WaNB
+public class BlockBase extends Block implements registerModel
 {
 
 	public BlockBase(String name, Material material)

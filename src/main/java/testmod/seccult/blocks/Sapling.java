@@ -31,12 +31,12 @@ import testmod.seccult.blocks.item.ItemBlockVariants;
 import testmod.seccult.creativetab.CreativeTabsLoader;
 import testmod.seccult.init.ModBlocks;
 import testmod.seccult.init.ModItems;
-import testmod.seccult.util.WaNB;
+import testmod.seccult.util.registerModel;
 import testmod.seccult.util.WaNP;
 import testmod.seccult.util.handlers.TreeHandler;
 import testmod.seccult.world.gen.generators.WorldGenEverythingTree;
 
-public class Sapling extends BlockBush implements IGrowable, WaNB, WaNP
+public class Sapling extends BlockBush implements IGrowable, registerModel, WaNP
 {	
 	public static final PropertyInteger STAGE = PropertyInteger.create("stage", 0, 1);
     protected static final AxisAlignedBB SAPLING_AABB = new AxisAlignedBB(0.09999999403953552D, 0.0D, 0.09999999403953552D, 0.8999999761581421D, 0.800000011920929D, 0.8999999761581421D);

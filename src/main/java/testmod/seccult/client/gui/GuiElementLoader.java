@@ -11,6 +11,7 @@ import testmod.seccult.blocks.SpellProgrammer;
 public class GuiElementLoader implements IGuiHandler
 {
 	public static final int GUI_DEMO = 1;
+	public static final int GUI_Accessories = 2;
 
     public GuiElementLoader()
     {
@@ -24,6 +25,8 @@ public class GuiElementLoader implements IGuiHandler
         {
         case GUI_DEMO:
             return new SpellProgrammerDemo((SpellProgrammer) world.getBlockState(new BlockPos(x, y, z)).getBlock(), player);
+        case GUI_Accessories:
+            return new AccessoriesContainer(player);
         default:
             return null;
         }
@@ -36,6 +39,8 @@ public class GuiElementLoader implements IGuiHandler
         {
         case GUI_DEMO:
             return new SpellProgrammerGui(player);
+        case GUI_Accessories:
+            return new AccessoriesGui(new AccessoriesContainer(player));
         default:
             return null;
         }

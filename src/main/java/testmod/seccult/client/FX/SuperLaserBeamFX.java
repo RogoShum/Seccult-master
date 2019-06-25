@@ -17,9 +17,6 @@ import net.minecraft.world.World;
 public class SuperLaserBeamFX extends Particle {
 	private static ResourceLocation darkPTexture = new ResourceLocation("seccult:textures/entity/darktexture.png");
     Entity player;
-    float x;
-    float y;
-    float z;
     Vec3d vec3d;
     float yaw;
     float piatch;
@@ -33,6 +30,9 @@ public class SuperLaserBeamFX extends Particle {
         yaw=player.rotationYaw;
         piatch=player.rotationPitch;
         this.height = height;
+        this.posX = player.posX;
+        this.posY = player.posY;
+        this.posZ = player.posZ;
     }
 
     public SuperLaserBeamFX(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn) {
@@ -41,22 +41,26 @@ public class SuperLaserBeamFX extends Particle {
 
     @Override
     public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-    	//System.out.println("QWQ");
         GlStateManager.pushMatrix();
         int i = 15728880;
         int j = i % 65536;
         int k = i / 65536;
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);
         DrawChannel(
-                (float) (x),
-                (float) (y + 1),
-                (float) (z),
-                (float) (vec3d.x*height+x),
-                (float) (vec3d.y*height+y+1) ,
-                (float) (vec3d.z*height+z), player.rotationYaw,player.rotationPitch);
+                (float) (posX),
+                (float) (posY + (entityIn.height / 2)),
+                (float) (posZ),
+                (float) (vec3d.x*height+posX),
+                (float) (vec3d.y*height+posY + (entityIn.height / 2)) ,
+                (float) (vec3d.z*height+posZ), player.rotationYaw,player.rotationPitch);
         GlStateManager.popMatrix();
     }
 
+    @Override
+    public int getFXLayer() {
+    	return 1;
+    }
+    
     public void setHeight(float height)
     {
     	this.height = height;
@@ -66,7 +70,6 @@ public class SuperLaserBeamFX extends Particle {
 		Cylinder cylinder = new Cylinder();
 		cylinder.setDrawStyle(GLU.GLU_FILL);		
 		cylinder.setNormals(GLU.GLU_NONE);
-		//cylinder.setTextureFlag(true);
 		cylinder.draw(radius, radius, height, 64, 64);
 	}
 	
@@ -74,35 +77,42 @@ public class SuperLaserBeamFX extends Particle {
 		Disk cylinder = new Disk();
 		cylinder.setDrawStyle(GLU.GLU_FILL);		
 		cylinder.setNormals(GLU.GLU_NONE);
-		//cylinder.setTextureFlag(true);
 		cylinder.draw(0, radius, 64, 64);
 	}
 	
-	public void Cylinder(float radius, float height, float alpha)
+	public void Cylinder(float radius, float height)
 	{
         GlStateManager.enableNormalize();
-        //GlStateManager.depthMask(true);
         GlStateManager.enableBlend();
         GlStateManager.enableAlpha();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_CONSTANT_ALPHA);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(darkPTexture);
+		float space = radius / 18;
 	    for(float r = radius / 3; r < radius;)
 	    {
 	    	GlStateManager.pushMatrix();
-		    if(r == radius / 3)
-		    	GlStateManager.color(1.0F, 1F, 1.0F, alpha);
-		    else
-		    	GlStateManager.color(0.0F, 1.0F, 0.0F, 0.05F);
+			    
+			    if(r < radius / 1.3F)
+			    	GlStateManager.color(particleRed, particleGreen, particleBlue, particleAlpha / 5);
+			    else
+			    	GlStateManager.color(particleRed, particleGreen, particleBlue, particleAlpha / 10);
+			    if(r == radius / 3)
+			    	GlStateManager.color(1.0F, 1F, 1.0F, particleAlpha);
+
 	    	cylinderRender(r, height);
-		    r += 0.01F;
+		    r += space;
 		    
 			GlStateManager.pushMatrix();
 			GlStateManager.rotate(180, 0.0F, 1.0F, 0.0F);
 			diskRender(r - 0.01F);
 			GlStateManager.popMatrix();
+			
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(0, 0, height);
+			diskRender(r - 0.01F);
+			GlStateManager.popMatrix();
 			GlStateManager.popMatrix();
 	    }
-		//GlStateManager.depthMask(false);
         GlStateManager.disableBlend();
         GlStateManager.disableNormalize();
 	}
@@ -117,21 +127,22 @@ public class SuperLaserBeamFX extends Particle {
 	    GlStateManager.translate(x1,y1,z1); 
 	    GlStateManager.rotate(-yaw  * 0.017453292F * (180F / (float)Math.PI), 0.0F, 1.0F, 0.0F);
 	    GlStateManager.rotate(pitch * 0.017453292F * (180F / (float)Math.PI), 1.0F, 0.0F, 0.0F);
-	    Cylinder(0.2F,distance, 0.7F);
-	    //Cylinder(0.37F,distance, 0.10005F);
-	    //Cylinder(0.4F,distance, 0.10005F);
-	    
+	    Cylinder((float)particleMaxAge / 10, distance);
 	    GlStateManager.popMatrix();
 	}
     
     @Override
     public void onUpdate() {
-    	if(player != null && !player.isEntityAlive())
+    	if(player == null)
+    		return;
+    	if(!player.isEntityAlive())
     		setExpired();
-    	
-    	//System.out.println("QAQ");
-    	/*particleAge++;
-    	if(particleAge > 1)
-    		setExpired();*/
+
+        this.posX = player.posX;
+        this.posY = player.posY;
+        this.posZ = player.posZ;
+        System.out.println(posY);
+        System.out.println(posX);
+        System.out.println(posZ);
     }
 }
