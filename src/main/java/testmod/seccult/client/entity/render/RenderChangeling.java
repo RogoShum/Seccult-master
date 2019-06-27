@@ -6,7 +6,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import testmod.seccult.entity.EntityChangeling;
+import testmod.seccult.entity.livings.EntityChangeling;
 
 @SideOnly(Side.CLIENT)
 public class RenderChangeling extends Render<EntityChangeling>

@@ -12,16 +12,16 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.Seccult;
-import testmod.seccult.api.ModMagicks;
 import testmod.seccult.api.PlayerDataHandler;
 import testmod.seccult.api.PlayerDataHandler.PlayerData;
 import testmod.seccult.client.gui.button.SpellButton;
+import testmod.seccult.init.ModMagicks;
+import testmod.seccult.network.NetworkHandler;
+import testmod.seccult.network.NetworkPlayerAddMagick;
 
 @SideOnly(Side.CLIENT)
 public class SpellProgrammerGui extends GuiScreen
@@ -50,19 +50,19 @@ public class SpellProgrammerGui extends GuiScreen
     private boolean ismagickButton;
     protected List<GuiButton> PanelButtonList = Lists.<GuiButton>newArrayList();
     protected List<SpellButton> SelectedButtonList = Lists.<SpellButton>newArrayList();
-	public List<String> tooltip = new ArrayList();
-    
-	private NBTTagList NewMagickNBTList = new NBTTagList();
+	public List<String> tooltip = new ArrayList<String>();
+    private SpellProgrammerDemo serverside;
 	
     int xSize, ySize, selectX, selectY, offsetX, offsetY;
 	private boolean PanelOpen;
     
-    public SpellProgrammerGui(EntityPlayer player)
+    public SpellProgrammerGui(SpellProgrammerDemo demo, EntityPlayer player)
     {
     	this.player = player;
         PlayerData data = PlayerDataHandler.get(player);
         magick = data.getAllMagickData();
         canProgeammer = true;
+        serverside = demo;
     } 
     
     @Override
@@ -309,10 +309,10 @@ public class SpellProgrammerGui extends GuiScreen
     	for(int i = 0; i < magick.length; i++)
     	{
     		
-    		if(!ismagickButton && magick[i] >= 5)
+    		if(!ismagickButton && magick[i] >= 3)
     		{
     			ismagickButton = true;
-    			z = 5;
+    			z = 3;
     		}
     		else
     		{
@@ -336,13 +336,9 @@ public class SpellProgrammerGui extends GuiScreen
     	}
     }
     
-    //这个是GUI的主要函数
-    //用于渲染图形界面
-    //所以每一帧都会调用
-    //可以当更新器用...?
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-    	
+
     	if(selected != null)
     	{
     		boolean onPaper = selected.checkOnPaper(mouseX, mouseY, this.width, this.height);
@@ -381,8 +377,10 @@ public class SpellProgrammerGui extends GuiScreen
 			mc.getTextureManager().bindTexture(TEXTURE);
 			this.drawTexturedModalRect(selected.x, selected.y, 128, this.ySize + 4, 16, 16);
 			GlStateManager.popMatrix();
-			 	
-    		openPanel();
+			
+				openPanel();
+			if(selected.id == 0)
+				closePanel();
 		    String power_name = I18n.format(selected.spellPower_name);
 			String attribute_name = I18n.format(selected.spellAttribute_name);
 		    this.fontRenderer.drawString(power_name, offsetX + 196, offsetY + 90, 0x404040);
@@ -409,7 +407,7 @@ public class SpellProgrammerGui extends GuiScreen
         {
         	GlStateManager.pushMatrix();
 			mc.getTextureManager().bindTexture(TEXTURE);
-        	this.drawTexturedModalRect(mouseX, mouseY, 32, 192, 18, 18);
+        	this.drawTexturedModalRect(mouseX - 8, mouseY - 8, 32, 192, 18, 18);
         	GlStateManager.popMatrix();
         }
         handleCanBeCompile();
@@ -460,9 +458,7 @@ public class SpellProgrammerGui extends GuiScreen
 			String attribute = String.valueOf(selected.spellAttribute);
 		    this.fontRenderer.drawString(power, selected.x - 1, selected.y - 15, 0x404040);
 		    this.fontRenderer.drawString(attribute, selected.x + 11, selected.y - 15, 0x404040);
-		    
 
-		    
 			for(int i = 0; i < PanelButtonList.size(); i++)
 			{
 				PanelButtonList.get(i).enabled = true;
@@ -528,6 +524,7 @@ public class SpellProgrammerGui extends GuiScreen
     @Override
     protected void actionPerformed(GuiButton button) throws IOException
     {
+    	
     	for(int i = 0; i < magick.length; i++)
     	{
     		if(button.id == magick[i])
@@ -572,33 +569,69 @@ public class SpellProgrammerGui extends GuiScreen
     
     private boolean magickCompiler()
     {
+    	int[][] MagickThing = new int[4][];
+
+		int amount = 0;
+		List<int[]> ListMagick = new ArrayList<>();
+		List<int[]> ListSelector = new ArrayList<>();
+		List<int[]> ListSelectorPower = new ArrayList<>();
+		List<int[]> ListSelectorAttribute = new ArrayList<>();
+		int MaxLength = 0;
     	for(int i = 0; i < SelectedButtonList.size(); i++)
     	{
     		if(SelectedButtonList.get(i).isMagickButton)
     		{	
     			SelectedButtonList.get(i).checkLinkedSort();
-    			NBTTagCompound nbt = new NBTTagCompound();
-    			int amount = SelectedButtonList.get(i).sortID - 1;
-    			nbt.setInteger("Magick", SelectedButtonList.get(i).id);
-    			nbt.setInteger("MagickPower", SelectedButtonList.get(i).spellPower);
-    			nbt.setInteger("MagickAttribute", SelectedButtonList.get(i).spellAttribute);
-    			nbt.setInteger("SelectNumber", amount);
-    			int[] SelectorList =  SelectedButtonList.get(i).Sort;
-    			int[] SelectorPowerList =  SelectedButtonList.get(i).Power;
-    			int[] SelectorAttributeList =  SelectedButtonList.get(i).Attribute;
-
-    			for(int z = amount; z > 0; z--)
-    			{
-    				String selector = "Selector"+String.valueOf(z);
-    				nbt.setInteger(selector, SelectorList[z]);
-    				nbt.setInteger(selector+"Power", SelectorPowerList[z]);
-    				nbt.setInteger(selector+"Attribute", SelectorAttributeList[z]);
-    			}
-    			NewMagickNBTList.appendTag(nbt);
+    			int[] Selector = SelectedButtonList.get(i).Sort;
+    			int[] SelectorPower = SelectedButtonList.get(i).Power;
+    			int[] SelectorAttribute = SelectedButtonList.get(i).Attribute;
+    			int[] Magick = {SelectedButtonList.get(i).id,
+    							SelectedButtonList.get(i).spellPower,
+    							SelectedButtonList.get(i).spellAttribute,
+    							Selector.length};
+    			
+    			if(Selector.length > MaxLength)
+    				MaxLength = Selector.length;
+    			
+    			ListSelector.add(Selector);
+    			ListSelectorPower.add(SelectorPower);
+    			ListSelectorAttribute.add(SelectorAttribute);
+    			ListMagick.add(Magick);
+    			
+    			amount++;
     		}
     	}
     	
-    	SelectedButtonList.clear();
+		MagickThing[0] = new int[amount];
+		MagickThing[1] = new int[amount];
+		MagickThing[2] = new int[amount];
+		MagickThing[3] = new int[amount];
+    	
+		int[][] SelectorList = new int[amount][];
+		int[][] SelectorPowerList = new int[amount][];
+		int[][] SelectorAttributeList = new int[amount][];
+		
+		for(int i = 0; i < amount; i++)
+		{
+			int[] m = ListMagick.get(i);
+			for(int z = 0; z < 4; z ++)
+        	{
+				MagickThing[z][i] = m[z];
+        	}
+			int L = MagickThing[3][i];
+			int[] im = ListSelector.get(i);
+			SelectorList[i] = new int[L];
+			SelectorPowerList[i] = new int[L];
+			SelectorAttributeList[i] = new int[L];
+			for(int z = 0; z < im.length; z++)
+			{
+				SelectorList[i][z] = ListSelector.get(i)[z];
+				SelectorPowerList[i][z] = ListSelectorPower.get(i)[z];
+				SelectorAttributeList[i][z] = ListSelectorAttribute.get(i)[z];
+			}
+		}
+    	NetworkHandler.getNetwork().sendToServer(new NetworkPlayerAddMagick(player.getUniqueID(), MagickThing, SelectorList, SelectorPowerList, SelectorAttributeList, amount));
+    	//SelectedButtonList.clear();
     	selected = null;
     	chooseToLink = null;
 		return true;
@@ -620,6 +653,12 @@ public class SpellProgrammerGui extends GuiScreen
     			SelectedButtonList.get(i).prveLinked = null;
     	}
 		this.selected = null;
+    }
+    
+    @Override
+    public void onGuiClosed() {
+    	serverside.onContainerClosed(player);
+    	super.onGuiClosed();
     }
     
     @Override

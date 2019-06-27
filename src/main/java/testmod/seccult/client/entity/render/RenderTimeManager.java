@@ -2,11 +2,15 @@ package testmod.seccult.client.entity.render;
 
 import org.lwjgl.opengl.GL11;
 
+import com.jcraft.jorbis.DspState;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -17,7 +21,7 @@ import testmod.seccult.entity.EntityTimeManager;
 
 public class RenderTimeManager extends Render<EntityTimeManager>{
 
-	private static ResourceLocation darkTexture = new ResourceLocation("seccult:textures/entity/darktexture.png");
+	private static ResourceLocation darkTexture = new ResourceLocation("seccult:textures/entity/blackvelvethell.png");
 	private int lifeTiming;
 	public RenderTimeManager(RenderManager manager) {
         super(manager);
@@ -47,22 +51,18 @@ public class RenderTimeManager extends Render<EntityTimeManager>{
 	    }
 	    }
 	    GlStateManager.scale(size, size, size);
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 0.5F);
         int i = 15728880;
         int j = i % 65536;
         int k = i / 65536;
         
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
-        GlStateManager.enableNormalize();
-        GlStateManager.depthMask(false);
         GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-			Minecraft.getMinecraft().getTextureManager().bindTexture(darkTexture);
+        GlStateManager.color(1, 1, 1, 0.1001F);
+        GlStateManager.blendFunc(SourceFactor.ONE_MINUS_DST_COLOR, DestFactor.ONE_MINUS_DST_COLOR);
+		Minecraft.getMinecraft().getTextureManager().bindTexture(darkTexture);
 	    GlStateManager.callList(ClientProxy.sphereIdOutside);
 	    GlStateManager.callList(ClientProxy.sphereIdInside);
-	    GlStateManager.depthMask(true);
-        GlStateManager.disableBlend();
-        GlStateManager.disableNormalize();
+	    GlStateManager.disableBlend();
 	    GlStateManager.popMatrix();
 	}
 

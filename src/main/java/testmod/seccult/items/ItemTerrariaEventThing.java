@@ -12,7 +12,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import testmod.seccult.entity.EntityEoW;
+import testmod.seccult.entity.livings.EntityEoW;
 
 public class ItemTerrariaEventThing extends ItemBase{
 

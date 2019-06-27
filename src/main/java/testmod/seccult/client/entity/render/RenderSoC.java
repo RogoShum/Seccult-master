@@ -7,7 +7,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.Seccult;
 import testmod.seccult.client.entity.model.ModelSoC;
-import testmod.seccult.entity.EntitySoC;
+import testmod.seccult.entity.livings.EntitySoC;
 
 @SideOnly(Side.CLIENT)
 public class RenderSoC extends RenderLiving<EntitySoC>

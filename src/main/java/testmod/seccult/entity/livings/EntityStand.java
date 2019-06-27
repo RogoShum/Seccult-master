@@ -1,4 +1,4 @@
-package testmod.seccult.entity;
+package testmod.seccult.entity.livings;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;

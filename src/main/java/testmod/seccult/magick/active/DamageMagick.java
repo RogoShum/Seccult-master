@@ -3,10 +3,11 @@ package testmod.seccult.magick.active;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.Vec3d;
 import testmod.seccult.init.ModDamage;
-import testmod.seccult.magick.ActiveHandler;
+import testmod.seccult.init.ModMagicks;
+import testmod.seccult.network.NetworkEffectData;
+import testmod.seccult.network.NetworkHandler;
 
 public class DamageMagick extends Magick{
 	protected DamageSource damage;
@@ -40,15 +41,15 @@ public class DamageMagick extends Magick{
 
 	@Override
 	void toEntity() {
-		if(entity instanceof EntityLivingBase && e != null)
+		if(entity instanceof EntityLivingBase && player != null)
 		{
 			MagickFX();
-			damage(e);
+			damage(player);
 			EntityLivingBase living = (EntityLivingBase) entity;
 			living.attackEntityFrom(damage, strengh);
 			living.hurtResistantTime = -1;
 		}
-		else if(e != null)
+		else if(player != null)
 		{
 			doMagickToEntity(entity);
 		}
@@ -56,20 +57,29 @@ public class DamageMagick extends Magick{
 
 	@Override
 	void toBlock() {
-		e.world.destroyBlock(block, true);
+		player.world.destroyBlock(block, true);
 	}
 
 	@Override
 	void MagickFX() 
 	{
-		int particles = 32;
-		for (int i = 0; i < particles; i++) {
-                entity.world.spawnParticle(EnumParticleTypes.SPELL_MOB, entity.posX + (this.rand.nextDouble() - 0.5D) * (double)entity.width, entity.posY + this.rand.nextDouble() * (double)entity.height - 0.25D, entity.posZ + (this.rand.nextDouble() - 0.5D) * (double)entity.width, (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
+		for(int i = 0; i < strengh; i++) {
+		double[] pos = new double[3], vec = new double[3];
+		pos[0] = entity.posX;
+		pos[1] = entity.posY + (entity.height / 2);
+		pos[2] = entity.posZ;
+		Vec3d look = player.getLookVec();
+		vec[0] = entity.world.rand.nextFloat() / 2 * look.x;
+		vec[1] = entity.world.rand.nextFloat() / 2 * look.y;
+		vec[2] = entity.world.rand.nextFloat() / 2 * look.z;
+		
+		float[] color = {RGB[0], RGB[1], RGB[2]};
+		NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, strengh / 5, 0));
 		}
 	}
 
 	@Override
 	public int getColor() {
-		return ActiveHandler.DamageMagickColor;
+		return ModMagicks.DamageMagickColor;
 	}
 }

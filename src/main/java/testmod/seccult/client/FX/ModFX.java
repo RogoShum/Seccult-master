@@ -11,6 +11,8 @@ public class ModFX {
     @SubscribeEvent
     public static void registerSprite(TextureStitchEvent.Pre event){
         LightFX.test2 = event.getMap().registerSprite(new ResourceLocation("seccult:particle/light"));
+        StarFX.test2 = event.getMap().registerSprite(new ResourceLocation("seccult:particle/star"));
+        PentagonFX.test2 = event.getMap().registerSprite(new ResourceLocation("seccult:particle/star2"));
         ATFX.test3 = event.getMap().registerSprite(new ResourceLocation("seccult:particle/ATfield"));
         RainbowFX.test3 = event.getMap().registerSprite(new ResourceLocation("seccult:particle/Rainbow"));
     }

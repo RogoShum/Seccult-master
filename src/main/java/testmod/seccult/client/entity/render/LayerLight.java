@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.client.entity.model.ModelLight;
-import testmod.seccult.entity.EntityLight;
+import testmod.seccult.entity.livings.EntityLight;
 
 @SideOnly(Side.CLIENT)
 public class LayerLight implements LayerRenderer<EntityLight>

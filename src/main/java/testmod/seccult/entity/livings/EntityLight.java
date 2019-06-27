@@ -1,4 +1,4 @@
-package testmod.seccult.entity;
+package testmod.seccult.entity.livings;
 
 import java.util.List;
 
@@ -24,6 +24,7 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import testmod.seccult.client.FX.ATFX;
 import testmod.seccult.client.FX.SuperLaserBeamFX;
+import testmod.seccult.entity.EntityLmr;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.util.ChunkCoordinates;
 import testmod.seccult.util.MathHelper.MathHelper;

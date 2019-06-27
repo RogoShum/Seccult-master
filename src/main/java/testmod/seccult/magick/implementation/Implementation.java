@@ -1,37 +1,51 @@
 package testmod.seccult.magick.implementation;
 
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
+import testmod.seccult.init.ModMagicks;
+import testmod.seccult.magick.ImplementationHandler;
 
-public abstract class Implementation {
+public abstract class Implementation implements Cloneable{
 	private final String nbtName;
-	private final String shortName;
-	private Entity entity;
-	private BlockPos block;
+	private List<Entity> entity;
+	private List<BlockPos> block;
+	protected Entity player;
 	protected boolean doEntity;
 	protected boolean doBlock;
+	public float[] color = new float[3];
 	
-	public Implementation(String nbtName, String shortName) {
+	protected int radius;
+	
+	public Implementation(String nbtName) {
 		this.nbtName = nbtName;
-		this.shortName = shortName;
+		ImplementationHandler.addImplementation(this);
+		ModMagicks.addImplementation(this);
 	}
 	
-	public abstract void getTarget(Entity player);
-	
-	public String getShortName() {
-		return shortName;
-	}
+	public abstract void getTarget();
 
+	public void setPlayer(Entity player)
+	{
+		this.player = player;
+	}
+	
 	public String getNbtName() {
 		return nbtName;
 	}
 
-	protected void setEntity(Entity e)
+	public void setAttribute(int r)
+	{
+		this.radius = r;
+	}
+	
+	public void setEntity(List<Entity> e)
 	{
 		this.entity = e;
 	}
 	
-	protected void setBlock(BlockPos b)
+	public void setBlock(List<BlockPos> b)
 	{
 		this.block = b;
 	}
@@ -45,12 +59,33 @@ public abstract class Implementation {
 	{
 		doBlock = true;
 	}
-	
-	public Entity getEntity() {
+
+	public List<Entity> getEntity() {
+		if(entity == null && entity.isEmpty())
+		{
+			return null;
+		}
 		return entity;
 	}
 	
-	public BlockPos getBlock() {
+	public List<BlockPos> getBlock() {
 		return block;
 	}
+	
+	public void transTarget(Implementation i)
+	{
+		i.setEntity(entity);
+		i.setBlock(block);
+	}
+	
+    @Override  
+    public Implementation clone() {  
+    	Implementation Implementation = null;  
+        try{  
+        	Implementation = (Implementation)super.clone();  
+        }catch(CloneNotSupportedException e) {  
+            e.printStackTrace();  
+        }  
+        return Implementation;  
+    }  
 }

@@ -7,12 +7,10 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 
-import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import testmod.seccult.Seccult;
 import testmod.seccult.init.ModDamage;
 import testmod.seccult.network.NetworkHandler;
@@ -81,6 +79,8 @@ public class PlayerDataHandler {
 		
 		private static final String TAG_PROFICIENCY_LEVEL = "proficiency";
 		
+		private NBTTagList MagickList;
+		
 		private float ManaTalentValue;
 		private float ControlAbility;
 		private float ManaStrengh;
@@ -134,6 +134,7 @@ public class PlayerDataHandler {
 			color3 = cmp.getInteger("Color3");
 			color4 = cmp.getInteger("Color4");
 			
+			System.out.println(player.world.isRemote);
 			NetworkHandler.getNetwork().sendToAll(new NetworkPlayerWandData(color2, color3, color4, player.getUniqueID(), wand));
 			
 			if(ManaTalentValue == 0)
@@ -171,6 +172,29 @@ public class PlayerDataHandler {
 			
 			if(GrowthAbility == 0 )
 				GrowthAbility = ManaTalentValue / 1+rand.nextFloat();
+			
+			if(!cmp.hasKey(Seccult.MagickList)) 
+			{
+				NBTTagList list = new NBTTagList();
+				cmp.setTag(Seccult.MagickList, list);
+				MagickList = list;
+			}
+			else
+			{
+				MagickList = cmp.getTagList(Seccult.MagickList, 10);
+			}
+			
+			if(MagickList == null)
+			{
+				MagickList = new NBTTagList();
+			}
+			
+			NBTTagList Mdata = getMagickDataForPlayer(player);
+			int[] newMData = new int[Mdata.tagCount()];
+			for(int i = 0; i< Mdata.tagCount(); i++)
+				newMData[i] = Mdata.getIntAt(i);
+			
+			magickData = newMData;
 		}
 		
 		public void save() {
@@ -203,6 +227,8 @@ public class PlayerDataHandler {
 			cmp.setFloat(TAG_MAX_MANA_VALUE, MaxManaValue);
 			
 			cmp.setFloat(TAG_PROFICIENCY_LEVEL, proficiency);
+			cmp.setTag(Seccult.MagickList, MagickList);
+			setMagickData(player, magickData);
 		}
 		
 		public static int getColor(){
@@ -309,15 +335,9 @@ public class PlayerDataHandler {
 			this.wand = wand;
 		}
 		
-		public void setMagickData(NBTTagList idList)
+		public void setMagickData(int[] idList)
 		{
-			int amount = idList.tagCount();
-			int[] NewData = new int[amount];
-			for(int i = 0; i < idList.tagCount(); i++)
-			{
-				NewData[i] = idList.getIntAt(i);
-			}
-			magickData = newMagickList(NewData);
+			magickData = newMagickList(idList);
 		}
 		
 	    private int[] newMagickList(int[] list)
@@ -344,13 +364,15 @@ public class PlayerDataHandler {
 	    }
 		
 		public void addMagickData(int id)
-		{
+		{	
+			if(hasMagick(id))
+				return;
 			int[] NewData = new int[magickData.length + 1];
 			for(int i = 0; i < magickData.length; i++)
 			{
 				NewData[i] = magickData[i];
 			}
-			NewData[magickData.length + 1] = id;
+			NewData[magickData.length] = id;
 			magickData = NewData;
 		}
 		
@@ -415,6 +437,77 @@ public class PlayerDataHandler {
 		
 		public int getWandStyle() {
 			return wand;
+		}
+		
+		public String[] addMagick(NBTTagCompound magick)
+		{
+			String[] string = new String[2];
+			string[0] = "false";
+			string[1] = "unknow";
+			getMagickList().appendTag(magick);
+			string[0] = "true";
+			return string;
+		}
+
+		public boolean hasMagick(int id)
+		{
+			for(int i = 0; i < magickData.length; i++)
+			{
+				if(magickData[i] == id)
+				return true;
+			}
+			
+			return false;
+		}
+		
+		public static void setMagickData(EntityPlayer player, int[] magicklist)
+		{
+			NBTTagList list = new NBTTagList();
+			for(int i = 0; i < magicklist.length; i++)
+			{
+				NBTTagInt z = new NBTTagInt(magicklist[i]);
+				list.appendTag(z);
+			}
+			getData(player).setTag(Seccult.MagickData, list);
+		}
+		
+		public static NBTTagList getMagickDataForPlayer(EntityPlayer player)
+		{
+			if(getData(player).hasKey(Seccult.MagickData))
+				return getData(player).getTagList(Seccult.MagickData, 3);
+			else return new NBTTagList();
+		}
+		
+		public static NBTTagCompound getData(EntityPlayer player)
+		{
+			NBTTagCompound forgeData = player.getEntityData();
+			if(!forgeData.hasKey(EntityPlayer.PERSISTED_NBT_TAG)) {
+				forgeData.setTag(EntityPlayer.PERSISTED_NBT_TAG, new NBTTagCompound());
+			}
+
+			NBTTagCompound persistentData = forgeData.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+			if(!persistentData.hasKey(Seccult.Data)) {
+				persistentData.setTag(Seccult.Data, new NBTTagCompound());
+			}
+			return persistentData.getCompoundTag(Seccult.Data);
+		}
+		
+		public NBTTagList getMagickList()
+		{
+			return MagickList == null ? new NBTTagList(): MagickList;
+		}
+		
+		public NBTTagList getAllMagick()
+		{
+			return MagickList;
+		}
+		
+		public NBTTagCompound getMagickAt(int i)
+		{
+			if(getMagickList().tagCount() >= i)
+				return getMagickList().getCompoundTagAt(i);
+			else
+				return null;
 		}
 	}
 }

@@ -11,6 +11,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import testmod.seccult.entity.livings.EntityNotoriousBIG;
 
 public class EntityDummy extends Entity
 {

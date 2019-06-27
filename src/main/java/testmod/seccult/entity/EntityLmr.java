@@ -18,6 +18,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.client.FX.LightFX;
+import testmod.seccult.entity.livings.EntityStand;
 import testmod.seccult.util.MathHelper.MovingObjectPosition;
 
 public class EntityLmr extends Entity

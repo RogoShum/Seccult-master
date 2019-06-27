@@ -27,8 +27,8 @@ public class AMadeInHeaven extends ItemAccessories{
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
 		super.onArmorTick(world, player, itemStack);
 		if(!hasAccessories(player, ModItems.A_MADE_IN_HEAVEN)) return;
-		//madeInHeaven(player);
-		dummyBody(player);
+		madeInHeaven(player);
+		//dummyBody(player);
 	}
 	
 	private void dummyBody(EntityPlayer player)

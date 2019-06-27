@@ -10,8 +10,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import testmod.seccult.Seccult;
-import testmod.seccult.api.ModMagicks;
-import testmod.seccult.magick.active.Magick;
+import testmod.seccult.init.ModMagicks;
 
 public class SpellButton extends GuiButton{
 
@@ -93,6 +92,7 @@ public class SpellButton extends GuiButton{
 	
 	@Override
 	public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+		
 		rotationAngle++;
 		if(rotationAngle > 360)
 			rotationAngle = 0;
@@ -103,7 +103,6 @@ public class SpellButton extends GuiButton{
 		
 		if(spellAttribute < 0)
 			spellAttribute = 0;
-		
 		if(clicked)
 		{
 			this.x = mouseX - 8;
@@ -133,14 +132,11 @@ public class SpellButton extends GuiButton{
         String BUTTON_PATH = Seccult.MODID + ":" + "textures/gui/button/" + MagickName + ".png";
         ResourceLocation BUTTON_TEXTURE = new ResourceLocation(BUTTON_PATH);
         mc.getTextureManager().bindTexture(BUTTON_TEXTURE);
-        //int x = mouseX - this.height, y = mouseY - this.width;
         GlStateManager.pushMatrix();
         GlStateManager.scale(0.0625F, 0.0625F, 0.0625F);
         this.drawTexturedModalRect(this.x * 16, this.y * 16, 0, 0, this.width * 16, this.height * 16);
-        //this.drawGradientRect(mouseX, mouseY, mouseX+20, mouseY+20, 0xFF000000, 0xFF000000);
         GlStateManager.popMatrix();
 		}
-		//System.out.println("QAQ");
 	}
 	
 	public void checkLinkedSort() {
@@ -200,14 +196,7 @@ public class SpellButton extends GuiButton{
 						getLinked.sortLock = true;
 					}
 				}
-				}
-				else
-				{
-					Sort = updateArray(0);
-					Power = updateArray(1);
-					Attribute = updateArray(2);
-				}
-				
+				}				
 				sortLock = false;
 			}
 		}

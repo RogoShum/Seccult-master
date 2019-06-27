@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -15,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import testmod.seccult.Seccult;
+import testmod.seccult.client.gui.GuiElementLoader;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.items.Accessories.ItemAccessories;
 
@@ -127,13 +130,14 @@ public class PlayerAccessorieHandler {
 
 		public void tick()
 		{
+			//if(Minecraft.getMinecraft().currentScreen instanceof GuiInventory)
+				//player.openGui(Seccult.instance, GuiElementLoader.GUI_Accessories, player.world, (int)player.posX, (int)player.posY, (int)player.posZ);
+			
 			for(int i = 0; i < itemList.length; i++)
 			{
 				if(itemList[i]!=null)
 				{
 					itemList[i].getItem().onArmorTick(player.world, player, itemList[i]);
-					//ItemAccessories ac = (ItemAccessories)itemList[i].getItem();
-					//System.out.println(ac.hasAccessories(player, ModItems.A_MADE_IN_HEAVEN));
 				}
 			}
 			save();
@@ -147,7 +151,7 @@ public class PlayerAccessorieHandler {
 					NBTTagCompound nbt = new NBTTagCompound();
 					ItemStack item = itemList[i];
 					ResourceLocation id = item.getItem().getRegistryName();
-					if(id.equals(Items.AIR))
+					if(id.equals(Items.AIR.getRegistryName()))
 						continue;
 					nbt.setString(TAG_ITEM_ID, id.toString());
 					nbt.setInteger(TAG_ITEM_COUNT, item.getCount());

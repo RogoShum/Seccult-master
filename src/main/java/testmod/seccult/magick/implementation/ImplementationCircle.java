@@ -1,18 +1,15 @@
 package testmod.seccult.magick.implementation;
 
-import net.minecraft.entity.Entity;
-
 public class ImplementationCircle extends Implementation{
 
-	public ImplementationCircle(String nbtName, String shortName) {
-		super(nbtName, shortName);
+	public ImplementationCircle(String nbtName) {
+		super(nbtName);
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public void getTarget(Entity player) {
+	public void getTarget() {
 		// TODO Auto-generated method stub
 		
 	}
-
 }

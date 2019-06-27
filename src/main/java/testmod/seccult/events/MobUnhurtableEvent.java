@@ -18,10 +18,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.client.FX.ATFX;
 import testmod.seccult.client.FX.LightFX;
-import testmod.seccult.entity.EntityBase;
 import testmod.seccult.entity.EntityBloodBeam;
-import testmod.seccult.entity.EntityLight;
-import testmod.seccult.entity.EntityNotoriousBIG;
+import testmod.seccult.entity.livings.EntityBase;
+import testmod.seccult.entity.livings.EntityLight;
+import testmod.seccult.entity.livings.EntityNotoriousBIG;
 import testmod.seccult.entity.projectile.TRBladeBeam;
 import testmod.seccult.util.RogoDamage;
 

@@ -7,7 +7,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.Seccult;
 import testmod.seccult.client.entity.model.ModelEoW;
-import testmod.seccult.entity.EntityEoW;
+import testmod.seccult.entity.livings.EntityEoW;
 @SideOnly(Side.CLIENT)
 public class RenderEoW extends RenderLiving<EntityEoW>
 {

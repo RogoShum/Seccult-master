@@ -4,6 +4,14 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import testmod.seccult.Seccult;
+import testmod.seccult.entity.livings.EntityCarne;
+import testmod.seccult.entity.livings.EntityChangeling;
+import testmod.seccult.entity.livings.EntityEoC;
+import testmod.seccult.entity.livings.EntityEoW;
+import testmod.seccult.entity.livings.EntityEoWHead;
+import testmod.seccult.entity.livings.EntityLight;
+import testmod.seccult.entity.livings.EntityNotoriousBIG;
+import testmod.seccult.entity.livings.EntitySoC;
 import testmod.seccult.entity.projectile.*;
 
 public class ModEntity  

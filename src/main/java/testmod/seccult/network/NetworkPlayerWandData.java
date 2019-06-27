@@ -68,9 +68,12 @@ public class NetworkPlayerWandData implements IMessage {
         	
         	int wand = message.wandstyle;
         	
+
         	EntityPlayer player = world.getPlayerEntityByUUID(message.PUUID);
+        	if(player != null) {
         	PlayerData data = PlayerDataHandler.get(player);
         	data.setColor(color2, color3, color4, wand);
+        	}
             return null;
         }
 }

@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import testmod.seccult.ClientProxy;
 import testmod.seccult.client.entity.model.ModelSoC;
-import testmod.seccult.entity.EntityEoC;
+import testmod.seccult.entity.livings.EntityEoC;
 
 public class RenderEoC extends RenderLiving<EntityEoC>{
 	private static ResourceLocation eoc = new ResourceLocation("seccult:textures/entity/eoc.png");

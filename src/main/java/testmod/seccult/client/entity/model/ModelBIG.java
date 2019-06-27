@@ -5,7 +5,7 @@ import net.minecraft.client.model.ModelCreeper;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
-import testmod.seccult.entity.EntityNotoriousBIG;
+import testmod.seccult.entity.livings.EntityNotoriousBIG;
 
 /**
  * ModelBIG - rogoshum

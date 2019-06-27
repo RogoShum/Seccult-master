@@ -1,4 +1,4 @@
-package testmod.seccult.entity;
+package testmod.seccult.entity.livings;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -32,6 +32,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import testmod.seccult.Seccult;
+import testmod.seccult.entity.RogoEntityGetData;
 import testmod.seccult.util.MathHelper.MovingObjectPosition;
 
 public class EntityChangeling extends EntityCreature implements RogoEntityGetData{

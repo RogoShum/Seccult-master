@@ -5,6 +5,13 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import testmod.seccult.entity.*;
+import testmod.seccult.entity.livings.EntityCarne;
+import testmod.seccult.entity.livings.EntityChangeling;
+import testmod.seccult.entity.livings.EntityEoC;
+import testmod.seccult.entity.livings.EntityEoW;
+import testmod.seccult.entity.livings.EntityLight;
+import testmod.seccult.entity.livings.EntityNotoriousBIG;
+import testmod.seccult.entity.livings.EntitySoC;
 import testmod.seccult.entity.projectile.*;
 
 public class RenderHandler 

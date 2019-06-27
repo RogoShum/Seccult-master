@@ -8,7 +8,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.Seccult;
 import testmod.seccult.client.entity.model.ModelBIG;
-import testmod.seccult.entity.EntityNotoriousBIG;
+import testmod.seccult.entity.livings.EntityNotoriousBIG;
 
 @SideOnly(Side.CLIENT)
 public class RenderBIG extends RenderLiving<EntityNotoriousBIG>

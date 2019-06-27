@@ -11,12 +11,14 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 import testmod.seccult.api.PlayerDataHandler;
-import testmod.seccult.api.PlayerMagickDataHandler;
 import testmod.seccult.api.accessorie.PlayerAccessorieHandler;
 import testmod.seccult.init.ModDamage;
+import testmod.seccult.magick.MagickCompiler;
 
 public class PlayerDataUpdateEvent {
     public static final List<String> MagicDamage  = new ArrayList<>();
+    public static List<MagickCompiler> compiler = new ArrayList<>();
+    
     
     public PlayerDataUpdateEvent() 
     {
@@ -40,6 +42,12 @@ public class PlayerDataUpdateEvent {
 	@SubscribeEvent
 	public void onServerTick(ServerTickEvent event) 
 	{
+		for(int i = 0; i < compiler.size(); i++)
+		{
+			compiler.get(i).onUpdate();
+			if(compiler.get(i).done)
+				compiler.remove(i);
+		}
 		if(event.phase == Phase.END) {
 			PlayerDataHandler.cleanup();
 			PlayerAccessorieHandler.cleanup();

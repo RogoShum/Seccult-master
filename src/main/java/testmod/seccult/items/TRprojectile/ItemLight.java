@@ -20,8 +20,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.Seccult;
-import testmod.seccult.entity.EntityLight;
 import testmod.seccult.entity.EntityLmr;
+import testmod.seccult.entity.livings.EntityLight;
 import testmod.seccult.items.ProjectileBase;
 
 public class ItemLight extends ProjectileBase

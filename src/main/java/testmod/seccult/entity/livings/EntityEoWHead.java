@@ -1,4 +1,4 @@
-package testmod.seccult.entity;
+package testmod.seccult.entity.livings;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.IEntityLivingData;

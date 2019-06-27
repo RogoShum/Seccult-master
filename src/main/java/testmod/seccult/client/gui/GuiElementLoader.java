@@ -25,8 +25,8 @@ public class GuiElementLoader implements IGuiHandler
         {
         case GUI_DEMO:
             return new SpellProgrammerDemo((SpellProgrammer) world.getBlockState(new BlockPos(x, y, z)).getBlock(), player);
-        case GUI_Accessories:
-            return new AccessoriesContainer(player);
+        //case GUI_Accessories:
+            //return new AccessoriesContainer(player);
         default:
             return null;
         }
@@ -38,9 +38,9 @@ public class GuiElementLoader implements IGuiHandler
         switch (ID)
         {
         case GUI_DEMO:
-            return new SpellProgrammerGui(player);
-        case GUI_Accessories:
-            return new AccessoriesGui(new AccessoriesContainer(player));
+            return new SpellProgrammerGui(new SpellProgrammerDemo((SpellProgrammer) world.getBlockState(new BlockPos(x, y, z)).getBlock(), player), player);
+        //case GUI_Accessories:
+            //return new AccessoriesGui(new AccessoriesContainer(player));
         default:
             return null;
         }

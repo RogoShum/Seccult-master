@@ -11,13 +11,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class LightFX extends Particle
+public class StarFX extends Particle
 {
     private final float lightParticleScale;
 
 	public static TextureAtlasSprite test2;
 
-    public LightFX(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn)
+    public StarFX(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn)
     {
         super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
         this.motionX = xSpeedIn;
@@ -39,7 +39,7 @@ public class LightFX extends Particle
         this.setSize(0.1F, 0.1F);
     }
     
-    public LightFX(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn, float a)
+    public StarFX(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn, float a)
     {
         super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
         this.motionX = xSpeedIn;
@@ -79,9 +79,9 @@ public class LightFX extends Particle
 	@Override
     public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ)
     {
-		this.particleRed += (1 - rand.nextFloat() * 2) *0.0005;
-		this.particleGreen += (1 - rand.nextFloat() * 2) *0.0005;
-		this.particleBlue += (1 - rand.nextFloat() * 2) *0.0005;
+		this.particleRed += this.particleGreen - this.particleBlue;
+		this.particleGreen += this.particleBlue - this.particleRed;
+		this.particleBlue += this.particleRed - this.particleGreen;
     	if(this.particleAge < this.particleMaxAge / 2)
     	{
     		float f = ((float)this.particleAge + partialTicks) / (float)this.particleMaxAge;
@@ -155,7 +155,7 @@ public class LightFX extends Particle
         {
             public Particle createParticle(int particleID, World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn, int... p_178902_15_)
             {
-                return new LightFX(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
+                return new StarFX(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
             }
         }
 }

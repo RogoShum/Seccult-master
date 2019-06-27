@@ -7,7 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.Seccult;
-import testmod.seccult.entity.EntityCarne;
+import testmod.seccult.entity.livings.EntityCarne;
 
 @SideOnly(Side.CLIENT)
 public class RenderCarne extends RenderLiving<EntityCarne>

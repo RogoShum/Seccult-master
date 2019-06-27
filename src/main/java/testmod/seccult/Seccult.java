@@ -17,16 +17,15 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import testmod.seccult.api.ModMagicks;
 import testmod.seccult.client.FX.ModFX;
 import testmod.seccult.client.gui.GuiElementLoader;
 import testmod.seccult.creativetab.CreativeTabsLoader;
 import testmod.seccult.events.ModEventHandler;
 import testmod.seccult.init.ModItems;
+import testmod.seccult.init.ModMagicks;
 import testmod.seccult.items.ItemWand;
-import testmod.seccult.magick.ActiveHandler;
-import testmod.seccult.magick.ImplemrntationHandler;
-import testmod.seccult.magick.MagickHandler;
+import testmod.seccult.magick.ImplementationHandler;
+import testmod.seccult.magick.MagickCompiler;
 import testmod.seccult.magick.implementation.Implementation;
 import testmod.seccult.network.NetworkHandler;
 import testmod.seccult.util.handlers.RegistryHandler;
@@ -81,14 +80,8 @@ public class Seccult
 			public int colorMultiplier(ItemStack stack, int tintIndex) {
 				if(tintIndex == 1)
 					return ItemWand.getMagickColor(stack);
-				if(tintIndex == 2)
-					return ItemWand.getWandStyle(stack, 2);
-				if(tintIndex == 3)
-					return ItemWand.getWandStyle(stack, 3);
-				if(tintIndex == 4)
-					return ItemWand.getWandStyle(stack, 4);
-				
-				return 1;
+
+					return ItemWand.getWandStyle(stack, tintIndex);
 			}
 		}, ModItems.Wand);
 	}
