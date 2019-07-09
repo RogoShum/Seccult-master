@@ -3,17 +3,13 @@ package testmod.seccult.magick.implementation;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import testmod.seccult.client.FX.LightFX;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
 import testmod.seccult.util.MathHelper.Vector3;
@@ -30,18 +26,29 @@ public class ImplementationFocused extends Implementation{
 				{
 					List<Entity> eList = getEntity();
 					List<Entity> newList = new ArrayList<>();
+					List<BlockPos> newbList = new ArrayList<>();
 					for(int i = 0; i < eList.size(); i++)
 					{
 						if(eList.get(i)!=null) {
-						Entity e = getEntityLookedAt(eList.get(i), radius);
+							Entity e = getEntityLookedAt(eList.get(i), base + addtion);
+							BlockPos b = getBlockLookedAt(eList.get(i), base + addtion);
 						if(e!=null) {
 							float d = e.getDistance(eList.get(i));
-						applyMagickTrail(e.world, eList.get(i).posX, eList.get(i).posY + (eList.get(i).getEyeHeight() * 0.8), eList.get(i).posZ, e.posX, e.posY + (e.height / 2), e.posZ, d);
+								applyMagickTrail(eList.get(i).world, eList.get(i).posX, eList.get(i).posY + (eList.get(i).getEyeHeight() * 0.8), eList.get(i).posZ, e.posX, e.posY + (e.height / 2), e.posZ, d);
 							newList.add(e);
+						}
+						
+						if(b != null)
+						{
+							float d = (float)eList.get(i).getDistanceSqToCenter(b);
+							if(e == null)
+							applyMagickTrail(eList.get(i).world, eList.get(i).posX, eList.get(i).posY + (eList.get(i).getEyeHeight() * 0.8), eList.get(i).posZ, b.getX(), b.getY() + 1, b.getZ(), d);
+							newbList.add(b);
 						}
 						}
 					}
 					setEntity(newList);
+					setBlock(newbList);
 				}
 	}
 	
@@ -58,23 +65,16 @@ public class ImplementationFocused extends Implementation{
         NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, particles, 101));
 	}
 	
-	public BlockPos getBlockLookedAt(Entity e, double finalDistance)
+	public static BlockPos getBlockLookedAt(Entity e, double finalDistance)
 	{
-		double distance = finalDistance;
 		RayTraceResult pos = raycast(e, finalDistance);
-		Vec3d positionVector = e.getPositionVector();
-		if(e instanceof EntityPlayer)
-			positionVector = positionVector.addVector(0, e.getEyeHeight(), 0);
-
 		if(pos != null)
-			distance = pos.hitVec.distanceTo(positionVector);
-
-		Vec3d lookVector = e.getLookVec();
-		Vec3d reachVector = positionVector.addVector(lookVector.x * finalDistance, lookVector.y * finalDistance, lookVector.z * finalDistance);
-		return new BlockPos(reachVector);
+			return pos.getBlockPos();
+		else
+			return null;
 	}
 	
-	public Entity getEntityLookedAt(Entity e, double finalDistance){
+	public static Entity getEntityLookedAt(Entity e, double finalDistance){
 		Entity foundEntity = null;
 
 		double distance = finalDistance;

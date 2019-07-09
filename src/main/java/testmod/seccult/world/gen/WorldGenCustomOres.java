@@ -33,7 +33,7 @@ public class WorldGenCustomOres implements IWorldGenerator
 		{
 		case 0:
 		
-			runGenerator(ore_overworld_unterra, world, random, chunkX, chunkZ, 50, 20, 25);
+			runGenerator(ore_overworld_unterra, world, random, chunkX, chunkZ, 4, 20, 25);
 			
 			break;
 			
@@ -48,9 +48,9 @@ public class WorldGenCustomOres implements IWorldGenerator
 		int heightDiff = maxHeight - minHeight + 1;
 		for(int i = 0; i < chance; i++)
 		{
-			int x = chunkX * 16 + rand.nextInt(16);
+			int x = chunkX * 16 + rand.nextInt(4);
 			int y = minHeight + rand.nextInt(heightDiff);
-			int z = chunkZ * 16 + rand.nextInt(16);
+			int z = chunkZ * 16 + rand.nextInt(4);
 			
 			gen.generate(world, rand, new BlockPos(x,y,z));
 		}

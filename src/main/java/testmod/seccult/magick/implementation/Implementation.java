@@ -16,7 +16,8 @@ public abstract class Implementation implements Cloneable{
 	protected boolean doBlock;
 	public float[] color = new float[3];
 	
-	protected int radius;
+	protected int base;
+	protected int addtion;
 	
 	public Implementation(String nbtName) {
 		this.nbtName = nbtName;
@@ -35,9 +36,10 @@ public abstract class Implementation implements Cloneable{
 		return nbtName;
 	}
 
-	public void setAttribute(int r)
+	public void setAttribute(int b, int add)
 	{
-		this.radius = r;
+		this.base = b;
+		this.addtion = add;
 	}
 	
 	public void setEntity(List<Entity> e)
@@ -61,7 +63,7 @@ public abstract class Implementation implements Cloneable{
 	}
 
 	public List<Entity> getEntity() {
-		if(entity == null && entity.isEmpty())
+		if(entity == null || entity.isEmpty())
 		{
 			return null;
 		}

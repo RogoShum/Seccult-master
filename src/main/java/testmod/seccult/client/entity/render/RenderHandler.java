@@ -36,15 +36,6 @@ public class RenderHandler
 			}
 		});
 		
-		RenderingRegistry.registerEntityRenderingHandler(EntityLmr.class, new IRenderFactory<EntityLmr>()
-		{
-			@Override
-			public Render<? super EntityLmr> createRenderFor(RenderManager manager)
-			{
-				return new RenderLmr(manager);
-			}
-		});
-		
 		RenderingRegistry.registerEntityRenderingHandler(EntityBloodBeam.class, new IRenderFactory<EntityBloodBeam>()
 		{
 			@Override
@@ -111,32 +102,12 @@ public class RenderHandler
 		RenderingRegistry.registerEntityRenderingHandler(EntityLaserBeamBase.class, m -> new RenderLaser(m));
 		RenderingRegistry.registerEntityRenderingHandler(EntityDummy.class, m -> new RenderDummy(m));
 		RenderingRegistry.registerEntityRenderingHandler(EntityChangeling.class, m -> new RenderChangeling(m));
-		
-		RenderingRegistry.registerEntityRenderingHandler(EntityTimeManager.class, new IRenderFactory<EntityTimeManager>()
-		{
-			@Override
-			public Render<? super EntityTimeManager> createRenderFor(RenderManager manager)
-			{
-				return new RenderTimeManager(manager);
-			}
-		});
-		
-		RenderingRegistry.registerEntityRenderingHandler(EntityBlackVelvetHell.class, new IRenderFactory<EntityBlackVelvetHell>()
-		{
-			@Override
-			public Render<? super EntityBlackVelvetHell> createRenderFor(RenderManager manager)
-			{
-				return new RenderBlackVelvetHell(manager);
-			}
-		});
-		
-		RenderingRegistry.registerEntityRenderingHandler(EntityCarne.class, new IRenderFactory<EntityCarne>()
-		{
-			@Override
-			public Render<? super EntityCarne> createRenderFor(RenderManager manager)
-			{
-				return new RenderCarne(manager);
-			}
-		});
+		RenderingRegistry.registerEntityRenderingHandler(EntityLmr.class, m -> new RenderLmr(m));
+		RenderingRegistry.registerEntityRenderingHandler(EntityIMProjectile.class, m -> new RenderLmr(m));
+		RenderingRegistry.registerEntityRenderingHandler(EntityIMCircle.class, m -> new RenderIMCircle(m));
+		RenderingRegistry.registerEntityRenderingHandler(EntityClowCardArrow.class, m -> new RenderClowArrow(m));
+		RenderingRegistry.registerEntityRenderingHandler(EntityTimeManager.class, m -> new RenderTimeManager(m));
+		RenderingRegistry.registerEntityRenderingHandler(EntityBlackVelvetHell.class, m -> new RenderBlackVelvetHell(m));
+		RenderingRegistry.registerEntityRenderingHandler(EntityCarne.class, m -> new RenderCarne(m));
 	}
 }

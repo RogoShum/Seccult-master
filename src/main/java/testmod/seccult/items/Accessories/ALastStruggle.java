@@ -15,7 +15,7 @@ public class ALastStruggle extends ItemAccessories{
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
 		super.onArmorTick(world, player, itemStack);
-		if(!hasAccessories(player, ModItems.A_LAST_STRUGGLE)) return;
+		if(!hasAccessories(player, itemStack)) return;
 		for(int i = 0; i < player.inventory.mainInventory.size(); i++)
 		{
 			ItemStack item = player.inventory.mainInventory.get(i);

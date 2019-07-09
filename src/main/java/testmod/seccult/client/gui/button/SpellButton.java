@@ -38,8 +38,8 @@ public class SpellButton extends GuiButton{
 	public int[] Power;
 	public int[] Attribute;
 	
-	public SpellButton(int buttonId, int x, int y, boolean display) {
-		super(buttonId, x, y, 16, 16, "");
+	public SpellButton(int buttonId, int x, int y, int wid, int hei, boolean display) {
+		super(buttonId, x, y, wid, hei, "");
 		this.displayLayer = display;
 		defineAttribute();
 		if(isMagickButton)
@@ -133,8 +133,17 @@ public class SpellButton extends GuiButton{
         ResourceLocation BUTTON_TEXTURE = new ResourceLocation(BUTTON_PATH);
         mc.getTextureManager().bindTexture(BUTTON_TEXTURE);
         GlStateManager.pushMatrix();
-        GlStateManager.scale(0.0625F, 0.0625F, 0.0625F);
-        this.drawTexturedModalRect(this.x * 16, this.y * 16, 0, 0, this.width * 16, this.height * 16);
+        
+        if(this.width==32&&this.height==32)
+        {
+        	GlStateManager.scale(0.1428, 0.1428, 0.1428);
+        	this.drawTexturedModalRect(this.x * 7, this.y * 7, 0, 0, this.width * 8, this.height * 8);
+        }
+        else
+        {
+        	GlStateManager.scale(0.0625, 0.0625, 0.0625);
+        	this.drawTexturedModalRect(this.x * 16, this.y * 16, 0, 0, this.width * 16, this.height * 16);
+        }
         GlStateManager.popMatrix();
 		}
 	}

@@ -51,7 +51,6 @@ public class SpellProgrammerGui extends GuiScreen
     protected List<GuiButton> PanelButtonList = Lists.<GuiButton>newArrayList();
     protected List<SpellButton> SelectedButtonList = Lists.<SpellButton>newArrayList();
 	public List<String> tooltip = new ArrayList<String>();
-    private SpellProgrammerDemo serverside;
 	
     int xSize, ySize, selectX, selectY, offsetX, offsetY;
 	private boolean PanelOpen;
@@ -62,7 +61,6 @@ public class SpellProgrammerGui extends GuiScreen
         PlayerData data = PlayerDataHandler.get(player);
         magick = data.getAllMagickData();
         canProgeammer = true;
-        serverside = demo;
     } 
     
     @Override
@@ -331,7 +329,7 @@ public class SpellProgrammerGui extends GuiScreen
     			hdis = 0;
     		}
     		
-    			this.buttonList.add(new SpellButton(magick[i], offsetX - 80 + (16 * hdis) + hdis, offsetY + 7 + wdis, false));
+    			this.buttonList.add(new SpellButton(magick[i], offsetX - 80 + (16 * hdis) + hdis, offsetY + 7 + wdis,16, 16, false));
     		hdis++;
     	}
     }
@@ -529,7 +527,7 @@ public class SpellProgrammerGui extends GuiScreen
     	{
     		if(button.id == magick[i])
     		{
-    			SpellButton spellbutton = new SpellButton(button.id, button.x, button.y, true);
+    			SpellButton spellbutton = new SpellButton(button.id, button.x, button.y, 16, 16, true);
     			clicked = spellbutton;
     			return;
     		}
@@ -657,7 +655,6 @@ public class SpellProgrammerGui extends GuiScreen
     
     @Override
     public void onGuiClosed() {
-    	serverside.onContainerClosed(player);
     	super.onGuiClosed();
     }
     

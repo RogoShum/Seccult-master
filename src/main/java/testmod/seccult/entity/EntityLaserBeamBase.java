@@ -1,5 +1,6 @@
 package testmod.seccult.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
@@ -12,12 +13,16 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import testmod.seccult.client.FX.FrozenBlockFX;
 import testmod.seccult.client.FX.SuperLaserBeamFX;
-import testmod.seccult.util.MathHelper.MathHelper;
+import testmod.seccult.magick.active.TeleportMagick;
+import testmod.seccult.magick.implementation.ImplementationFocused;
 
 public class EntityLaserBeamBase extends Entity{
 
@@ -25,20 +30,15 @@ public class EntityLaserBeamBase extends Entity{
 	private static final DataParameter<Float> Width = EntityDataManager.<Float>createKey(EntityLaserBeamBase.class, DataSerializers.FLOAT);
 	private static final DataParameter<NBTTagCompound> TAG = EntityDataManager.<NBTTagCompound>createKey(EntityLaserBeamBase.class, DataSerializers.COMPOUND_TAG);
 	
-	private int Num;
 	private Entity owner;
-	private EntityLaserBeamBase follower;
-	private EntityLaserBeamBase upper;
-	private boolean isTail;
 	private int Damage;
+	private float distance;
 	private EnumHand hand = EnumHand.MAIN_HAND;
-	private double[] position = new double[3];
-	private LaserLengthChecker lengthchecker = new LaserLengthChecker();
 	private SuperLaserBeamFX laserbeam;
 	
 	public EntityLaserBeamBase(World worldIn) {
 		super(worldIn);
-		this.setSize(1F, 1F);
+		this.setSize(0.0F, 0.0F);
 	}
 
     protected void entityInit()
@@ -46,10 +46,6 @@ public class EntityLaserBeamBase extends Entity{
         this.dataManager.register(Length, Float.valueOf(0));
         this.dataManager.register(Width, Float.valueOf(0));
         this.dataManager.register(TAG, new NBTTagCompound());
-    }
-    
-    public void setTail() {
-    	this.isTail = true;
     }
     
     public void setOwner(Entity o) {
@@ -67,28 +63,21 @@ public class EntityLaserBeamBase extends Entity{
     @Override
     public void onUpdate() {
     	super.onUpdate();
-    	/*if(owner == null) {
-    		this.setDead();
-    	}*/
-    	
-    	if(follower == null)
-    	{
-    		double[] p = new double[3];
-    		p[0] = this.posX;
-    		p[1] = this.posY;
-    		p[2] = this.posZ;
-    		lengthchecker.setPosition(p);
-    	}
-
-    	if(isTail)
-    	{
-    		position = lengthchecker.getPosition();
-    		float dx = (float) (position[0] - this.posX);
-    	    float dy = (float) (position[1] - this.posY);
-    		float dz = (float) (position[2] - this.posZ);
-    		float distance = (float) Math.sqrt(dx*dx + dy*dy + dz*dz);
+    		Vec3d lok = this.getLookVec();
+    		BlockPos block = ImplementationFocused.getBlockLookedAt(this, 120);
+    		if(block == null)
+    		{
+       		 	Vec3d position = this.getPositionVector().addVector(lok.x * 120, lok.y * 120, lok.z * 120);
+       		 	block = new BlockPos(position);
+    		}
+    		else
+    		block.add(lok.x * -1, lok.y * -1, lok.z * -1);
+    		float dx = (float) (block.getX() - this.posX);
+    	    float dy = (float) (block.getY() - this.posY);
+    		float dz = (float) (block.getZ() - this.posZ);
+    		distance = (float) Math.sqrt(dx*dx + dy*dy + dz*dz);
     		
-    	 	if(laserbeam == null || (laserbeam != null && !laserbeam.isAlive()))
+    	 	if(this.world.isRemote && laserbeam == null || (laserbeam != null && !laserbeam.isAlive()))
     	 	{
     	 		createLaser(this.world, this.posX, this.posY, this.posZ, this, distance);
     	 	}
@@ -96,20 +85,14 @@ public class EntityLaserBeamBase extends Entity{
     	 	{
     	 		laserbeam.setHeight(distance);
     	 	}
-    		/*NBTTagCompound nbt = new NBTTagCompound();
-    		nbt.setDouble("X", this.posX - position[0]);
-    		nbt.setDouble("Y", this.posY - position[1]);
-    		nbt.setDouble("Z", this.posZ - position[2]);
-    		setTag(nbt);*/
-    	}
-    	
+
     	if(!this.world.isRemote)
     	{
     		if(owner != null) {
         		Vec3d handVec = owner.getLookVec().rotateYaw(hand == EnumHand.MAIN_HAND ? -0.4F : 0.4F);
-        		Vec3d lok = owner.getLookVec();
-       		 	Vec3d position = owner.getPositionVector().addVector(handVec.x, handVec.y - 0.8F + owner.getEyeHeight(), handVec.z);
-       		 	Vec3d QAQ = position.addVector(lok.x * this.Num, lok.y * this.Num, lok.z * this.Num);
+       		 	Vec3d position = owner.getPositionVector().addVector(handVec.x, handVec.y - 0.8 + owner.getEyeHeight(), handVec.z);
+       		 	Vec3d QAQ = position.addVector(lok.x * -1.5, lok.y * -1.5, lok.z * -1.5);
+       		 	TeleportMagick.setPlayerTP(this, QAQ.x, QAQ.y, QAQ.z, 0);
        		 	this.setLocationAndAngles(QAQ.x, QAQ.y, QAQ.z, owner.rotationYaw, owner.rotationPitch);
        		 	if(!owner.isEntityAlive())
        		 		this.setDead();
@@ -118,58 +101,46 @@ public class EntityLaserBeamBase extends Entity{
     		{
     			setDead();
     		}
-    		
-    		if(this.world.isAirBlock(getPosition()) && follower == null && this.Num <= 120)
-    		{
-    			int a = this.Num + 1;
-    			spawnLaser(a);
-    		}
-    		else if(follower != null && !follower.isEntityAlive())
-    		{
-    			follower = null;
-    		}
-    		
-    		if(!this.isTail) {
-    		if(upper == null) 
-    		{
-    			this.setDead();
-    			return;
-    		}
-    		else if(!upper.isEntityAlive())
-    		{
-    			this.setDead();
-    			return;
-    		}
-    		}
     	}
-    	if(!this.world.isAirBlock(getPosition()) && this.follower != null) {
-    		this.follower.setDead();
-    	}
-    	if(this.getMyWidth() == 1)
-    		return;
+
     	this.collideWithNearbyEntities();
     }
 
 	public void createLaser(World worldIn, double posXIn, double posYIn, double posZIn, Entity player, float height)
 	{
-			SuperLaserBeamFX laser =  new SuperLaserBeamFX(worldIn, posXIn, posYIn, posZIn, player, height);
-			laser.setRBGColorF(1, 0.5F, 0);
-			laser.setAlphaF(1F);
-			laser.setMaxAge(2);
-			Minecraft.getMinecraft().effectRenderer.addEffect(laser);
-			this.laserbeam = (SuperLaserBeamFX) laser;
+		SuperLaserBeamFX laser =  new SuperLaserBeamFX(worldIn, posXIn, posYIn, posZIn, player, height);
+		laser.setRBGColorF(1, 0.5F, 0);
+		laser.setAlphaF(1F);
+		laser.setMaxAge(3);
+		Minecraft.getMinecraft().effectRenderer.addEffect(laser);
+		this.laserbeam = (SuperLaserBeamFX) laser;
 	}
     
     protected void collideWithNearbyEntities()
     {
-        List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox());
-
-        if (!list.isEmpty())
+    	Vec3d lok = this.getLookVec();
+		Vec3d position = this.getPositionVector().addVector(lok.x * distance / 2, lok.y * distance / 2, lok.z * distance / 2);
+    	AxisAlignedBB boundingBox = new AxisAlignedBB(position.x, position.y, position.z, position.x, position.y, position.z).grow(distance / 2, distance / 2, distance / 2);
+        List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, boundingBox);
+        List<Vec3d> vecs = new ArrayList<>();
+        for(float f = 0; f < distance; f+=1.5)
+        {
+        	Vec3d vec = this.getPositionVector().addVector(lok.x * f, lok.y * f - 0.4, lok.z * f);
+        	//Minecraft.getMinecraft().effectRenderer.addEffect(new LightFX(this.world, vec.x, vec.y, vec.z, 0, 0, 0, 5));
+        	vecs.add(vec);
+        }
+        
+        if (!list.isEmpty() && !vecs.isEmpty())
         {
             for (int l = 0; l < list.size(); ++l)
             {
                 Entity entity = list.get(l);
-                this.applyEntityCollision(entity);
+                for(Vec3d vec: vecs)
+                {
+                	if(entity.getDistance(vec.x, vec.y, vec.z) <= 0.8 && entity != owner)
+                		this.applyEntityCollision(entity);
+                }
+                
             }
         }
     }
@@ -203,34 +174,10 @@ public class EntityLaserBeamBase extends Entity{
         	 var4 = par1Entity.attackEntityFrom(new EntityDamageSource("seccult:Laser", this), this.Damage);
          return var4;
     }
-    
-    private void spawnLaser(int n) {
-		EntityLaserBeamBase f = new EntityLaserBeamBase(world);
-		f.upper = this;
-		f.Num = n;
-		f.owner = this.owner;
-		f.Damage = this.Damage;
-		f.lengthchecker = this.lengthchecker;
-		this.follower = f;
-		Vec3d p = MathHelper.onLookVec(this, 0.9, 0);
-		f.setPositionAndRotation(p.x, p.y, p.z, this.rotationYaw, this.rotationPitch);
-		if(!this.world.isRemote)
-		this.world.spawnEntity(f);
-    }
-    
-    public void setLength(float length)
-    {
-        this.dataManager.set(Length, Float.valueOf(length));
-    }
 	
     public void setWidth(float width)
     {
         this.dataManager.set(Width, Float.valueOf(width));
-    }
-    
-    public float getMyLength()
-    {
-        return this.dataManager.get(Length).floatValue();
     }
     
     public float getMyWidth()
@@ -254,9 +201,6 @@ public class EntityLaserBeamBase extends Entity{
         return 15728880;
     }
 
-    /**
-     * Gets how bright this entity is.
-     */
     public float getBrightness()
     {
         return 5.0F;

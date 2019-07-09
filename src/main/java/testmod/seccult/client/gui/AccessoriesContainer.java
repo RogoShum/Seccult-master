@@ -74,7 +74,6 @@ public class AccessoriesContainer extends Container{
 		{
 			if(item[i] != null) {
 			Slot[i].putStack(item[i]);
-			System.out.println(item[i].getItem().getRegistryName());
 			}
 		}
 	}

@@ -1,0 +1,7 @@
+{
+    "parent": "block/cube_column",
+    "textures": {
+        "end": "seccult:blocks/log_magic_top",
+        "side": "seccult:blocks/log_magic"
+    }
+}

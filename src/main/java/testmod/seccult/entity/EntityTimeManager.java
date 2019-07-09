@@ -6,12 +6,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.item.EntityPainting;
@@ -28,19 +26,20 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.entity.projectile.TRprojectileBase;
+import testmod.seccult.magick.magickState.StateManager;
 import testmod.seccult.potions.ModPotions;
 import testmod.seccult.util.MathHelper.MovingObjectPosition;
 
 public class EntityTimeManager extends Entity{
 	private static final DataParameter<Integer> EFFECT = EntityDataManager.<Integer>createKey(EntityTimeManager.class, DataSerializers.VARINT);
-	
-	
+
 	protected UUID upperUUID = null;
 	protected long uppermost = 0;
 	protected long upperleast = 0;
 	protected EntityLivingBase MyLord;
 	protected int MyRange;
 	private boolean timestop;
+	private int limit;
 	private long timeset;
 	private ArrayList<EntityDummy> hookedEntitys = new ArrayList<EntityDummy>();
 	private ArrayList<EntityLiving> hookedLivings = new ArrayList<EntityLiving>();
@@ -66,13 +65,19 @@ public class EntityTimeManager extends Entity{
 	}
 	
 	public EntityTimeManager(World worldIn, EntityLivingBase lord, int range) {
-		super(worldIn);
+		this(worldIn);
 		this.setSize(1.0F, 1.0F);
 		this.MyLord = lord;
 		this.upperUUID = lord.getUniqueID();
 		this.upperleast = lord.getUniqueID().getLeastSignificantBits();
 		this.uppermost = lord.getUniqueID().getMostSignificantBits();
 		this.MyRange = range;
+		this.limit = 300;
+	}
+	
+	public EntityTimeManager(World worldIn, EntityLivingBase lord, int range, int time) {
+		this(worldIn, lord, range);
+		this.limit = time;
 	}
 	
 	@Override
@@ -80,11 +85,13 @@ public class EntityTimeManager extends Entity{
 		if(!this.world.isRemote) {
 		super.onUpdate();
 		
-		if(this.MyRange > -10 && (this.MyLord == null || !this.MyLord.getEntityData().hasKey("TimeStop") || this.MyLord.getEntityData().getInteger("TimeStop") == 0)) {
+		if(this.MyRange > -10 && (this.MyLord == null || !this.MyLord.getEntityData().hasKey("TimeStop") || this.MyLord.getEntityData().getInteger("TimeStop") == 0 || (limit > 10 && limit !=300))) {
 			setRender(1);
 			this.MyRange--;
 			loadUUID();
-			if(this.MyRange <= 55) {
+			if(this.MyRange <= 40) {
+				if(MyLord != null)
+					MyLord.getEntityData().setInteger("TimeStop", 0);
 				unLoadHooks();
 			this.isDead = true;
 			this.MyLord = null;
@@ -92,13 +99,14 @@ public class EntityTimeManager extends Entity{
 			}
 			return;
 		}
-		
+		if(limit != 300)
+		limit++;
 		if(MyLord.getEntityData().hasKey("TimeStop") && MyLord.getEntityData().getInteger("TimeStop") == 2) {
 			List<EntityLiving> livings = this.hookedLivings;
 			if(livings != null && (livings.size() > 0)) {
 			for (int a = 0; a < livings.size(); ++a) {
 				EntityLiving d = livings.get(a);
-				d.setNoAI(true);
+				StateManager.setState(d, StateManager.NO_AI, 10);
 			}
 			}
 			
@@ -114,7 +122,6 @@ public class EntityTimeManager extends Entity{
 		    List<Entity> list = MyLord.world.getEntitiesWithinAABBExcludingEntity(MyLord, MyLord.getEntityBoundingBox().grow(MyRange));
 		    boolean pass = false;
 		    Entity entity = null;    
-	        Particle par = null;
 		    if ((list != null) && (list.size() > 0))
 		    {
 		      for (int j1 = 0; j1 < list.size(); ++j1)
@@ -153,18 +160,11 @@ public class EntityTimeManager extends Entity{
 	private void unLoadHooks() 
 	{
 		List<EntityDummy> hooks = this.hookedEntitys;
-		List<EntityLiving> livings = this.hookedLivings;
 		this.hookedprojectile.clear();
 			if(hooks != null && (hooks.size() > 0)) {
 			for (int a = 0; a < hooks.size(); ++a) {
 				EntityDummy d = hooks.get(a);
 				DummyManager.restore(d);
-    }
-	}
-			if(livings != null && (livings.size() > 0)) {
-			for (int a = 0; a < livings.size(); ++a) {
-				EntityLiving d = livings.get(a);
-				d.setNoAI(false);
     }
 	}
 	}
@@ -187,7 +187,6 @@ public class EntityTimeManager extends Entity{
 	}
 	
 	private void TimeStop(MovingObjectPosition movingObjectPosition) {
-		Iterator i$;
 	    Entity hitEntity = movingObjectPosition.entityHit;
 	    if ((hitEntity != null) && (hitEntity.ticksExisted >= 2))
 	    {
@@ -297,18 +296,10 @@ public class EntityTimeManager extends Entity{
 		
 		
 		List<EntityDummy> hooks = this.hookedEntitys;
-		List<EntityLiving> livings = this.hookedLivings;
 			if(hooks != null && (hooks.size() > 0)) {
 			for (int a = 0; a < hooks.size(); ++a) {
 				EntityDummy d = hooks.get(a);
 				DummyManager.restore(d);
-    }
-	}
-			if(livings != null && (livings.size() > 0)) {
-			for (int a = 0; a < livings.size(); ++a) {
-				EntityLiving d = livings.get(a);
-				d.setNoAI(false);
-				d.addPotionEffect(new PotionEffect(ModPotions.lostmind, 20));
     }
 	}
 	}

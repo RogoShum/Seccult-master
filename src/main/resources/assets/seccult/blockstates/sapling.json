@@ -2,6 +2,15 @@
     "variants": 
     {
         "stage=0,variant=everything": { "model": "oak_sapling" },
-        "stage=1,variant=everything": { "model": "oak_sapling" }
+        "stage=1,variant=everything": { "model": "oak_sapling" },
+		
+		"stage=0,variant=bluetree": { "model": "seccult:bluetree_sapling" },
+        "stage=1,variant=bluetree": { "model": "seccult:bluetree_sapling" },
+		
+		"stage=0,variant=whitetree": { "model": "seccult:whitetree_sapling" },
+        "stage=1,variant=whitetree": { "model": "seccult:whitetree_sapling" },
+		
+		"stage=0,variant=magicktree": { "model": "seccult:magictree_sapling" },
+        "stage=1,variant=magicktree": { "model": "seccult:magictree_sapling" }
     }
 }

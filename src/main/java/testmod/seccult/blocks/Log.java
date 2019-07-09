@@ -37,7 +37,7 @@ public class Log extends BlockLog implements registerModel, WaNP
 	{
 		public boolean apply(@Nullable TreeHandler.EnumType apply)
 		{
-			return apply.getMeta() < 2;
+			return apply.getMeta() < 4;
 		}
 	});
 	
@@ -48,7 +48,7 @@ public class Log extends BlockLog implements registerModel, WaNP
 		setUnlocalizedName(name);
 		setRegistryName(name);
 		setSoundType(SoundType.WOOD);
-		setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, TreeHandler.EnumType.EVERYTHING).withProperty(LOG_AXIS, EnumAxis.Y));
+		//setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, TreeHandler.EnumType.EVERYTHING).withProperty(LOG_AXIS, EnumAxis.Y));
 		setCreativeTab(CreativeTabsLoader.tab);
 		setHardness(50.0F);
 		setResistance(10086.0F);
@@ -65,22 +65,6 @@ public class Log extends BlockLog implements registerModel, WaNP
 		super.updateTick(worldIn, pos, state, rand);
 	}
 	
-	private static final AxisAlignedBB BOTTOM_AABB = new AxisAlignedBB(0, 0, 0, 1, 1/16.0, 1);
-	private static final AxisAlignedBB NORTH_AABB = new AxisAlignedBB(0, 0, 15/16.0, 1, 0.5, 1);
-	private static final AxisAlignedBB SOUTH_AABB = new AxisAlignedBB(0, 0, 0, 1, 0.5, 1/16.0);
-	private static final AxisAlignedBB WEST_AABB = new AxisAlignedBB(0, 0, 0, 1/16.0, 0.5, 1);
-	private static final AxisAlignedBB EAST_AABB = new AxisAlignedBB(15/16.0, 0, 0, 1, 0.5, 1);
-
-
-	@Override
-	public void addCollisionBoxToList(IBlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull AxisAlignedBB entityBox, @Nonnull List<AxisAlignedBB> boxes, Entity entity, boolean isActualState) {
-		addCollisionBoxToList(pos, entityBox, boxes, BOTTOM_AABB);
-		addCollisionBoxToList(pos, entityBox, boxes, NORTH_AABB);
-		addCollisionBoxToList(pos, entityBox, boxes, SOUTH_AABB);
-		addCollisionBoxToList(pos, entityBox, boxes, WEST_AABB);
-		addCollisionBoxToList(pos, entityBox, boxes, EAST_AABB);
-	}
-	
 	@Override
 	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) 
 	{
@@ -93,7 +77,7 @@ public class Log extends BlockLog implements registerModel, WaNP
 	@Override
 	public IBlockState getStateFromMeta(int meta) 
 	{
-		IBlockState state = this.getDefaultState().withProperty(VARIANT, TreeHandler.EnumType.byMetadata((meta & 1) % 2));
+		IBlockState state = this.getDefaultState().withProperty(VARIANT, TreeHandler.EnumType.byMetadata(meta));
 		
 		switch(meta & 6)
 		{
@@ -116,27 +100,11 @@ public class Log extends BlockLog implements registerModel, WaNP
 		return state;
 	}
 	
-	@SuppressWarnings("incomplete-switch")
 	@Override
 	public int getMetaFromState(IBlockState state) 
 	{
 		int i = 0;
-		i = i | ((TreeHandler.EnumType)state.getValue(VARIANT)).getMeta();
-		
-		switch((BlockLog.EnumAxis)state.getValue(LOG_AXIS))
-		{
-		case X:
-			i |= 2;
-			break;
-			
-		case Y:
-			i |= 4;
-			break;
-			
-		case Z:
-			i |= 6;
-		}
-		
+		i = ((TreeHandler.EnumType)state.getValue(VARIANT)).getMeta();
 		return i;
 	}
 	

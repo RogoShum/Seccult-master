@@ -6,7 +6,10 @@ public class TreeHandler
 {
 	public static enum EnumType implements IStringSerializable
 	{
-		EVERYTHING(0, "everything");
+		EVERYTHING(0, "everything"),
+		MANA_TREE_BLUE(1, "bluetree"),
+		MANA_TREE_WHITE(2, "whitetree"),
+		MANA_TREE_MAGIC(3, "magicktree");
 		
 		private static final EnumType[] META_LOOKUP = new EnumType[values().length];
 		private final int meta;
@@ -46,10 +49,15 @@ public class TreeHandler
 			return this.name;
 		}
 		
-		public static EnumType byMetadata(int meta)
-		{
-			return META_LOOKUP[meta];
-		}
+        public static EnumType byMetadata(int meta)
+        {
+            if (meta < 0 || meta >= META_LOOKUP.length)
+            {
+                meta = 0;
+            }
+
+            return META_LOOKUP[meta];
+        }
 		
 		static
 		{

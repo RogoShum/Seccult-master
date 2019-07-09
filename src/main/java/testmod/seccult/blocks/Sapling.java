@@ -25,6 +25,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenBigTree;
 import net.minecraft.world.gen.feature.WorldGenTrees;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.terraingen.TerrainGen;
 import testmod.seccult.Seccult;
 import testmod.seccult.blocks.item.ItemBlockVariants;
@@ -34,9 +35,10 @@ import testmod.seccult.init.ModItems;
 import testmod.seccult.util.registerModel;
 import testmod.seccult.util.WaNP;
 import testmod.seccult.util.handlers.TreeHandler;
-import testmod.seccult.world.gen.generators.WorldGenEverythingTree;
+import testmod.seccult.world.gen.plant.WorldGenSeccultTree;
+import testmod.seccult.world.gen.plant.WorldGenEverythingTree;
 
-public class Sapling extends BlockBush implements IGrowable, registerModel, WaNP
+public class Sapling extends BlockBush implements IGrowable, registerModel, WaNP, IPlantable
 {	
 	public static final PropertyInteger STAGE = PropertyInteger.create("stage", 0, 1);
     protected static final AxisAlignedBB SAPLING_AABB = new AxisAlignedBB(0.09999999403953552D, 0.0D, 0.09999999403953552D, 0.8999999761581421D, 0.800000011920929D, 0.8999999761581421D);
@@ -45,7 +47,7 @@ public class Sapling extends BlockBush implements IGrowable, registerModel, WaNP
 	{
 		public boolean apply(@Nullable TreeHandler.EnumType apply)
 		{
-			return apply.getMeta() < 2;
+			return apply.getMeta() < 4;
 		}
 	});
     
@@ -55,7 +57,7 @@ public class Sapling extends BlockBush implements IGrowable, registerModel, WaNP
     {
 		setUnlocalizedName(name);
 		setRegistryName(name);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, TreeHandler.EnumType.EVERYTHING).withProperty(STAGE, Integer.valueOf(0)));
+		//this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, TreeHandler.EnumType.EVERYTHING).withProperty(STAGE, Integer.valueOf(0)));
 		setCreativeTab(CreativeTabsLoader.tab);
 		
 		this.name = name;
@@ -114,15 +116,14 @@ public class Sapling extends BlockBush implements IGrowable, registerModel, WaNP
 	@Override
 	public IBlockState getStateFromMeta(int meta) 
 	{
-		return this.getDefaultState().withProperty(VARIANT, TreeHandler.EnumType.byMetadata(meta & 1)).withProperty(STAGE, Integer.valueOf((meta & 8) >> 3));
+		return this.getDefaultState().withProperty(VARIANT, TreeHandler.EnumType.byMetadata(meta)).withProperty(STAGE, Integer.valueOf((meta & 8) >> 3));
 	}
 	
 	@Override
 	public int getMetaFromState(IBlockState state)
 	{
 		int i = 0;
-		i = i | ((TreeHandler.EnumType)state.getValue(VARIANT)).getMeta();
-		i = i | ((Integer)state.getValue(STAGE)).intValue() << 3;
+		i = ((TreeHandler.EnumType)state.getValue(VARIANT)).getMeta();
 		return i;
 	}
 	
@@ -163,12 +164,20 @@ public class Sapling extends BlockBush implements IGrowable, registerModel, WaNP
 		WorldGenerator gen = (WorldGenerator)(rand.nextInt(10) == 0 ? new WorldGenBigTree(false) : new WorldGenTrees(false));
 		boolean flag = false;
 		int i = 0, j = 0;
-		
 		switch((TreeHandler.EnumType)state.getValue(VARIANT))
 		{
-		case EVERYTHING:
-			gen = new WorldGenEverythingTree();
-			break;
+			case EVERYTHING:
+				gen = new WorldGenEverythingTree();
+				break;
+			case MANA_TREE_BLUE:
+				gen = new WorldGenSeccultTree(true, TreeHandler.EnumType.MANA_TREE_BLUE);
+				break;
+			case MANA_TREE_WHITE:
+				gen = new WorldGenSeccultTree(true, TreeHandler.EnumType.MANA_TREE_WHITE);
+				break;
+			case MANA_TREE_MAGIC:
+				gen = new WorldGenSeccultTree(true, TreeHandler.EnumType.MANA_TREE_MAGIC);
+				break;
 		}
 		
 		IBlockState iblockstate = Blocks.AIR.getDefaultState();

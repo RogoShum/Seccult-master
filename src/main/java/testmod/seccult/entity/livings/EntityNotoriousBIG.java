@@ -43,8 +43,6 @@ public class EntityNotoriousBIG extends EntityStand{
 		thisSise();
 		if(getStandEnergy() > -10)
 			this.isDead = false;
-		if(this.world.isRemote)
-			System.out.println(getMySize());
 		return getStandEnergy() > -10;
 	}
 	

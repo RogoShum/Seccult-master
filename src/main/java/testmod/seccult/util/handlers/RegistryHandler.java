@@ -13,6 +13,7 @@ import testmod.seccult.entity.ModEntity;
 import testmod.seccult.init.ModBlocks;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.util.registerModel;
+import testmod.seccult.world.gen.SeccultBiomeRegistries;
 import testmod.seccult.world.gen.WorldGenCustomOres;
 import testmod.seccult.world.gen.WorldGenCustomTrees;
 
@@ -55,6 +56,7 @@ public class RegistryHandler
 	public static void otherRegistries()
 	{
 		//GameRegistry.registerWorldGenerator(new WorldGenCustomOres(), 0);
+		GameRegistry.registerWorldGenerator(new WorldGenCustomTrees(), 0);
 	}
 	
 	public static void preInitRegisteries()

@@ -16,12 +16,12 @@ public class ItemAccessories extends ItemBase{
 		super(name);
 	}
 	
-	public boolean hasAccessories(EntityPlayer player, Item item)
+	public boolean hasAccessories(EntityPlayer player, ItemStack item)
 	{
 		ItemStack[] stack = PlayerAccessorieHandler.get(player).getAccessories();
 		for(int i = 0; i < stack.length; i++)
 		{
-			if(stack[i].getItem().getRegistryName().toString().equals(item.getRegistryName().toString()))
+			if(stack[i] == item)
 				return true;
 		}
 		return false;

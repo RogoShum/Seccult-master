@@ -4,7 +4,6 @@ import java.util.Random;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import testmod.seccult.api.PlayerDataHandler;
@@ -48,9 +47,10 @@ public abstract class Magick implements Cloneable{
 		this.player = Iplayer;
 		block = goal;
 		entity = e;
-		
+
 		strengh = power;
 		this.attribute = attribute;
+		
 		if(this.player instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) this.player;
 			
@@ -114,7 +114,6 @@ public abstract class Magick implements Cloneable{
 	
 	protected void doMagick()
 	{
-		
 		if(entity != null)
 		toEntity();
 		if(block != null)

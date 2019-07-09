@@ -44,6 +44,13 @@ public class NetworkPlayerWandData implements IMessage {
         uleast = buf.readLong();
         ulong = buf.readLong();
         PUUID = new UUID(ulong, uleast);
+        System.out.println("=============");
+        System.out.println("=============");
+        System.out.println(ulong);
+        System.out.println(uleast);
+        System.out.println(PUUID);
+        System.out.println("=============");
+        System.out.println("=============");
     }
 
     @Override
@@ -67,14 +74,16 @@ public class NetworkPlayerWandData implements IMessage {
         	int color4 = message.color4;
         	
         	int wand = message.wandstyle;
-        	
-
+        	if(message.PUUID != null)
+        	{
         	EntityPlayer player = world.getPlayerEntityByUUID(message.PUUID);
         	if(player != null) {
         	PlayerData data = PlayerDataHandler.get(player);
         	data.setColor(color2, color3, color4, wand);
         	}
+        	}
             return null;
+        	
         }
 }
 }

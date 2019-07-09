@@ -49,6 +49,7 @@ public class EntityBloodBeam extends Entity{
 		}
 		else
 			loadUUID();
+		System.out.println("QWQ");
 	}
 	
 	private void onChargeBloodB() {

@@ -39,6 +39,9 @@ public class ModEntity
 		registerEntityWithoutEgg("timemanager", EntityTimeManager.class, id++, 128, 1, true);
 		registerEntityWithoutEgg("blackvelvethell", EntityBlackVelvetHell.class, id++, 128, 1, true);
 		registerEntityWithoutEgg("dummyentity", EntityDummy.class, id++, 128, 1, true);
+		registerEntityWithoutEgg("improjectile", EntityIMProjectile.class, id++, 128, 1, true);
+		registerEntityWithoutEgg("imcircle", EntityIMCircle.class, id++, 128, 1, true);
+		registerEntityWithoutEgg("ArrowClowCard", EntityClowCardArrow.class, id++, 128, 1, true);
 	}
 	
 	public static void registerEntity(String name, Class<? extends Entity> entity, int id, int range, int updateFrequency, boolean svu, int color1, int color2) 

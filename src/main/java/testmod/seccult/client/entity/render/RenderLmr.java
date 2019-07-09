@@ -2,15 +2,14 @@ package testmod.seccult.client.entity.render;
 
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.entity.RenderSnowball;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.Seccult;
-import testmod.seccult.entity.EntityLmr;
 
 @SideOnly(Side.CLIENT)
-public class RenderLmr extends Render<EntityLmr>
+public class RenderLmr extends Render<Entity>
 {
 	private static final ResourceLocation TEXTURES = new ResourceLocation(Seccult.MODID + ":textures/entity/lmr.png");
 	
@@ -21,7 +20,7 @@ public class RenderLmr extends Render<EntityLmr>
 	}
 	
 	@Override
-	protected ResourceLocation getEntityTexture(EntityLmr entity)
+	protected ResourceLocation getEntityTexture(Entity entity)
 	{
 		return TEXTURES;
 	}

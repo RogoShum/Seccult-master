@@ -19,6 +19,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import testmod.seccult.magick.magickState.StateManager;
 import testmod.seccult.util.ChunkCoordinates;
 import testmod.seccult.util.MathHelper.MathHelper;
 import testmod.seccult.util.MathHelper.MovingObjectPosition;
@@ -246,6 +247,7 @@ public class EntityEoW extends EntityBase{
         this.motionX += (Math.signum(this.eneX - this.posX) - this.motionX);
         this.motionY += (Math.signum(this.eneY - this.posY) - this.motionY);
         this.motionZ += (Math.signum(this.eneZ - this.posZ) - this.motionZ);
+        StateManager.setPlayerMove(this, (Math.signum(this.eneX - this.posX) - this.motionX), (Math.signum(this.eneY - this.posY) - this.motionY), (Math.signum(this.eneZ - this.posZ) - this.motionZ), 1);
         	//this.moveHelper.setMoveTo(eneX, eneY, eneZ, 1);
         }
 	}
@@ -492,7 +494,8 @@ public class EntityEoW extends EntityBase{
             this.motionX += (Math.signum(upper.posX - this.posX) - this.motionX) * 0.6F;
             this.motionY += (Math.signum(upper.posY - this.posY) - this.motionY) * 0.6F;
             this.motionZ += (Math.signum(upper.posZ - this.posZ) - this.motionZ) * 0.6F;
-    		this.moveHelper.setMoveTo(upper.posX, upper.posY, upper.posZ, 1);
+            StateManager.setPlayerMove(this, (Math.signum(upper.posX - this.posX) - this.motionX) * 0.6F, (Math.signum(upper.posY - this.posY) - this.motionY) * 0.6, (Math.signum(upper.posZ - this.posZ) - this.motionZ) * 0.6, 1);
+    		//this.moveHelper.setMoveTo(upper.posX, upper.posY, upper.posZ, 1);
     		double segmentDistance = 0.8D;
     		Vec3d pos;
     		if(this.upper instanceof EntityEoW)

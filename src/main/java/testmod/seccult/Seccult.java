@@ -1,10 +1,10 @@
 package testmod.seccult;
 
+import java.util.Random;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -13,8 +13,6 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.client.FX.ModFX;
@@ -24,11 +22,10 @@ import testmod.seccult.events.ModEventHandler;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.items.ItemWand;
-import testmod.seccult.magick.ImplementationHandler;
-import testmod.seccult.magick.MagickCompiler;
-import testmod.seccult.magick.implementation.Implementation;
 import testmod.seccult.network.NetworkHandler;
 import testmod.seccult.util.handlers.RegistryHandler;
+import testmod.seccult.world.gen.DimensionMagic;
+import testmod.seccult.world.gen.SeccultBiomeRegistries;
 
 @Mod(modid = "seccult", name = "Seccult", version = "0.1")
 
@@ -42,6 +39,8 @@ public class Seccult
 	public static final String AccessorieData = MODID + ":accessorie_data";
 	public static final String MagickData = "MagickData";
 	public static final String MagickList = "MagickList";
+	
+	public static Random rand = new Random();
 	
 	@Instance(Seccult.MODID)
     public static Seccult instance;
@@ -66,7 +65,7 @@ public class Seccult
 	{
 		new GuiElementLoader();
 		proxy.sphereRender();
-		proxy.cylinderRender();
+		DimensionMagic.register();
 	}
 	
 	@EventHandler

@@ -83,7 +83,8 @@ public class MobUnhurtableEvent {
 			}
 		}
 		
-		if(event.getSource().getImmediateSource() instanceof TRBladeBeam && event.getSource().getTrueSource() instanceof EntityPlayer) {
+		if(event.getSource().getImmediateSource() instanceof TRBladeBeam && event.getSource().getTrueSource() instanceof EntityLivingBase) {
+			System.out.println("QAQ");
 			TRBladeBeam beam = (TRBladeBeam) event.getSource().getImmediateSource();
 			EntityLivingBase player = (EntityLivingBase) event.getSource().getTrueSource();
 			if(beam.getRenderSkin() == 12) {
@@ -114,7 +115,7 @@ public class MobUnhurtableEvent {
 			if(player.getEntityData().hasKey("YesYourHighness") && player.getEntityData().getInteger("YesYourHighness") == 1) {
 				player.hurtResistantTime = 20000;
 				player.isDead = false;
-				player.deathTime = -1;
+				player.deathTime = 0;
 				player.setHealth(player.getMaxHealth());
 			}
 		}
@@ -128,8 +129,9 @@ public class MobUnhurtableEvent {
 			if(player.getEntityData().hasKey("YesYourHighness") && player.getEntityData().getInteger("YesYourHighness") == 1) {
 				player.hurtResistantTime = 20000;
 		        player.isDead = false;
-				player.deathTime = -1;
+				player.deathTime = 0;
 		        player.setHealth(player.getMaxHealth());
+		        event.setCanceled(true);
 			}
 		}
 	}

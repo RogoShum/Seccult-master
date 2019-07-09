@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Cylinder;
 import org.lwjgl.util.glu.Disk;
 import org.lwjgl.util.glu.GLU;
+import org.lwjgl.util.glu.Sphere;
 
 import net.minecraft.block.BlockBeacon;
 import net.minecraft.client.Minecraft;
@@ -50,9 +51,8 @@ public class RenderLaser extends Render<EntityLaserBeamBase>
 	@Override
 	public void doRender(EntityLaserBeamBase entity, double x, double y, double z, float yaw, float partialTicks) {
 		super.doRender(entity, x, y, z, yaw, partialTicks);
-
 	}
-
+	
     public static void renderOffsetAABB(AxisAlignedBB boundingBox, double x, double y, double z)
     {
         GlStateManager.disableTexture2D();

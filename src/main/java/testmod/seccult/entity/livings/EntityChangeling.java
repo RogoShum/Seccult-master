@@ -186,7 +186,7 @@ public class EntityChangeling extends EntityCreature implements RogoEntityGetDat
 			getSeccultDataToEntity();
 		}
 		
-		if(!this.StoragedEntity.isEmpty() && this.ticksExisted % 20 == 0)
+		/*if(!this.StoragedEntity.isEmpty() && this.ticksExisted % 20 == 0)
 		{
             Entity entity = EntityList.createEntityByIDFromName(new ResourceLocation(this.StoragedEntity.get(this.rand.nextInt(this.StoragedEntity.size()))), this.world);
             this.Entity = entity;
@@ -256,7 +256,7 @@ public class EntityChangeling extends EntityCreature implements RogoEntityGetDat
             {
             	this.world.spawnEntity(entity);
             }
-		}
+		}*/
 	}
 	
 	private void copy(Entity Sentity)

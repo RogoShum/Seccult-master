@@ -30,7 +30,7 @@ public class RenderBlackVelvetHell extends Render<EntityBlackVelvetHell>{
         GlStateManager.color(1.0F, 1.0F, 1.0F, 0.5F);
         GlStateManager.enableNormalize();
         GlStateManager.depthMask(false);
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_CONSTANT_COLOR);
 			Minecraft.getMinecraft().getTextureManager().bindTexture(darkTexture);
 	    GlStateManager.callList(ClientProxy.sphereIdOutside);
 	    GlStateManager.callList(ClientProxy.sphereIdInside);
@@ -46,7 +46,7 @@ public class RenderBlackVelvetHell extends Render<EntityBlackVelvetHell>{
         GlStateManager.enableNormalize();
         GlStateManager.depthMask(false);
         GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_CONSTANT_COLOR);
 			Minecraft.getMinecraft().getTextureManager().bindTexture(darkPTexture);
 	    GlStateManager.callList(ClientProxy.sphereIdOutside);
 	    GlStateManager.callList(ClientProxy.sphereIdInside);

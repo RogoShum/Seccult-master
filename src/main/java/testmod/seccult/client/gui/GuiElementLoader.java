@@ -12,6 +12,7 @@ public class GuiElementLoader implements IGuiHandler
 {
 	public static final int GUI_DEMO = 1;
 	public static final int GUI_Accessories = 2;
+	public static final int GUI_SpellSelect = 3;
 
     public GuiElementLoader()
     {
@@ -25,8 +26,10 @@ public class GuiElementLoader implements IGuiHandler
         {
         case GUI_DEMO:
             return new SpellProgrammerDemo((SpellProgrammer) world.getBlockState(new BlockPos(x, y, z)).getBlock(), player);
-        //case GUI_Accessories:
-            //return new AccessoriesContainer(player);
+        case GUI_Accessories:
+            return new AccessoriesContainer(player);
+        case GUI_SpellSelect:
+            return new SpellSelect(player);
         default:
             return null;
         }
@@ -39,8 +42,10 @@ public class GuiElementLoader implements IGuiHandler
         {
         case GUI_DEMO:
             return new SpellProgrammerGui(new SpellProgrammerDemo((SpellProgrammer) world.getBlockState(new BlockPos(x, y, z)).getBlock(), player), player);
-        //case GUI_Accessories:
-            //return new AccessoriesGui(new AccessoriesContainer(player));
+        case GUI_Accessories:
+            return new AccessoriesGui(new AccessoriesContainer(player));
+        case GUI_SpellSelect:
+            return new SpellSelectGui(player);
         default:
             return null;
         }

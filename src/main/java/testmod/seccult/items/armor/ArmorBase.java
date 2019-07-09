@@ -12,7 +12,9 @@ import testmod.seccult.util.registerModel;
 
 public class ArmorBase extends ItemArmor implements registerModel
 {
-
+	private float MagicRelief;
+	private float MagicEnhance;
+	private float MagicUpperlimit;
 	public ArmorBase(String name, ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot equipmentSlotIn) {
 		super(materialIn, renderIndexIn, equipmentSlotIn);
 		setUnlocalizedName(name);
@@ -26,6 +28,13 @@ public class ArmorBase extends ItemArmor implements registerModel
 	public void registerModels() 
 	{
 		Seccult.proxy.registerItemRenderer(this, 0, "inventory");
+	}
+	
+	protected void setMagickAttribute(float MagicRelief, float MagicEnhance, float MagicUpperlimit)
+	{
+		this.MagicRelief = MagicRelief;
+		this.MagicEnhance = MagicEnhance;
+		this.MagicUpperlimit = MagicUpperlimit;
 	}
 	
 	public boolean hasArmorSetItem(EntityPlayer player, int i, Item item) {
@@ -44,5 +53,20 @@ public class ArmorBase extends ItemArmor implements registerModel
 		}
 
 		return false;
+	}
+	
+	public float getMagicRelief()
+	{
+		return MagicRelief;
+	}
+	
+	public float getMagicEnhance()
+	{
+		return MagicEnhance;
+	}
+	
+	public float getMagicUpperlimit()
+	{
+		return MagicUpperlimit;
 	}
 }

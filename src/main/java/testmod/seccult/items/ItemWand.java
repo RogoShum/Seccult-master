@@ -1,15 +1,16 @@
 package testmod.seccult.items;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,31 +18,28 @@ import net.minecraft.nbt.NBTTagFloat;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.Seccult;
 import testmod.seccult.api.PlayerDataHandler;
 import testmod.seccult.api.PlayerDataHandler.PlayerData;
-import testmod.seccult.client.FX.LightFX;
-import testmod.seccult.client.entity.model.ModelLight;
-import testmod.seccult.events.PlayerDataUpdateEvent;
+import testmod.seccult.client.gui.GuiElementLoader;
+import testmod.seccult.init.ModBlocks;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.magick.MagickCompiler;
 import testmod.seccult.magick.active.Magick;
-import testmod.seccult.magick.magickState.StateManager;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
-import testmod.seccult.network.NetworkPlayerMagickData;
 
 public class ItemWand extends ItemBase{
 	public static final ResourceLocation wand_prefix = new ResourceLocation(Seccult.MODID, "wandstyle");
 	
 	private NBTTagList MagickList;
-	private int MagickColor;
 	
 	public ItemWand(String name) {
 		super(name);
@@ -58,27 +56,16 @@ public class ItemWand extends ItemBase{
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, @Nonnull EnumHand hand) {
 		ItemStack stack = player.getHeldItem(hand);
 			player.setActiveHand(hand);
-			
-			/*PlayerDataHandler.get(player).addMagickData(0);
-			PlayerDataHandler.get(player).addMagickData(1);
-			PlayerDataHandler.get(player).addMagickData(2);
-			PlayerDataHandler.get(player).addMagickData(3);
-			PlayerDataHandler.get(player).addMagickData(4);
-			PlayerDataHandler.get(player).addMagickData(5);
-			PlayerDataHandler.get(player).addMagickData(6);
-			PlayerDataHandler.get(player).addMagickData(7);
-			PlayerDataHandler.get(player).addMagickData(8);
-			PlayerDataHandler.get(player).addMagickData(9);
-			PlayerDataHandler.get(player).addMagickData(10);*/
+			ArrayList<String> list = ModMagicks.GetAllMagickID();
+			for(int  i = 0; i < list.size(); i++)
+			PlayerDataHandler.get(player).addMagickData(i);
 			
 			double[] pos = new double[3], vec = new double[3];
 			pos[0] = player.posX;
 			pos[1] = player.posY;
 			pos[2] = player.posZ;
 			float[] color = {getWandStyle(stack, 2), getWandStyle(stack, 3), getWandStyle(stack, 4)};
-			//System.out.println(getWandStyle(stack, 2) +"    " +  getWandStyle(stack, 3) +"    " + getWandStyle(stack, 4));
             NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, 0, 100));
-			
 	        if (!world.isRemote && MagickList != null)
 	        {
 	        	int slot = stack.getTagCompound().getInteger("Slot");
@@ -87,6 +74,8 @@ public class ItemWand extends ItemBase{
 	            		stack.getTagCompound().setInteger("Slot", slot + 1);
 	            	if(slot > MagickList.tagCount() - 2)
 	            		stack.getTagCompound().setInteger("Slot", 0);
+	                int id = GuiElementLoader.GUI_SpellSelect;
+	                player.openGui(Seccult.instance, id, world, (int)player.posX, (int)player.posY, (int)player.posZ);
 	            }
 	            else
 	            {
@@ -98,13 +87,52 @@ public class ItemWand extends ItemBase{
 	}
 	
 	@Override
+	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand,
+			EnumFacing facing, float hitX, float hitY, float hitZ) {
+			int x = pos.getX(), y = pos.getY(), z = pos.getZ();
+			int side = facing.getIndex();
+			
+			switch(side) {
+			case 0:
+			default:
+				y--;
+				break;
+			case 1:
+				y++;
+				break;
+			case 2:
+				z--;
+				break;
+			case 3:
+				z++;
+				break;
+			case 4:
+				x--;
+				break;
+			case 5:
+				x++;
+				break;
+			}
+			
+			if(!player.canPlayerEdit(new BlockPos(x, y, z), facing, player.getHeldItem(hand))) {
+				return EnumActionResult.FAIL;
+			}
+			
+			IBlockState location = worldIn.getBlockState(new BlockPos(x, y, z));
+			if(location == Blocks.AIR.getDefaultState()) {
+				ModBlocks.PORTAL.trySpawnPortal(worldIn, new BlockPos(x, y, z));
+			}
+			player.getHeldItem(hand).shrink(1);
+			return EnumActionResult.SUCCESS;
+	}
+	
+	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
 		if(!stack.hasTagCompound())
 			stack.setTagCompound(new NBTTagCompound());
 		boolean hasUUID = stack.getTagCompound().hasKey("UUIDLeast") && stack.getTagCompound().hasKey("UUIDMost");
 		UUID id = null;
-		//entityIn.motionY = -0.5;
 		if(hasUUID)
 		{
 			id = new UUID(stack.getTagCompound().getLong("UUIDMost"), stack.getTagCompound().getLong("UUIDLeast"));
@@ -114,13 +142,22 @@ public class ItemWand extends ItemBase{
 			PlayerData data = PlayerDataHandler.get(player);
 			MagickList = data.getAllMagick();
 			
-			if(MagickList != null) {
-			NBTTagCompound MagickNBT = MagickList.getCompoundTagAt(0);
-			Magick getMagick = ModMagicks.getAttributeFromName(
-					ModMagicks.GetMagickStringByID(
-					MagickNBT.getInteger("Magick")));
-			//int color = getMagick.getColor();
-			//stack.getTagCompound().setInteger("MagickColor", getMagick.getColor());
+			if(MagickList != null && !MagickList.hasNoTags()) {
+			NBTTagCompound MagickNBT = MagickList.getCompoundTagAt(stack.getTagCompound().getInteger("Slot"));
+			NBTTagList LoadMagick = MagickNBT.getTagList("Magick", 10);
+			NBTTagCompound Magicknbt = LoadMagick.getCompoundTagAt(0);
+			
+			Magick magick = ModMagicks.getAttributeFromName(ModMagicks.GetMagickStringByID(Magicknbt.getInteger("Magick")));
+			if(magick!= null)
+			{
+				int color = magick.getColor();
+				stack.getTagCompound().setInteger("MagickColor", color);
+			}
+
+			}
+			else
+			{
+				stack.getTagCompound().setInteger("MagickColor", 0);
 			}
 		}
 		if(entityIn instanceof EntityPlayer && (!hasUUID || (hasUUID && id != entityIn.getUniqueID())))

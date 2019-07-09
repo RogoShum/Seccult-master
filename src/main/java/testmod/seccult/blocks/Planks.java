@@ -33,7 +33,7 @@ public class Planks extends Block implements registerModel, WaNP
 		setUnlocalizedName(name);
 		setRegistryName(name);
 		setCreativeTab(CreativeTabsLoader.tab);
-		setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, TreeHandler.EnumType.EVERYTHING));
+		//setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, TreeHandler.EnumType.EVERYTHING));
 		setHardness(15.0F);
 		setResistance(450.0F);
 		setHarvestLevel("axe", 3);

@@ -18,13 +18,31 @@ public class ModMagicks {
 	public static final String noClipMagick = "noclip";
 	public static final String LoseMindMagick = "losemind";
 	public static final String MoveMagick = "move";
+	public static final String WhiteAlbumMagick = "whitealbum";
+	public static final String GratefulDeadMagick = "gratefuldead";
+	public static final String TeleportMagick = "teleport";
+	public static final String CopyMagick = "copy";
+	public static final String TheWorldMagick = "theworld";
+	public static final String KraftWorkMagick = "kraftwork";
+	public static final String FloatingMagick = "Floating";
+	public static final String InScaleMagick = "InScale";
+	public static final String ArrowMagick = "Arrow";
 	
 	public static final int DamageMagickColor = 0xDC143C;
-	public static final int FlameMagickColor = 0xFF4500;
+	public static final int FlameMagickColor = 0xFF0000;
 	public static final int FrozenMagickColor = 0xE1FFFF;
 	public static final int noClipMagickColor = 0x708090;
 	public static final int LoseMindMagickColor = 0xB22222;
 	public static final int MoveMagickColor = 0x40E0D0;
+	public static final int WhiteAlbumMagickColor = 0x00FFFF;
+	public static final int GratefulDeadMagickColor = 0xFF4500;
+	public static final int TeleportMagickColor = 0x00FA9A;
+	public static final int CopyMagickColor = 0xDDA0DD;
+	public static final int TheWorldMagickColor = 0xFFF5EE;
+	public static final int KraftWorkMagickColor = 0xDEB887;
+	public static final int FloatingMagickColor = 0xFFFACD;
+	public static final int InScaleMagickColor = 0xFFFACD;
+	public static final int ArrowMagickColor = 0xFFFACD;
 	
 	public static Magick Damage;
 	public static Magick Flame;
@@ -32,6 +50,15 @@ public class ModMagicks {
 	public static Magick noClip;
 	public static Magick LoseMind;
 	public static Magick Move;
+	public static Magick WhiteAlbum;
+	public static Magick GratefulDead;
+	public static Magick Teleport;
+	public static Magick Copy;
+	public static Magick TheWorld;
+	public static Magick KraftWork;
+	public static Magick Floating;
+	public static Magick InScale;
+	public static Magick Arrow;
 	
 
 	private static Set<Magick> magicks = new HashSet<>();
@@ -46,6 +73,15 @@ public class ModMagicks {
 		noClip = new NoClipMagick(noClipMagick, true);
 		LoseMind = new LostMindMagick(LoseMindMagick, true);
 		Move = new MoveMagick(MoveMagick, true);
+		WhiteAlbum = new WhiteAlbumMagick(WhiteAlbumMagick, true);
+		GratefulDead = new GratefulDeadMagick(GratefulDeadMagick, true);
+		Teleport = new TeleportMagick(TeleportMagick, true);
+		Copy = new CopyMagick(CopyMagick, true);
+		TheWorld = new TheWorldMagick(TheWorldMagick, true);
+		KraftWork = new KraftWorkMagick(KraftWorkMagick, true);
+		Floating = new FloatingMagick(FloatingMagick, true);
+		InScale = new IncreaseScaleMagick(InScaleMagick, true);
+		Arrow = new ArrowClowCardMagick(ArrowMagick, true);
 	}
 
 	public static void addMagick(Magick magick) {
@@ -109,5 +145,16 @@ public class ModMagicks {
 		}
 		
 		return -1;
+	}
+	
+	public static ArrayList<String> GetAllMagickID()
+	{
+		ArrayList<String> newList = new ArrayList<>();
+		for(int i = 0; i < MagickList.size(); i++)
+		{
+			newList.add(MagickList.get(i));
+		}
+		
+		return newList;
 	}
 }

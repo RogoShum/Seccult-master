@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "axis=z": { "model": "seccult:magick_portal_ew" },
+        "axis=x": { "model": "seccult:magick_portal_ns" }
+    }
+}

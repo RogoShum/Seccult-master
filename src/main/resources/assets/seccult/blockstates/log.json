@@ -3,6 +3,21 @@
         "axis=y,variant=everything": { "model": "oak_log" },
         "axis=z,variant=everything": { "model": "oak_log", "x": 90 },
         "axis=x,variant=everything": { "model": "oak_log", "x": 90, "y": 90 },
-        "axis=none,variant=everything": { "model": "oak_log" }
+        "axis=none,variant=everything": { "model": "oak_log" },
+		
+		"axis=y,variant=bluetree": { "model": "seccult:bluetree_log" },
+        "axis=z,variant=bluetree": { "model": "seccult:bluetree_log", "x": 90 },
+        "axis=x,variant=bluetree": { "model": "seccult:bluetree_log", "x": 90, "y": 90 },
+        "axis=none,variant=bluetree": { "model": "seccult:bluetree_log" },
+		
+		"axis=y,variant=whitetree": { "model": "seccult:whitetree_log" },
+        "axis=z,variant=whitetree": { "model": "seccult:whitetree_log", "x": 90 },
+        "axis=x,variant=whitetree": { "model": "seccult:whitetree_log", "x": 90, "y": 90 },
+        "axis=none,variant=whitetree": { "model": "seccult:whitetree_log" },
+		
+		"axis=y,variant=magicktree": { "model": "seccult:magictree_log" },
+        "axis=z,variant=magicktree": { "model": "seccult:magictree_log", "x": 90 },
+        "axis=x,variant=magicktree": { "model": "seccult:magictree_log", "x": 90, "y": 90 },
+        "axis=none,variant=magicktree": { "model": "seccult:magictree_log" }
     }
 }

@@ -130,8 +130,8 @@ public class PlayerAccessorieHandler {
 
 		public void tick()
 		{
-			//if(Minecraft.getMinecraft().currentScreen instanceof GuiInventory)
-				//player.openGui(Seccult.instance, GuiElementLoader.GUI_Accessories, player.world, (int)player.posX, (int)player.posY, (int)player.posZ);
+			if(Minecraft.getMinecraft().currentScreen instanceof GuiInventory)
+				player.openGui(Seccult.instance, GuiElementLoader.GUI_Accessories, player.world, (int)player.posX, (int)player.posY, (int)player.posZ);
 			
 			for(int i = 0; i < itemList.length; i++)
 			{

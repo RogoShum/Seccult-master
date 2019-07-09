@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -41,6 +42,8 @@ public class NetworkPlayerAddMagick implements IMessage {
     @Override
     public void fromBytes(ByteBuf buf) {
     	length = buf.readInt();
+    	if(length > 0)
+    	{
     	int[][] MagickThing = new int[4][length];
     	
     	int[][] SelectorList = new int[length][];
@@ -65,10 +68,12 @@ public class NetworkPlayerAddMagick implements IMessage {
         	}
     	}
     	
+    	
     	MagickData = MagickThing;
     	Selector = SelectorList;
     	SelectorPower = SelectorPowerList;
     	SelectorAttribute = SelectorAttributeList;
+    	}
     	
         uleast = buf.readLong();
         ulong = buf.readLong();
@@ -78,6 +83,7 @@ public class NetworkPlayerAddMagick implements IMessage {
     @Override
     public void toBytes(ByteBuf buf) {
     	buf.writeInt(length);
+    	
     	for(int i = 0; i < length; i ++)
     	{
         	for(int z = 0; z < 4; z ++)
@@ -103,7 +109,15 @@ public class NetworkPlayerAddMagick implements IMessage {
 			World world = ctx.getServerHandler().player.world;
         	EntityPlayer player = world.getPlayerEntityByUUID(message.PUUID);
         	PlayerData data = PlayerDataHandler.get(player);
-        	data.addMagick(MagickCompiler.compileMagick(message.MagickData, message.Selector, message.SelectorPower, message.SelectorAttribute, message.length, true, true));
+        	System.out.println(message.length);
+        	if(message.length > 0)
+        		data.addMagick(MagickCompiler.compileMagick(message.MagickData, message.Selector, message.SelectorPower, message.SelectorAttribute, message.length, true, true));
+        	else
+        	{
+        		NBTTagCompound delete = new NBTTagCompound();
+        		delete.setInteger("DELETE", -message.length);
+        		data.addMagick(delete);
+        	}
             return null;
         }
     }

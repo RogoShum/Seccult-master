@@ -2,14 +2,20 @@ package testmod.seccult.magick;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
+import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.WorldServer;
 import testmod.seccult.events.PlayerDataUpdateEvent;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.magick.active.Magick;
 import testmod.seccult.magick.implementation.Implementation;
+import testmod.seccult.magick.implementation.ImplementationStoreable;
 
 public class MagickCompiler {
 	
@@ -33,10 +39,10 @@ public class MagickCompiler {
 	public float[] color = {0, 0, 0};
 	
 	List<Entity> entity = new ArrayList<>();
+	List<BlockPos> block = new ArrayList<>();
 	
-	public MagickCompiler() {
-	}
-	
+	public MagickCompiler() {}
+
 	public static NBTTagCompound compileMagick(int[][] MagickData, int[][] Selector, int[][] SelectorPower, int[][] SelectorAttribute, int amount,  boolean e, boolean b)
 	{
 		NBTTagCompound NewMagickNBTList = new NBTTagCompound();
@@ -66,7 +72,6 @@ public class MagickCompiler {
     	
     	NewMagickNBTList.setTag("Magick", Magick);
     	NewMagickNBTList.setTag("Selector", Select);
-
 		return NewMagickNBTList;
 	}
 	
@@ -92,9 +97,23 @@ public class MagickCompiler {
 			newMagick.MagickNBT = MagickNBT;
 			newMagick.Select = selector;
 			newMagick.e = e;
+			if(e == null || e.world.isRemote)
+				return;
 			newMagick.toDo = true;
 			PlayerDataUpdateEvent.compiler.add(newMagick);
 		}
+	}
+	
+	public void pushMagickData(NBTTagCompound magickNbt, NBTTagList selectNbt, Entity e)
+	{
+			MagickCompiler newMagick = new MagickCompiler();
+			newMagick.MagickNBT = magickNbt;
+			newMagick.Select = selectNbt;
+			newMagick.e = e; 
+			if(e == null || e.world.isRemote)
+				return;
+			newMagick.toDo = true;
+			PlayerDataUpdateEvent.compiler.add(newMagick);
 	}
 	
 	public void onUpdate()
@@ -129,35 +148,75 @@ public class MagickCompiler {
 				return;
 			}
 		
-    		if(magick == null) {
-			magick = ModMagicks.getAttributeFromName(
-					ModMagicks.GetMagickStringByID(
-					MagickNBT.getInteger("Magick")));
+			if(Select == null || Select.hasNoTags())
+			{
+				cycle = true;
+			}
+			
+			
+    		if(magick == null && !MagickNBT.hasNoTags()) {
+    			magick = ModMagicks.getAttributeFromName(
+				ModMagicks.GetMagickStringByID(
+				MagickNBT.getInteger("Magick")));
+			if(magick == null)
+				return;
+			
 			magickpower = MagickNBT.getInteger("MagickPower");
 			magickattribute = MagickNBT.getInteger("MagickAttribute");
 			color = magick.getRGB();
-			entity.add(e);
+			entity.add(getEntityHit());
+			block.add(getBlockHit());
     		}
     		
     		if(!cycle) {
 			NBTTagCompound SelectNBT = Select.getCompoundTagAt(order);
 			Implementation imples = (ImplementationHandler.getImplementationFromName(
-						ModMagicks.GetMagickStringByID(
-								SelectNBT.getInteger("Selector"))));
-			int implesattribute = SelectNBT.getInteger("SelectorPower") + SelectNBT.getInteger("SelectorAttribute");
-
+									ModMagicks.GetMagickStringByID(
+										SelectNBT.getInteger("Selector"))));
+			int implesattributeBase = SelectNBT.getInteger("SelectorPower");
+			int implesattributeAddtion =  SelectNBT.getInteger("SelectorAttribute");
 			imples.color = this.color;
 			imples.setPlayer(e);
-			imples.setAttribute(implesattribute);
+			imples.getTarget();
+			imples.setAttribute(implesattributeBase, implesattributeAddtion);
 			imples.setEntity(entity);
+			imples.setBlock(block);
+			if(imples instanceof ImplementationStoreable)
+			{
+				NBTTagList NewList = new NBTTagList();
+				for(int i = 0; i < Select.tagCount() - order - 1; i++)
+				{
+					NewList.appendTag(Select.getCompoundTagAt(order+1+i));
+				}
+				if(NewList.hasNoTags())
+					NewList = null;
+				ImplementationStoreable IMStore = (ImplementationStoreable) imples;
+				ModMagicks.getAttributeFromName(
+						ModMagicks.GetMagickStringByID(
+								MagickNBT.getInteger("Magick")));
+				IMStore.setData(MagickNBT.copy(), NewList);
+				IMStore.setScale(implesattributeBase + implesattributeAddtion);
+				IMStore.getTarget();
+				done = true;
+				return;
+			}
 			imples.getTarget();
 			entity = imples.getEntity();
+			block = imples.getBlock();
 			toDo = false;
-			if(order == Select.tagCount() - 1)
+			if(order >= Select.tagCount() - 1)
 			{
 				cycle = true;
 			}
     		}
+    		
+			if(magick != null && block != null && cycle && tick > 15)
+			{
+				for(int x = 0; x < block.size(); x++)
+					magick.setMagickAttribute(e, null, block.get(x), magickpower, magickattribute);
+				done = true;
+			}
+
 			if(magick != null && entity != null && cycle && tick > 15)
 			{
 				for(int x = 0; x < entity.size(); x++)
@@ -165,6 +224,62 @@ public class MagickCompiler {
 				done = true;
 			}
 	}
+	
+	public Entity getEntityHit()
+	{
+		Entity hit = null;
+		if(MagickNBT.hasKey("EntityHit" + "Most") && MagickNBT.hasKey("EntityHit" + "Least"))
+		{
+			UUID id = MagickNBT.getUniqueId("EntityHit");
+			if (id != null)
+	        {
+				hit = this.getEntityByUUID(id);
+
+	            if (hit == null && e.world instanceof WorldServer)
+	            {
+	                try
+	                {
+	                	hit = ((WorldServer)e.world).getEntityFromUuid(id);
+	                }
+	                catch (Throwable var2)
+	                {
+	                    hit = null;
+	                }
+	            }
+	        }
+		}
+		return hit;
+	}
+	
+	public BlockPos getBlockHit()
+	{
+		BlockPos hit = null;
+		if(MagickNBT.hasKey("BlockHit"))
+		{
+			NBTTagList pos = MagickNBT.getTagList("BlockHit", 6);
+			if (pos != null)
+	        {
+				hit = new BlockPos(pos.getDoubleAt(0), pos.getDoubleAt(1), pos.getDoubleAt(2));
+	        }
+		}
+		return hit;
+	}
+	
+    @Nullable
+    public Entity getEntityByUUID(UUID uuid)
+    {
+        for (int j2 = 0; j2 < e.world.getLoadedEntityList().size(); ++j2)
+        {
+            Entity entity = e.world.getLoadedEntityList().get(j2);
+
+            if (uuid.equals(entity.getUniqueID()))
+            {
+                return entity;
+            }
+        }
+
+        return null;
+    }
 	
     public static NBTTagList getMagickCode(NBTTagCompound item)
     {

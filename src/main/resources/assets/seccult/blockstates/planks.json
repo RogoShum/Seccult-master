@@ -1,6 +1,9 @@
 {
     "variants": 
     {
-        "variant=everything": { "model": "oak_planks" }
+        "variant=everything": { "model": "oak_planks" },
+		"variant=bluetree": { "model": "seccult:bluetree_planks" },
+		"variant=whitetree": { "model": "seccult:whitetree_planks" },
+		"variant=magicktree": { "model": "seccult:magictree_planks" }
     }
 }

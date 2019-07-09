@@ -8,9 +8,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class PotionLostMind extends PotionMod {
 
 	public PotionLostMind() {
-		super("lostmind", false, 0X8B008B, 0);
+		super("lostmind", true, 0X8B008B, 0);
 		MinecraftForge.EVENT_BUS.register(this);
-		setBeneficial();
 	}
 	
 	@SubscribeEvent

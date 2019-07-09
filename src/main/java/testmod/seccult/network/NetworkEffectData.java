@@ -1,8 +1,14 @@
 package testmod.seccult.network;
 
+import java.util.Iterator;
+
+import com.google.common.collect.AbstractIterator;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -61,7 +67,7 @@ public class NetworkEffectData implements IMessage {
         	double x = message.pos[0];
         	double y = message.pos[1];
         	double z = message.pos[2];
-        	
+
         	double xx = message.vec[0];
         	double yy = message.vec[1];
         	double zz = message.vec[2];
@@ -83,6 +89,15 @@ public class NetworkEffectData implements IMessage {
         			par = new PentagonFX(mc.world,x,y,z, xx, yy, zz, message.scale);
         			par.setRBGColorF(r, g, b);
         			break;
+        		case 3:
+        		    for (int sn = 0; sn < 4; ++sn)
+        		    {
+        			double d0 = x + 3 - mc.world.rand.nextInt(6);
+        			double d1 = y + 3 - mc.world.rand.nextInt(6);
+        			double d2 = z + 3 - mc.world.rand.nextInt(6);
+        			mc.world.spawnParticle(EnumParticleTypes.SNOW_SHOVEL, d0, d1, d2, 0, 0, 0);
+        		    }
+        			break;
         		case 100:
         			for(int i = 0; i < 10 ; i++) {
         	            double d0 = (double)((float)message.pos[0] + mc.world.rand.nextFloat());
@@ -100,7 +115,7 @@ public class NetworkEffectData implements IMessage {
         				}
         			break;
         		case 101:
-        			int distance = (int) message.scale * 10;
+        			int distance = (int) message.scale;
         			for (int i = 0; i < distance; i++) {
         				double trailFactor = i / (distance - 1.0D);
         				double tx = x + (xx - x) * trailFactor + mc.world.rand.nextGaussian() * 0.005;
@@ -118,7 +133,7 @@ public class NetworkEffectData implements IMessage {
         		case 102:
         			for(int i = 0; i < (message.scale * 2); i++) {
         			       double d0 = (double)((float)x + mc.world.rand.nextFloat());
-        			       double d1 = (double)((float)2 + mc.world.rand.nextFloat());
+        			       double d1 = (double)((float)y + mc.world.rand.nextFloat());
         			       double d2 = (double)((float)z + mc.world.rand.nextFloat());
         			       double d3 = (1 - 2*StateManager.rand.nextFloat()) / 2;
         			       double d4 = (1 - 2*StateManager.rand.nextFloat()) / 2;
@@ -143,19 +158,92 @@ public class NetworkEffectData implements IMessage {
         				double motionX = 1 - 2*mc.world.rand.nextFloat();
         				double motionY = 1 - 2*mc.world.rand.nextFloat();
         				double motionZ = 1 - 2*mc.world.rand.nextFloat();
-        				motionX = motionX * message.scale;
-        				motionY = motionY * message.scale;
-        				motionZ = motionZ * message.scale;
+        				motionX = motionX * message.scale / 4;
+        				motionY = motionY * message.scale / 4;
+        				motionZ = motionZ * message.scale / 4;
         				Particle big = new LightFX(mc.world, x, y, z, motionX, motionY, motionZ, message.scale * 10);
         		    	big.setRBGColorF(r, g, b);
         				big.setMaxAge(10);
         		    	Minecraft.getMinecraft().effectRenderer.addEffect(big);
         			}
         			break;
-        	}
+        		case 104:
+        			int scale = (int)(message.scale / 2);
+        				Iterable<BlockPos> Blocks = getAllInBox((int)x - scale, (int)y, (int)z - scale, (int)x + scale, (int)y, (int)z + scale);
+        				for(BlockPos pos: Blocks)
+        				{
+        						float randF = mc.world.rand.nextFloat()*2;
+        						if(randF > 1.75 || randF < 0.25)
+        						{
+        						Particle cc = new LightFX(mc.world, pos.getX(), pos.getY(), pos.getZ(), 0, (float)scale / 50, 0, (message.scale) / 6  * randF);
+        						cc.setRBGColorF(r, g, b);
+            					Minecraft.getMinecraft().effectRenderer.addEffect(cc);
+        						}
+        				}
+        			break;
+        		case 105:
+        				Particle cc = new FrozenBlockFX(mc.world, x, y, z, r, g, 3);
+            			Minecraft.getMinecraft().effectRenderer.addEffect(cc);
+        				
+        			break;
+        			
+        }
+    
         	if(par != null)
 			mc.effectRenderer.addEffect(par);
             return null;
         }
-}
+        
+        public static Iterable<BlockPos> getAllInBox(final double x1, final double y1, final double z1, final double x2, final double y2, final double z2)
+        {
+            return new Iterable<BlockPos>()
+            {
+                public Iterator<BlockPos> iterator()
+                {
+                    return new AbstractIterator<BlockPos>()
+                    {
+                        private boolean first = true;
+                        private double lastPosX;
+                        private double lastPosY;
+                        private double lastPosZ;
+                        protected BlockPos computeNext()
+                        {
+                            if (this.first)
+                            {
+                                this.first = false;
+                                this.lastPosX = x1;
+                                this.lastPosY = y1;
+                                this.lastPosZ = z1;
+                                return new BlockPos(x1, y1, z1);
+                            }
+                            else if (this.lastPosX == x2 && this.lastPosY == y2 && this.lastPosZ == z2)
+                            {
+                                return (BlockPos)this.endOfData();
+                            }
+                            else
+                            {
+                                if (this.lastPosX < x2)
+                                {
+                                    ++this.lastPosX;
+                                }
+                                else if (this.lastPosY < y2)
+                                {
+                                    this.lastPosX = x1;
+                                    ++this.lastPosY;
+                                }
+                                else if (this.lastPosZ < z2)
+                                {
+                                    this.lastPosX = x1;
+                                    this.lastPosY = y1;
+                                    ++this.lastPosZ;
+                                }
+
+                                return new BlockPos(this.lastPosX, this.lastPosY, this.lastPosZ);
+                            }
+                        }
+                    };
+                }
+            };
+        }
+	}
 }

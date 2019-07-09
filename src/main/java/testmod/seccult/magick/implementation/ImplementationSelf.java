@@ -14,10 +14,7 @@ public class ImplementationSelf extends Implementation{
 	@Override
 	public void getTarget() {
 		List<Entity> pl = new ArrayList<>();
-		for(int i = 0; i < getEntity().size(); i++)
-		{
-				pl.add(getEntity().get(i));
-		}
+		pl.add(player);
 		setEntity(pl);
 	}
 }

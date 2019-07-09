@@ -8,11 +8,14 @@ import java.util.Map.Entry;
 import java.util.Random;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
 import testmod.seccult.Seccult;
 import testmod.seccult.init.ModDamage;
+import testmod.seccult.items.armor.ArmorBase;
 import testmod.seccult.network.NetworkHandler;
 import testmod.seccult.network.NetworkPlayerWandData;
 
@@ -134,7 +137,6 @@ public class PlayerDataHandler {
 			color3 = cmp.getInteger("Color3");
 			color4 = cmp.getInteger("Color4");
 			
-			System.out.println(player.world.isRemote);
 			NetworkHandler.getNetwork().sendToAll(new NetworkPlayerWandData(color2, color3, color4, player.getUniqueID(), wand));
 			
 			if(ManaTalentValue == 0)
@@ -324,7 +326,7 @@ public class PlayerDataHandler {
 		public void reduceMana(float mana)
 		{
 			if(!player.isCreative())
-			ManaValue -= mana;
+			ManaValue -= mana * getPlayerArmorAttribute(1);
 		}
 		
 		public void setColor(int color2, int color3, int color4, int wand)
@@ -387,7 +389,7 @@ public class PlayerDataHandler {
 		}
 		
 		public float getMaxMana() {
-			return MaxManaValue;
+			return MaxManaValue + MaxManaValue * getPlayerArmorAttribute(2);
 		}
 		
 		public float getMana() {
@@ -398,27 +400,79 @@ public class PlayerDataHandler {
 			return ManaTalentValue;
 		}
 		public float getManaStrengh() {
-			return ManaStrengh;
+			return ManaStrengh + ManaStrengh * getPlayerArmorAttribute(0);
 		}
 		public float getGrowth() {
 			return GrowthAbility;
 		}
 		public float getControlAbility() {
-			return ControlAbility;
+			return ControlAbility + ControlAbility * getPlayerArmorAttribute(0);
+		}
+		
+		public float getPlayerArmorAttribute(int type)
+		{
+			float MagickEnhance = 0;
+			float MagickRelief = 0;
+			float MagickUpperlimit = 0;
+			if(type == 0)
+			{
+			for(int i = 0; i < 3; i++)
+			{
+				ItemStack stack = this.player.inventory.armorInventory.get(i);
+				Item item = stack.getItem();
+				if(item instanceof ArmorBase)
+				{
+					ArmorBase armor = (ArmorBase) item;
+					MagickEnhance += armor.getMagicEnhance();
+				}
+			}
+				return MagickEnhance;
+			}
+			else if(type == 1)
+			{
+			for(int i = 0; i < 3; i++)
+			{
+				ItemStack stack = this.player.inventory.armorInventory.get(i);
+				Item item = stack.getItem();
+				if(item instanceof ArmorBase)
+				{
+					ArmorBase armor = (ArmorBase) item;
+					MagickRelief += armor.getMagicRelief();
+				}
+			}
+			return 1 - MagickRelief;
+			}
+			else if(type == 2)
+			{
+			for(int i = 0; i < 3; i++)
+			{
+				ItemStack stack = this.player.inventory.armorInventory.get(i);
+				Item item = stack.getItem();
+				if(item instanceof ArmorBase)
+				{
+					ArmorBase armor = (ArmorBase) item;
+					MagickUpperlimit += armor.getMagicUpperlimit();
+				}
+			}
+			return MagickUpperlimit;
+			}
+			else
+				return 0;
+				
 		}
 		
 		public void tick() {
 			if(regenCooldown == 0) {
-					ManaValue = Math.min(MaxManaValue, ManaValue + getRegenPerTick());
+					ManaValue = Math.min(getMaxMana(), getMana() + getRegenPerTick());
 					save();
 			} else {
-				regenCooldown -= (float)Math.sqrt(GrowthAbility) -  1;
+				regenCooldown -= (float)Math.sqrt(getGrowth()) -  1;
 				save();
 			}
 			
 			if(ManaValue <= 0)
 			{
-				player.attackEntityFrom(ModDamage.MagickOverLoad, (float)Math.sqrt(0 - ManaValue));
+				player.attackEntityFrom(ModDamage.MagickOverLoad, (float)Math.sqrt(0 - getMana()));
 				ManaValue = 0;
 			}
 		}
@@ -444,6 +498,16 @@ public class PlayerDataHandler {
 			String[] string = new String[2];
 			string[0] = "false";
 			string[1] = "unknow";
+			if(magick.hasKey("DELETE"))
+			{
+				getMagickList().removeTag(magick.getInteger("DELETE"));
+				return string;
+			}
+			for(int i = 0; i < getMagickList().tagCount(); i++)
+			{
+				if(getMagickList().get(i).equals(magick))
+					return string;
+			}
 			getMagickList().appendTag(magick);
 			string[0] = "true";
 			return string;
@@ -494,12 +558,12 @@ public class PlayerDataHandler {
 		
 		public NBTTagList getMagickList()
 		{
-			return MagickList == null ? new NBTTagList(): MagickList;
+			return MagickList == null ? MagickList = new NBTTagList(): MagickList;
 		}
 		
 		public NBTTagList getAllMagick()
 		{
-			return MagickList;
+			return getMagickList();
 		}
 		
 		public NBTTagCompound getMagickAt(int i)

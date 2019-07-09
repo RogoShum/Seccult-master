@@ -16,6 +16,9 @@ plugins {
     id 'com.matthewprenger.cursegradle' version '1.0.9'
 }
 
+def commonManifest = {
+    attributes 'FMLAT': 'seccult_at.cfg'
+}
 
 configurations {
     optionalRuntime

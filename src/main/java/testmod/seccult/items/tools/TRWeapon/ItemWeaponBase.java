@@ -167,14 +167,12 @@ public class ItemWeaponBase extends ItemBase{
 		 EntityLaserBeamBase newprojectile = (EntityLaserBeamBase) entity;
          newprojectile.setOwner(player);
          newprojectile.setDamage(this.Damage);
-         //newprojectile.setWidth(1);
          Vec3d handVec = player.getLookVec().rotateYaw(hand == EnumHand.MAIN_HAND ? -0.4F : 0.4F);
 		 Vec3d lok = player.getLookVec();
-		 Vec3d position = player.getPositionVector().addVector(handVec.x, handVec.y - 0.8F + player.getEyeHeight(), handVec.z);
+		 Vec3d position = player.getPositionVector().addVector(handVec.x, handVec.y - 0.8 + player.getEyeHeight(), handVec.z);
 		 Vec3d QAQ = position.addVector(lok.x, lok.y, lok.z);
-		 newprojectile.setTail();
 		 newprojectile.setWidth(1);
-         entity.setLocationAndAngles(QAQ.x, QAQ.y, QAQ.z, player.rotationYaw, player.rotationPitch);
+         entity.setLocationAndAngles(QAQ.x, QAQ.y , QAQ.z, player.rotationYaw, player.rotationPitch);
         if(!player.world.isRemote) {
     	  player.world.spawnEntity(newprojectile);
     	  this.laser = newprojectile;

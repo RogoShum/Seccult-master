@@ -12,6 +12,7 @@ public class ModPotions {
 	public static final Potion damage = new PotionDamage();
 	public static final Potion allstop = new PotionAllStop();
 	public static final Potion reflect = new PotionReflect();
+	public static final Potion curse = new PotionCurse();
 			
 	@SubscribeEvent
 	public static void registerPotions(RegistryEvent.Register<Potion> evt){
@@ -19,5 +20,6 @@ public class ModPotions {
 		evt.getRegistry().register(damage);
 		evt.getRegistry().register(allstop);
 		evt.getRegistry().register(reflect);
+		evt.getRegistry().register(curse);
 	}
 }

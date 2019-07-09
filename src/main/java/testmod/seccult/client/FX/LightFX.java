@@ -54,6 +54,8 @@ public class LightFX extends Particle
         this.particleAlpha = 0.5F; // So MC renders us on the alpha layer, value not actually used
         this.lightParticleScale = this.particleScale;
         this.particleMaxAge = (int)(20 * a);
+        if(particleMaxAge == 0)
+        	particleMaxAge = 1;
         this.particleRed = 1F;
         this.particleGreen = 0.0F;
         this.particleBlue = 0.0F;

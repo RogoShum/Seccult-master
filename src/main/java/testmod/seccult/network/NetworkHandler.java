@@ -12,7 +12,9 @@ public class NetworkHandler {
 		network.registerMessage(NetworkPlayerWandData.PacketMessageHandler.class, NetworkPlayerWandData.class, 0, Side.CLIENT);
 		network.registerMessage(NetworkPlayerMagickData.PacketMessageHandler.class, NetworkPlayerMagickData.class, 1, Side.CLIENT);
 		network.registerMessage(NetworkEffectData.PacketMessageHandler.class, NetworkEffectData.class, 2, Side.CLIENT);
-		network.registerMessage(NetworkPlayerAddMagick.PacketMessageHandler.class, NetworkPlayerAddMagick.class, 3, Side.SERVER);
+		network.registerMessage(NetworkEntityMoving.PacketMessageHandler.class, NetworkEntityMoving.class, 3, Side.CLIENT);
+		network.registerMessage(NetworkPlayerTransMagickToClient.PacketMessageHandler.class, NetworkPlayerTransMagickToClient.class, 4, Side.CLIENT);
+		network.registerMessage(NetworkPlayerAddMagick.PacketMessageHandler.class, NetworkPlayerAddMagick.class, 5, Side.SERVER);
 	}
 	
 	public static SimpleNetworkWrapper getNetwork()

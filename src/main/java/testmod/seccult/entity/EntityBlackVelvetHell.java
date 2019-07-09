@@ -2,7 +2,6 @@ package testmod.seccult.entity;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -13,7 +12,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityBlackVelvetHell extends Entity{
-
 	private static final DataParameter<Float> Size = EntityDataManager.<Float>createKey(EntityBlackVelvetHell.class, DataSerializers.FLOAT);
 	private static final DataParameter<Float> Prisoner = EntityDataManager.<Float>createKey(EntityBlackVelvetHell.class, DataSerializers.FLOAT);
 	
