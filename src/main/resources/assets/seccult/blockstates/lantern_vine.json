@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "variant=2": { "model": "seccult:lantern_vine_essence" },
+        "variant=1": { "model": "seccult:lantern_vine_body" },
+        "variant=0": { "model": "seccult:lantern_vine_tail" }
+    }
+}

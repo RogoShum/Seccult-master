@@ -1,12 +1,17 @@
 package testmod.seccult.items;
 
+import static net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType.AIR;
+
 import java.util.ArrayList;
 import java.util.UUID;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,14 +27,17 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import testmod.seccult.ClientProxy;
 import testmod.seccult.Seccult;
 import testmod.seccult.api.PlayerDataHandler;
 import testmod.seccult.api.PlayerDataHandler.PlayerData;
 import testmod.seccult.client.gui.GuiElementLoader;
 import testmod.seccult.init.ModBlocks;
+import testmod.seccult.init.ModItems;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.magick.MagickCompiler;
 import testmod.seccult.magick.active.Magick;
@@ -54,7 +62,7 @@ public class ItemWand extends ItemBase{
 	
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, @Nonnull EnumHand hand) {
-		ItemStack stack = player.getHeldItem(hand);
+			ItemStack stack = player.getHeldItem(hand);
 			player.setActiveHand(hand);
 			ArrayList<String> list = ModMagicks.GetAllMagickID();
 			for(int  i = 0; i < list.size(); i++)
@@ -74,8 +82,6 @@ public class ItemWand extends ItemBase{
 	            		stack.getTagCompound().setInteger("Slot", slot + 1);
 	            	if(slot > MagickList.tagCount() - 2)
 	            		stack.getTagCompound().setInteger("Slot", 0);
-	                int id = GuiElementLoader.GUI_SpellSelect;
-	                player.openGui(Seccult.instance, id, world, (int)player.posX, (int)player.posY, (int)player.posZ);
 	            }
 	            else
 	            {
@@ -126,9 +132,13 @@ public class ItemWand extends ItemBase{
 			return EnumActionResult.SUCCESS;
 	}
 	
+
+	
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
+		KeyBinding[] keyBindings = ClientProxy.keyBindings;
+
 		if(!stack.hasTagCompound())
 			stack.setTagCompound(new NBTTagCompound());
 		boolean hasUUID = stack.getTagCompound().hasKey("UUIDLeast") && stack.getTagCompound().hasKey("UUIDMost");
@@ -139,6 +149,14 @@ public class ItemWand extends ItemBase{
 		}
 		if(!worldIn.isRemote && entityIn instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entityIn;
+			
+			ItemStack stackhold = player.getHeldItem(EnumHand.MAIN_HAND);
+			if(entityIn instanceof EntityPlayer && stackhold.getItem() == ModItems.Wand && keyBindings[1].isPressed())
+			{
+	            int GUIid = GuiElementLoader.GUI_SpellSelect;
+	            ((EntityPlayer) entityIn).openGui(Seccult.instance, GUIid, worldIn, (int)entityIn.posX, (int)entityIn.posY, (int)entityIn.posZ);
+			}
+			
 			PlayerData data = PlayerDataHandler.get(player);
 			MagickList = data.getAllMagick();
 			

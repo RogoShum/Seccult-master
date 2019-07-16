@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "snowy=false": { "model": "seccult:hypha" },
+        "snowy=true": { "model": "grass_snowed" }
+    }
+}

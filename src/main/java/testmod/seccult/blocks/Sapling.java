@@ -8,6 +8,7 @@ import com.google.common.base.Predicate;
 
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.IGrowable;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.properties.PropertyInteger;
@@ -57,9 +58,9 @@ public class Sapling extends BlockBush implements IGrowable, registerModel, WaNP
     {
 		setUnlocalizedName(name);
 		setRegistryName(name);
-		//this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, TreeHandler.EnumType.EVERYTHING).withProperty(STAGE, Integer.valueOf(0)));
+		setSoundType(SoundType.PLANT);
 		setCreativeTab(CreativeTabsLoader.tab);
-		
+		setLightLevel(4);
 		this.name = name;
 		
 		ModBlocks.BLOCKS.add(this);

@@ -10,15 +10,18 @@ import net.minecraft.world.gen.layer.IntCache;
 import testmod.seccult.world.gen.SeccultBiomeRegistries;
 
 public class GenLayerSeccultBiome extends GenLayer {
-	private static final int RARE_BIOME_CHANCE = 15;
-
-	protected static final List<Supplier<Biome>> commonBiomes = Arrays.asList(
-			() -> SeccultBiomeRegistries.mana_froest_BIRCH
-	);
+	private static final int RARE_BIOME_CHANCE = 100000;
+	
 	protected static final List<Supplier<Biome>> rareBiomes = Arrays.asList(
+			() -> SeccultBiomeRegistries.mana_froest_MACICAL,
+			() -> SeccultBiomeRegistries.mana_Mushroom_Cave
+	);
+	protected static final List<Supplier<Biome>> commonBiomes = Arrays.asList(
 			() -> SeccultBiomeRegistries.mana_froest_ROOFED,
 			() -> SeccultBiomeRegistries.mana_froest_FLOWER,
-			() -> SeccultBiomeRegistries.mana_froest_Mountain
+			() -> SeccultBiomeRegistries.mana_froest_Mountain,
+			() -> SeccultBiomeRegistries.mana_Mushroom_Island,
+			() -> SeccultBiomeRegistries.mana_Mushroom_Normal
 	);
 
 	public GenLayerSeccultBiome(long l, GenLayer genlayer) {

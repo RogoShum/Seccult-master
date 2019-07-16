@@ -1,11 +1,16 @@
 package testmod.seccult.entity;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Queue;
 import java.util.UUID;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -117,7 +122,46 @@ public class EntityTimeManager extends Entity{
 				frozeEntity(p);
 			}
 			}
-			
+			ParticleManager render = Minecraft.getMinecraft().effectRenderer;
+			 Field partic;
+			 Field posX;
+			 Field posY;
+			 Field posZ;
+			 Field particleAge;
+			try {
+				partic = ParticleManager.class.getDeclaredField("queue");
+				partic.setAccessible(true);
+            	posX = Particle.class.getDeclaredField("prevPosX");
+            	posX.setAccessible(true);
+            	posY = Particle.class.getDeclaredField("prevPosY");
+            	posY.setAccessible(true);
+            	posZ = Particle.class.getDeclaredField("prevPosZ");
+            	posZ.setAccessible(true);
+            	posZ = Particle.class.getDeclaredField("prevPosZ");
+            	posZ.setAccessible(true);
+				try {
+					Queue<Particle> queue = (Queue<Particle>) partic.get(render);
+					if (!queue.isEmpty())
+			        {
+			            for (Particle particle = queue.poll(); particle != null; particle = queue.poll())
+			            {
+			            	System.out.println((double)posX.get(particle) + " " + (double)posY.get(particle) + "  " + (double)posZ.get(particle));
+			            	particleAge = Particle.class.getDeclaredField("particleAge");
+			            	particleAge.setAccessible(true);
+			            	int age = (int)particleAge.get(particle);
+			            	particleAge.set(particle, --age);
+			                particle.setPosition((double)posX.get(particle), (double)posY.get(particle), (double)posZ.get(particle));
+			            }
+			        }
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (NoSuchFieldException | SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			 
 			MovingObjectPosition movingObjectPosition = new MovingObjectPosition(MyLord);
 		    List<Entity> list = MyLord.world.getEntitiesWithinAABBExcludingEntity(MyLord, MyLord.getEntityBoundingBox().grow(MyRange));
 		    boolean pass = false;

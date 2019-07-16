@@ -122,7 +122,7 @@ public abstract class Magick implements Cloneable{
 		if(data == null)
 			return;
 		reduceMana();
-		data.addCoolDown((float)Math.sqrt(strengh) + 20);
+		data.addCoolDown((float)Math.sqrt(strengh) * 10);
 	}
 	
 	abstract void toEntity();

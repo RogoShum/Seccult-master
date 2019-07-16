@@ -25,7 +25,6 @@ import testmod.seccult.items.ItemWand;
 import testmod.seccult.network.NetworkHandler;
 import testmod.seccult.util.handlers.RegistryHandler;
 import testmod.seccult.world.gen.DimensionMagic;
-import testmod.seccult.world.gen.SeccultBiomeRegistries;
 
 @Mod(modid = "seccult", name = "Seccult", version = "0.1")
 
@@ -65,6 +64,7 @@ public class Seccult
 	{
 		new GuiElementLoader();
 		proxy.sphereRender();
+		proxy.init();
 		DimensionMagic.register();
 	}
 	

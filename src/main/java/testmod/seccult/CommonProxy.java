@@ -11,5 +11,5 @@ public class CommonProxy
 	
 	public void sphereRender() {}
 	
-	public void cylinderRender() {}
+	public void init() {}
 }

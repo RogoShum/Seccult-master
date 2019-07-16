@@ -1,10 +1,7 @@
 package testmod.seccult.client.gui;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,10 +18,13 @@ public class SpellSelect extends Container
         super();
         PlayerData data = PlayerDataHandler.get(player);
         NBTTagList magick = data.getAllMagick();
-        for(int i = 0; i < magick.tagCount(); i++)
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setTag("M", magick);
+        NetworkHandler.getNetwork().sendTo(new NetworkPlayerTransMagickToClient(nbt), (EntityPlayerMP) player);
+        /*for(int i = 0; i < magick.tagCount(); i++)
         {
         	decompiler(magick.getCompoundTagAt(i), player.getUniqueID());
-        }
+        }*/
     }
     
     @Override
@@ -35,7 +35,7 @@ public class SpellSelect extends Container
 
 
     
-    public static void decompiler(NBTTagCompound magickNbt, UUID uuid)
+    /*public static void decompiler(NBTTagCompound magickNbt, UUID uuid)
     {
     	NBTTagList LoadMagick = magickNbt.getTagList("Magick", 10);
     	NBTTagList LoadSelect = magickNbt.getTagList("Selector", 10);
@@ -123,9 +123,9 @@ public class SpellSelect extends Container
 				SelectorAttributeList[i][z] = ListSelectorAttribute.get(i)[z];
 			}
 		}
-		NetworkHandler.getNetwork().sendToAll(new NetworkPlayerTransMagickToClient(uuid, MagickThing, SelectorList, SelectorPowerList, SelectorAttributeList, amount));
+		//NetworkHandler.getNetwork().sendToAll(new NetworkPlayerTransMagickToClient(uuid, MagickThing, SelectorList, SelectorPowerList, SelectorAttributeList, amount));
     }
-    
+    */
 	@Override
 	public boolean canInteractWith(EntityPlayer playerIn) {
 		

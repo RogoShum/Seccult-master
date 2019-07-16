@@ -4,9 +4,13 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.BlockFalling;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
@@ -18,9 +22,12 @@ import net.minecraft.world.biome.Biome.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraft.world.gen.MapGenCaves;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import net.minecraft.world.gen.feature.WorldGenLakes;
+import testmod.seccult.init.ModBlocks;
+import testmod.seccult.world.gen.plant.WorldGenCave;
 
 public class ChunkGeneratorSeccult implements IChunkGenerator {
 	
@@ -77,6 +84,7 @@ public class ChunkGeneratorSeccult implements IChunkGenerator {
 		this.setBlocksInChunk(x, z, chunkprimer);
 		this.biomesForGeneration = this.world.getBiomeProvider().getBiomes(this.biomesForGeneration, x * 16, z * 16, 16, 16);
 		this.replaceBiomeBlocks(x, z, chunkprimer, biomesForGeneration);
+		new MapGenCaves().generate(this.world, x, z, chunkprimer);
 		Chunk chunk = new Chunk(this.world, chunkprimer, x, z);
 		byte[] abyte = chunk.getBiomeArray();
 		
@@ -246,8 +254,11 @@ public class ChunkGeneratorSeccult implements IChunkGenerator {
 		int i1 = this.rand.nextInt(16) + 8,
 			j1 = this.rand.nextInt(256),
 			k1 = this.rand.nextInt(16) + 8;
-		//if(!biome.equals(Biomes.BEACH))
-		//(new WorldGenLakes(Blocks.WATER)).generate(world, rand, pos.add(i1, j1, k1));
+		//System.out.println("Found Mushroom Cave");
+		//if(biome.getBiomeClass() == SeccultBiomeRegistries.mana_Mushroom_Cave.getBiomeClass())
+		//{
+
+		//}
 		
 		biome.decorate(world, rand, new BlockPos(i, 0, j));
 		WorldEntitySpawner.performWorldGenSpawning(world, biome, i + 8, j + 8, 16, 16, rand);
@@ -257,7 +268,7 @@ public class ChunkGeneratorSeccult implements IChunkGenerator {
 
 	@Override
 	public boolean generateStructures(Chunk chunkIn, int x, int z) {
-		return false;
+		return this.generateStructures;
 	}
 
 	@Override
@@ -279,5 +290,4 @@ public class ChunkGeneratorSeccult implements IChunkGenerator {
 	public boolean isInsideStructure(World worldIn, String structureName, BlockPos pos) {
 		return false;
 	}
-
 }

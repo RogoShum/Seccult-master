@@ -1,5 +1,7 @@
 package testmod.seccult.items.armor;
 
+import net.minecraft.client.model.ModelBiped;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -37,7 +39,7 @@ public class ArmorBase extends ItemArmor implements registerModel
 		this.MagicUpperlimit = MagicUpperlimit;
 	}
 	
-	public boolean hasArmorSetItem(EntityPlayer player, int i, Item item) {
+	public static boolean hasArmorSetItem(EntityPlayer player, int i, Item item) {
 		if(player == null || player.inventory == null || player.inventory.armorInventory == null)
 			return false;
 		
@@ -68,5 +70,12 @@ public class ArmorBase extends ItemArmor implements registerModel
 	public float getMagicUpperlimit()
 	{
 		return MagicUpperlimit;
+	}
+	
+	@Override
+	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot,
+			ModelBiped _default) {
+		// TODO Auto-generated method stub
+		return super.getArmorModel(entityLiving, itemStack, armorSlot, _default);
 	}
 }

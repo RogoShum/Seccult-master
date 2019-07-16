@@ -19,20 +19,14 @@ public class NetworkPlayerWandData implements IMessage {
 	
 	private int wandstyle;
 	
-	private long ulong;
-	private long uleast;
-	
-	private UUID PUUID;
-	
     public NetworkPlayerWandData() {}
     
-    public NetworkPlayerWandData(int color, int color2, int color3, UUID p, int wand)
+    public NetworkPlayerWandData(int color, int color2, int color3, int wand)
     {
     	this.color2 = color;
     	this.color3 = color2;
     	this.color4 = color3;
     	this.wandstyle = wand;
-    	this.PUUID = p;
     }
     
     @Override
@@ -41,16 +35,6 @@ public class NetworkPlayerWandData implements IMessage {
         color3 = buf.readInt();
         color4 = buf.readInt();
         wandstyle = buf.readInt();
-        uleast = buf.readLong();
-        ulong = buf.readLong();
-        PUUID = new UUID(ulong, uleast);
-        System.out.println("=============");
-        System.out.println("=============");
-        System.out.println(ulong);
-        System.out.println(uleast);
-        System.out.println(PUUID);
-        System.out.println("=============");
-        System.out.println("=============");
     }
 
     @Override
@@ -59,8 +43,6 @@ public class NetworkPlayerWandData implements IMessage {
     	buf.writeInt(color3);
     	buf.writeInt(color4);
     	buf.writeInt(wandstyle);
-    	buf.writeLong(PUUID.getLeastSignificantBits());
-    	buf.writeLong(PUUID.getMostSignificantBits());
     }
     
     public static class PacketMessageHandler implements IMessageHandler<NetworkPlayerWandData, IMessage> {
@@ -68,22 +50,15 @@ public class NetworkPlayerWandData implements IMessage {
         @Override
         public IMessage onMessage(NetworkPlayerWandData message, MessageContext ctx) {
         	Minecraft mc = Minecraft.getMinecraft();
-			World world = mc.world;
         	int color2 = message.color2;
         	int color3 = message.color3;
         	int color4 = message.color4;
         	
         	int wand = message.wandstyle;
-        	if(message.PUUID != null)
-        	{
-        	EntityPlayer player = world.getPlayerEntityByUUID(message.PUUID);
-        	if(player != null) {
-        	PlayerData data = PlayerDataHandler.get(player);
+
+        	PlayerData data = PlayerDataHandler.get(mc.player);
         	data.setColor(color2, color3, color4, wand);
-        	}
-        	}
             return null;
-        	
         }
-}
+    }
 }

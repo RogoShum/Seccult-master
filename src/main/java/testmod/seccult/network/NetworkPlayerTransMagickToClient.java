@@ -1,21 +1,49 @@
 package testmod.seccult.network;
 
-import java.util.UUID;
-
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import testmod.seccult.api.PlayerDataHandler;
 import testmod.seccult.api.PlayerDataHandler.PlayerData;
-import testmod.seccult.magick.MagickCompiler;
 
 public class NetworkPlayerTransMagickToClient implements IMessage {
-	private int[][] MagickData;
+
+	private NBTTagCompound NBT;
+	
+	public NetworkPlayerTransMagickToClient() {}
+	
+	public NetworkPlayerTransMagickToClient(NBTTagCompound nbt) {
+		this.NBT = nbt;
+	}
+	
+	@Override
+	public void fromBytes(ByteBuf buf) {
+		NBT = ByteBufUtils.readTag(buf);
+	}
+
+	@Override
+	public void toBytes(ByteBuf buf) {
+		ByteBufUtils.writeTag(buf, NBT);
+	}
+	
+	public static class PacketMessageHandler implements IMessageHandler<NetworkPlayerTransMagickToClient, IMessage> {
+
+		@Override
+		public IMessage onMessage(NetworkPlayerTransMagickToClient message, MessageContext ctx) {
+			PlayerData data = PlayerDataHandler.get(Minecraft.getMinecraft().player);
+			NBTTagList list = message.NBT.getTagList("M", 10);
+        	data.setMagickList(list);
+			return null;
+		}
+		
+	}
+}
+	/*private int[][] MagickData;
 	private int length;
 	private int[][] Selector;
 	private int[][] SelectorPower;
@@ -107,5 +135,4 @@ public class NetworkPlayerTransMagickToClient implements IMessage {
         	data.addMagick(MagickCompiler.compileMagick(message.MagickData, message.Selector, message.SelectorPower, message.SelectorAttribute, message.length, true, true));
             return null;
         }
-    }
-}
+    }*/

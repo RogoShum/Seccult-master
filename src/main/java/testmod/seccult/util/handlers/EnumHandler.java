@@ -46,10 +46,15 @@ public class EnumHandler
 			return this.name;
 		}
 		
-		public static EnumType byMetadata(int meta)
-		{
-			return META_LOOKUP[meta];
-		}
+        public static EnumType byMetadata(int meta)
+        {
+            if (meta < 0 || meta >= META_LOOKUP.length)
+            {
+                meta = 0;
+            }
+
+            return META_LOOKUP[meta];
+        }
 		
 		static
 		{

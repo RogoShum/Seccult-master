@@ -1,9 +1,7 @@
 package testmod.seccult.blocks;
 
-import java.util.List;
 import java.util.Random;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.google.common.base.Predicate;
@@ -15,11 +13,9 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import testmod.seccult.Seccult;
@@ -48,11 +44,11 @@ public class Log extends BlockLog implements registerModel, WaNP
 		setUnlocalizedName(name);
 		setRegistryName(name);
 		setSoundType(SoundType.WOOD);
-		//setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, TreeHandler.EnumType.EVERYTHING).withProperty(LOG_AXIS, EnumAxis.Y));
+		setLightLevel(0.125F);
 		setCreativeTab(CreativeTabsLoader.tab);
 		setHardness(50.0F);
-		setResistance(10086.0F);
-		setHarvestLevel("axe", 5);
+		setResistance(30.0F);
+		setHarvestLevel("axe", 2);
 		
 		this.name = name;
 		
@@ -78,25 +74,7 @@ public class Log extends BlockLog implements registerModel, WaNP
 	public IBlockState getStateFromMeta(int meta) 
 	{
 		IBlockState state = this.getDefaultState().withProperty(VARIANT, TreeHandler.EnumType.byMetadata(meta));
-		
-		switch(meta & 6)
-		{
-		case 0:
-			state = state.withProperty(LOG_AXIS, EnumAxis.Y);
-			break;
-			
-		case 2:
-			state = state.withProperty(LOG_AXIS, EnumAxis.X);
-			break;
-			
-		case 4:
-			state = state.withProperty(LOG_AXIS, EnumAxis.Z);
-			break;
-			
-		default:
-			state = state.withProperty(LOG_AXIS, EnumAxis.NONE);
-		}
-		
+		state = state.withProperty(LOG_AXIS, EnumAxis.NONE);
 		return state;
 	}
 	
@@ -139,5 +117,5 @@ public class Log extends BlockLog implements registerModel, WaNP
 		{
 			Seccult.proxy.registerVariantRenderer(Item.getItemFromBlock(this), i, "log_" + TreeHandler.EnumType.values()[i].getName(), "inventory");
 		}
-	}	
+	}
 }

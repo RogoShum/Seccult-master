@@ -4,15 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockBush;
+import net.minecraft.block.material.MapColor;
+import net.minecraft.block.material.Material;
 import net.minecraftforge.common.IPlantable;
-import testmod.seccult.blocks.BlockPlant;
-import testmod.seccult.blocks.BlockPortal;
-import testmod.seccult.blocks.Leaf;
-import testmod.seccult.blocks.Log;
-import testmod.seccult.blocks.Ores;
-import testmod.seccult.blocks.Planks;
-import testmod.seccult.blocks.Sapling;
-import testmod.seccult.blocks.SpellProgrammer;
+import testmod.seccult.blocks.*;
 
 public class ModBlocks 
 {
@@ -26,8 +22,16 @@ public class ModBlocks
 	public static final IPlantable SAPLINGS = new Sapling("sapling");
 	public static final Block SPELLPROGRAMMER = new SpellProgrammer("spellprogrammer");
 	public static final BlockPortal PORTAL = new BlockPortal();
+	public static final Block OreSpawn = new BlockOreSpawn("ore_spawn", Material.WOOD);
 	
-	//Flower
-	public static final BlockPlant LITTLE_FLOWER = new BlockPlant("little_flower");
-	public static final BlockPlant CATCH_THE_SOUL = new BlockPlant("catch_the_soul");
+	//Plant
+	public static final BlockPlant FLOWER = new BlockPlant("flower");
+	
+	public static final Block LANTERN_FRUIT = new LanternFruit("latern_fruit");
+	public static final Block LANTERN_VINE = new BlockLanternVine("lantern_vine");
+	public static final BlockBush LittleMush = new BlockLittleMushroom("blue_mushroom");
+	public static final BlockBush LittleRedMush = new BlockLittleMushroom("magenta_mushroom");
+	public static final Block Mush = new BlockMagickMushroom("blue_magick_mushroom", Material.WOOD, MapColor.LIGHT_BLUE, LittleMush);
+	public static final Block RedMush = new BlockMagickMushroom("magenta_magick_mushroom", Material.WOOD, MapColor.MAGENTA, LittleRedMush);
+	public static final Block Hypha = new BlockHypha("hypha");
 }

@@ -1,5 +1,6 @@
 package testmod.seccult.world.gen.biome;
 
+import net.minecraft.init.Biomes;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
@@ -25,11 +26,13 @@ public class GenLayerSeccult extends GenLayer {
 		int input[] = parent.getInts(nx, nz, nwidth, ndepth);
 		int output[] = IntCache.getIntCache(width * depth);
 
-		int fireSwamp        = Biome.getIdForBiome(SeccultBiomeRegistries.mana_froest_ROOFED);
-		int swamp            = Biome.getIdForBiome(SeccultBiomeRegistries.mana_froest_BIRCH);
-		int glacier          = Biome.getIdForBiome(SeccultBiomeRegistries.mana_froest_Mountain);
-		int snowyForest      = Biome.getIdForBiome(SeccultBiomeRegistries.mana_froest_FLOWER);
-
+		int roofForest        = Biome.getIdForBiome(SeccultBiomeRegistries.mana_froest_ROOFED);
+		int magic            = Biome.getIdForBiome(SeccultBiomeRegistries.mana_froest_MACICAL);
+		int island          = Biome.getIdForBiome(SeccultBiomeRegistries.mana_Mushroom_Island);
+		int normalForest      = Biome.getIdForBiome(SeccultBiomeRegistries.mana_froest_Mountain);
+		int mushCave      = Biome.getIdForBiome(SeccultBiomeRegistries.mana_Mushroom_Cave);
+		int ocean          = Biome.getIdForBiome(Biomes.OCEAN);
+		
 		for (int dz = 0; dz < depth; dz++) {
 			for (int dx = 0; dx < width; dx++) {
 
@@ -39,11 +42,18 @@ public class GenLayerSeccult extends GenLayer {
 				int down   = input[dx + 1 + (dz + 2) * nwidth];
 				int center = input[dx + 1 + (dz + 1) * nwidth];
 
-				if (isKey(fireSwamp, center, right, left, up, down)) {
-					output[dx + dz * width] = swamp;
-				} else if (isKey(glacier, center, right, left, up, down)) {
-					output[dx + dz * width] = snowyForest;
-				} else {
+				if (isKey(magic, center, right, left, up, down)) {
+					output[dx + dz * width] = roofForest;
+				} else if (isKey(roofForest, center, right, left, up, down)) {
+					output[dx + dz * width] = normalForest;
+				} else if (isKey(normalForest, center, right, left, up, down)) {
+					output[dx + dz * width] = ocean;
+				} else if (isKey(mushCave, center, right, left, up, down)) {
+					output[dx + dz * width] = island;
+				} else if (isKey(island, center, right, left, up, down)) {
+					output[dx + dz * width] = ocean;
+				} 
+				else {
 					output[dx + dz * width] = center;
 				}
 			}

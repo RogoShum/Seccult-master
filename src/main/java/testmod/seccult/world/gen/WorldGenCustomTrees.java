@@ -7,11 +7,13 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.feature.WorldGenFlowers;
+import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.fml.common.IWorldGenerator;
 import testmod.seccult.blocks.Leaf;
 import testmod.seccult.init.ModBlocks;
 import testmod.seccult.util.handlers.TreeHandler;
+import testmod.seccult.util.handlers.PlantsHandler;
 import testmod.seccult.world.gen.plant.WorldGenSeccultTree;
 import testmod.seccult.world.gen.plant.WorldGenEverythingTree;
 import testmod.seccult.world.gen.plant.WorldGenPlants;
@@ -22,7 +24,12 @@ public class WorldGenCustomTrees implements IWorldGenerator
 	private final WorldGenSeccultTree BLUETREE = new WorldGenSeccultTree(true, TreeHandler.EnumType.MANA_TREE_BLUE);
 	private final WorldGenSeccultTree WHITETREE = new WorldGenSeccultTree(true, TreeHandler.EnumType.MANA_TREE_WHITE);
 	private final WorldGenSeccultTree MAGICTREE = new WorldGenSeccultTree(true, TreeHandler.EnumType.MANA_TREE_MAGIC);
-	private final WorldGenPlants LITTLE_FLOWER = new WorldGenPlants(ModBlocks.LITTLE_FLOWER);
+	private final WorldGenPlants LITTLE_FLOWER = new WorldGenPlants(ModBlocks.FLOWER, PlantsHandler.EnumType.Little);
+	private final WorldGenPlants CATCH_SOUL = new WorldGenPlants(ModBlocks.FLOWER, PlantsHandler.EnumType.Catch_Soul);
+	private final WorldGenPlants C = new WorldGenPlants(ModBlocks.FLOWER, PlantsHandler.EnumType.C);
+	private final WorldGenPlants M = new WorldGenPlants(ModBlocks.FLOWER, PlantsHandler.EnumType.M);
+	private final WorldGenPlants Y = new WorldGenPlants(ModBlocks.FLOWER, PlantsHandler.EnumType.Y);
+	private final WorldGenPlants GRASS = new WorldGenPlants(ModBlocks.FLOWER, PlantsHandler.EnumType.Grass);
 	
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) 
@@ -33,18 +40,13 @@ public class WorldGenCustomTrees implements IWorldGenerator
 			
 			break;
 			
-		case 0:
-			int i = random.nextInt(4);
-			if(i == 0)
-			runGenerator(EVERYTHING, world, random, chunkX, chunkZ, 3, 0, 110);
-			else if (i == 1)
-			runGenerator(BLUETREE, world, random, chunkX, chunkZ, 3, 0, 256);
-			else if (i == 2)
-			runGenerator(WHITETREE, world, random, chunkX, chunkZ, 3, 0, 256);
-			else if (i == 3)
-			runGenerator(MAGICTREE, world, random, chunkX, chunkZ, 3, 0, 256);
+		case DimensionMagic.MAGIC_ID:
 			runGenerator(LITTLE_FLOWER, world, random, chunkX, chunkZ, 1, 40, 76);
-			
+			runGenerator(CATCH_SOUL, world, random, chunkX, chunkZ, 1, 0, 120);
+			runGenerator(C, world, random, chunkX, chunkZ, 1, 40, 76);
+			runGenerator(M, world, random, chunkX, chunkZ, 1, 40, 76);
+			runGenerator(Y, world, random, chunkX, chunkZ, 1, 40, 76);
+			runGenerator(GRASS, world, random, chunkX, chunkZ, 10, 40, 76);
 			break;
 			
 		case -1:

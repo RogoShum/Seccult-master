@@ -4,17 +4,24 @@ import java.util.Random;
 
 import net.minecraft.block.BlockDoublePlant;
 import net.minecraft.block.BlockFlower;
+import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.BlockOldLeaf;
+import net.minecraft.block.BlockOldLog;
+import net.minecraft.block.BlockPlanks;
 import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.passive.EntityWolf;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraft.world.gen.feature.WorldGenBigMushroom;
+import net.minecraft.world.gen.feature.WorldGenMegaJungle;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.util.handlers.TreeHandler;
+import testmod.seccult.world.gen.WorldGenSeccultMushroom;
 import testmod.seccult.world.gen.plant.WorldGenSeccultTree;
 
 public class BiomeManaForest extends Biome {
@@ -27,12 +34,12 @@ public class BiomeManaForest extends Biome {
     {
         super(properties);
         this.type = typeIn;
-        this.decorator.treesPerChunk = 6;
+        this.decorator.treesPerChunk = 9;
         this.decorator.grassPerChunk = 2;
 
         if (this.type == BiomeManaForest.Type.FLOWER)
         {
-            this.decorator.treesPerChunk = 3;
+            this.decorator.treesPerChunk = -999;
             this.decorator.flowersPerChunk = 100;
             this.decorator.grassPerChunk = 1;
             this.spawnableCreatureList.add(new Biome.SpawnListEntry(EntityRabbit.class, 4, 2, 3));
@@ -45,7 +52,7 @@ public class BiomeManaForest extends Biome {
 
         if (this.type == BiomeManaForest.Type.ROOFED)
         {
-            this.decorator.treesPerChunk = -999;
+            this.decorator.treesPerChunk = 4;
         }
 
         if (this.type == BiomeManaForest.Type.FLOWER) //Needs to be done here so we have access to this.type
@@ -64,16 +71,18 @@ public class BiomeManaForest extends Biome {
     {
         if (this.type == BiomeManaForest.Type.ROOFED && rand.nextInt(3) > 0)
         {
-            return SUPER_BIRCH_TREE;
-        }
-        else if (this.type != BiomeManaForest.Type.BIRCH && rand.nextInt(5) != 0)
-        {
             return ROOF_TREE;
+        }
+        else if (this.type == BiomeManaForest.Type.Magical && rand.nextInt(5) != 0)
+        {
+            return SUPER_BIRCH_TREE;
         }
         else
         {
             return BIRCH_TREE;
         }
+    	//return new WorldGenMegaJungle(false, 1, 2, Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.JUNGLE)
+    			//, Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.JUNGLE).withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false)));
     }
 
     public BlockFlower.EnumFlowerType pickRandomFlower(Random rand, BlockPos pos)
@@ -124,14 +133,13 @@ public class BiomeManaForest extends Biome {
 
                 if (p_185379_2_.nextInt(20) == 0 && net.minecraftforge.event.terraingen.TerrainGen.decorate(p_185379_1_, p_185379_2_, new net.minecraft.util.math.ChunkPos(p_185379_3_), blockpos, net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.BIG_SHROOM))
                 {
-                    WorldGenBigMushroom worldgenbigmushroom = new WorldGenBigMushroom();
+                    WorldGenSeccultMushroom worldgenbigmushroom = new WorldGenSeccultMushroom();
                     worldgenbigmushroom.generate(p_185379_1_, p_185379_2_, blockpos);
                 }
                 else if (net.minecraftforge.event.terraingen.TerrainGen.decorate(p_185379_1_, p_185379_2_, new net.minecraft.util.math.ChunkPos(p_185379_3_), blockpos, net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.TREE))
                 {
                     WorldGenAbstractTree worldgenabstracttree = this.getRandomTreeFeature(p_185379_2_);
                     worldgenabstracttree.setDecorationDefaults();
-
                     if (worldgenabstracttree.generate(p_185379_1_, p_185379_2_, blockpos))
                     {
                         worldgenabstracttree.generateSaplings(p_185379_1_, p_185379_2_, blockpos);
@@ -176,7 +184,7 @@ public class BiomeManaForest extends Biome {
 
     @Override
     public int getWaterColorMultiplier() {
-    	return 14221165;
+    	return 10092512;
     }
     
     public Class <? extends Biome > getBiomeClass()
@@ -184,18 +192,24 @@ public class BiomeManaForest extends Biome {
         return BiomeManaForest.class;
     }
 
+    @Override
+    public int getSkyColorByTemp(float currentTemperature) {
+    	return 10092512;
+    }
+    
     @SideOnly(Side.CLIENT)
     public int getGrassColorAtPos(BlockPos pos)
     {
-        int i = super.getGrassColorAtPos(pos);
-        return this.type == BiomeManaForest.Type.ROOFED ? (i & 14221165) + 2634762 >> 1 : i;
+        //int i = super.getGrassColorAtPos(pos);
+        //return (i & 14221165) + 2634762 >> 1;
+            return 682628;
     }
 
     public static enum Type
     {
         NORMAL,
         FLOWER,
-        BIRCH,
+        Magical,
         ROOFED;
     }
 }

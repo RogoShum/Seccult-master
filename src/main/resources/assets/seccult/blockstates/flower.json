@@ -1,0 +1,11 @@
+{
+    "variants": 
+    {
+		"variant=little_flower": { "model": "seccult:little_flower" },
+		"variant=catch_the_soul": { "model": "seccult:catch_the_soul" },
+		"variant=c": { "model": "seccult:flower_c" },
+		"variant=m": { "model": "seccult:flower_m" },
+		"variant=y": { "model": "seccult:flower_y" },
+		"variant=grass": { "model": "seccult:flower_grass" }
+    }
+}

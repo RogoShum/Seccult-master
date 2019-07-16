@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,6 +18,7 @@ import net.minecraft.nbt.NBTTagList;
 import testmod.seccult.Seccult;
 import testmod.seccult.init.ModDamage;
 import testmod.seccult.items.armor.ArmorBase;
+import testmod.seccult.network.NetworPlayerMagickData;
 import testmod.seccult.network.NetworkHandler;
 import testmod.seccult.network.NetworkPlayerWandData;
 
@@ -91,6 +94,10 @@ public class PlayerDataHandler {
 		
 		private float ManaValue;
 		private float MaxManaValue;
+		
+		private float ExtraManaValue;
+		private float lastTickMaxManaValue;
+		
 		private float proficiency;
 		
 		private float regenCooldown;
@@ -137,7 +144,8 @@ public class PlayerDataHandler {
 			color3 = cmp.getInteger("Color3");
 			color4 = cmp.getInteger("Color4");
 			
-			NetworkHandler.getNetwork().sendToAll(new NetworkPlayerWandData(color2, color3, color4, player.getUniqueID(), wand));
+			if(!client)
+			NetworkHandler.getNetwork().sendTo(new NetworkPlayerWandData(color2, color3, color4, wand), (EntityPlayerMP) player);
 			
 			if(ManaTalentValue == 0)
 			{
@@ -295,7 +303,8 @@ public class PlayerDataHandler {
 	    }
 		
 		private float getRegenPerTick() {
-			float Regen = (float) (Math.pow(ManaValue + ControlAbility, 1.0005) - ManaValue);
+			//System.out.println((ManaValue / 5) + ControlAbility);
+			float Regen = (float) (Math.pow((ManaValue / 10) + (ControlAbility / 10), 1.00000000001) - (ManaValue / 10));
 			return Regen;
 		}
 
@@ -325,8 +334,17 @@ public class PlayerDataHandler {
 		
 		public void reduceMana(float mana)
 		{
-			if(!player.isCreative())
-			ManaValue -= mana * getPlayerArmorAttribute(1);
+			if(player.isCreative())
+				return;
+			if(ManaValue >= mana * getPlayerArmorAttribute(1))
+			{
+				ManaValue -= mana * getPlayerArmorAttribute(1);
+			}
+			else 
+			{
+				ExtraManaValue -= (mana * getPlayerArmorAttribute(1) - ManaValue);
+				ManaValue = 0;
+			}
 		}
 		
 		public void setColor(int color2, int color3, int color4, int wand)
@@ -385,15 +403,19 @@ public class PlayerDataHandler {
 		
 		public void addCoolDown(float CoolDown)
 		{
-			regenCooldown -= CoolDown;
+			regenCooldown += CoolDown;
 		}
 		
 		public float getMaxMana() {
-			return MaxManaValue + MaxManaValue * getPlayerArmorAttribute(2);
+			if(client)
+				return MaxManaValue;
+			if(getPlayerArmorAttribute(2) == 0)
+				return MaxManaValue;
+			return MaxManaValue * getPlayerArmorAttribute(2);
 		}
 		
 		public float getMana() {
-			return ManaValue;
+			return ManaValue + ExtraManaValue;
 		}
 		
 		public float getManaTalent() {
@@ -416,7 +438,7 @@ public class PlayerDataHandler {
 			float MagickUpperlimit = 0;
 			if(type == 0)
 			{
-			for(int i = 0; i < 3; i++)
+			for(int i = 0; i < 4; i++)
 			{
 				ItemStack stack = this.player.inventory.armorInventory.get(i);
 				Item item = stack.getItem();
@@ -430,7 +452,7 @@ public class PlayerDataHandler {
 			}
 			else if(type == 1)
 			{
-			for(int i = 0; i < 3; i++)
+			for(int i = 0; i < 4; i++)
 			{
 				ItemStack stack = this.player.inventory.armorInventory.get(i);
 				Item item = stack.getItem();
@@ -440,11 +462,13 @@ public class PlayerDataHandler {
 					MagickRelief += armor.getMagicRelief();
 				}
 			}
+			if(MagickRelief > 1)
+				MagickRelief = 0.1F;
 			return 1 - MagickRelief;
 			}
 			else if(type == 2)
 			{
-			for(int i = 0; i < 3; i++)
+			for(int i = 0; i < 4; i++)
 			{
 				ItemStack stack = this.player.inventory.armorInventory.get(i);
 				Item item = stack.getItem();
@@ -454,6 +478,8 @@ public class PlayerDataHandler {
 					MagickUpperlimit += armor.getMagicUpperlimit();
 				}
 			}
+			if(MagickUpperlimit == 0)
+				ExtraManaValue = 0;
 			return MagickUpperlimit;
 			}
 			else
@@ -462,18 +488,42 @@ public class PlayerDataHandler {
 		}
 		
 		public void tick() {
-			if(regenCooldown == 0) {
-					ManaValue = Math.min(getMaxMana(), getMana() + getRegenPerTick());
+			if(client)
+				return;
+			//ManaValue = 0;
+			//regenCooldown = 30;
+			//System.out.println(regenCooldown);
+			if(Float.isNaN(ManaValue))
+				ManaValue = 0;
+			
+			if(Float.isNaN(player.getHealth()))
+				player.setHealth(0);
+			
+			if(regenCooldown <= 0) {
+				regenCooldown = 0;
+					ManaValue = Math.min(MaxManaValue, Math.min(getMaxMana(), getMana() + getRegenPerTick()));
+					if(ManaValue == MaxManaValue)
+					{
+						ExtraManaValue = Math.min(getMaxMana() - ManaValue, Math.min(getMaxMana(), getMana() + getRegenPerTick()));
+					}
 					save();
 			} else {
+				
 				regenCooldown -= (float)Math.sqrt(getGrowth()) -  1;
 				save();
 			}
 			
-			if(ManaValue <= 0)
+			if(ManaValue + ExtraManaValue <= 0)
 			{
 				player.attackEntityFrom(ModDamage.MagickOverLoad, (float)Math.sqrt(0 - getMana()));
 				ManaValue = 0;
+				ExtraManaValue = 0;
+			}
+			float[] vaule = {0, this.getMaxMana()};
+			float[] vaule1 = {1, this.getMana()};
+			if(!client) {
+			NetworkHandler.getNetwork().sendTo(new NetworPlayerMagickData(vaule), (EntityPlayerMP)player);
+			NetworkHandler.getNetwork().sendTo(new NetworPlayerMagickData(vaule1), (EntityPlayerMP)player);
 			}
 		}
 
@@ -513,6 +563,11 @@ public class PlayerDataHandler {
 			return string;
 		}
 
+		public void setMagickList(NBTTagList magick)
+		{
+			this.MagickList = magick;
+		}
+		
 		public boolean hasMagick(int id)
 		{
 			for(int i = 0; i < magickData.length; i++)
