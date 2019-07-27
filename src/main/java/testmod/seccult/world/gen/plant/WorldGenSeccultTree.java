@@ -382,6 +382,8 @@ public class WorldGenSeccultTree extends WorldGenAbstractTree{
     public boolean generate(World worldIn, Random rand, BlockPos position)
     {
         this.world = worldIn;
+        if(world.isRemote)
+        	return false;
         this.basePos = position;
         this.rand = new Random(rand.nextLong());
         

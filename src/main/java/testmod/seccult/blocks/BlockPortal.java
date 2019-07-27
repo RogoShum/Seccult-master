@@ -21,6 +21,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
@@ -35,13 +36,15 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import testmod.seccult.Seccult;
 import testmod.seccult.init.ModBlocks;
+import testmod.seccult.util.registerModel;
 import testmod.seccult.world.gen.DimensionMagic;
 import testmod.seccult.world.gen.TestTeleporter;
 
-public class BlockPortal extends BlockBreakable{
+public class BlockPortal extends BlockBreakable implements registerModel{
 
-
+	private String name = "magick_portal";
 	public static final PropertyEnum<EnumFacing.Axis> AXIS = PropertyEnum.<EnumFacing.Axis>create("axis", EnumFacing.Axis.class, EnumFacing.Axis.X, EnumFacing.Axis.Z);
 	protected static final AxisAlignedBB X_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.375D, 1.0D, 1.0D, 0.625D);
     protected static final AxisAlignedBB Z_AABB = new AxisAlignedBB(0.375D, 0.0D, 0.0D, 0.625D, 1.0D, 1.0D);
@@ -394,5 +397,11 @@ public class BlockPortal extends BlockBreakable{
 				for(int j = 0; j < this.height; ++j) this.world.setBlockState(pos.up(j), ModBlocks.PORTAL.getDefaultState().withProperty(BlockPortal.AXIS, this.axis), 2);
 			}
 		}
+	}
+
+	@Override
+	public void registerModels() 
+	{
+			Seccult.proxy.registerVariantRenderer(Item.getItemFromBlock(this), 0, this.name, "inventory");
 	}
 }

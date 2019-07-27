@@ -53,7 +53,7 @@ public class WorldGenCustomOres implements IWorldGenerator
 			int x = chunkX * 16 + rand.nextInt(4);
 			int y = minHeight + rand.nextInt(heightDiff);
 			int z = chunkZ * 16 + rand.nextInt(4);
-			
+			if(!world.isRemote)
 			gen.generate(world, rand, new BlockPos(x,y,z));
 		}
 	}

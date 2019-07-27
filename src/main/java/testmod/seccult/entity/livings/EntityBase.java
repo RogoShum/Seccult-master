@@ -59,6 +59,21 @@ public class EntityBase extends EntityLiving{
 	return null;
 	}
 	
+	protected double LookX()
+	{
+		return this.getLookVec().x;
+	}
+	
+	protected double LookY()
+	{
+		return this.getLookVec().y;
+	}
+	
+	protected double LookZ()
+	{
+		return this.getLookVec().z;
+	}
+	
 	protected void Moveto(double x, double y, double z, float speed) {
         this.motionX += (Math.signum(x - this.posX) - this.motionX) * speed;
         this.motionY += (Math.signum(y - this.posY) - this.motionY) * speed;

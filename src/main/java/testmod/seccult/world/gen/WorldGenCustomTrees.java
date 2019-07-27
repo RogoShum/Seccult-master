@@ -41,12 +41,12 @@ public class WorldGenCustomTrees implements IWorldGenerator
 			break;
 			
 		case DimensionMagic.MAGIC_ID:
-			runGenerator(LITTLE_FLOWER, world, random, chunkX, chunkZ, 1, 40, 76);
-			runGenerator(CATCH_SOUL, world, random, chunkX, chunkZ, 1, 0, 120);
-			runGenerator(C, world, random, chunkX, chunkZ, 1, 40, 76);
-			runGenerator(M, world, random, chunkX, chunkZ, 1, 40, 76);
-			runGenerator(Y, world, random, chunkX, chunkZ, 1, 40, 76);
-			runGenerator(GRASS, world, random, chunkX, chunkZ, 10, 40, 76);
+			//runGenerator(LITTLE_FLOWER, world, random, chunkX, chunkZ, 1, 40, 76);
+			//runGenerator(CATCH_SOUL, world, random, chunkX, chunkZ, 1, 0, 120);
+			//runGenerator(C, world, random, chunkX, chunkZ, 1, 40, 76);
+			//runGenerator(M, world, random, chunkX, chunkZ, 1, 40, 76);
+			//runGenerator(Y, world, random, chunkX, chunkZ, 1, 40, 76);
+			//runGenerator(GRASS, world, random, chunkX, chunkZ, 10, 40, 76);
 			break;
 			
 		case -1:
@@ -63,6 +63,7 @@ public class WorldGenCustomTrees implements IWorldGenerator
 			int x = chunkX * 16 + random.nextInt(4)+8;
 			int y = minHeight + random.nextInt(heightDiff);
 			int z = chunkZ * 16 + random.nextInt(4)+8;
+			if(!world.isRemote)
 			generator.generate(world, random, new BlockPos(x, y, z));
 		}
 	}

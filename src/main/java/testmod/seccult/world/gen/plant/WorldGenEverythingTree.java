@@ -28,6 +28,8 @@ public class WorldGenEverythingTree extends WorldGenAbstractTree
 	@Override
     public boolean generate(World worldIn, Random rand, BlockPos position)
     {
+		 if(worldIn.isRemote)
+	        	return false;
         int i = rand.nextInt(3) + this.minHeight;
         boolean flag = true;
 

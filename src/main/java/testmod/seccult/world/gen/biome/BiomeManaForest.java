@@ -36,7 +36,6 @@ public class BiomeManaForest extends Biome {
         this.type = typeIn;
         this.decorator.treesPerChunk = 9;
         this.decorator.grassPerChunk = 2;
-
         if (this.type == BiomeManaForest.Type.FLOWER)
         {
             this.decorator.treesPerChunk = -999;

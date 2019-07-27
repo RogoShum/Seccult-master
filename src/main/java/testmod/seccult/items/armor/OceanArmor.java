@@ -9,12 +9,14 @@ import net.minecraft.init.Enchantments;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import testmod.seccult.ModReclection;
 import testmod.seccult.Seccult;
 import testmod.seccult.init.ModItems;
+import testmod.seccult.potions.ModPotions;
 
 public class OceanArmor extends FunctionArmor{
 	private int air;
@@ -39,7 +41,6 @@ public class OceanArmor extends FunctionArmor{
 			air = 300;
 			return;
 		}
-
 		try {
 			if(player.world.handleMaterialAcceleration(player.getEntityBoundingBox().grow(0.0D, -0.4000000059604645D, 0.0D).shrink(0.001D), Material.WATER, player))
 			ModReclection.Entity_inWater(player, false);
@@ -48,6 +49,9 @@ public class OceanArmor extends FunctionArmor{
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
+		
+		if(player.world.handleMaterialAcceleration(player.getEntityBoundingBox().grow(0.0D, -1.0D, 0.0D).offset(0, 1, 0).shrink(0.001D), Material.WATER, player))
+		player.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 201));
 		
 		if(player.capabilities.isCreativeMode)
 			return;

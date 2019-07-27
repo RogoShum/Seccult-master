@@ -13,7 +13,7 @@ public class EntityEoWHead extends EntityEoW{
 		EntityEoW B = null;
 		public EntityEoWHead(World worldIn) {
 			super(worldIn);
-			this.FirstSpawn = 49;
+			this.SpawnAmount = 49;
 			this.setSize(1.6F, 1.6F);
 		}
 		
@@ -39,7 +39,7 @@ public class EntityEoWHead extends EntityEoW{
 		public void writeEntityToNBT(NBTTagCompound nbt) {
 			if(!nbt.hasKey("Part")) {
 				nbt.setString("Part", "isHead");
-				if(!nbt.hasKey("notFirstSpawn") && FirstSpawn == 0)
+				if(!nbt.hasKey("notFirstSpawn") && SpawnAmount == 0)
 				{
 					nbt.setBoolean("notFirstSpawn", false);
 				}
@@ -48,19 +48,19 @@ public class EntityEoWHead extends EntityEoW{
 		}
 		
 	    private void onBody() {
-	    	while(FirstSpawn > 0) {
-	    	if(this.FirstSpawn > 1) 
+	    	while(SpawnAmount > 0) {
+	    	if(this.SpawnAmount > 1) 
 	    	{
 	    		spawnCreature();
 	    	}
-	 	   	else if(this.FirstSpawn == 1)
+	 	   	else if(this.SpawnAmount == 1)
 	 	   	{
 	 	   		spawnCreature();
 	 	   		}
 	    	}
 	    }
 	    
-	    private EntityEoW spawnCreature() {
+	    protected EntityEoW spawnCreature() {
 	    	Entity entity = null;
 	            entity = EntityList.createEntityByIDFromName(EOWres, this.world);
 	            EntityEoW EOW = (EntityEoW) entity;
@@ -77,7 +77,7 @@ public class EntityEoWHead extends EntityEoW{
 	 	 		   	if(!this.world.isRemote)
 	                this.world.spawnEntity(EOW);
 	                //EOW.playLivingSound();
-	 	 		   	FirstSpawn--;
+	 	 		   	SpawnAmount--;
 	 	 		   	A = EOW;
 	                return EOW;
 	    }

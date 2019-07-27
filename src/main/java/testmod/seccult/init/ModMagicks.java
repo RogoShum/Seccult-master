@@ -44,21 +44,36 @@ public class ModMagicks {
 	public static final int InScaleMagickColor = 0xFFFACD;
 	public static final int ArrowMagickColor = 0xFFFACD;
 	
-	public static Magick Damage;
-	public static Magick Flame;
-	public static Magick Frozen;
-	public static Magick noClip;
-	public static Magick LoseMind;
-	public static Magick Move;
-	public static Magick WhiteAlbum;
-	public static Magick GratefulDead;
-	public static Magick Teleport;
-	public static Magick Copy;
-	public static Magick TheWorld;
-	public static Magick KraftWork;
-	public static Magick Floating;
-	public static Magick InScale;
-	public static Magick Arrow;
+	@SuppressWarnings("unused")
+	private static Magick Damage;
+	@SuppressWarnings("unused")
+	private static Magick Flame;
+	@SuppressWarnings("unused")
+	private static Magick Frozen;
+	@SuppressWarnings("unused")
+	private static Magick noClip;
+	@SuppressWarnings("unused")
+	private static Magick LoseMind;
+	@SuppressWarnings("unused")
+	private static Magick Move;
+	@SuppressWarnings("unused")
+	private static Magick WhiteAlbum;
+	@SuppressWarnings("unused")
+	private static Magick GratefulDead;
+	@SuppressWarnings("unused")
+	private static Magick Teleport;
+	@SuppressWarnings("unused")
+	private static Magick Copy;
+	@SuppressWarnings("unused")
+	private static Magick TheWorld;
+	@SuppressWarnings("unused")
+	private static Magick KraftWork;
+	@SuppressWarnings("unused")
+	private static Magick Floating;
+	@SuppressWarnings("unused")
+	private static Magick InScale;
+	@SuppressWarnings("unused")
+	private static Magick Arrow;
 	
 
 	private static Set<Magick> magicks = new HashSet<>();
@@ -94,7 +109,7 @@ public class ModMagicks {
 	}
 	
 	@Nullable
-	public static Magick getAttributeFromName(String name) {
+	public static Magick getMagickFromName(String name) {
 		for (Magick magick : magicks) {
 			if (magick.getNbtName().equals(name)) return magick.clone();
 		}

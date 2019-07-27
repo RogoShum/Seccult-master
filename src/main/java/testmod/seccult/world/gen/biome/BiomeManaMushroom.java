@@ -1,16 +1,11 @@
 package testmod.seccult.world.gen.biome;
 
-import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityMooshroom;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -24,7 +19,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.init.ModBlocks;
 import testmod.seccult.world.gen.WorldGenSeccultMushroom;
-import testmod.seccult.world.gen.plant.WorldGenCave;
 
 public class BiomeManaMushroom extends Biome{
 	private final BiomeManaMushroom.Type type;
@@ -280,37 +274,19 @@ public class BiomeManaMushroom extends Biome{
         	            }
         	        }
 
-    	            if(net.minecraftforge.event.terraingen.TerrainGen.decorate(worldIn, random, forgeChunkPos, net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.CUSTOM))
-    	            if(grassPerChunk == -12450)
+        	        if(grassPerChunk == -12450)
     	            {
-    	            	{
-    	            		Iterable<BlockPos> blocks = BlockPos.getAllInBox(new BlockPos(chunkPos.getX() - 60, 0, chunkPos.getZ() + 60), new BlockPos(chunkPos.getX() + 60, 60, chunkPos.getZ() - 60));
-    	            		BlockPos blockpos3 = new BlockPos(0,0,0);
-    						for(BlockPos pos: blocks)
-    						{
-    							if(pos.getX() % 120 == 0 && pos.getZ() % 120 == 0)
-    								blockpos3 = new BlockPos(pos.getX(),20,pos.getZ());
-    						}
-        	                	int y = 0;
-        	                	switch(random.nextInt(3))
-        	                	{
-        	                		case 0: 
-        	                			y = 20;
-        	                			break;
-        	                		case 1: 
-        	                			y = 30;
-        	                			break;
-        	                		case 2: 
-        	                			y = 40;
-        	                			break;
-        	                	}
-        	                	if(blockpos3 != new BlockPos(0,0,0))
-        	                	{
-        	                	worldIn.setBlockState(new BlockPos(blockpos3.getX(), y ,blockpos3.getZ()), ModBlocks.OreSpawn.getDefaultState());
-        	                	(new WorldGenCave(Blocks.AIR)).generate(worldIn, random, new BlockPos(blockpos3.getX(), y ,blockpos3.getZ()));
-        	                	worldIn.setBlockState(new BlockPos(blockpos3.getX(), y ,blockpos3.getZ()), Blocks.AIR.getDefaultState());
-        	                	}
-    	            	}
+        	        	if(net.minecraftforge.event.terraingen.TerrainGen.decorate(worldIn, random, forgeChunkPos, net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.CUSTOM))
+        	        	{
+        	                int i10 = random.nextInt(16) + 8;
+        	                int l13 = random.nextInt(16) + 8;
+        	                int i17 = random.nextInt(20) + 20;
+
+        	                int k19 = random.nextInt(i17);
+        	                BlockPos blockpos6 = this.chunkPos.add(i10, k19, l13);
+        	                
+        	                worldIn.setBlockState(blockpos6, ModBlocks.Mush_Gen.getDefaultState());
+        	        	}
     	            }
         
         	        

@@ -18,7 +18,6 @@ public class RenderLight extends RenderLiving<EntityLight>
 	{
 		super(renderManager, new ModelLight(0), 0.0F);
 		this.addLayer(new LayerLight(this));
-        
 	}
 	
 	@Override

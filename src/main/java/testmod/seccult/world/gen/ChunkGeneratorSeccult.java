@@ -4,15 +4,9 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.BlockFalling;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEntitySpawner;
@@ -25,9 +19,8 @@ import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.MapGenCaves;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
-import net.minecraft.world.gen.feature.WorldGenLakes;
-import testmod.seccult.init.ModBlocks;
-import testmod.seccult.world.gen.plant.WorldGenCave;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 
 public class ChunkGeneratorSeccult implements IChunkGenerator {
 	
@@ -49,12 +42,14 @@ public class ChunkGeneratorSeccult implements IChunkGenerator {
 		this.generateStructures = generateStructures;
 		this.terrainType = world.getWorldInfo().getTerrainType();
 		this.rand = new Random(seed);
+		
 		this.minLimitPerlinNoise = new NoiseGeneratorOctaves(this.rand, 16);
 		this.maxLimitPerlinNoise = new NoiseGeneratorOctaves(this.rand, 16);
 		this.mainPerlinNoise = new NoiseGeneratorOctaves(this.rand, 8);
 		this.surfaceNoise = new NoiseGeneratorPerlin(this.rand, 4);
 		this.scaleNoise = new NoiseGeneratorOctaves(this.rand, 10);
 		this.depthNoise = new NoiseGeneratorOctaves(this.rand, 16);
+		
 		this.heightMap = new double[825];
 		this.biomeWeights = new float[25];
 		
@@ -80,11 +75,13 @@ public class ChunkGeneratorSeccult implements IChunkGenerator {
 	@Override
 	public Chunk generateChunk(int x, int z) {
 		this.rand.setSeed((long)x * 341873128712L + (long)z * 132897987541L);
+		
 		ChunkPrimer chunkprimer = new ChunkPrimer();
 		this.setBlocksInChunk(x, z, chunkprimer);
+		
 		this.biomesForGeneration = this.world.getBiomeProvider().getBiomes(this.biomesForGeneration, x * 16, z * 16, 16, 16);
 		this.replaceBiomeBlocks(x, z, chunkprimer, biomesForGeneration);
-		new MapGenCaves().generate(this.world, x, z, chunkprimer);
+		//new MapGenCaves().generate(this.world, x, z, chunkprimer);
 		Chunk chunk = new Chunk(this.world, chunkprimer, x, z);
 		byte[] abyte = chunk.getBiomeArray();
 		
@@ -120,21 +117,21 @@ public class ChunkGeneratorSeccult implements IChunkGenerator {
 						   d8 = (this.heightMap[l1 + i2 + 1] - d4) * d0;
 					
 					for(int j2 = 0; j2 < 8; ++j2) {
-						double d9 = .25D,
+						double d9 = 0.25D,
 							   d10 = d1,
 							   d11 = d2,
 							   d12 = (d3 - d1) * d9,
 							   d13 = (d4 - d2) * d9;
 						
 						for(int k2 = 0; k2 < 4; ++k2) {
-							double d14 = .25D,
+							double d14 = 0.25D,
 								   d16 = (d11 - d10) * d14,
 								   lvt_45_1 = d10 - d16;
 							
 							for(int l2 = 0; l2 < 4; ++l2) {
 								if((lvt_45_1 += d16) > 0.0D)
 									primer.setBlockState(i * 4 + k2, i2 * 8 + j2, l * 4 + l2, Blocks.STONE.getDefaultState());
-								else if (i2 * 8 + j2 < 63)
+								else if (i2 * 8 + j2 < this.world.getSeaLevel() - 1)
 									primer.setBlockState(i * 4 + k2, i2 * 8 + j2, l * 4 + l2, Blocks.WATER.getDefaultState());
 							}
 							
@@ -242,23 +239,21 @@ public class ChunkGeneratorSeccult implements IChunkGenerator {
 	@Override
 	public void populate(int x, int z) {
 		BlockFalling.fallInstantly = true;
+		
+		MinecraftForge.EVENT_BUS.post(new PopulateChunkEvent.Pre(this, this.world, this.rand, x, z, false));
+		
 		int i = x * 16;
 		int j = z * 16;
 		BlockPos pos = new BlockPos(i, 0, j);
+		
 		Biome biome = this.world.getBiome(pos.add(16, 0, 16));
+		
 		this.rand.setSeed(this.world.getSeed());
+		
 		long k = this.rand.nextLong() / 2L * 2L + 1L,
 			 l = this.rand.nextLong() / 2L * 2L + 1L;
-		this.rand.setSeed((long)x * k + (long)z * l ^ this.world.getSeed());
 		
-		int i1 = this.rand.nextInt(16) + 8,
-			j1 = this.rand.nextInt(256),
-			k1 = this.rand.nextInt(16) + 8;
-		//System.out.println("Found Mushroom Cave");
-		//if(biome.getBiomeClass() == SeccultBiomeRegistries.mana_Mushroom_Cave.getBiomeClass())
-		//{
-
-		//}
+		this.rand.setSeed((long)x * k + (long)z * l ^ this.world.getSeed());
 		
 		biome.decorate(world, rand, new BlockPos(i, 0, j));
 		WorldEntitySpawner.performWorldGenSpawning(world, biome, i + 8, j + 8, 16, 16, rand);

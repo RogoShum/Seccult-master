@@ -4,6 +4,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import testmod.seccult.init.ModItems;
 
@@ -15,7 +17,7 @@ public class NoClipChest extends FunctionArmor{
 	
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
-		if(player.capabilities.allowFlying)
+		/*if(player.capabilities.allowFlying)
 		{
 			if(player.capabilities.isFlying)
 			{
@@ -23,11 +25,10 @@ public class NoClipChest extends FunctionArmor{
 			}
 			else
 				player.noClip = false;
-			player.height = 0;
-			player.width = 0;
-			player.eyeHeight = 1.65F;
 		}
 		else
-			player.noClip = true;
+			player.noClip = true;*/
+		player.width = 0;
+		player.height = 0;
 	}
 }

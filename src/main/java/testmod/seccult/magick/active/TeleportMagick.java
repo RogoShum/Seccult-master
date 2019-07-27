@@ -12,7 +12,6 @@ public class TeleportMagick extends Magick{
 
 	public TeleportMagick(String nbtName, boolean hasDetailedText) {
 		super(nbtName, hasDetailedText);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

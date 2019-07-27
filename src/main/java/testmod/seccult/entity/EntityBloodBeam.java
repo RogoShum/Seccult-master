@@ -23,10 +23,8 @@ public class EntityBloodBeam extends Entity{
 	protected float Myblood;
 	
 	public EntityBloodBeam(World worldIn) {
-		
 		super(worldIn);
         this.setSize(0.2F, 0.2F);
-		// TODO Auto-generated constructor stub
 	}
 	
 	public EntityBloodBeam(World worldIn, EntityLivingBase o, float d) {
@@ -49,7 +47,6 @@ public class EntityBloodBeam extends Entity{
 		}
 		else
 			loadUUID();
-		System.out.println("QWQ");
 	}
 	
 	private void onChargeBloodB() {
@@ -58,7 +55,6 @@ public class EntityBloodBeam extends Entity{
 	  		this.owner.setHealth(this.owner.getHealth() + this.Myblood);
 	  		this.setDead();
 		}
-		
 	}
 
 	private void onChargeBlood() {
@@ -84,7 +80,6 @@ public class EntityBloodBeam extends Entity{
 
 	private void onParticle() {
 		Minecraft.getMinecraft().effectRenderer.addEffect(new LightFX(this.world, this.posX, this.posY, this.posZ, 0, 0, 0, 1));
-		
 	}
 	
 	protected void Moveto(double x, double y, double z, float speed) {

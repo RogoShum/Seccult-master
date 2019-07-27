@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "variant=2": { "model": "seccult:hypha_light_head" },
+        "variant=1": { "model": "seccult:hypha_light_body" },
+        "variant=0": { "model": "seccult:hypha_light_tail" }
+    }
+}

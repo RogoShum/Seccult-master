@@ -155,7 +155,7 @@ public class MagickCompiler {
 			
 			
     		if(magick == null && !MagickNBT.hasNoTags()) {
-    			magick = ModMagicks.getAttributeFromName(
+    			magick = ModMagicks.getMagickFromName(
 				ModMagicks.GetMagickStringByID(
 				MagickNBT.getInteger("Magick")));
 			if(magick == null)
@@ -191,7 +191,7 @@ public class MagickCompiler {
 				if(NewList.hasNoTags())
 					NewList = null;
 				ImplementationStoreable IMStore = (ImplementationStoreable) imples;
-				ModMagicks.getAttributeFromName(
+				ModMagicks.getMagickFromName(
 						ModMagicks.GetMagickStringByID(
 								MagickNBT.getInteger("Magick")));
 				IMStore.setData(MagickNBT.copy(), NewList);

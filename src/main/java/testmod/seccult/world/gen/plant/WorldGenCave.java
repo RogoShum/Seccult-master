@@ -23,26 +23,20 @@ public class WorldGenCave extends WorldGenerator
 
     public boolean generate(World worldIn, Random rand, BlockPos position)
     {
+    	if(worldIn.isRemote)
+    		return false;
+    	
     	int distance = Minecraft.getMinecraft().gameSettings.renderDistanceChunks * 16;
         int scale = (int)(distance / 1.5);
-        /*BlockPos block1 = position.add(scale, 0, scale);
-        BlockPos block2 = position.add(-scale, 0, -scale);
-        System.out.print(block1 +" is ");
-        if(worldIn.isBlockLoaded(block1))
-        	System.out.println("Loaded.");
+        if(rand.nextInt(5) == 0)
+        	scale = 80;
         else
-        	System.out.println("UnLoaded.");
-        
-        System.out.print(block2 +" is ");
-        if(worldIn.isBlockLoaded(block2))
-        	System.out.println("Loaded.");
-        else
-        	System.out.println("UnLoaded.");
-        System.out.println("==========");
-        if (!worldIn.isBlockLoaded(block1) || !worldIn.isBlockLoaded(block2))
-        	return false;*/
+        	scale = 40;
     	Block essence = ModBlocks.OreSpawn;
     	this.essenceBlock = rand.nextInt(3) + 1;
+    	
+    	int height = scale / 4;
+    	
         for (position = position.add(-(scale/2), 0, -(scale/2)); position.getY() > scale / 8 && worldIn.isAirBlock(position); position = position.down())
         {
             ;
@@ -53,24 +47,29 @@ public class WorldGenCave extends WorldGenerator
         }
         else
         {
-            position = position.down(scale / 8);
+            position = position.down(scale / 8); 
             
-            boolean[] aboolean = new boolean[scale * scale * scale / 4];
+            boolean[] aboolean = new boolean[scale * scale * height];
             int i = rand.nextInt(scale / 8) + scale / 8;
+            
+            int s16 = scale / 16;
+            int s32 = scale / 32;
+            int s8 = scale / 8;
+            
             for (int j = 0; j < i; ++j)
             {
-                double d0 = rand.nextDouble() * (scale / 2.28) + (scale / 4.5);
+                double d0 = rand.nextDouble() * (scale / 2.28) + (height);
                 double d1 = rand.nextDouble() * (scale / 3.2) + (scale / 6.4);
-                double d2 = rand.nextDouble() * (scale / 2.28) + (scale / 4.5);
-                double d3 = rand.nextDouble() * (scale - d0 - (scale / 16)) + (scale / 32) + d0 / (scale / 32);
-                double d4 = rand.nextDouble() * ((scale / 4) - d1 - (scale / 8)) + (scale / 16) + d1 / (scale / 32);
-                double d5 = rand.nextDouble() * (scale - d2 - (scale / 16)) + (scale / 32) + d2 / (scale / 32);
+                double d2 = rand.nextDouble() * (scale / 2.28) + (height);
+                double d3 = rand.nextDouble() * (scale - d0 - s16 + s32 + d0 / s32);
+                double d4 = rand.nextDouble() * ((height) - d1 - s8) + s16 + d1 / s32;
+                double d5 = rand.nextDouble() * (scale - d2 - s16) + s32 + d2 / s32;
 
                 for (int l = 1; l < scale-1; ++l)
                 {
                     for (int i1 = 1; i1 < scale-1; ++i1)
                     {
-                        for (int j1 = 1; j1 < (scale / 4)-1; ++j1)
+                        for (int j1 = 1; j1 < height -1; ++j1)
                         {
                             double d6 = ((double)l - d3) / (d0 / 2.0D);
                             double d7 = ((double)j1 - d4) / (d1 / 2.0D);
@@ -79,7 +78,7 @@ public class WorldGenCave extends WorldGenerator
 
                             if (d9 < 0.8D)
                             {
-                                aboolean[(l * scale + i1) * scale / 4 + j1] = true;
+                                aboolean[(l * scale + i1) * height + j1] = true;
                             }
                         }
                     }
@@ -90,7 +89,7 @@ public class WorldGenCave extends WorldGenerator
             {
                 for (int l2 = 0; l2 < scale; ++l2)
                 {
-                    for (int k = 0; k < scale / 4; ++k)
+                    for (int k = 0; k < height; ++k)
                     {
                             Block block = worldIn.getBlockState(position.add(k1, k, l2)).getBlock();
                             if (block == essence)
@@ -114,13 +113,15 @@ public class WorldGenCave extends WorldGenerator
                 }
             }
             
+            int height4 = (height / 4);
+            
             for (int l1 = 0; l1 < scale; ++l1)
             {
                 for (int i3 = 0; i3 < scale; ++i3)
                 {
-                    for (int i4 = 0; i4 < scale / 4; ++i4)
+                    for (int i4 = 0; i4 < height4; ++i4)
                     {
-                        if (aboolean[(l1 * scale + i3) * scale / 4 + i4])
+                        if (aboolean[(l1 * scale + i3) * height + i4])
                         {
                         	worldIn.setBlockState(position.add(l1, i4-1, i3), ModBlocks.Hypha.getDefaultState(), 2);
                         	worldIn.setBlockState(position.add(l1, i4-2, i3), ModBlocks.Hypha.getDefaultState(), 2);
@@ -129,13 +130,15 @@ public class WorldGenCave extends WorldGenerator
                 }
             }
             
+            int naheight = height - height4;
+            
             for (int l1 = 0; l1 < scale; ++l1)
             {
                 for (int i3 = 0; i3 < scale; ++i3)
                 {
-                    for (int i4 = 0; i4 < scale / 4; ++i4)
+                    for (int i4 = 0; i4 < naheight; ++i4)
                     {
-                        if (aboolean[(l1 * scale + i3) * scale / 4 + i4])
+                        if (aboolean[(l1 * scale + i3) * height + i4])
                         {
                             worldIn.setBlockState(position.add(l1, i4, i3), this.block.getDefaultState(), 2);
                         }
@@ -147,9 +150,9 @@ public class WorldGenCave extends WorldGenerator
             {
                 for (int i3 = 0; i3 < scale; ++i3)
                 {
-                    for (int i4 = 0; i4 < scale / 4; ++i4)
+                    for (int i4 = 0; i4 < height; ++i4)
                     {
-                        if (aboolean[(l1 * scale + i3) * scale / 4 + i4])
+                        if (aboolean[(l1 * scale + i3) * height + i4])
                         {
                         	if(worldIn.getBlockState(position.add(l1, i4-1, i3)).getBlock() == ModBlocks.Hypha)
                         	{
@@ -161,6 +164,25 @@ public class WorldGenCave extends WorldGenerator
                             	}
                             	else if(rand.nextInt(20) == 0)
                         		(new WorldGenSeccultMushroom()).generate(worldIn, rand, position.add(l1, i4, i3));
+                        	}
+                        	
+                        	if(rand.nextInt(20) == 0)
+                        	{
+                        		if(!worldIn.isAirBlock(position.add(l1, i4+1, i3)))
+                        		{
+                        			for(int h = 0; h < 5; ++h)
+                        			{
+                        				if(worldIn.isAirBlock(position.add(l1, i4+h, i3)))
+                        				{
+                        					if(rand.nextInt(2) == 0)
+                        						worldIn.setBlockState(position.add(l1, i4+h, i3), ModBlocks.HYPHA_LIGHT.getDefaultState());
+                        					else
+                        						worldIn.setBlockState(position.add(l1, i4+h, i3), ModBlocks.HYPHA_LIGHT_BLUE.getDefaultState());
+                        				}
+                        				else
+                        					break;
+                        			}
+                        		}
                         	}
                         }
                     }

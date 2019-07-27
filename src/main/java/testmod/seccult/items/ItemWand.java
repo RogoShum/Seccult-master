@@ -1,16 +1,12 @@
 package testmod.seccult.items;
 
-import static net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType.AIR;
-
 import java.util.ArrayList;
 import java.util.UUID;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -27,7 +23,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -48,6 +43,8 @@ public class ItemWand extends ItemBase{
 	public static final ResourceLocation wand_prefix = new ResourceLocation(Seccult.MODID, "wandstyle");
 	
 	private NBTTagList MagickList;
+	
+	
 	
 	public ItemWand(String name) {
 		super(name);
@@ -156,6 +153,7 @@ public class ItemWand extends ItemBase{
 	            int GUIid = GuiElementLoader.GUI_SpellSelect;
 	            ((EntityPlayer) entityIn).openGui(Seccult.instance, GUIid, worldIn, (int)entityIn.posX, (int)entityIn.posY, (int)entityIn.posZ);
 			}
+			if(player == null) return;
 			
 			PlayerData data = PlayerDataHandler.get(player);
 			MagickList = data.getAllMagick();
@@ -165,7 +163,7 @@ public class ItemWand extends ItemBase{
 			NBTTagList LoadMagick = MagickNBT.getTagList("Magick", 10);
 			NBTTagCompound Magicknbt = LoadMagick.getCompoundTagAt(0);
 			
-			Magick magick = ModMagicks.getAttributeFromName(ModMagicks.GetMagickStringByID(Magicknbt.getInteger("Magick")));
+			Magick magick = ModMagicks.getMagickFromName(ModMagicks.GetMagickStringByID(Magicknbt.getInteger("Magick")));
 			if(magick!= null)
 			{
 				int color = magick.getColor();

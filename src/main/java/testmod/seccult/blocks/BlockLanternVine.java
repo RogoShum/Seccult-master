@@ -56,14 +56,42 @@ public class BlockLanternVine extends Block implements registerModel, WaNP{
 				this.dropBlockAsItem(world, pos, state, 0);
 				return;
 			}
-		if(world.getBlockState(pos.up()).getBlock() == ModBlocks.LANTERN_VINE && world.getBlockState(pos.down()).getBlock() == ModBlocks.LANTERN_VINE)
-			world.setBlockState(pos, ModBlocks.LANTERN_VINE.getDefaultState().withProperty(VARIANT, 1));
-		else if(world.getBlockState(pos.up()).getBlock() != ModBlocks.LANTERN_VINE && world.getBlockState(pos.down()).getBlock() == ModBlocks.LANTERN_VINE)
-			world.setBlockState(pos, ModBlocks.LANTERN_VINE.getDefaultState().withProperty(VARIANT, 0));
-		else if(world.getBlockState(pos.up()).getBlock() == ModBlocks.LANTERN_VINE && world.getBlockState(pos.down()).getBlock() != ModBlocks.LANTERN_VINE)
-			world.setBlockState(pos, ModBlocks.LANTERN_VINE.setLightLevel(12).getDefaultState().withProperty(VARIANT, 2));
-		else
-			world.setBlockState(pos, ModBlocks.LANTERN_VINE.setLightLevel(12).getDefaultState().withProperty(VARIANT, 2));
+
+		if(this == ModBlocks.LANTERN_VINE)
+		{
+			if(world.getBlockState(pos.up()).getBlock() == ModBlocks.LANTERN_VINE && world.getBlockState(pos.down()).getBlock() == ModBlocks.LANTERN_VINE)
+				world.setBlockState(pos, ModBlocks.LANTERN_VINE.getDefaultState().withProperty(VARIANT, 1));
+			else if(world.getBlockState(pos.up()).getBlock() != ModBlocks.LANTERN_VINE && world.getBlockState(pos.down()).getBlock() == ModBlocks.LANTERN_VINE)
+				world.setBlockState(pos, ModBlocks.LANTERN_VINE.getDefaultState().withProperty(VARIANT, 0));
+			else if(world.getBlockState(pos.up()).getBlock() == ModBlocks.LANTERN_VINE && world.getBlockState(pos.down()).getBlock() != ModBlocks.LANTERN_VINE)
+				world.setBlockState(pos, ModBlocks.LANTERN_VINE.setLightLevel(12).getDefaultState().withProperty(VARIANT, 2));
+			else
+				world.setBlockState(pos, ModBlocks.LANTERN_VINE.setLightLevel(12).getDefaultState().withProperty(VARIANT, 2));
+		}
+		else if(this == ModBlocks.HYPHA_LIGHT)
+		{
+			if(world.getBlockState(pos.up()).getBlock() == ModBlocks.HYPHA_LIGHT && world.getBlockState(pos.down()).getBlock() == ModBlocks.HYPHA_LIGHT)
+				world.setBlockState(pos, ModBlocks.HYPHA_LIGHT.getDefaultState().withProperty(VARIANT, 1));
+			else if(world.getBlockState(pos.up()).getBlock() != ModBlocks.HYPHA_LIGHT && world.getBlockState(pos.down()).getBlock() == ModBlocks.HYPHA_LIGHT)
+				world.setBlockState(pos, ModBlocks.HYPHA_LIGHT.getDefaultState().withProperty(VARIANT, 0));
+			else if(world.getBlockState(pos.up()).getBlock() == ModBlocks.HYPHA_LIGHT && world.getBlockState(pos.down()).getBlock() != ModBlocks.HYPHA_LIGHT)
+				world.setBlockState(pos, ModBlocks.HYPHA_LIGHT.setLightLevel(12).getDefaultState().withProperty(VARIANT, 2));
+			else
+				world.setBlockState(pos, ModBlocks.HYPHA_LIGHT.setLightLevel(12).getDefaultState().withProperty(VARIANT, 2));
+		}
+		else if(this == ModBlocks.HYPHA_LIGHT_BLUE)
+		{
+			if(world.getBlockState(pos.up()).getBlock() == ModBlocks.HYPHA_LIGHT_BLUE && world.getBlockState(pos.down()).getBlock() == ModBlocks.HYPHA_LIGHT_BLUE)
+				world.setBlockState(pos, ModBlocks.HYPHA_LIGHT_BLUE.getDefaultState().withProperty(VARIANT, 1));
+			else if(world.getBlockState(pos.up()).getBlock() != ModBlocks.HYPHA_LIGHT_BLUE && world.getBlockState(pos.down()).getBlock() == ModBlocks.HYPHA_LIGHT_BLUE)
+				world.setBlockState(pos, ModBlocks.HYPHA_LIGHT_BLUE.getDefaultState().withProperty(VARIANT, 0));
+			else if(world.getBlockState(pos.up()).getBlock() == ModBlocks.HYPHA_LIGHT_BLUE && world.getBlockState(pos.down()).getBlock() != ModBlocks.HYPHA_LIGHT_BLUE)
+				world.setBlockState(pos, ModBlocks.HYPHA_LIGHT_BLUE.setLightLevel(12).getDefaultState().withProperty(VARIANT, 2));
+			else
+				world.setBlockState(pos, ModBlocks.HYPHA_LIGHT_BLUE.setLightLevel(12).getDefaultState().withProperty(VARIANT, 2));
+		}
+		
+		
 		if(state.getValue(VARIANT).intValue() == 2)
 			this.setLightLevel(12);
 		else
@@ -78,6 +106,11 @@ public class BlockLanternVine extends Block implements registerModel, WaNP{
 			this.dropBlockAsItem(world, pos, state, 0);
 			return;
 		}
+	}
+	
+	@Override
+	public int tickRate(World worldIn) {
+		return 1;
 	}
 	
     @Override
@@ -142,6 +175,6 @@ public class BlockLanternVine extends Block implements registerModel, WaNP{
 	@Override
 	public String getSpecialName(ItemStack stack) 
 	{
-		return PlantsHandler.EnumType.values()[stack.getItemDamage()].getName();
+		return null;
 	}
 }

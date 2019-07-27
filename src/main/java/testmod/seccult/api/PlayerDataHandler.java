@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.potion.PotionEffect;
 import testmod.seccult.Seccult;
 import testmod.seccult.init.ModDamage;
 import testmod.seccult.items.armor.ArmorBase;
@@ -58,7 +59,18 @@ public class PlayerDataHandler {
 	}
 	
 	private static int getKey(EntityPlayer player) {
-		return player.hashCode() << 1 + (player.getEntityWorld().isRemote ? 1 : 0);
+		int t = 0;
+		try {
+			int i = player.hashCode() << 1;
+			int r = player.getEntityWorld().isRemote ? 1 : 0;
+			t = i + r;
+		}
+		catch(Exception e) {
+			System.out.println("hashCode " + (player.hashCode() << 1));
+			System.out.println("World " + player.getEntityWorld());
+			System.out.println("Remote " + player.getEntityWorld().isRemote);
+		}
+		return t;
 	}
 	
 	public static NBTTagCompound getDataCompoundForPlayer(EntityPlayer player) {
@@ -138,14 +150,27 @@ public class PlayerDataHandler {
 			ManaValue = cmp.getFloat(TAG_MANA_VALUE);
 			proficiency = cmp.getFloat(TAG_PROFICIENCY_LEVEL);
 			
-			wand = cmp.getInteger("WandStyle");
-			
-			color2 = cmp.getInteger("Color2");
-			color3 = cmp.getInteger("Color3");
-			color4 = cmp.getInteger("Color4");
-			
 			if(!client)
+			{
+			if(cmp.hasKey("WandStyle"))
+				wand = cmp.getInteger("WandStyle");
+			else
+				cmp.setInteger("WandStyle", rand.nextInt(6) + 1);
+
+			if(!cmp.hasKey("Color2") || !cmp.hasKey("Color3") || !cmp.hasKey("Color4"))
+			{
+				cmp.setInteger("Color2", getColor());
+				cmp.setInteger("Color3", getColor());
+				cmp.setInteger("Color4", getColor());
+			}
+			else
+			{
+				color2 = cmp.getInteger("Color2");
+				color3 = cmp.getInteger("Color3");
+				color4 = cmp.getInteger("Color4");
+			}
 			NetworkHandler.getNetwork().sendTo(new NetworkPlayerWandData(color2, color3, color4, wand), (EntityPlayerMP) player);
+			}
 			
 			if(ManaTalentValue == 0)
 			{
@@ -218,15 +243,7 @@ public class PlayerDataHandler {
 
 		public void writeToNBT(NBTTagCompound cmp) {
 			
-			if(!cmp.hasKey("WandStyle"))
-				cmp.setInteger("WandStyle", rand.nextInt(6) + 1);
-				
-				if(!cmp.hasKey("Color2") || !cmp.hasKey("Color3") || !cmp.hasKey("Color4"))
-				{
-					cmp.setInteger("Color2", getColor());
-					cmp.setInteger("Color3", getColor());
-					cmp.setInteger("Color4", getColor());
-				}
+
 			
 			cmp.setFloat(TAG_MANA_TALENT_VALUE, ManaTalentValue);
 			cmp.setFloat(TAG_COMTROL_ABILITY, ControlAbility);

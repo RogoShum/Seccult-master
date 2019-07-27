@@ -1,17 +1,14 @@
-package testmod.seccult.entity;
+package testmod.seccult.init;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import testmod.seccult.Seccult;
-import testmod.seccult.entity.livings.EntityCarne;
-import testmod.seccult.entity.livings.EntityChangeling;
-import testmod.seccult.entity.livings.EntityEoC;
-import testmod.seccult.entity.livings.EntityEoW;
-import testmod.seccult.entity.livings.EntityEoWHead;
-import testmod.seccult.entity.livings.EntityLight;
-import testmod.seccult.entity.livings.EntityNotoriousBIG;
-import testmod.seccult.entity.livings.EntitySoC;
+import testmod.seccult.entity.*;
+import testmod.seccult.entity.livings.*;
+import testmod.seccult.entity.livings.insect.*;
+import testmod.seccult.entity.livings.water.*;
 import testmod.seccult.entity.projectile.*;
 
 public class ModEntity  
@@ -19,11 +16,20 @@ public class ModEntity
 	public static void registerEntities()
 	{
 		int id = 0;
+		int distance = Minecraft.getMinecraft().gameSettings.renderDistanceChunks * 16;
+		if(distance < 128)
+			distance = 128;
 		registerEntity("light", EntityLight.class, id++, 128, 1, true, 12654645, 000000);
-		registerEntity("trueeaterofworlds", EntityEoWHead.class, id++, 256, 1, true, 52365, 000000);
-		registerEntity("eyeofcthulhu", EntityEoC.class, id++, 256, 1, true, 888888, 000000);
+		registerEntity("trueeaterofworlds", EntityEoWHead.class, id++, distance, 1, true, 52365, 000000);
+		registerEntity("eyeofcthulhu", EntityEoC.class, id++, distance, 1, true, 888888, 000000);
 		registerEntity("carne", EntityCarne.class, id++, 128, 1, true, 214124, 241200);
 		registerEntity("changeling", EntityChangeling.class, id++, 128, 1, true, 213100, 1);
+		registerEntity("butterfly", EntityButterfly.class, id++, 128, 1, true, 12654645, 000000);
+		registerEntity("dragonfly", EntityDragonfly.class, id++, 128, 1, true, 12654645, 000000);
+		registerEntity("bird", EntityBird.class, id++, 128, 1, true, 12654645, 12654645);
+		registerEntity("worm", EntityWorm.class, id++, 128, 1, true, 12654645, 12654645);
+		registerEntity("fish", EntityFish.class, id++, 128, 1, true, 12654645, 12654645);
+		registerEntity("jellyfish", EntityJellyfish.class, id++, 128, 1, true, 12654645, 12654645);
 		registerEntityWithoutEgg("scp173", EntitySCP173.class, id++, 128, 1, true);
 		registerEntityWithoutEgg("laserbeam", EntityLaserBeamBase.class, id++, 128, 1, true);
 		registerEntityWithoutEgg("notoriousBIG", EntityNotoriousBIG.class, id++, 256, 1, true);

@@ -9,7 +9,9 @@ import testmod.seccult.util.registerModel;
 
 public class ItemBase extends Item implements registerModel
 {
-	ResourceLocation EOWres = new ResourceLocation("seccult:trueeaterofworlds");
+	ResourceLocation TEOWres = new ResourceLocation("seccult:trueeaterofworlds");
+	ResourceLocation EOWres = new ResourceLocation("seccult:eaterofworlds");
+	ResourceLocation Worm = new ResourceLocation("seccult:worm");
 	ResourceLocation BVH = new ResourceLocation("seccult:blackvelvethell");
 	ResourceLocation SCP173 = new ResourceLocation("seccult:scp173");
 	

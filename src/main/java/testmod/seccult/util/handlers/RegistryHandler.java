@@ -7,15 +7,14 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import testmod.seccult.ClientProxy;
 import testmod.seccult.client.entity.render.RenderHandler;
-import testmod.seccult.entity.ModEntity;
 import testmod.seccult.init.ModBlocks;
+import testmod.seccult.init.ModEntity;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.util.registerModel;
-import testmod.seccult.world.gen.SeccultBiomeRegistries;
 import testmod.seccult.world.gen.WorldGenCustomOres;
 import testmod.seccult.world.gen.WorldGenCustomTrees;
+import testmod.seccult.world.gen.WorldGenStructures;
 
 @EventBusSubscriber
 public class RegistryHandler 
@@ -55,7 +54,8 @@ public class RegistryHandler
 	
 	public static void otherRegistries()
 	{
-		//GameRegistry.registerWorldGenerator(new WorldGenCustomOres(), 0);
+		GameRegistry.registerWorldGenerator(new WorldGenStructures(), 0);
+		GameRegistry.registerWorldGenerator(new WorldGenCustomOres(), 0);
 		GameRegistry.registerWorldGenerator(new WorldGenCustomTrees(), 0);
 	}
 	

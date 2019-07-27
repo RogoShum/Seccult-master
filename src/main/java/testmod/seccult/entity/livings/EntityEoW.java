@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.UUID;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.item.EntityPainting;
@@ -16,6 +18,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
@@ -31,6 +34,9 @@ public class EntityEoW extends EntityBase{
 	///////////////////////////////////////////////////////////////////////////
 	/////////////                Identifying                ///////////////////
 	///////////////////////////////////////////////////////////////////////////
+	
+	EntityEoW A = this;
+	EntityEoW B = null;
 	
 	protected boolean isHead;
 	protected boolean isTail;
@@ -61,12 +67,11 @@ public class EntityEoW extends EntityBase{
 	protected float thisYaw = 0;
 	protected float thisPitch = 0;
 
-	protected int FirstSpawn;
+	protected int SpawnAmount = 0;
 	public EntityEoW(World worldIn) {
 		super(worldIn);
-		this.FirstSpawn = 0;
 		this.isBody = true;
-		this.setSize(1.6F, 1.6F);
+		this.setSize(1.8F, 1.8F);
 		this.eneX = this.posX;
 		this.eneY = this.posY;
 		this.eneZ = this.posZ;
@@ -75,8 +80,16 @@ public class EntityEoW extends EntityBase{
 		this.isTRboss = true;
 	}
 	
+	public void setSpawnAmount(int i)
+	{
+		this.SpawnAmount = i;
+	}
+	
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
+		if(nbt.hasKey("SpawnAmount"))
+			this.SpawnAmount = nbt.getInteger("SpawnAmount");
+		
 		if(nbt.hasKey("Part")) {
 		String part = nbt.getString("Part");
 		switch(part) {
@@ -120,6 +133,10 @@ public class EntityEoW extends EntityBase{
 	
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
+		
+		if(this.SpawnAmount > 0)
+			nbt.setInteger("SpawnAmount", SpawnAmount);
+		
 			if(isBody) {
 				nbt.setString("Part", "isBody");
 			}
@@ -153,6 +170,10 @@ public class EntityEoW extends EntityBase{
     public void onUpdate()
     {
 	   super.onUpdate();
+	   
+		if(SpawnAmount > 0 && this.isHead) {
+			onBody();
+		}
 	   
 	   if(this.ticksExisted < 30) {
 		   if(this.isHead)
@@ -200,6 +221,41 @@ public class EntityEoW extends EntityBase{
        CooldownTime--;
     }
     
+    private void onBody() {
+    	while(SpawnAmount > 0) {
+    	//if(this.SpawnAmount > 1) 
+    	//{
+    		//spawnCreature();
+    	//}
+ 	   //	else if(this.SpawnAmount == 1)
+ 	   	//{
+ 	   		spawnCreature();
+ 	   		//}
+    	}
+    }
+    
+    protected EntityEoW spawnCreature() {
+    	Entity entity = null;
+            entity = EntityList.createEntityByIDFromName(EOWres, this.world);
+            EntityEoW EOW = (EntityEoW) entity;
+                entity.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
+                EOW.rotationYawHead = EOW.rotationYaw;
+                EOW.renderYawOffset = EOW.rotationYaw;
+                EOW.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(EOW)), (IEntityLivingData)null);
+                EOW.setupperUUIDM(A.getUniqueID().getMostSignificantBits());
+                EOW.setupperUUIDL(A.getUniqueID().getLeastSignificantBits());
+                EOW.setupper(A);
+ 	   	    	A.setfollowerUUIDL(EOW.getUniqueID().getLeastSignificantBits());
+ 	   	    	A.setfollowerUUIDM(EOW.getUniqueID().getMostSignificantBits());
+ 	   	    	A.setfollower(EOW);
+ 	 		   	if(!this.world.isRemote)
+                this.world.spawnEntity(EOW);
+                //EOW.playLivingSound();
+ 	 		   	SpawnAmount--;
+ 	 		   	A = EOW;
+                return EOW;
+    }
+    
     private void Attack() {
         int xdir = 1;
         int zdir = 1;
@@ -244,10 +300,11 @@ public class EntityEoW extends EntityBase{
         if(this.CooldownTime <= 0) {
         this.rotationYaw = this.thisYaw;
         this.rotationPitch = this.thisPitch;
-        this.motionX += (Math.signum(this.eneX - this.posX) - this.motionX);
-        this.motionY += (Math.signum(this.eneY - this.posY) - this.motionY);
-        this.motionZ += (Math.signum(this.eneZ - this.posZ) - this.motionZ);
-        StateManager.setPlayerMove(this, (Math.signum(this.eneX - this.posX) - this.motionX), (Math.signum(this.eneY - this.posY) - this.motionY), (Math.signum(this.eneZ - this.posZ) - this.motionZ), 1);
+        float space = this.width / 2;
+        this.motionX += (Math.signum(this.eneX - this.posX) - this.motionX) * space;
+        this.motionY += (Math.signum(this.eneY - this.posY) - this.motionY) * space;
+        this.motionZ += (Math.signum(this.eneZ - this.posZ) - this.motionZ) * space;
+        StateManager.setPlayerMove(this, (Math.signum(this.eneX - this.posX) - this.motionX) * space, (Math.signum(this.eneY - this.posY) - this.motionY) * space, (Math.signum(this.eneZ - this.posZ) - this.motionZ) * space, 1);
         	//this.moveHelper.setMoveTo(eneX, eneY, eneZ, 1);
         }
 	}
@@ -489,14 +546,15 @@ public class EntityEoW extends EntityBase{
     
     private void followUp() {
     	if(this.upper != null) {
+    		float space = this.width / 2;
     		this.faceEntity(this.upper, 360, 360);
     		this.renderYawOffset = this.rotationYaw;
-            this.motionX += (Math.signum(upper.posX - this.posX) - this.motionX) * 0.6F;
-            this.motionY += (Math.signum(upper.posY - this.posY) - this.motionY) * 0.6F;
-            this.motionZ += (Math.signum(upper.posZ - this.posZ) - this.motionZ) * 0.6F;
-            StateManager.setPlayerMove(this, (Math.signum(upper.posX - this.posX) - this.motionX) * 0.6F, (Math.signum(upper.posY - this.posY) - this.motionY) * 0.6, (Math.signum(upper.posZ - this.posZ) - this.motionZ) * 0.6, 1);
+            this.motionX += (Math.signum(upper.posX - this.posX) - this.motionX) * space;
+            this.motionY += (Math.signum(upper.posY - this.posY) - this.motionY) * space;
+            this.motionZ += (Math.signum(upper.posZ - this.posZ) - this.motionZ) * space;
+            StateManager.setPlayerMove(this, (Math.signum(upper.posX - this.posX) - this.motionX) * space, (Math.signum(upper.posY - this.posY) - this.motionY) * space, (Math.signum(upper.posZ - this.posZ) - this.motionZ) * space, 1);
     		//this.moveHelper.setMoveTo(upper.posX, upper.posY, upper.posZ, 1);
-    		double segmentDistance = 0.8D;
+    		double segmentDistance = space;
     		Vec3d pos;
     		if(this.upper instanceof EntityEoW)
     			pos = ((EntityEoW)this.upper).getFacingPositionDouble(this.upper.posX, this.upper.posY, this.upper.posZ, -0.25D, 0);

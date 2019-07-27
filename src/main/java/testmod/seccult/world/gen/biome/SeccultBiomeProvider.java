@@ -24,14 +24,14 @@ public class SeccultBiomeProvider extends BiomeProvider{
         getBiomesToSpawnIn().add(SeccultBiomeRegistries.mana_Mushroom_Island);
         
         
-		GenLayer biomes = new GenLayerSeccultBiome(1L);
+		GenLayer biomes = new GenLayerSeccultBiome(1000L);
 		//biomes = new GenLayerSeccult(1000L, biomes);
 
-		biomes = new GenLayerZoom(1001, biomes);
-		biomes = new GenLayerZoom(1002, biomes);
-		biomes = new GenLayerZoom(1003, biomes);
-		biomes = new GenLayerZoom(1004, biomes);
-		biomes = new GenLayerZoom(1005, biomes);
+		//biomes = new GenLayerZoom(1001, biomes);
+		//biomes = new GenLayerZoom(1002, biomes);
+		//biomes = new GenLayerZoom(1003, biomes);
+		//biomes = new GenLayerZoom(1004, biomes);
+		//biomes = new GenLayerZoom(1005, biomes);
 
 		GenLayer genlayervoronoizoom = new GenLayerVoronoiZoom(10L, biomes);
 

@@ -17,6 +17,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import testmod.seccult.entity.livings.EntityEoW;
+import testmod.seccult.entity.livings.insect.EntityWorm;
+import testmod.seccult.init.ModBlocks;
 import testmod.seccult.world.gen.plant.WorldGenCave;
 
 public class ItemTerrariaEventThing extends ItemBase{
@@ -31,10 +33,17 @@ public class ItemTerrariaEventThing extends ItemBase{
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, @Nonnull EnumHand hand) {
 		ItemStack stack = player.getHeldItem(hand);
 			player.setActiveHand(hand);
-			//spawnEOW(player);
-			spawnGen(world, player);
+			spawnEOW(player);
+			//spawnGen(world, player);
+			//spawnGenBlock(world, player);
 			return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
 	} 
+	
+	private void spawnGenBlock(World world, EntityPlayer player)
+	{
+		BlockPos position = player.getPosition().add(2, -2, 2);
+		world.setBlockState(position, ModBlocks.Mush_Gen.getDefaultState());
+	}
 	
 	private void spawnGen(World world, EntityPlayer player)
 	{
@@ -49,8 +58,9 @@ public class ItemTerrariaEventThing extends ItemBase{
 		double z = player.posZ + 40;
 		
 		Entity entity = null;
-        entity = EntityList.createEntityByIDFromName(EOWres, player.getEntityWorld());
-        EntityEoW EOW = (EntityEoW) entity;
+		 entity = EntityList.createEntityByIDFromName(EOWres, player.getEntityWorld());
+	        EntityEoW EOW = (EntityEoW) entity;
+        	EOW.setSpawnAmount(10);
             entity.setLocationAndAngles(x, y, z, -player.rotationYaw, -player.rotationPitch);
             EOW.rotationYawHead = EOW.rotationYaw;
             EOW.renderYawOffset = EOW.rotationYaw;

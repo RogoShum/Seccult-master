@@ -23,6 +23,7 @@ import testmod.seccult.entity.livings.EntityBase;
 import testmod.seccult.entity.livings.EntityLight;
 import testmod.seccult.entity.livings.EntityNotoriousBIG;
 import testmod.seccult.entity.projectile.TRBladeBeam;
+import testmod.seccult.init.ModItems;
 import testmod.seccult.util.RogoDamage;
 
 public class MobUnhurtableEvent {
@@ -83,11 +84,10 @@ public class MobUnhurtableEvent {
 			}
 		}
 		
-		if(event.getSource().getImmediateSource() instanceof TRBladeBeam && event.getSource().getTrueSource() instanceof EntityLivingBase) {
-			System.out.println("QAQ");
-			TRBladeBeam beam = (TRBladeBeam) event.getSource().getImmediateSource();
-			EntityLivingBase player = (EntityLivingBase) event.getSource().getTrueSource();
-			if(beam.getRenderSkin() == 12) {
+		if(event.getSource().getTrueSource() instanceof EntityPlayer) {
+			Entity beam = event.getEntity();
+			EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
+			if(player.getHeldItemMainhand().getItem() == ModItems.Vampire_Knives) {
 				EntityBloodBeam blood = new EntityBloodBeam(beam.world, player, event.getAmount() * 0.075F);
 				blood.setPosition(beam.posX, beam.posY, beam.posZ);
 				if(!beam.world.isRemote)

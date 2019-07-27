@@ -29,9 +29,14 @@ public class ModBlocks
 	
 	public static final Block LANTERN_FRUIT = new LanternFruit("latern_fruit");
 	public static final Block LANTERN_VINE = new BlockLanternVine("lantern_vine");
+	public static final Block HYPHA_LIGHT = new BlockLanternVine("hypha_light");
+	public static final Block HYPHA_LIGHT_BLUE = new BlockLanternVine("hypha_light_blue");
 	public static final BlockBush LittleMush = new BlockLittleMushroom("blue_mushroom");
 	public static final BlockBush LittleRedMush = new BlockLittleMushroom("magenta_mushroom");
 	public static final Block Mush = new BlockMagickMushroom("blue_magick_mushroom", Material.WOOD, MapColor.LIGHT_BLUE, LittleMush);
 	public static final Block RedMush = new BlockMagickMushroom("magenta_magick_mushroom", Material.WOOD, MapColor.MAGENTA, LittleRedMush);
 	public static final Block Hypha = new BlockHypha("hypha");
+	
+	//generator
+	public static final Block Mush_Gen = new BlockGenerator();
 }
