@@ -14,10 +14,12 @@ import testmod.seccult.api.PlayerDataHandler;
 import testmod.seccult.api.accessorie.PlayerAccessorieHandler;
 import testmod.seccult.init.ModDamage;
 import testmod.seccult.magick.MagickCompiler;
+import testmod.seccult.magick.active.MagickTeleporter;
 
 public class PlayerDataUpdateEvent {
     public static final List<String> MagicDamage  = new ArrayList<>();
     public static List<MagickCompiler> compiler = new ArrayList<>();
+    public static List<MagickTeleporter> Teleporter = new ArrayList<>();
     
     
     public PlayerDataUpdateEvent() 
@@ -48,6 +50,14 @@ public class PlayerDataUpdateEvent {
 			if(compiler.get(i).done)
 				compiler.remove(i);
 		}
+		
+		for(int i = 0; i < Teleporter.size(); i++)
+		{
+			Teleporter.get(i).onUpdate();
+			if(Teleporter.get(i).done)
+				Teleporter.remove(i);
+		}
+		
 		if(event.phase == Phase.END) {
 			PlayerDataHandler.cleanup();
 			PlayerAccessorieHandler.cleanup();

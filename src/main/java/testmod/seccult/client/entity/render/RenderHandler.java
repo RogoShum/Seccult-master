@@ -3,6 +3,8 @@ package testmod.seccult.client.entity.render;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import testmod.seccult.entity.*;
 import testmod.seccult.entity.livings.*;
+import testmod.seccult.entity.livings.flying.EntityAirTentacle;
+import testmod.seccult.entity.livings.flying.EntityBird;
 import testmod.seccult.entity.livings.insect.*;
 import testmod.seccult.entity.livings.water.*;
 import testmod.seccult.entity.projectile.*;
@@ -33,5 +35,8 @@ public class RenderHandler
 		RenderingRegistry.registerEntityRenderingHandler(EntityFish.class, m -> new RenderFish(m));
 		RenderingRegistry.registerEntityRenderingHandler(EntityButterfly.class, m -> new RenderButterFly(m));
 		RenderingRegistry.registerEntityRenderingHandler(EntityJellyfish.class, m -> new RenderJellyFish(m));
+		RenderingRegistry.registerEntityRenderingHandler(EntityBird.class, m -> new RenderBird(m));
+		RenderingRegistry.registerEntityRenderingHandler(EntityAirTentacle.class, m -> new RenderAirTentacle(m));
+		RenderingRegistry.registerEntityRenderingHandler(EntityWaterTentacle.class, m -> new RenderWaterTentacle(m));
 	}
 }

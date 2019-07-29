@@ -8,13 +8,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.Seccult;
 import testmod.seccult.client.entity.model.ModelJellyFish;
+import testmod.seccult.entity.livings.insect.EntityButterfly;
 import testmod.seccult.entity.livings.water.EntityJellyfish;
 
 @SideOnly(Side.CLIENT)
 public class RenderJellyFish extends RenderLiving<EntityJellyfish>
 {
-	private static final ResourceLocation TEXTURESD = new ResourceLocation(Seccult.MODID + ":textures/entity/jellyfish_normal.png");
-	
 	public RenderJellyFish(RenderManager renderManager) 
 	{
 		super(renderManager, new ModelJellyFish(), 0.3F);
@@ -24,6 +23,14 @@ public class RenderJellyFish extends RenderLiving<EntityJellyfish>
 	@Override
 	public void doRender(EntityJellyfish entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
+	}
+	
+	@Override
+	protected void preRenderCallback(EntityJellyfish e, float partialTickTime) {
+		super.preRenderCallback(e, partialTickTime);
+		float size = e.width;
+		GlStateManager.scale(size * 2, size * 2, size * 2);
+		this.shadowSize = size / 2;
 	}
 	
     protected void applyRotations(EntityJellyfish entityLiving, float p_77043_2_, float rotationYaw, float partialTicks)

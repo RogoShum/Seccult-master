@@ -5,23 +5,22 @@ import java.util.List;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import testmod.seccult.entity.EntityWaterCreature;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.magick.active.Magick;
 
 public class EntityFish extends EntityWaterCreature{
-
-	private int swing;
-	private boolean swingUp;
-	
 	private int swimingTime;
 	
 	private int warningTime;
 	
 	public EntityFish(World worldIn) {
-		super(worldIn);
-		this.setSize(0.6F, 0.4F);
+		super(worldIn);		
+		float size = rand.nextFloat();
+		if(size > 0.6F) size = 0.6F;
+		this.setSize(size, size / 2);
 		this.swimingTime += 35;
+		
+		this.swingLimit = 15;
 	}
 
 	@Override
@@ -29,9 +28,14 @@ public class EntityFish extends EntityWaterCreature{
 	{
 		this.setNoGravity(true);
 		if(!this.world.isRemote && this.world.isDaytime()) {
-            if (this.world.getNearestPlayerNotCreative(this, 5.0D) != null)
+            if (this.world.getNearestPlayerNotCreative(this, 5.0D) != null || warningTime > 0)
             {
-            	EntityWaterCreature.inWaterWalk(this, 0.3F, 1, 16);
+            	EntityWaterCreature.inWaterWalk(this, 0.3F, 1, this.rand.nextInt(2) + 1);
+        		if(this.rand.nextInt(4) == 0)
+        		{
+        			Magick m = ModMagicks.getMagickFromName(ModMagicks.TeleportMagick);
+        			m.setMagickAttribute(this, this, null, 2 + this.rand.nextInt(8), 0);
+        		}
             }
 			
             if(this.rand.nextInt(100) == 0)
@@ -42,10 +46,10 @@ public class EntityFish extends EntityWaterCreature{
             	if(this.rand.nextInt(3) == 0)
             	{
             		EntityWaterCreature.inWaterWalk(this, 0.2F, 5, 1.5F);
-            		if(this.rand.nextInt(2) == 0)
+            		if(this.rand.nextInt(30) == 0)
             		{
             			Magick m = ModMagicks.getMagickFromName(ModMagicks.TeleportMagick);
-            			m.setMagickAttribute(this, null, null, 2 + this.rand.nextInt(8), 0);
+            			m.setMagickAttribute(this, this, null, 2 + this.rand.nextInt(8), 0);
             		}
             	}
             	swimingTime--;
@@ -55,10 +59,11 @@ public class EntityFish extends EntityWaterCreature{
 		{
             if (this.world.getNearestPlayerNotCreative(this, 2.0D) != null || warningTime > 0)
             {
-            	EntityWaterCreature.inWaterWalk(this, 0.3F, 1, this.rand.nextInt(8) + 8);
-    			if(this.rand.nextInt(3) == 0)
+            	EntityWaterCreature.inWaterWalk(this, 0.3F, 1, this.rand.nextInt(2) + 1);
+    			if(this.rand.nextInt(30) == 0)
     			{
-    				EntityWaterCreature.inWaterWalk(this, 0.3F, 1, this.rand.nextInt(8) + 8);
+    				Magick m = ModMagicks.getMagickFromName(ModMagicks.TeleportMagick);
+        			m.setMagickAttribute(this, this, null, 4 + this.rand.nextInt(8), 0);
     			}
     			swimingTime += 35;
     			
@@ -73,31 +78,7 @@ public class EntityFish extends EntityWaterCreature{
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		float motion = (float) (Math.abs(this.motionX) + Math.abs(this.motionY) + Math.abs(this.motionZ));
-		
-		if(swingUp)
-		{
-			if(motion > 0)
-				swing += (motion + 1) * 10;
-			else if (this.world.isDaytime())
-				swing++;
-			else if (this.ticksExisted % 3 ==0)
-				swing++;
-		}
-		else
-		{
-			if(motion > 0)
-				swing -= (motion + 1) * 10;
-			else if (this.world.isDaytime())
-				swing--;
-			else if (this.ticksExisted % 3 ==0)
-				swing--;
-		}
-		
-		if(swing > 15)
-			swingUp = false;
-		else if(swing < -15)
-			swingUp = true;
+
 	}
 	
 	@Override
@@ -108,6 +89,13 @@ public class EntityFish extends EntityWaterCreature{
 			this.warningTime += 1;
 			warningOthers();
 		}
+		
+		if(source.damageType.equals(DamageSource.IN_WALL.damageType))
+		{
+    		Magick m = ModMagicks.getMagickFromName(ModMagicks.TeleportMagick);
+    		m.setMagickAttribute(this, this, null, 2 + this.rand.nextInt(8), 0);
+		}
+		
 		return attack;
 	}
 	
@@ -123,11 +111,6 @@ public class EntityFish extends EntityWaterCreature{
 				fish.warningTime += 1;
 			}
 		}
-	}
-	
-	public int getSwing()
-	{
-		return this.swing;
 	}
 	
 	@Override

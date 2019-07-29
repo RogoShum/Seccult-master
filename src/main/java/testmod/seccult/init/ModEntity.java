@@ -7,6 +7,8 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 import testmod.seccult.Seccult;
 import testmod.seccult.entity.*;
 import testmod.seccult.entity.livings.*;
+import testmod.seccult.entity.livings.flying.EntityAirTentacle;
+import testmod.seccult.entity.livings.flying.EntityBird;
 import testmod.seccult.entity.livings.insect.*;
 import testmod.seccult.entity.livings.water.*;
 import testmod.seccult.entity.projectile.*;
@@ -19,7 +21,7 @@ public class ModEntity
 		int distance = Minecraft.getMinecraft().gameSettings.renderDistanceChunks * 16;
 		if(distance < 128)
 			distance = 128;
-		registerEntity("light", EntityLight.class, id++, 128, 1, true, 12654645, 000000);
+		registerEntity("light", EntityLight.class, id++, distance, 1, true, 12654645, 000000);
 		registerEntity("trueeaterofworlds", EntityEoWHead.class, id++, distance, 1, true, 52365, 000000);
 		registerEntity("eyeofcthulhu", EntityEoC.class, id++, distance, 1, true, 888888, 000000);
 		registerEntity("carne", EntityCarne.class, id++, 128, 1, true, 214124, 241200);
@@ -30,6 +32,8 @@ public class ModEntity
 		registerEntity("worm", EntityWorm.class, id++, 128, 1, true, 12654645, 12654645);
 		registerEntity("fish", EntityFish.class, id++, 128, 1, true, 12654645, 12654645);
 		registerEntity("jellyfish", EntityJellyfish.class, id++, 128, 1, true, 12654645, 12654645);
+		registerEntity("airtentacle", EntityAirTentacle.class, id++, distance, 1, true, 12654645, 12654645);
+		registerEntity("watertentacle", EntityWaterTentacle.class, id++, distance, 1, true, 12654645, 12654645);
 		registerEntityWithoutEgg("scp173", EntitySCP173.class, id++, 128, 1, true);
 		registerEntityWithoutEgg("laserbeam", EntityLaserBeamBase.class, id++, 128, 1, true);
 		registerEntityWithoutEgg("notoriousBIG", EntityNotoriousBIG.class, id++, 256, 1, true);

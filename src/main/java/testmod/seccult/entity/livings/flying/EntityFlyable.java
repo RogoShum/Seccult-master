@@ -1,19 +1,16 @@
-package testmod.seccult.entity;
+package testmod.seccult.entity.livings.flying;
 
 import java.util.Calendar;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -22,7 +19,7 @@ import testmod.seccult.init.ModItems;
 
 public abstract class EntityFlyable extends EntityBase implements IAnimals
 {
-    private static final DataParameter<Byte> HANGING = EntityDataManager.<Byte>createKey(EntityBat.class, DataSerializers.BYTE);
+    private static final DataParameter<Byte> HANGING = EntityDataManager.<Byte>createKey(EntityFlyable.class, DataSerializers.BYTE);
     /** Coordinates of where the bat spawned. */
     protected BlockPos spawnPosition;
     public int dropLine = 180;
@@ -77,10 +74,12 @@ public abstract class EntityFlyable extends EntityBase implements IAnimals
         if (this.getIsBatHanging())
         {
         	if(this.hang)
-        	this.posY = (double)MathHelper.floor(this.posY) + 1.0D - (double)this.height;
-            this.motionX = 0.0D;
-            this.motionY = 0.0D;
-            this.motionZ = 0.0D;
+        	{
+        		this.posY = (double)MathHelper.floor(this.posY) + 1.0D - (double)this.height;
+        		this.motionX = 0.0D;
+        		this.motionY = 0.0D;
+        		this.motionZ = 0.0D;
+        	}
         }
         else
         {
@@ -139,11 +138,6 @@ public abstract class EntityFlyable extends EntityBase implements IAnimals
     	if(!this.world.isRemote && source == DamageSource.STARVE && this.posY > dropLine && this.getHealth() < 1)
     		this.dropItem(ModItems.Terraria_Blade, 1);
     	return super.attackEntityFrom(source, amount);
-    }
-
-    public static void registerFixesBat(DataFixer fixer)
-    {
-        EntityLiving.registerFixesMob(fixer, EntityBat.class);
     }
 
     /**

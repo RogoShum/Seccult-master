@@ -99,7 +99,7 @@ public class NetworkEffectData implements IMessage {
         		    }
         			break;
         		case 100:
-        			for(int i = 0; i < 10 ; i++) {
+        			for(int i = 0; i < 20 ; i++) {
         	            double d0 = (double)((float)message.pos[0] + mc.world.rand.nextFloat());
         	            double d1 = (double)((float)message.pos[1] + mc.world.rand.nextFloat());
         	            double d2 = (double)((float)message.pos[2] + mc.world.rand.nextFloat());
@@ -108,10 +108,9 @@ public class NetworkEffectData implements IMessage {
         	            double d5 = (1 - 2*StateManager.rand.nextFloat()) / 2;
         	        	Particle me = new LightFX(mc.world, (d0 +x) / 2.0D, (d1 +y) / 2.0D, (d2 +z) / 2.0D, d3/6, d4/6, d5/6, 1);
         	        	me.setRBGColorF(r, g, b);
-        	        	Particle smoke = new LightFX(mc.world, d0, d1, d2, d3 / 5, d4 / 5, d5 / 5, 1);
-        	        	smoke.setRBGColorF(r, g, b);
-        	        	Particle pop = new LightFX(mc.world, d0, d1, d2, -d3/6, -d4/6, -d5/6, 1);
-        	        	pop.setRBGColorF(r, g, b);
+        	        	Particle smoke = new StarFX(mc.world, d0, d1, d2, d3 / 5, d4 / 5, d5 / 5, 1);
+        	        	Minecraft.getMinecraft().effectRenderer.addEffect(me);
+        	        	Minecraft.getMinecraft().effectRenderer.addEffect(smoke);
         				}
         			break;
         		case 101:
@@ -185,8 +184,7 @@ public class NetworkEffectData implements IMessage {
         				Particle cc = new FrozenBlockFX(mc.world, x, y, z, r, g, 3);
             			Minecraft.getMinecraft().effectRenderer.addEffect(cc);
         				
-        			break;
-        			
+        			break;	
         }
     
         	if(par != null)

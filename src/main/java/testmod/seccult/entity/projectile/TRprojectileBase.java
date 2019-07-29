@@ -139,6 +139,23 @@ public class TRprojectileBase extends Entity{
 		{
 			EntityLivingBase e = (EntityLivingBase) hitEntity;
 			if(player != null && e != player && this.makeDamage) {
+		    	if(attackEntityAsMob(e))
+		    	{
+		    		if(this.getRenderSkin() == TRprojectileID.Daybreak)
+		    			this.makeDamage = false;
+		    		else if(this.getRenderSkin() != TRprojectileID.Meowmere || this.getRenderSkin() != TRprojectileID.SolarEruption)
+		    		this.setDead();
+		    	}
+			}
+		}
+	}
+	
+	/*private void Ref(MovingObjectPosition movingObjectPosition) {
+		Entity hitEntity = movingObjectPosition.entityHit;
+		if(hitEntity instanceof EntityLivingBase)
+		{
+			EntityLivingBase e = (EntityLivingBase) hitEntity;
+			if(player != null && e != player && this.makeDamage) {
 		    	  if(!attackEntityAsMob(e))
 		    	  {
 		    		  if(e.getHealth() > this.Damage) {
@@ -154,10 +171,10 @@ public class TRprojectileBase extends Entity{
 		    		  	 if(this.getRenderSkin() != TRprojectileID.Meowmere || this.getRenderSkin() != TRprojectileID.SolarEruption)
 		    		  	this.setDead();
 		    		  }
-		    	  }
+		    	}
 			}
 		}
-	}
+	}*/
 	
 	public int getID() {
 		return this.id;
@@ -252,7 +269,9 @@ public class TRprojectileBase extends Entity{
     public boolean attackEntityAsMob(Entity par1Entity)
     {
          boolean var4 = false;
-             var4 = par1Entity.attackEntityFrom(DamageSource.causePlayerDamage(player), this.Damage);
+         par1Entity.hurtResistantTime = -1;
+         var4 = par1Entity.attackEntityFrom(DamageSource.causePlayerDamage(player), this.Damage);
+         par1Entity.hurtResistantTime = -1;
          return var4;
     }
     

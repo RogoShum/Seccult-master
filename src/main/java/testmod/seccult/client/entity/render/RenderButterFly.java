@@ -1,5 +1,6 @@
 package testmod.seccult.client.entity.render;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
@@ -20,9 +21,11 @@ public class RenderButterFly extends RenderLiving<EntityButterfly>
 	}
 	
 	@Override
-	public void doRender(EntityButterfly entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		super.doRender(entity, x, y, z, entityYaw, partialTicks);
-		//jellyfish_normal
+	protected void preRenderCallback(EntityButterfly e, float partialTickTime) {
+		super.preRenderCallback(e, partialTickTime);
+		float size = e.width;
+		GlStateManager.scale(size * 2, size * 2, size * 2);
+		this.shadowSize = size / 2;
 	}
 	
 	@Override

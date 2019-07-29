@@ -103,6 +103,7 @@ public class EntityLight extends EntityMob
     public void onUpdate()
     {
 	   super.onUpdate();
+	   this.onGround = false;
     	MovingObjectPosition movingObjectPosition = new MovingObjectPosition(this);
         Entity entity = null;	    
         boolean pass = false;

@@ -4,6 +4,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.Vec3d;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.magick.magickState.StateManager;
+import testmod.seccult.network.NetworkEffectData;
+import testmod.seccult.network.NetworkHandler;
 
 public class MoveMagick extends Magick{
 
@@ -14,6 +16,7 @@ public class MoveMagick extends Magick{
 	@Override
 	void toEntity() {
 		Vec3d QAQ = player.getLookVec();
+		MagickFX();
 		entity.motionX = QAQ.scale(0.5).x *(strengh + attribute);
 		entity.motionY = QAQ.scale(0.5).y *(strengh + attribute);
 		entity.motionZ = QAQ.scale(0.5).z *(strengh + attribute);
@@ -36,6 +39,34 @@ public class MoveMagick extends Magick{
 	}
 
 	@Override
-	void MagickFX() {
+	void MagickFX() 
+	{
+		for(int i = 0; i < strengh * 10; i++) {
+		double[] pos = new double[3], vec = new double[3];
+		if(entity != null)
+		{
+			pos[0] = entity.posX;
+			pos[1] = entity.posY + (entity.height / 2);
+			pos[2] = entity.posZ;
+			Vec3d look = player.getLookVec();
+			vec[0] = entity.world.rand.nextFloat() / 2 * -look.x * strengh / 2;
+			vec[1] = entity.world.rand.nextFloat() / 2 * -look.y * strengh / 2;
+			vec[2] = entity.world.rand.nextFloat() / 2 * -look.z * strengh / 2;
+		}
+		
+		if(block != null)
+		{
+			pos[0] = block.getX();
+			pos[1] = block.getY() + 1;
+			pos[2] = block.getZ();
+			Vec3d look = player.getLookVec();
+			vec[0] = player.world.rand.nextFloat() / 10 * -look.x * strengh / 2;
+			vec[1] = player.world.rand.nextFloat() / 10 * -look.y * strengh / 2;
+			vec[2] = player.world.rand.nextFloat() / 10 * -look.z * strengh / 2;
+		}
+		
+		float[] color = {RGB[0], RGB[1], RGB[2]};
+		NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, strengh / 5, 0));
+		}
 	}
 }

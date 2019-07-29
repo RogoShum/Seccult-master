@@ -96,7 +96,7 @@ public class ModelFish extends ModelBase {
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
         this.Body.render(f5);
         EntityFish fish = (EntityFish) entity;
-        int swing = fish.getSwing();
+        float swing = fish.getSwing();
 
         this.setRotateAngle(Body, entity.rotationPitch, f4, 0);
         this.setRotateAngles(tail0, 0.045553093477052F, swing, 0);

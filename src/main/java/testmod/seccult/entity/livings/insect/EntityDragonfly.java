@@ -7,7 +7,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import testmod.seccult.entity.EntityFlyable;
+import testmod.seccult.entity.livings.flying.EntityFlyable;
 
 public class EntityDragonfly extends EntityFlyable implements IEntityInsect{
 

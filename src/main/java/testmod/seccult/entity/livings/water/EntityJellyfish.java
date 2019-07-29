@@ -11,7 +11,9 @@ public class EntityJellyfish extends EntitySquid{
 	
 	public EntityJellyfish(World worldIn) {
 		super(worldIn);
-		 this.setSize(0.45F, 0.45F);
+		float size = rand.nextFloat();
+		if(size > 0.6F) size = 0.6F;
+		this.setSize(size, size);
 	}
 	
 	@Override

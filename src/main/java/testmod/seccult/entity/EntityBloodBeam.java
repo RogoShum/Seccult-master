@@ -12,7 +12,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.client.FX.LightFX;
-import testmod.seccult.util.MathHelper.MovingObjectPosition;
 
 public class EntityBloodBeam extends Entity{
 	
@@ -43,18 +42,10 @@ public class EntityBloodBeam extends Entity{
 		if(this.owner != null) {
 			onParticle();
 			Moveto(this.owner.posX, this.owner.posY + (this.owner.height / 2), this.owner.posZ, 1);
-			onChargeBloodB();
+			onChargeBlood();
 		}
 		else
 			loadUUID();
-	}
-	
-	private void onChargeBloodB() {
-		if(this.getDistanceSq(this.owner.posX, this.owner.posY + (this.owner.height / 2), this.owner.posZ) < 0.5)
-		{
-	  		this.owner.setHealth(this.owner.getHealth() + this.Myblood);
-	  		this.setDead();
-		}
 	}
 
 	private void onChargeBlood() {
@@ -62,8 +53,6 @@ public class EntityBloodBeam extends Entity{
         
         List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(0.5));
         
-        if ((list != null) && (list.size() > 0))
-	    {
 	      for (int j1 = 0; j1 < list.size(); ++j1)
 	      {
 	        entity = (Entity)list.get(j1);
@@ -75,7 +64,6 @@ public class EntityBloodBeam extends Entity{
 	      		this.setDead();
 	      	}
 	      }
-	   }
 	}
 
 	private void onParticle() {
@@ -90,18 +78,13 @@ public class EntityBloodBeam extends Entity{
        this.posX += this.motionX;
        this.posY += this.motionY;
        this.posZ += this.motionZ;
+       
+       this.motionX *= (double)0.8;
+       this.motionY *= (double)0.8;
+       this.motionZ *= (double)0.8;
+       
+       this.setPosition(this.posX, this.posY, this.posZ);
 	}
-	
-    protected void Ref(MovingObjectPosition movingObjectPosition, boolean todead)
-    {
-      Entity hitEntity = movingObjectPosition.entityHit;
-  	if (hitEntity != null && hitEntity instanceof EntityLivingBase && hitEntity == this.owner)
-  	{
-  		EntityLivingBase living = (EntityLivingBase) hitEntity;
-  		living.setHealth(living.getHealth() + this.Myblood);
-  		this.setDead();
-  	}
-    }
 	
 	private void loadUUID() {
         if(!this.getEntityWorld().isRemote && this.owner == null && this.upperUUID != null) {
@@ -135,10 +118,7 @@ public class EntityBloodBeam extends Entity{
     }
 	
 	@Override
-	protected void entityInit() {
-		// TODO Auto-generated method stub
-		
-	}
+	protected void entityInit() {}
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt) {

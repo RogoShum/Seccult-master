@@ -1,5 +1,6 @@
 package testmod.seccult.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
@@ -22,6 +23,7 @@ public class EntityIMCircle extends Entity{
 	
 	private  NBTTagCompound LoadMagick = new NBTTagCompound();
 	private  NBTTagList LoadSelect = new NBTTagList();
+	private List<Entity> worked = new ArrayList<Entity>();
 	private float particleRedIn;
 	private float particleGreenIn;
 	private float particleBlueIn;
@@ -107,11 +109,12 @@ public class EntityIMCircle extends Entity{
 
 	private void pushMagick(Entity hit)
 	{
-		 if (!this.world.isRemote) {
+		 if (!this.world.isRemote && !worked.contains(hit)) {
 			 NBTTagCompound newMagickNBT = LoadMagick.copy();
 			 newMagickNBT.setUniqueId("EntityHit", hit.getUniqueID());
 			 MagickCompiler newMagick = new MagickCompiler();
 			 newMagick.pushMagickData(newMagickNBT, LoadSelect, this.owner);
+			 worked.add(hit);
 		 }
 	}
 	

@@ -27,13 +27,12 @@ public class FlameMagick extends Magick{
 		if(strengh < 15)
 		{
 			living.setFire((int) strengh);
-			living.attackEntityFrom(DamageSource.IN_FIRE, strengh / 2);
+			living.attackEntityFrom(DamageSource.IN_FIRE, strengh);
 			living.hurtResistantTime = -1;
 		}
 		else
 		{
 			living.setFire((int) strengh);
-			living.attackEntityFrom(DamageSource.IN_FIRE, strengh);
 			living.hurtResistantTime = -1;
 			living.world.newExplosion(null, living.posX, living.posY, living.posZ, strengh / 2, true, true);
 			living.hurtResistantTime = -1;

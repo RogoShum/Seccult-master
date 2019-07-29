@@ -7,17 +7,18 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import testmod.seccult.entity.EntityFlyable;
+import testmod.seccult.entity.livings.flying.EntityFlyable;
 
 public class EntityButterfly extends EntityFlyable implements IEntityInsect{
-
-	private int swing;
-	private boolean swingUp;
 	
 	public EntityButterfly(World worldIn) {
 		super(worldIn);
-		this.setSize(0.6F, 0.3F);
+		float size = rand.nextFloat();
+		if(size > 0.6F) size = 0.6F;
+		this.setSize(size, size / 2);
 		this.hang = true;
+		
+		this.swingLimit = 45;
 	}
 
 	@Override
@@ -121,39 +122,5 @@ public class EntityButterfly extends EntityFlyable implements IEntityInsect{
             this.setIsBatHanging(false);
             this.world.playEvent((EntityPlayer)null, 1025, blockpos, 0);
         }
-	}
-	
-	@Override
-	public void onUpdate() {
-		super.onUpdate();
-		float motion = (float) (Math.abs(this.motionX) + Math.abs(this.motionY) + Math.abs(this.motionZ));
-		if(swingUp)
-		{
-			if(motion > 0)
-				swing += (motion + 1) * 20;
-			else if (this.world.isDaytime())
-				swing++;
-			else if (this.ticksExisted % 3 ==0)
-				swing++;
-		}
-		else
-		{
-			if(motion > 0)
-				swing -= (motion + 1) * 20;
-			else if (this.world.isDaytime())
-				swing--;
-			else if (this.ticksExisted % 3 ==0)
-				swing--;
-		}
-		
-		if(swing > 45)
-			swingUp = false;
-		else if(swing < -45)
-			swingUp = true;
-	}
-	
-	public int getSwing()
-	{
-		return this.swing;
 	}
 }

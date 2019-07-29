@@ -70,7 +70,7 @@ public abstract class Magick implements Cloneable{
 		if(isSucceed && data.getMana() > strengh)
 			doMagick();
 		else if(!isSucceed)
-			failedToDoMagick(plo);
+			failedToDoMagick(plo / 10);
 		else if(data.getMana() > strengh)
 			createFailedFX();
 		}

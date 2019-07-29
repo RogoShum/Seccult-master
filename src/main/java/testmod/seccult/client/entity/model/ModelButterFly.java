@@ -51,7 +51,7 @@ public class ModelButterFly extends ModelBase {
     @Override
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
     	EntityButterfly but = (EntityButterfly) entity;
-    	int swing = but.getSwing();
+    	float swing = but.getSwing();
         GlStateManager.pushMatrix();
         GlStateManager.translate(this.body.offsetX, this.body.offsetY, this.body.offsetZ);
         GlStateManager.translate(this.body.rotationPointX * f5, this.body.rotationPointY * f5, this.body.rotationPointZ * f5);
