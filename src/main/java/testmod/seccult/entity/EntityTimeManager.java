@@ -11,20 +11,18 @@ import java.util.UUID;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.client.particle.particleHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -32,8 +30,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.entity.projectile.TRprojectileBase;
 import testmod.seccult.magick.magickState.StateManager;
-import testmod.seccult.potions.ModPotions;
-import testmod.seccult.util.MathHelper.MovingObjectPosition;
 
 public class EntityTimeManager extends Entity{
 	private static final DataParameter<Integer> EFFECT = EntityDataManager.<Integer>createKey(EntityTimeManager.class, DataSerializers.VARINT);
@@ -122,71 +118,47 @@ public class EntityTimeManager extends Entity{
 				frozeEntity(p);
 			}
 			}
-			ParticleManager render = Minecraft.getMinecraft().effectRenderer;
-			 Field partic;
-			 Field posX;
-			 Field posY;
-			 Field posZ;
-			 Field particleAge;
+			/*ParticleManager render = Minecraft.getMinecraft().effectRenderer;
+			Field partic;
+			Field particleAge;
 			try {
+				
 				partic = ParticleManager.class.getDeclaredField("queue");
 				partic.setAccessible(true);
-            	posX = Particle.class.getDeclaredField("prevPosX");
-            	posX.setAccessible(true);
-            	posY = Particle.class.getDeclaredField("prevPosY");
-            	posY.setAccessible(true);
-            	posZ = Particle.class.getDeclaredField("prevPosZ");
-            	posZ.setAccessible(true);
-            	posZ = Particle.class.getDeclaredField("prevPosZ");
-            	posZ.setAccessible(true);
-				try {
-					Queue<Particle> queue = (Queue<Particle>) partic.get(render);
-					if (!queue.isEmpty())
-			        {
-			            for (Particle particle = queue.poll(); particle != null; particle = queue.poll())
-			            {
-			            	System.out.println((double)posX.get(particle) + " " + (double)posY.get(particle) + "  " + (double)posZ.get(particle));
-			            	particleAge = Particle.class.getDeclaredField("particleAge");
-			            	particleAge.setAccessible(true);
-			            	int age = (int)particleAge.get(particle);
-			            	particleAge.set(particle, --age);
-			                particle.setPosition((double)posX.get(particle), (double)posY.get(particle), (double)posZ.get(particle));
-			            }
-			        }
-				} catch (IllegalArgumentException | IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				Queue<Particle> queue = (Queue<Particle>) partic.get(render);
+				if (!queue.isEmpty())
+				{
+					for (Particle particle = queue.poll(); particle != null; particle = queue.poll())
+					{
+						particleAge = Particle.class.getDeclaredField("particleAge");
+						particleAge.setAccessible(true);
+						int age = (int)particleAge.get(particle);
+						particleAge.set(particle, --age);
+						particle.setPosition(particleHelper.getPrevPosX(particle), particleHelper.getPrevPosY(particle), particleHelper.getPrevPosZ(particle));
+					}
 				}
-			} catch (NoSuchFieldException | SecurityException e) {
-				// TODO Auto-generated catch block
+			} catch (NoSuchFieldException e) {
+				e.printStackTrace();
+			} catch (SecurityException e) {
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
 				e.printStackTrace();
 			}
-			 
-			MovingObjectPosition movingObjectPosition = new MovingObjectPosition(MyLord);
+			 */
 		    List<Entity> list = MyLord.world.getEntitiesWithinAABBExcludingEntity(MyLord, MyLord.getEntityBoundingBox().grow(MyRange));
-		    boolean pass = false;
 		    Entity entity = null;    
-		    if ((list != null) && (list.size() > 0))
-		    {
+
 		      for (int j1 = 0; j1 < list.size(); ++j1)
 		      {
 		        entity = (Entity)list.get(j1);
 		        if (entity != null && entity != this.MyLord)
 		        {
-		          movingObjectPosition = new MovingObjectPosition(entity);
+		        	TimeStop(entity);
 		        }
-
-		        if ((MyLord.world.isRemote) || (movingObjectPosition == null) || (movingObjectPosition.entityHit instanceof EntityItemFrame) || (movingObjectPosition.entityHit instanceof EntityPainting)) {
-		          continue;
-		        }
-
-		        pass = false;
-
-		        if (pass)
-		          continue;
-		        TimeStop(movingObjectPosition);
+		        
 		      }
-		    }
 		}
 		
 		this.MyLord.getEntityData().setInteger("TimeStop", 2);
@@ -230,8 +202,7 @@ public class EntityTimeManager extends Entity{
 	      hitEntity.fallDistance -= 0.076865F;
 	}
 	
-	private void TimeStop(MovingObjectPosition movingObjectPosition) {
-	    Entity hitEntity = movingObjectPosition.entityHit;
+	private void TimeStop(Entity hitEntity) {
 	    if ((hitEntity != null) && (hitEntity.ticksExisted >= 2))
 	    {
 		    ResourceLocation className = EntityList.getKey(hitEntity.getClass());

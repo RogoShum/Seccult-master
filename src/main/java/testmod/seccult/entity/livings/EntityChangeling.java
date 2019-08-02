@@ -33,7 +33,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import testmod.seccult.Seccult;
 import testmod.seccult.entity.RogoEntityGetData;
-import testmod.seccult.util.MathHelper.MovingObjectPosition;
 
 public class EntityChangeling extends EntityCreature implements RogoEntityGetData{
 	private static final DataParameter<NBTTagCompound> NBT = EntityDataManager.<NBTTagCompound>createKey(EntityChangeling.class, DataSerializers.COMPOUND_TAG);
@@ -79,7 +78,6 @@ public class EntityChangeling extends EntityCreature implements RogoEntityGetDat
 	public void onUpdate()
 	{
 		super.onUpdate();
-		MovingObjectPosition movingObjectPosition = new MovingObjectPosition(this);
         Entity Sentity = null;
         this.MyEntityList = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(0.5));
         
@@ -89,14 +87,9 @@ public class EntityChangeling extends EntityCreature implements RogoEntityGetDat
 	      {
 	        Sentity = (Entity)this.MyEntityList.get(j1);
 	        
-	        if (Sentity != null)
-	        {
-	          movingObjectPosition = new MovingObjectPosition(Sentity);
-	        }
-
-	        if ((this.world.isRemote) || (movingObjectPosition.entityHit instanceof EntityPlayer) ||(movingObjectPosition == null) || (movingObjectPosition.entityHit instanceof EntityItemFrame) || (movingObjectPosition.entityHit instanceof EntityPainting) ) {
-	          continue;
-	        }
+		    if ((Sentity == null) || (this.world.isRemote) || (Sentity instanceof EntityPlayer) || (Sentity instanceof EntityItemFrame) || (Sentity instanceof EntityPainting) ) {
+			    continue;
+			}
 	        
 	        if(Sentity instanceof EntityChangeling) 
 	        {

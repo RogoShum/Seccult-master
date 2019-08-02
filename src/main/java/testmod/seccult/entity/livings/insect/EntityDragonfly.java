@@ -1,6 +1,7 @@
 package testmod.seccult.entity.livings.insect;
 
 import net.minecraft.block.BlockBush;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.DamageSource;
@@ -18,6 +19,12 @@ public class EntityDragonfly extends EntityFlyable implements IEntityInsect{
 		this.hang = true;
 	}
 
+	@Override
+	protected void applyEntityAttributes() {
+		super.applyEntityAttributes();
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D);
+	}
+	
 	@Override
 	public void movingMode() 
 	{

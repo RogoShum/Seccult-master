@@ -2,6 +2,10 @@ package testmod.seccult.entity.livings;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItemFrame;
@@ -11,11 +15,12 @@ import net.minecraft.init.Blocks;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import testmod.seccult.util.MathHelper.MovingObjectPosition;
 
 public class EntityBase extends EntityLiving{
 	protected float swing;
@@ -32,36 +37,30 @@ public class EntityBase extends EntityLiving{
 		super(worldIn);
 	}
 
-	protected EntityPlayer findPlayerToAttack(Entity myentity) {
-		 MovingObjectPosition movingObjectPosition = new MovingObjectPosition(myentity);
-	       Entity entity = null;	    
-	       boolean pass = false;
+	protected EntityPlayer findPlayerToAttack(Entity myentity) 
+	{
+	       Entity entity = null;
 	       double effectiveBoundary = 128.0D;
 	       List<Entity> list = myentity.world.getEntitiesWithinAABBExcludingEntity(myentity, myentity.getEntityBoundingBox().grow(effectiveBoundary, effectiveBoundary, effectiveBoundary));
 	     
 	       if ((list != null) && (list.size() > 0))
 		    {
-		      for (int j1 = 0; j1 < list.size(); ++j1)
-		      {
-		        entity = (Entity)list.get(j1);
+	    	   for (int j1 = 0; j1 < list.size(); ++j1)
+	    	   {
+	    		   entity = (Entity)list.get(j1);
 		        
-		        if (entity != null)
-		        {
-		          movingObjectPosition = new MovingObjectPosition(entity);
-		        }
-
-		        if ((myentity.world.isRemote) || (movingObjectPosition == null) || (movingObjectPosition.entityHit instanceof EntityItemFrame) || (movingObjectPosition.entityHit instanceof EntityPainting)) {
-		          continue;
-		        }
-
-		        pass = false;
-		        if (pass)
-		          continue;
-		        EntityPlayer player = Aura(movingObjectPosition);
-		        if(player != null)
-		        	return player;
-		          }      
-	         }
+		       		if (entity != null)
+		       		{
+		       			if ((myentity.world.isRemote) || (entity instanceof EntityItemFrame) || (entity instanceof EntityPainting)) {
+				          continue;
+				        }
+				        
+				        EntityPlayer player = Aura(entity);
+				        if(player != null)
+				        	return player;
+				   }    
+		       }
+	       }
 		return null;
 	}
 	
@@ -156,8 +155,7 @@ public class EntityBase extends EntityLiving{
 			swingUp = true;
 	}
 	
-	protected EntityPlayer Aura(MovingObjectPosition movingObjectPosition) {
-       Entity hitEntity = movingObjectPosition.entityHit;
+	protected EntityPlayer Aura(Entity hitEntity) {
        if(hitEntity instanceof EntityPlayer) {
     	   EntityPlayer player = (EntityPlayer) hitEntity;
     	   return player;
@@ -217,4 +215,63 @@ public class EntityBase extends EntityLiving{
         this.motionY += (Math.signum(y - this.posY) - this.motionY) * speed;
         this.motionZ += (Math.signum(z - this.posZ) - this.motionZ) * speed;
 	}
+	
+	//copy from dragon
+	protected boolean destroyBlocksInAABB(AxisAlignedBB p_70972_1_)
+    {
+        int i = MathHelper.floor(p_70972_1_.minX);
+        int j = MathHelper.floor(p_70972_1_.minY);
+        int k = MathHelper.floor(p_70972_1_.minZ);
+        int l = MathHelper.floor(p_70972_1_.maxX);
+        int i1 = MathHelper.floor(p_70972_1_.maxY);
+        int j1 = MathHelper.floor(p_70972_1_.maxZ);
+        boolean flag = false;
+        boolean flag1 = false;
+
+        for (int k1 = i; k1 <= l; ++k1)
+        {
+            for (int l1 = j; l1 <= i1; ++l1)
+            {
+                for (int i2 = k; i2 <= j1; ++i2)
+                {
+                    BlockPos blockpos = new BlockPos(k1, l1, i2);
+                    IBlockState iblockstate = this.world.getBlockState(blockpos);
+                    Block block = iblockstate.getBlock();
+
+                    if (!block.isAir(iblockstate, this.world, blockpos) && iblockstate.getMaterial() != Material.FIRE)
+                    {
+                        if (!net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this))
+                        {
+                            flag = true;
+                        }
+                        else if (block.canEntityDestroy(iblockstate, this.world, blockpos, this) && net.minecraftforge.event.ForgeEventFactory.onEntityDestroyBlock(this, blockpos, iblockstate))
+                        {
+                            if (block != Blocks.COMMAND_BLOCK && block != Blocks.REPEATING_COMMAND_BLOCK && block != Blocks.CHAIN_COMMAND_BLOCK && block != Blocks.IRON_BARS && !(block instanceof BlockLiquid))
+                            {
+                                flag1 = this.world.setBlockToAir(blockpos) || flag1;
+                            }
+                            else
+                            {
+                                flag = true;
+                            }
+                        }
+                        else
+                        {
+                            flag = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (flag1)
+        {
+            double d0 = p_70972_1_.minX + (p_70972_1_.maxX - p_70972_1_.minX) * (double)this.rand.nextFloat();
+            double d1 = p_70972_1_.minY + (p_70972_1_.maxY - p_70972_1_.minY) * (double)this.rand.nextFloat();
+            double d2 = p_70972_1_.minZ + (p_70972_1_.maxZ - p_70972_1_.minZ) * (double)this.rand.nextFloat();
+            this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, d0, d1, d2, 0.0D, 0.0D, 0.0D);
+        }
+
+        return flag;
+    }
 }

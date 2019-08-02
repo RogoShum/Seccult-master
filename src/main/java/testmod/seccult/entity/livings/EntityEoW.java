@@ -25,7 +25,6 @@ import net.minecraft.world.World;
 import testmod.seccult.magick.magickState.StateManager;
 import testmod.seccult.util.ChunkCoordinates;
 import testmod.seccult.util.MathHelper.MathHelper;
-import testmod.seccult.util.MathHelper.MovingObjectPosition;
 
 public class EntityEoW extends EntityBase{
 	private static final DataParameter<Integer> EOW_VARIANT = EntityDataManager.<Integer>createKey(EntityEoW.class, DataSerializers.VARINT);
@@ -183,10 +182,8 @@ public class EntityEoW extends EntityBase{
 		   if(this.isTail)
 			   this.setHealth(220);
 	   }
-	   
-	   MovingObjectPosition movingObjectPosition = new MovingObjectPosition(this);
+
        Entity entity = null;	    
-       boolean pass = false;
 
        List<Entity> list2 = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(128));
        
@@ -196,20 +193,12 @@ public class EntityEoW extends EntityBase{
 	      {
 	        entity = (Entity)list2.get(j1);
 	        
-	        if (entity != null)
-	        {
-	          movingObjectPosition = new MovingObjectPosition(entity);
-	        }
+	        if ((entity == null) || (this.world.isRemote) || (entity instanceof EntityItemFrame) || (entity instanceof EntityPainting)) {
+		          continue;
+		     }
 
-	        if ((this.world.isRemote) || (movingObjectPosition == null) || (movingObjectPosition.entityHit instanceof EntityItemFrame) || (movingObjectPosition.entityHit instanceof EntityPainting)) {
-	          continue;
-	        }
-
-	        pass = false;
-	        if (pass)
-	          continue;
-	        RefB(movingObjectPosition);            	
-	          }      
+	        RefB(entity);   
+	      }      
          }
        loadUUID();
        isUpperDead();
@@ -269,7 +258,7 @@ public class EntityEoW extends EntityBase{
         
     	     
         if ((this.rand.nextInt(7) == 2) && (this.world.getDifficulty() != EnumDifficulty.PEACEFUL))
-             {
+        {
                e = findPlayerToAttack(this);
                if (e != null && isSuitableTarget(e) && CooldownTime <= 0 && !hasAttacked)
                {
@@ -290,12 +279,13 @@ public class EntityEoW extends EntityBase{
             	   CooldownTime = 0;
                }
             	   
-             }else {
+        }
+        else {
                  float var7 = (float)(Math.atan2(this.motionZ, this.motionX) * 180.0D / 3.141592653589793D) - 90.0F;
                  float var8 = MathHelper.wrapAngleTo180_float(var7 - this.rotationYaw);
                  this.moveForward = 0.75F;
                  this.rotationYaw += var8 / 4.0F;
-             }
+        }
         
         if(this.CooldownTime <= 0) {
         this.rotationYaw = this.thisYaw;
@@ -520,8 +510,7 @@ public class EntityEoW extends EntityBase{
 		return 4;
 	}
     
-    private void RefB(MovingObjectPosition movingObjectPosition) {
-        Entity hitEntity = movingObjectPosition.entityHit;
+    private void RefB(Entity hitEntity) {
         if(hitEntity instanceof EntityEoW && hitEntity.getUniqueID().equals(this.upperUUID))
         	upper = (EntityEoW) hitEntity;
         if(hitEntity instanceof EntityEoW && hitEntity.getUniqueID().equals(this.followerUUID))

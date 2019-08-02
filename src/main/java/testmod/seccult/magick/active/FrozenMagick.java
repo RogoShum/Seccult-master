@@ -1,10 +1,9 @@
 package testmod.seccult.magick.active;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.Vec3d;
+import testmod.seccult.entity.EntityFrozenFX;
 import testmod.seccult.init.ModDamage;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.magick.magickState.StateManager;
@@ -46,6 +45,11 @@ public class FrozenMagick extends Magick{
 			MagickFX();
 			damage(player);
 			StateManager.setState(entity, StateManager.FROZEN, (int)strengh);
+			EntityFrozenFX fx = new EntityFrozenFX(entity.world);
+			fx.setPosition(entity.posX, entity.posY, entity.posZ);
+			fx.setOwner(entity);
+			if(!entity.world.isRemote)
+				entity.world.spawnEntity(fx);
 			entity.attackEntityFrom(damage, attribute);
 		}
 	}

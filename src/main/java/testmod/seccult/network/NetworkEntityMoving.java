@@ -101,9 +101,15 @@ public class NetworkEntityMoving implements IMessage {
         {
             Entity entityplayer = world.loadedEntityList.get(j2);
             //System.out.println(uuid);
+            try {
             if (uuid != null && uuid.equals(entityplayer.getUniqueID()))
             {
                 return entityplayer;
+            }
+            }
+            catch (Exception e)
+            {
+            	
             }
         }
 

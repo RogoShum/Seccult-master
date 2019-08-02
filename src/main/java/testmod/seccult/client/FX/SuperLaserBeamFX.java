@@ -10,10 +10,12 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import testmod.seccult.entity.EntityLaserBeamBase;
 
 public class SuperLaserBeamFX extends Particle {
 	private static ResourceLocation darkPTexture = new ResourceLocation("seccult:textures/entity/darktexture.png");
@@ -27,6 +29,7 @@ public class SuperLaserBeamFX extends Particle {
     public SuperLaserBeamFX(World worldIn, double posXIn, double posYIn, double posZIn, Entity player, float height) {
         super(worldIn, posXIn, posYIn, posZIn);
         this.player=player;
+   
         vec3d =new Vec3d(player.getLookVec().x,
                 player.getLookVec().y,
                 player.getLookVec().z);
@@ -51,7 +54,9 @@ public class SuperLaserBeamFX extends Particle {
         angle+=10;
         if(angle >=360)
         	angle = 0;
-        //OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(posX - entityIn.posX, posY - entityIn.posY, posZ - entityIn.posZ);
         DrawChannel(
                 (float) (posX),
                 (float) (posY + (entityIn.height / 2)),
@@ -59,6 +64,7 @@ public class SuperLaserBeamFX extends Particle {
                 (float) (vec3d.x*height+posX),
                 (float) (vec3d.y*height+posY + (entityIn.height / 2)) ,
                 (float) (vec3d.z*height+posZ), player.rotationYaw,player.rotationPitch);
+        GlStateManager.popMatrix();
     }
 
     @Override
@@ -131,11 +137,20 @@ public class SuperLaserBeamFX extends Particle {
 		float dz = z2 - z1;
 		float distance = (float) Math.sqrt(dx*dx + dy*dy + dz*dz);
 	    
-		Vec3d handVec = player.getLookVec().rotateYaw(hand == EnumHand.MAIN_HAND ? -0.4F : 0.4F);
-		Vec3d lok = player.getLookVec();
-		 	Vec3d position = new Vec3d(handVec.x, handVec.y + 1, handVec.z);
-		 	Vec3d QAQ = position.addVector(lok.x * 1, lok.y * 1, lok.z * 1);
+		Vec3d QAQ = new Vec3d(0, 0, 0);
 		
+		if(player instanceof EntityLaserBeamBase)
+		{
+			EntityLaserBeamBase laser = (EntityLaserBeamBase) player;
+			if(laser.getOwner() instanceof EntityPlayer)
+			{
+				Vec3d handVec = player.getLookVec().rotateYaw(hand == EnumHand.MAIN_HAND ? -0.4F : 0.4F);
+				Vec3d lok = player.getLookVec();
+				Vec3d position = new Vec3d(handVec.x, handVec.y + 1, handVec.z);
+				QAQ = position.addVector(lok.x * 1, lok.y * 1, lok.z * 1);
+			}
+		}
+
 	    GlStateManager.pushMatrix();
 	    GlStateManager.translate(QAQ.x,QAQ.y,QAQ.z); 
 	    GlStateManager.rotate(-yaw  * 0.017453292F * (180F / (float)Math.PI), 0.0F, 1.0F, 0.0F);

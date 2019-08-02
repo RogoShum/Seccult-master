@@ -88,7 +88,7 @@ public class MobUnhurtableEvent {
 			Entity beam = event.getEntity();
 			EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
 			if(player.getHeldItemMainhand().getItem() == ModItems.Vampire_Knives) {
-				EntityBloodBeam blood = new EntityBloodBeam(beam.world, player, event.getAmount() * 0.075F);
+				EntityBloodBeam blood = new EntityBloodBeam(beam.world, player, event.getAmount() * 0.75F);
 				blood.setPosition(beam.posX, beam.posY, beam.posZ);
 				if(!beam.world.isRemote)
 				beam.world.spawnEntity(blood);

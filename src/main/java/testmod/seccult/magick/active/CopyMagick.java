@@ -20,56 +20,61 @@ public class CopyMagick extends Magick{
 
 	@Override
 	void toEntity() {
+		
+		Entity enti = CopyMagick.copyEntity(this.entity);
+	    if(enti != null) 
+	    {
+	    	enti.setPositionAndRotation(this.entity.posX, this.entity.posY, this.entity.posZ, this.entity.rotationYaw, this.entity.rotationPitch);
+	        if(!this.entity.world.isRemote)
+	        	this.entity.world.spawnEntity(enti);
+	    }
+	}
+
+	public static Entity copyEntity(Entity preEntity)
+	{
 		NBTTagCompound entityNBT = new NBTTagCompound();
-	    ResourceLocation className = EntityList.getKey(entity.getClass());
+	    ResourceLocation className = EntityList.getKey(preEntity.getClass());
 	  	if(className != null) 
 	  	{
 	  		entityNBT.setString("id", className.toString());
 	  	}
-	  	else if(entity instanceof EntityItem)
+	  	else if(preEntity instanceof EntityItem)
 	  	{
 	  	   entityNBT.setString("id", EntityList.getKey(EntityItem.class).toString());
 	  	}
 	  	
-	  	entity.writeToNBT(entityNBT);
+	  	preEntity.writeToNBT(entityNBT);
 	  	entityNBT.setUniqueId("UUID", UUID.randomUUID());
 	  	if(!(entityNBT.getString("id").equals(""))) {
-	    Entity entity = EntityList.createEntityFromNBT(entityNBT, this.entity.world);
-	    
-	    if(entity != null) 
-	    {
-	        entity.readFromNBT(entityNBT);
-	        //System.out.println(entityNBT);
-	        entity.setPositionAndRotation(this.entity.posX, this.entity.posY, this.entity.posZ, this.entity.rotationYaw, this.entity.rotationPitch);
-	        if(!this.entity.world.isRemote)
-	        	this.entity.world.spawnEntity(entity);
-	    }
+	    Entity entity = EntityList.createEntityFromNBT(entityNBT, preEntity.world);
+	    if(entity != null)
+	    	entity.readFromNBT(entityNBT);
+	    	return  entity;
 	  	}
+	  	return null;
 	}
-
+	
 	@Override
 	void toBlock() 
 	{
 		Block newblock = player.world.getBlockState(block).getBlock();
         TileEntity tile = player.world.getTileEntity(block);
-        /*NBTTagCompound tag = null;
+        NBTTagCompound tag = null;
         if (tile != null) {
         	NBTTagCompound newTag = new NBTTagCompound();
         	tile.writeToNBT(newTag);
         	tag = newTag;
-        	System.out.println(tag);
         }
 		
+        ItemStack item = new ItemStack(newblock);
+		EntityItem newItem = new EntityItem(player.world, block.getX(), block.getY() + 1, block.getZ(), item);
 		if(tag != null)
 		{
-			System.out.println("QwQ");
 			NBTTagCompound data = (NBTTagCompound) tag.getTag("ForgeData");
 			NBTTagCompound caps = (NBTTagCompound) tag.getTag("ForgeCaps");
 			newItem.getEntityData().setTag("ForgeData", data);
 			newItem.getEntityData().setTag("ForgeCaps", caps);
-		}*/
-        ItemStack item = new ItemStack(newblock);
-		EntityItem newItem = new EntityItem(player.world, block.getX(), block.getY(), block.getZ(), item);
+		}
 		if(!this.player.world.isRemote)
         	this.player.world.spawnEntity(newItem);
 	}

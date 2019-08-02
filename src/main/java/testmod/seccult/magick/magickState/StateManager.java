@@ -8,7 +8,6 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
@@ -43,11 +42,8 @@ public class StateManager {
 			entity.motionY = 0;
 			entity.motionZ = 0;
 			entity.ticksExisted -= 1;
-			double[] vec = {0,0,0};
-			float[] color = {entity.height,entity.width,0};
-			double[] pos = {entity.posX,entity.posY + entity.height,entity.posZ};
-			NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, 0F, 105));
 			setPlayerMove(entity, 0, 0, 0, 1);
+			setPlayerTP(entity, entity.prevPosX, entity.prevPosY, entity.prevPosZ, 0);
 			entity.setPositionAndRotation(entity.prevPosX, entity.prevPosY, entity.prevPosZ, entity.prevRotationYaw, entity.prevRotationPitch);
 			if(!entity.isEntityAlive())
 				setState(entity, FROZEN, -10);
@@ -197,10 +193,30 @@ public class StateManager {
 		return 0;
 	}
 	
+	public static boolean CheckIfStatedSafe(Entity entity, String s)
+	{
+		NBTTagCompound state = getStateListForEntity(entity);
+		boolean ifState = false;
+			if(state.hasKey(s)) 
+			{
+				int tick = state.getInteger(s);
+				if (tick > 0)
+					ifState = true;
+			}
+		return ifState;
+	}
+	
 	public static void setPlayerMove(Entity e, double movex, double movey, double movez, int type)
 	{
 		double[] pos = {0, 0, 0};
 		double[] move = {movex, movey, movez};
+		NetworkHandler.getNetwork().sendToAllAround(new NetworkEntityMoving(e.getUniqueID(), pos, move, type), new TargetPoint(e.dimension, e.posX, e.posY, e.posZ, 3));
+	}
+	
+	public static void setPlayerTP(Entity e, double movex, double movey, double movez, int type)
+	{
+		double[] move = {0, 0, 0};
+		double[] pos = {movex, movey, movez};
 		NetworkHandler.getNetwork().sendToAllAround(new NetworkEntityMoving(e.getUniqueID(), pos, move, type), new TargetPoint(e.dimension, e.posX, e.posY, e.posZ, 3));
 	}
 	

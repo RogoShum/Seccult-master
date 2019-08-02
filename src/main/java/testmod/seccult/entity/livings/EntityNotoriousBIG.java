@@ -6,8 +6,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
-import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntitySnowball;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,7 +15,6 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
-import testmod.seccult.util.MathHelper.MovingObjectPosition;
 
 public class EntityNotoriousBIG extends EntityStand{
 	private static final DataParameter<Float> Size = EntityDataManager.<Float>createKey(EntityNotoriousBIG.class, DataSerializers.FLOAT);
@@ -171,7 +168,6 @@ public class EntityNotoriousBIG extends EntityStand{
 			this.setStandEnergy(-5000);
 		}
 
-    	MovingObjectPosition movingObjectPosition = new MovingObjectPosition(this);
         Entity entity = null;
         
         List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(1));
@@ -181,17 +177,8 @@ public class EntityNotoriousBIG extends EntityStand{
 	      for (int j1 = 0; j1 < list.size(); ++j1)
 	      {
 	        entity = (Entity)list.get(j1);
-	        
-	        if (entity != null)
-	        {
-	          movingObjectPosition = new MovingObjectPosition(entity);
-	        }
 
-	        if ((this.world.isRemote) || (movingObjectPosition == null) || (movingObjectPosition.entityHit instanceof EntityItemFrame) || (movingObjectPosition.entityHit instanceof EntityPainting)) {
-	          continue;
-	        }
-
-	        Ref2(movingObjectPosition);
+	        Ref2(entity);
 	       }      
 	    }
 	}
@@ -326,55 +313,30 @@ public class EntityNotoriousBIG extends EntityStand{
 	}
 	
 	private void catchUpTheEntity() {
-    	MovingObjectPosition movingObjectPosition = new MovingObjectPosition(this);
         Entity entity = null;
         
         List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(128));
-        
-        if ((list != null) && (list.size() > 0))
-	    {
+
 	      for (int j1 = 0; j1 < list.size(); ++j1)
 	      {
 	        entity = (Entity)list.get(j1);
 	        
-	        if (entity != null)
-	        {
-	          movingObjectPosition = new MovingObjectPosition(entity);
-	        }
-
-	        if ((this.world.isRemote) || (movingObjectPosition == null) || (movingObjectPosition.entityHit instanceof EntityItemFrame) || (movingObjectPosition.entityHit instanceof EntityPainting)) {
-	          continue;
-	        }
-
-	        Ref(movingObjectPosition);
+	        Ref(entity);
 	       }      
-	    }
-        
+
         List<Entity> list1 = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(1));
         
-        if ((list1 != null) && (list1.size() > 0))
-	    {
 	      for (int j1 = 0; j1 < list1.size(); ++j1)
 	      {
 	        entity = (Entity)list1.get(j1);
 	        
-	        if (entity != null && this.isSuitableTarget(entity))
-	        {
-	          movingObjectPosition = new MovingObjectPosition(entity);
-	        }
-
-	        if ((this.world.isRemote) || (movingObjectPosition == null) || (movingObjectPosition.entityHit instanceof EntityItemFrame) || (movingObjectPosition.entityHit instanceof EntityPainting)) {
-	          continue;
-	        }
-	        
-	        Ref1(movingObjectPosition);
-	       }      
-	    }
+	        Ref1(entity);
+	         
+	     }      
 	}
 	
-    protected void Ref(MovingObjectPosition movingObjectPosition)
+    protected void Ref(Entity hitEntity)
     {
-      Entity hitEntity = movingObjectPosition.entityHit;
       if(hitEntity instanceof EntityNotoriousBIG) {
     	  return;
       }
@@ -405,9 +367,8 @@ public class EntityNotoriousBIG extends EntityStand{
       }
     }
     
-    protected void Ref1(MovingObjectPosition movingObjectPosition)
+    protected void Ref1(Entity hitEntity)
     {
-      Entity hitEntity = movingObjectPosition.entityHit;
       if(!(hitEntity instanceof EntityLivingBase)) {
     	  if(hitEntity instanceof EntitySnowball) {
     		  setStandEnergy(getStandEnergy() + 10);
@@ -447,9 +408,8 @@ public class EntityNotoriousBIG extends EntityStand{
       }
     }
     
-    protected void Ref2(MovingObjectPosition movingObjectPosition)
+    protected void Ref2(Entity hitEntity)
     {
-    	Entity hitEntity = movingObjectPosition.entityHit;
         if(!(hitEntity instanceof EntityLivingBase)) {
         	float siize = (hitEntity.width + hitEntity.height) / 2;
       	  if(hitEntity instanceof EntitySnowball) {

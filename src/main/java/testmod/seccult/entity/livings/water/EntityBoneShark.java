@@ -10,10 +10,16 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import testmod.seccult.entity.livings.water.EntityRockShellLeviathan.DamageReduce;
+import testmod.seccult.init.ModMagicks;
+import testmod.seccult.magick.active.Magick;
 import testmod.seccult.magick.active.TeleportMagick;
 import testmod.seccult.network.NetworkEntityMoving;
 import testmod.seccult.network.NetworkHandler;
@@ -26,19 +32,22 @@ public class EntityBoneShark extends EntityWaterCreature{
 	
 	public EntityBoneShark(World worldIn) {
 		super(worldIn);		
-		this.setSize(4F, 4);
+		this.setSize(2F, 1.5F);
 		this.swimingTime += 35;
 		this.swingLimit = 15;
 	}
 
 	@Override
+	protected void applyEntityAttributes() {
+		super.applyEntityAttributes();
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(25.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.5D);
+        this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(5.0D);
+	}
+	
+	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
-		
-		if(this.getHealth() > this.getMaxHealth() / 2)
-	        this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(12.0D);
-	        else
-	        this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(0);
 			
 		if(this.target != null && !this.target.isEntityAlive())
 			this.target = null;
@@ -76,6 +85,7 @@ public class EntityBoneShark extends EntityWaterCreature{
 			
             if(this.rand.nextInt(100) == 0)
             	swimingTime += this.rand.nextInt(200) + 20;
+            
             if(swimingTime > 0)
             {
             	EntityWaterCreature.inWaterWalk(this, 0.1F, 5, 3F);
@@ -88,10 +98,15 @@ public class EntityBoneShark extends EntityWaterCreature{
             	swimingTime--;
             }
 		}
-		else if(this.target != null)
+		else if(this.target != null && !this.getIsSleeping())
 		{
 			this.faceEntity(this.target, 40, 30);
 			this.Moveto(this.target.posX, this.target.posY, this.target.posZ, 0.2F);
+		}
+		else if(this.target != null && this.getIsSleeping())
+		{
+			//this.faceEntity(this.target, 40, 30);
+			this.Moveto(this.target.posX, this.target.posY, this.target.posZ, 0.03F);
 		}
 		
 		if(warningTime > 0)
@@ -100,18 +115,34 @@ public class EntityBoneShark extends EntityWaterCreature{
 	
 	public void sleepingMode()
 	{
-		this.setSize(2F, 4);
 		if(this.target != null)
 		{
-			this.faceEntity(this.target, 40, 30);
+			double motion = Math.abs(target.motionX) + Math.abs(target.motionY) + Math.abs(target.motionZ);
 			
-			//setPlayerTP(target, this.posX + this.LookX(), this.posY + this.LookY() - this.target.height, this.posZ + this.LookZ(),0);
-			target.setPositionAndRotation(this.posX + this.LookX(), this.posY + this.LookY() - this.target.height, this.posZ + this.LookZ(), target.rotationYaw, target.rotationPitch);
-			target.posX = this.posX + this.LookX();
-			target.posY = this.posY + this.LookY() - this.target.height;
-			target.posZ = this.posZ + this.LookZ();
+			if(motion < 0.5)
+			{
+			float randF = this.rand.nextInt(120) - 60;
+			this.rotationYawHead += randF;
 			
-			boolean attack = this.target.attackEntityFrom(DamageSource.OUT_OF_WORLD, 5f);
+			if(this.rotationYaw > rotationYawHead)
+				this.rotationYaw += -10;
+			else
+				this.rotationYaw += 10;
+			
+		    Vec3d look = this.getVectorForRotation(this.rotationPitch, this.rotationYawHead);
+			target.setPositionAndRotation(this.posX + look.x * 1.5F, this.posY + look.y, this.posZ + look.z * 1.5F, target.rotationYaw + rand.nextInt(40) - 20, target.rotationPitch + rand.nextInt(20) - 10);
+			target.posX = this.posX + look.x * 1.5F;
+			target.posY = this.posY + look.y;
+			target.posZ = this.posZ + look.z * 1.5F;
+			}
+			else
+			{
+				this.target.motionX = this.LookX() * 2;
+				this.target.motionY = this.LookY() * 2;
+				this.target.motionZ = this.LookZ() * 2;
+			}
+			
+			boolean attack = this.target.attackEntityFrom(DamageSource.MAGIC, 5f);
 			if(attack && (this.target instanceof EntityWaterCreature || this.target instanceof EntityWaterMob))
 				this.heal(2.5f);
 		}
@@ -167,9 +198,9 @@ public class EntityBoneShark extends EntityWaterCreature{
 		super.applyEntityCollision(entityIn);
 		
 		if(entityIn == this.target)
-		{
 			this.setIsSleeping(true);
-		}
+		else
+			this.setIsSleeping(false);
 	}
 	
 	private void warningOthers()
@@ -209,7 +240,6 @@ public class EntityBoneShark extends EntityWaterCreature{
 	}
 	
 	private void searchingTarget() {
-		this.setSize(4F, 2);
 		AxisAlignedBB box = new AxisAlignedBB(this.posX, this.posY - height, this.posZ, this.posX, this.posY, this.posZ).grow(30, 30, 30);
 		List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, box);
 			
@@ -248,37 +278,84 @@ public class EntityBoneShark extends EntityWaterCreature{
 	@Override
 	public void GroundThing() 
 	{
-		if(!(this.ticksExisted % 20 == 0))
-			return;
-		this.setNoGravity(false);
-		
-		boolean water = false;
-		Iterable<BlockPos> blocks= BlockPos.getAllInBox(getPosition().add(-30, -30, -30), getPosition().add(30, 30, 30));
-		BlockPos waterPos = null;
-		for(BlockPos pos : blocks)
+	if(!(this.ticksExisted % 20 == 0))
+		return;
+	this.setNoGravity(false);
+	
+	if(this.target != null)
+	{
+		this.faceEntity(this.target, 40, 30);
+		Magick m = ModMagicks.getMagickFromName(ModMagicks.MoveMagick);
+		m.setMagickAttribute(this, this, null, 2 + this.rand.nextInt(8), 0);
+	}
+	
+	if(this.getAir() < 20)
+	{
+	boolean water = false;
+	Iterable<BlockPos> blocks= BlockPos.getAllInBox(getPosition().add(-30, -30, -30), getPosition().add(30, 30, 30));
+	BlockPos waterPos = null;
+	for(BlockPos pos : blocks)
+	{
+		if(this.world.getBlockState(pos).getBlock() == Blocks.WATER || this.world.getBlockState(pos).getBlock() == Blocks.FLOWING_WATER)
 		{
-			if(this.world.getBlockState(pos).getBlock() == Blocks.WATER || this.world.getBlockState(pos).getBlock() == Blocks.FLOWING_WATER)
+			water = true;
+			
+			if(waterPos == null)
+				waterPos = pos;
+			if(waterPos != null && this.getIfCloestTarget(this, pos, waterPos))
+				waterPos = pos;
+		}
+	}
+	
+	if(water)
+		new TeleportMagick(this, waterPos.add(0, -2, 0));
+	else
+	{
+		Iterable<BlockPos> blocks1= BlockPos.getAllInBox(getPosition().add(-2, -1, -2), getPosition().add(2, 1, 2));
+	
+		for(BlockPos pos : blocks1)
+		{
+			if(this.world.isAirBlock(pos))
+				this.world.setBlockState(pos, Blocks.WATER.getDefaultState());
+		}
+	}
+	}
+}
+	@Override
+	public void readEntityFromNBT(NBTTagCompound compound) {
+		super.readEntityFromNBT(compound);
+		
+		if(compound.hasKey("SC_DamageReduce"))
+		{
+			NBTTagList list = compound.getTagList("SC_DamageReduce", 10);
+			for(int i = 0; i < list.tagCount(); ++i)
 			{
-				water = true;
-				
-				if(waterPos == null)
-					waterPos = pos;
-				if(waterPos != null && this.getIfCloestTarget(this, pos, waterPos))
-					waterPos = pos;
+				NBTTagCompound nbt = list.getCompoundTagAt(i);
+				if(nbt.hasKey("DamageType"))
+				{
+					DamageReduce reduce = new DamageReduce(nbt.getString("DamageType"));
+					reduce.setReduce(nbt.getFloat("Reduce"));
+					this.damageList.add(reduce);
+				}
 			}
 		}
+	}
+	
+	@Override
+	public void writeEntityToNBT(NBTTagCompound compound) {
+		super.writeEntityToNBT(compound);
 		
-		if(water)
-			new TeleportMagick(this, waterPos.add(0, -2, 0));
-		else
+		if(this.damageList != null)
 		{
-			Iterable<BlockPos> blocks1= BlockPos.getAllInBox(getPosition().add(-2, -1, -2), getPosition().add(2, 1, 2));
-		
-			for(BlockPos pos : blocks1)
+			NBTTagList list = new NBTTagList();
+			for(DamageReduce reduce : this.damageList)
 			{
-				if(this.world.isAirBlock(pos))
-					this.world.setBlockState(pos, Blocks.WATER.getDefaultState());
+				NBTTagCompound nbt = new NBTTagCompound();
+				nbt.setFloat("Reduce", reduce.getTrueReduce());
+				nbt.setString("DamageType", reduce.getDamage());
+				list.appendTag(nbt);
 			}
+			compound.setTag("SC_DamageReduce", list);
 		}
 	}
 	
@@ -296,6 +373,16 @@ public class EntityBoneShark extends EntityWaterCreature{
 		{
 			this.reduce *= 0.9;
 			return this.reduce;
+		}
+		
+		public float getTrueReduce()
+		{
+			return this.reduce;
+		}
+		
+		public void setReduce(float re)
+		{
+			this.reduce = re;
 		}
 		
 		public String getDamage()

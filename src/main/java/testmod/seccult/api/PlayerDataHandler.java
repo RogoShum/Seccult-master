@@ -150,8 +150,6 @@ public class PlayerDataHandler {
 			ManaValue = cmp.getFloat(TAG_MANA_VALUE);
 			proficiency = cmp.getFloat(TAG_PROFICIENCY_LEVEL);
 			
-			if(!client)
-			{
 			if(cmp.hasKey("WandStyle"))
 				wand = cmp.getInteger("WandStyle");
 			else
@@ -168,8 +166,6 @@ public class PlayerDataHandler {
 				color2 = cmp.getInteger("Color2");
 				color3 = cmp.getInteger("Color3");
 				color4 = cmp.getInteger("Color4");
-			}
-			NetworkHandler.getNetwork().sendTo(new NetworkPlayerWandData(color2, color3, color4, wand), (EntityPlayerMP) player);
 			}
 			
 			if(ManaTalentValue == 0)

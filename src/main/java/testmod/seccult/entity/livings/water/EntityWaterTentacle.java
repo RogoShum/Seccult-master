@@ -10,10 +10,13 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import testmod.seccult.entity.livings.water.EntityRockShellLeviathan.DamageReduce;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.magick.active.Magick;
 import testmod.seccult.magick.active.TeleportMagick;
@@ -34,13 +37,22 @@ public class EntityWaterTentacle extends EntityWaterCreature{
 	}
 
 	@Override
+	protected void applyEntityAttributes() {
+		super.applyEntityAttributes();
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.7D);
+        this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(5.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).setBaseValue(10.0D);
+	}
+	
+	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 		
 		if(this.getHealth() > this.getMaxHealth() / 2)
-	        this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(12.0D);
+	        this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(7.0D);
 	        else
-	        this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(0);
+	        this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(5);
 			
 		if(this.target != null && !this.target.isEntityAlive())
 			this.target = null;
@@ -171,9 +183,9 @@ public class EntityWaterTentacle extends EntityWaterCreature{
 		super.applyEntityCollision(entityIn);
 		
 		if(entityIn == this.target)
-		{
 			this.setIsSleeping(true);
-		}
+		else
+			this.setIsSleeping(false);
 	}
 	
 	private void warningOthers()
@@ -256,6 +268,15 @@ public class EntityWaterTentacle extends EntityWaterCreature{
 			return;
 		this.setNoGravity(false);
 		
+		if(this.target != null)
+		{
+			this.faceEntity(this.target, 40, 30);
+			Magick m = ModMagicks.getMagickFromName(ModMagicks.MoveMagick);
+    		m.setMagickAttribute(this, this, null, 2 + this.rand.nextInt(8), 0);
+		}
+		
+		if(this.getAir() < 20)
+		{
 		boolean water = false;
 		Iterable<BlockPos> blocks= BlockPos.getAllInBox(getPosition().add(-30, -30, -30), getPosition().add(30, 30, 30));
 		BlockPos waterPos = null;
@@ -284,6 +305,45 @@ public class EntityWaterTentacle extends EntityWaterCreature{
 					this.world.setBlockState(pos, Blocks.WATER.getDefaultState());
 			}
 		}
+		}
+	}
+	
+	@Override
+	public void readEntityFromNBT(NBTTagCompound compound) {
+		super.readEntityFromNBT(compound);
+		
+		if(compound.hasKey("SC_DamageReduce"))
+		{
+			NBTTagList list = compound.getTagList("SC_DamageReduce", 10);
+			for(int i = 0; i < list.tagCount(); ++i)
+			{
+				NBTTagCompound nbt = list.getCompoundTagAt(i);
+				if(nbt.hasKey("DamageType"))
+				{
+					DamageReduce reduce = new DamageReduce(nbt.getString("DamageType"));
+					reduce.setReduce(nbt.getFloat("Reduce"));
+					this.damageList.add(reduce);
+				}
+			}
+		}
+	}
+	
+	@Override
+	public void writeEntityToNBT(NBTTagCompound compound) {
+		super.writeEntityToNBT(compound);
+		
+		if(this.damageList != null)
+		{
+			NBTTagList list = new NBTTagList();
+			for(DamageReduce reduce : this.damageList)
+			{
+				NBTTagCompound nbt = new NBTTagCompound();
+				nbt.setFloat("Reduce", reduce.getTrueReduce());
+				nbt.setString("DamageType", reduce.getDamage());
+				list.appendTag(nbt);
+			}
+			compound.setTag("SC_DamageReduce", list);
+		}
 	}
 	
 	public class DamageReduce
@@ -298,8 +358,18 @@ public class EntityWaterTentacle extends EntityWaterCreature{
 		
 		public float getReduce()
 		{
-			this.reduce *= 0.9;
+			this.reduce *= 0.7;
 			return this.reduce;
+		}
+		
+		public float getTrueReduce()
+		{
+			return this.reduce;
+		}
+		
+		public void setReduce(float re)
+		{
+			this.reduce = re;
 		}
 		
 		public String getDamage()

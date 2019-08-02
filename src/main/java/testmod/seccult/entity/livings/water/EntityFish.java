@@ -3,6 +3,7 @@ package testmod.seccult.entity.livings.water;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import testmod.seccult.init.ModMagicks;
@@ -23,6 +24,12 @@ public class EntityFish extends EntityWaterCreature{
 		this.swingLimit = 15;
 	}
 
+	@Override
+	protected void applyEntityAttributes() {
+		super.applyEntityAttributes();
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
+	}
+	
 	@Override
 	public void waterMoving() 
 	{
@@ -112,7 +119,7 @@ public class EntityFish extends EntityWaterCreature{
 			}
 		}
 	}
-	
+
 	@Override
 	public void GroundThing() 
 	{

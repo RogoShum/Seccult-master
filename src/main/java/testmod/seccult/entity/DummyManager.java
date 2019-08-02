@@ -11,7 +11,7 @@ public class DummyManager
     World world = entity.world;
     EntityDummy dummy = new EntityDummy(world);
     dummy.setEntity(entity);
-    entity.setDead();
+    world.removeEntity(entity);
     world.spawnEntity(dummy);
     return dummy;
   }

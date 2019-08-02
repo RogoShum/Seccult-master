@@ -28,7 +28,6 @@ import testmod.seccult.entity.EntityLmr;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.util.ChunkCoordinates;
 import testmod.seccult.util.MathHelper.MathHelper;
-import testmod.seccult.util.MathHelper.MovingObjectPosition;
 
 public class EntityLight extends EntityMob
 {
@@ -104,9 +103,7 @@ public class EntityLight extends EntityMob
     {
 	   super.onUpdate();
 	   this.onGround = false;
-    	MovingObjectPosition movingObjectPosition = new MovingObjectPosition(this);
         Entity entity = null;	    
-        boolean pass = false;
         double effectiveBoundary = 32.0D;
         double effectiveBoundary2 = 1D;
         List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(effectiveBoundary, effectiveBoundary, effectiveBoundary));
@@ -118,18 +115,11 @@ public class EntityLight extends EntityMob
 	      {
 	        entity = (Entity)list.get(j1);
 	        
-	        if (entity != null)
-	        {
-	          movingObjectPosition = new MovingObjectPosition(entity);
-	        }
+	        if ((this.world.isRemote) || (entity == null) || (entity instanceof EntityItemFrame) || (entity instanceof EntityPainting)) {
+		          continue;
+		    }
+	        
 
-	        if ((this.world.isRemote) || (movingObjectPosition == null) || (movingObjectPosition.entityHit instanceof EntityItemFrame) || (movingObjectPosition.entityHit instanceof EntityPainting)) {
-	          continue;
-	        }
-
-	        pass = false;
-	        if (pass)
-	          continue;
 	              double d5 = entity.getDistanceSq(this.posX, this.posY, this.posZ);
 
 	              if ((16.0D < 0.0D || d5 < 16.0D * 16.0D) && (d4 == -1.0D || d5 < d4))
@@ -150,20 +140,11 @@ public class EntityLight extends EntityMob
 	      {
 	        entity = (Entity)list2.get(j1);
 	        
-	        if (entity != null)
-	        {
-	          movingObjectPosition = new MovingObjectPosition(entity);
-	        }
-
-	        if ((this.world.isRemote) || (movingObjectPosition == null) || (movingObjectPosition.entityHit instanceof EntityItemFrame) || (movingObjectPosition.entityHit instanceof EntityPainting)) {
-	          continue;
-	        }
-
-	        pass = false;
-	        if (pass)
-	          continue;
-	        	Ref(movingObjectPosition);
-	            }      
+	        if ((this.world.isRemote) || (entity == null) || (entity instanceof EntityItemFrame) || (entity instanceof EntityPainting)) {
+		          continue;
+		    }
+	        	Ref(entity);
+	         }      
           }
         
         int xdir = 1;
@@ -327,9 +308,8 @@ public class EntityLight extends EntityMob
     	return (this.world.rayTraceBlocks(new Vec3d(this.posX, this.posY + 0.55D, this.posZ), new Vec3d(pX, pY, pZ), false) == null);
     }
     
-    protected void Ref(MovingObjectPosition movingObjectPosition)
+    protected void Ref(Entity hitEntity)
     {
-      Entity hitEntity = movingObjectPosition.entityHit;
       if(!(hitEntity instanceof EntityLivingBase || hitEntity instanceof EntityItem || hitEntity instanceof EntityLmr))
       {
     	  final double x,y,z;

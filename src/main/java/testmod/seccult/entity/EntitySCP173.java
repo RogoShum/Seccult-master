@@ -8,7 +8,6 @@ import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import testmod.seccult.util.MathHelper.MovingObjectPosition;
 
 public class EntitySCP173 extends EntitySCPBase{
 
@@ -24,11 +23,8 @@ public class EntitySCP173 extends EntitySCPBase{
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		
-		MovingObjectPosition movingObjectPosition = new MovingObjectPosition(this);
+
         Entity entity = null;
-        boolean pass = false;
-        
         List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(32D));
         
         if ((list != null) && (list.size() > 0))
@@ -39,17 +35,9 @@ public class EntitySCP173 extends EntitySCPBase{
 	        
 	        if (entity != null)
 	        {
-	          movingObjectPosition = new MovingObjectPosition(entity);
+	        	Ref(entity);
 	        }
-
-	        if ((this.world.isRemote) || (movingObjectPosition == null) || (movingObjectPosition.entityHit instanceof EntityItemFrame) || (movingObjectPosition.entityHit instanceof EntityPainting)) {
-	          continue;
-	        }
-
-	        pass = false;
-	        if (pass)
-	          continue;
-	        Ref(movingObjectPosition);
+	        
 	       }      
          }
         
@@ -77,8 +65,8 @@ public class EntitySCP173 extends EntitySCPBase{
 		stop = false;
 	}
 	
-	private void Ref(MovingObjectPosition movingObjectPosition) {
-		Entity e = movingObjectPosition.entityHit;
+	private void Ref(Entity entityHit) {
+		Entity e = entityHit;
 		if(!(e instanceof EntityLivingBase))
 			return;
 		EntityLivingBase living = (EntityLivingBase) e;

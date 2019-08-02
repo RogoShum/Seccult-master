@@ -2,6 +2,7 @@ package testmod.seccult.entity.projectile;
 
 import java.util.List;
 
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,7 +17,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import testmod.seccult.items.TRprojectile.TRprojectileID;
-import testmod.seccult.util.MathHelper.MovingObjectPosition;
 
 public class TRprojectileBase extends Entity{
 	private int Speed;
@@ -95,7 +95,7 @@ public class TRprojectileBase extends Entity{
         BlockPos y2 = base.add(0, -0.4, 0);
         BlockPos z1 = base.add(0, 0, 0.4);
         BlockPos z2 = base.add(0, 0, -0.4);
-        if (!this.world.isRemote && (!this.world.isAirBlock(x1) || !this.world.isAirBlock(x2) || !this.world.isAirBlock(y1) || !this.world.isAirBlock(y2) || !this.world.isAirBlock(z1) || !this.world.isAirBlock(z2))) {
+        if (!this.world.isRemote && (this.stick(x1) || this.stick(x2) || this.stick(y1) || this.stick(y2) || this.stick(z1) || this.stick(z2))) {
         	this.isStick = true;
         }
         else
@@ -104,6 +104,11 @@ public class TRprojectileBase extends Entity{
         this.collisionCold--;
         if(this.collisionCold < -100)
         	this.collisionCold = -100;
+	}
+	
+	public boolean stick(BlockPos pos)
+	{
+		return !this.world.isAirBlock(pos) && !(this.world.getBlockState(pos).getBlock() instanceof BlockLiquid);
 	}
 	
 	public void setAttribute(int Damage, int speed, EntityPlayer player, int id) {
@@ -117,7 +122,6 @@ public class TRprojectileBase extends Entity{
 	private void DamageThings() {
 			Entity entity = null;
 	       List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(0.25));
-	       MovingObjectPosition movingObjectPosition = new MovingObjectPosition(this);
 	       if ((list != null) && (list.size() > 0))
 		    {
 		      for (int j1 = 0; j1 < list.size(); ++j1)
@@ -126,15 +130,13 @@ public class TRprojectileBase extends Entity{
 		        
 		        if (entity != null)
 		        {
-		        	 movingObjectPosition = new MovingObjectPosition(entity);
+		        	Ref(entity);
 		        }
-		    	Ref(movingObjectPosition);
 		      }
 		    }
 	}
 	
-	private void Ref(MovingObjectPosition movingObjectPosition) {
-		Entity hitEntity = movingObjectPosition.entityHit;
+	private void Ref(Entity hitEntity) {
 		if(hitEntity instanceof EntityLivingBase)
 		{
 			EntityLivingBase e = (EntityLivingBase) hitEntity;

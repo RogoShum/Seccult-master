@@ -2,6 +2,7 @@ package testmod.seccult.entity.livings.insect;
 
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockLiquid;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
@@ -21,6 +22,12 @@ public class EntityButterfly extends EntityFlyable implements IEntityInsect{
 		this.swingLimit = 45;
 	}
 
+	@Override
+	protected void applyEntityAttributes() {
+		super.applyEntityAttributes();
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D);
+	}
+	
 	@Override
 	public void movingMode() {
         if(this.posY > dropLine && this.ticksExisted % 20 == 0)

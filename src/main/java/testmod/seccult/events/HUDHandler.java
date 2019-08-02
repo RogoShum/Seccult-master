@@ -30,7 +30,7 @@ public class HUDHandler {
     protected Minecraft mc = Minecraft.getMinecraft();
     protected HUDScreen gui = new HUDScreen();
     protected PlayerData data;
-    private OceanHelmetFX laser;
+    //private OceanHelmetFX laser;
     
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
@@ -92,7 +92,7 @@ public class HUDHandler {
     	int air = 0;
     	if(OceanArmor.hasArmorSetItem(player))
     	{
-    		OceanHelmet(player.world, player.posX,  player.posY,  player.posZ, player);
+    		//OceanHelmet(player.world, player.posX,  player.posY,  player.posZ, player);
     		ItemStack item = player.inventory.armorInventory.get(0);
     		OceanArmor armor = (OceanArmor) item.getItem();
     		air = armor.getAir();
@@ -121,14 +121,14 @@ public class HUDHandler {
         	GlStateManager.popMatrix();
     		}
     	}
-    	else if(laser != null)
+    	/*else if(laser != null)
     	{
     		laser.setExpired();
     		laser = null;
-    	}
+    	}*/
     }
 	
-	private void OceanHelmet(World world, double xCoordIn, double yCoordIn, double zCoordIn, EntityPlayer player)
+	/*private void OceanHelmet(World world, double xCoordIn, double yCoordIn, double zCoordIn, EntityPlayer player)
 	{
 		if(laser == null || player.ticksExisted % 1200 == 0)
 		{
@@ -140,7 +140,7 @@ public class HUDHandler {
 			this.laser = ocean;
 			
 		}
-	}
+	}*/
 	
     public FontRenderer getFontRenderer()
     {

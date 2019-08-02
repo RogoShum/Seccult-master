@@ -11,6 +11,7 @@ public class ItemBase extends Item implements registerModel
 {
 	ResourceLocation TEOWres = new ResourceLocation("seccult:trueeaterofworlds");
 	ResourceLocation EOWres = new ResourceLocation("seccult:eaterofworlds");
+	ResourceLocation LightThing = new ResourceLocation("seccult:lightingthing");
 	ResourceLocation Worm = new ResourceLocation("seccult:worm");
 	ResourceLocation BVH = new ResourceLocation("seccult:blackvelvethell");
 	ResourceLocation SCP173 = new ResourceLocation("seccult:scp173");

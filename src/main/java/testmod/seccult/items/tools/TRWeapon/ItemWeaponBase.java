@@ -21,7 +21,6 @@ import testmod.seccult.entity.EntityLaserBeamBase;
 import testmod.seccult.entity.projectile.EntitySolarEruption;
 import testmod.seccult.entity.projectile.TRprojectileBase;
 import testmod.seccult.items.ItemBase;
-import testmod.seccult.util.MathHelper.MathHelper;
 
 public class ItemWeaponBase extends ItemBase{
 	private boolean isMelee;

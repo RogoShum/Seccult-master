@@ -10,20 +10,6 @@
 	},
 	"elements": [
 		{
-			"name": "magickbar",
-			"from": [7.6, 11.5, 7.9],
-			"to": [8.4, 17.5, 8.7],
-			"rotation": {"angle": 0, "axis": "x", "origin": [7.6, 12.5, 5.9]},
-			"faces": {
-				"north": {"uv": [0, 0, 1, 1], "texture": "#1", "tintindex": 1},
-				"east": {"uv": [0, 0, 1, 1], "texture": "#1", "tintindex": 1},
-				"south": {"uv": [0, 0, 1, 1], "texture": "#1", "tintindex": 1},
-				"west": {"uv": [0, 0, 1, 1], "texture": "#1", "tintindex": 1},
-				"up": {"uv": [0, 0, 1, 1], "texture": "#1", "tintindex": 1},
-				"down": {"uv": [0, 0, 1, 1], "texture": "#1", "tintindex": 1}
-			}
-		},
-		{
 			"name": "magicolor",
 			"from": [14, 20.7, 7.9],
 			"to": [14.7, 21.4, 8.6],

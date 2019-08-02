@@ -5,8 +5,6 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
@@ -19,7 +17,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.client.FX.LightFX;
 import testmod.seccult.entity.livings.EntityStand;
-import testmod.seccult.util.MathHelper.MovingObjectPosition;
 
 public class EntityLmr extends Entity
 {
@@ -116,33 +113,20 @@ public class EntityLmr extends Entity
     }
 
     private void isLaser() {
-    	MovingObjectPosition movingObjectPosition = new MovingObjectPosition(this);
         Entity entity = null;
-        boolean pass = false;
-        
+
         List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(0.5));
-        
-        if ((list != null) && (list.size() > 0))
-	    {
+
 	      for (int j1 = 0; j1 < list.size(); ++j1)
 	      {
 	        entity = (Entity)list.get(j1);
 	        
 	        if (entity != null)
 	        {
-	          movingObjectPosition = new MovingObjectPosition(entity);
+	        	Ref(entity);
 	        }
-
-	        if ((this.world.isRemote) || (movingObjectPosition == null) || (movingObjectPosition.entityHit instanceof EntityItemFrame) || (movingObjectPosition.entityHit instanceof EntityPainting)) {
-	          continue;
-	        }
-
-	        pass = false;
-	        if (pass)
-	          continue;
-	        Ref(movingObjectPosition, true);
-	            }      
-         }
+	        
+	      }      
         
         if(this.ticksExisted > 20) {
         	this.setDead();
@@ -161,9 +145,7 @@ public class EntityLmr extends Entity
     protected void notLaser() {
     	if (this.world.isRemote || (this.shootingEntity == null || !this.shootingEntity.isDead) && this.world.isBlockLoaded(new BlockPos(this)))
         {	
-            MovingObjectPosition movingObjectPosition = new MovingObjectPosition(this);
             Entity entity = null;
-            boolean pass = false;
             
             ++this.ticksInAir;
             
@@ -190,28 +172,18 @@ public class EntityLmr extends Entity
             
             this.setPosition(this.posX, this.posY, this.posZ);            
             List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(0.5));
-            
-            if ((list != null) && (list.size() > 0))
-    	    {
+
     	      for (int j1 = 0; j1 < list.size(); ++j1)
     	      {
     	        entity = (Entity)list.get(j1);
     	        
     	        if (entity != null)
     	        {
-    	          movingObjectPosition = new MovingObjectPosition(entity);
+    	        	Ref(entity);
     	        }
+    	       
+    	     }      
 
-    	        if ((this.world.isRemote) || (movingObjectPosition == null) || (movingObjectPosition.entityHit instanceof EntityItemFrame) || (movingObjectPosition.entityHit instanceof EntityPainting)) {
-    	          continue;
-    	        }
-
-    	        pass = false;
-    	        if (pass)
-    	          continue;
-    	        Ref(movingObjectPosition, true);
-    	            }      
-              }
             if(this.ticksExisted > 200) {
             	this.setDead();
             }
@@ -227,9 +199,8 @@ public class EntityLmr extends Entity
         	Minecraft.getMinecraft().effectRenderer.addEffect(new LightFX(this.world, this.lastTickPosX, this.lastTickPosY, this.lastTickPosZ, this.accelerationX, this.accelerationY, this.accelerationZ));
     }
     
-    protected void Ref(MovingObjectPosition movingObjectPosition, boolean todead)
+    protected void Ref(Entity hitEntity)
     {
-      Entity hitEntity = movingObjectPosition.entityHit;
       Entity shooter = this.shootingEntity;
       if(!(hitEntity == shooter) && hitEntity instanceof EntityLivingBase)
       {

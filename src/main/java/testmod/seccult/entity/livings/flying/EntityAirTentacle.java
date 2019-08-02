@@ -9,10 +9,13 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import testmod.seccult.entity.livings.water.EntityWaterCreature;
+import testmod.seccult.entity.livings.water.EntityRockShellLeviathan.DamageReduce;
 
 public class EntityAirTentacle extends EntityFlyable{
 
@@ -190,6 +193,44 @@ public class EntityAirTentacle extends EntityFlyable{
 		return super.attackEntityFrom(source, amount);
 	}
 	
+	@Override
+	public void readEntityFromNBT(NBTTagCompound compound) {
+		super.readEntityFromNBT(compound);
+		
+		if(compound.hasKey("SC_DamageReduce"))
+		{
+			NBTTagList list = compound.getTagList("SC_DamageReduce", 10);
+			for(int i = 0; i < list.tagCount(); ++i)
+			{
+				NBTTagCompound nbt = list.getCompoundTagAt(i);
+				if(nbt.hasKey("DamageType"))
+				{
+					DamageReduce reduce = new DamageReduce(nbt.getString("DamageType"));
+					reduce.setReduce(nbt.getFloat("Reduce"));
+					this.damageList.add(reduce);
+				}
+			}
+		}
+	}
+	
+	@Override
+	public void writeEntityToNBT(NBTTagCompound compound) {
+		super.writeEntityToNBT(compound);
+		
+		if(this.damageList != null)
+		{
+			NBTTagList list = new NBTTagList();
+			for(DamageReduce reduce : this.damageList)
+			{
+				NBTTagCompound nbt = new NBTTagCompound();
+				nbt.setFloat("Reduce", reduce.getTrueReduce());
+				nbt.setString("DamageType", reduce.getDamage());
+				list.appendTag(nbt);
+			}
+			compound.setTag("SC_DamageReduce", list);
+		}
+	}
+	
 	public class DamageReduce
 	{
 		private String damage;
@@ -202,8 +243,18 @@ public class EntityAirTentacle extends EntityFlyable{
 		
 		public float getReduce()
 		{
-			this.reduce *= 0.9;
+			this.reduce *= 0.7;
 			return this.reduce;
+		}
+		
+		public float getTrueReduce()
+		{
+			return this.reduce;
+		}
+		
+		public void setReduce(float re)
+		{
+			this.reduce = re;
 		}
 		
 		public String getDamage()

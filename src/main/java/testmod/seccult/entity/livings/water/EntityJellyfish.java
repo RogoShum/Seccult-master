@@ -1,5 +1,6 @@
 package testmod.seccult.entity.livings.water;
 
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -14,6 +15,12 @@ public class EntityJellyfish extends EntitySquid{
 		float size = rand.nextFloat();
 		if(size > 0.6F) size = 0.6F;
 		this.setSize(size, size);
+	}
+	
+	@Override
+	protected void applyEntityAttributes() {
+		super.applyEntityAttributes();
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
 	}
 	
 	@Override
@@ -44,7 +51,7 @@ public class EntityJellyfish extends EntitySquid{
     {
         return 15728880;
     }
-
+    
     /**
      * Gets how bright this entity is.
      */

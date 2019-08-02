@@ -11,6 +11,7 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
@@ -38,6 +39,7 @@ import testmod.seccult.magick.MagickCompiler;
 import testmod.seccult.magick.active.Magick;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
+import testmod.seccult.network.NetworkPlayerWandData;
 
 public class ItemWand extends ItemBase{
 	public static final ResourceLocation wand_prefix = new ResourceLocation(Seccult.MODID, "wandstyle");
@@ -153,7 +155,6 @@ public class ItemWand extends ItemBase{
 	            int GUIid = GuiElementLoader.GUI_SpellSelect;
 	            ((EntityPlayer) entityIn).openGui(Seccult.instance, GUIid, worldIn, (int)entityIn.posX, (int)entityIn.posY, (int)entityIn.posZ);
 			}
-			if(player == null) return;
 			
 			PlayerData data = PlayerDataHandler.get(player);
 			MagickList = data.getAllMagick();
@@ -178,8 +179,12 @@ public class ItemWand extends ItemBase{
 		}
 		if(entityIn instanceof EntityPlayer && (!hasUUID || (hasUUID && id != entityIn.getUniqueID())))
 		{
+			
 			EntityPlayer player = (EntityPlayer) entityIn;
+			
 			PlayerData data = PlayerDataHandler.get(player);
+			if(!worldIn.isRemote)
+			NetworkHandler.getNetwork().sendTo(new NetworkPlayerWandData(data.getColor2(), data.getColor3(), data.getColor4(), data.getWandStyle()), (EntityPlayerMP) player); 
 			setWandStyle(stack, data.getColor2(), data.getColor3(), data.getColor4());
 			setWandS(stack, data.getWandStyle());
 			setLastPlayerUUID(stack, player.getUniqueID());

@@ -38,5 +38,11 @@ public class RenderHandler
 		RenderingRegistry.registerEntityRenderingHandler(EntityBird.class, m -> new RenderBird(m));
 		RenderingRegistry.registerEntityRenderingHandler(EntityAirTentacle.class, m -> new RenderAirTentacle(m));
 		RenderingRegistry.registerEntityRenderingHandler(EntityWaterTentacle.class, m -> new RenderWaterTentacle(m));
+		RenderingRegistry.registerEntityRenderingHandler(EntityBoneShark.class, m -> new RenderBoneShark(m));
+		RenderingRegistry.registerEntityRenderingHandler(EntityLightingThing.class, m -> new RenderLightingThing(m));
+		RenderingRegistry.registerEntityRenderingHandler(EntityRockShellLeviathan.class, m -> new RenderRockShell(m));
+		RenderingRegistry.registerEntityRenderingHandler(EntityMagickBubble.class, m -> new RenderMagickBubble(m));
+		RenderingRegistry.registerEntityRenderingHandler(EntityFrozenFX.class, m -> new RenderFrozenFX(m));
+		RenderingRegistry.registerEntityRenderingHandler(EntityAdvanceLaser.class, m -> new RenderAdvanceLaser(m));
 	}
 }
