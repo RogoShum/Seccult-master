@@ -31,9 +31,12 @@ public class RendererHelper
 		return location.toString();
 	}
 	
-	public static String getTexture(@SuppressWarnings("rawtypes") Render render2, Entity entity) 
+	public static String getTexture(RenderLivingBase<EntityLivingBase> render2, EntityLivingBase entity) 
 	{
 		ResourceLocation location = render2.getEntityTexture(entity);
-		return location.toString();
+		if(location != null)
+			return location.toString();
+		else
+			return null;
 	}
 }

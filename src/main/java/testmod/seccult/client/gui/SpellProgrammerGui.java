@@ -67,20 +67,19 @@ public class SpellProgrammerGui extends GuiScreen
     public void initGui() {
     	super.initGui();
     	//this.buttonList.clear();
-    	//添加小面板的按钮
+
     	PanelButton.add(BUTTON_UP_A);
     	PanelButton.add(BUTTON_UP_B);
     	PanelButton.add(BUTTON_DOWN_A);
     	PanelButton.add(BUTTON_DOWN_B);
     	PanelButton.add(BUTTON_FORK);
-    	//设定一下主要面板的尺寸
+
     	xSize = 172;
     	ySize = 172;
-    	//自动计算屏幕正中心的位置
+
     	offsetX = (this.width - this.xSize) / 2;
     	offsetY = (this.height - this.ySize) / 2;
-    	//添加新按钮
-    	//同时对按钮的显示功能进行覆写
+
     	this.buttonList.add(new GuiButton(BUTTON_CONFIRM, offsetX + 195, offsetY + 6, 16, 16, "")
     	{
     		@Override
@@ -92,8 +91,6 @@ public class SpellProgrammerGui extends GuiScreen
                     int x = mouseX - this.x, y = mouseY - this.y;
                     this.drawTexturedModalRect(offsetX + 192, offsetY + 4, 0, ySize + 20, 21, 21);
                     if(canProgeammer)
-                    	//判断式里是指鼠标在按钮的坐标范围内
-                    	//指鼠标移上去
                     	if (x >= 0 && y >= 0 && x < this.width && y < this.height)
                     	{
                     		this.drawTexturedModalRect(this.x, this.y, 48, ySize + 4, this.width, this.height);
@@ -199,7 +196,7 @@ public class SpellProgrammerGui extends GuiScreen
 		down_a.enabled = false;
 		down_b.enabled = false;
 		fork.enabled = false;
-		//这里把小面板的按钮做了个整合
+
 		PanelButtonList.add(up_a);
 		PanelButtonList.add(up_b);
 		PanelButtonList.add(down_a);
@@ -207,23 +204,18 @@ public class SpellProgrammerGui extends GuiScreen
 		PanelButtonList.add(fork);
 		
 		buttonList.addAll(PanelButtonList);
-		//这个函数块对左侧面板里的按钮进行了坐标计算
-		//然后添加按钮
+
     	addMagickButton();
-    	//暂时还没啥用
     	updateScreen();
     }
     
-    
-    //鼠标点击后调用
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
     	super.mouseClicked(mouseX, mouseY, mouseButton);
     	clickedSpellButton(mouseX, mouseY, 1);
     	realeaseClicked(mouseX, mouseY, 1);
     }
-    
-    //这个是更新当前选中的按钮
+
     private void clickedSpellButton(int mouseX, int mouseY, int state)
     {
 
@@ -273,7 +265,6 @@ public class SpellProgrammerGui extends GuiScreen
 		return true;
 	}
 
-	//鼠标松开后调用
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int state) {
     	super.mouseReleased(mouseX, mouseY, state);
@@ -281,7 +272,6 @@ public class SpellProgrammerGui extends GuiScreen
     	clickedSpellButton(mouseX, mouseY, 2);
     }
     
-    //这个是往其他面板增加定制按钮用的
     private void realeaseClicked(int mouseX, int mouseY, int state)
     {
     	if(clicked != null) 
@@ -410,8 +400,7 @@ public class SpellProgrammerGui extends GuiScreen
         }
         handleCanBeCompile();
     }
-    
-    //关闭小面板
+
 	private void closePanel() {
 		
 		PanelOpen = false;
@@ -444,7 +433,6 @@ public class SpellProgrammerGui extends GuiScreen
 		}
 	}
 
-	//打开小面板
 	private void openPanel()
 	{
 		if(PanelOpen)
@@ -486,8 +474,7 @@ public class SpellProgrammerGui extends GuiScreen
 			}
 		}
 	}
-    
-	//→ →暂时还没用
+
     private void handleCanBeCompile()
     {
     	if(this.SelectedButtonList.size() < 1)
@@ -515,10 +502,7 @@ public class SpellProgrammerGui extends GuiScreen
         
         canProgeammer = true;
     }
-    
-    //按过按钮之后
-    //会调用这个
-    //可以给按钮添加动作
+
     @Override
     protected void actionPerformed(GuiButton button) throws IOException
     {

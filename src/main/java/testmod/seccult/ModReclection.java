@@ -1,8 +1,12 @@
 package testmod.seccult;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
+import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.gen.layer.GenLayer;
 import testmod.seccult.api.PlayerDataHandler.PlayerData;
@@ -42,5 +46,13 @@ public class ModReclection {
 		Field ManaValue = PlayerData.class.getDeclaredField("ManaValue");
 		ManaValue.setAccessible(true);
 		ManaValue.set(data, vaule);
+	}
+	
+	public static void renderLayer(RenderLivingBase<EntityLivingBase> renderer, EntityLivingBase living, float limbSwing, float limbSwingAmount,
+			float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
+	{
+		Method layer = RenderLivingBase.class.getDeclaredMethod("renderLayers", EntityLivingBase.class, float.class, float.class, float.class, float.class, float.class, float.class, float.class);
+		layer.setAccessible(true);
+		layer.invoke(renderer, living, limbSwing, limbSwingAmount, 1, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 	}
 }

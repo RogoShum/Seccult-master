@@ -5,14 +5,15 @@ import testmod.seccult.magick.magickState.StateManager;
 
 public class WhiteAlbumMagick extends Magick{
 
-	public WhiteAlbumMagick(String nbtName, boolean hasDetailedText) {
-		super(nbtName, hasDetailedText);
+	public WhiteAlbumMagick(String nbtName, boolean hasDetailedText, float cost1, float cost2) 
+	{
+		super(nbtName, hasDetailedText, cost1, cost2);
 	}
 
 	@Override
 	void toEntity() 
 	{
-		StateManager.setState(entity, StateManager.WhiteAlbum, 2 * (int)strengh);
+		StateManager.setState(entity, StateManager.WhiteAlbum, (int)(strengh), (int)attribute);
 	}
 
 	@Override

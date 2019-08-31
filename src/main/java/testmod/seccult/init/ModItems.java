@@ -81,7 +81,7 @@ public class ModItems
 	//Armor
 	public static final Item SPA_HELMET = new MagickHelmet("spa_helmet", ARMOR_MATERIAL_SPA, 1, EntityEquipmentSlot.HEAD);
 	public static final Item SPA_CHEST = new MagickChest("spa_chest", ARMOR_MATERIAL_SPA, 1, EntityEquipmentSlot.CHEST);
-	public static final Item SPA_LEGGINGS = new MagickLegs("spa_leggings", ARMOR_MATERIAL_SPA, 2, EntityEquipmentSlot.LEGS);
+	public static final Item SPA_LEGGINGS = new MagickLegs("spa_leggings", ARMOR_MATERIAL_SPA, 1, EntityEquipmentSlot.LEGS);
 	public static final Item SPA_BOOTS = new MagickBoots("spa_boots", ARMOR_MATERIAL_SPA, 1, EntityEquipmentSlot.FEET);
 	
 	public static final Item RECOVERY_HELMET = new RecoveryHelmet();
@@ -89,7 +89,7 @@ public class ModItems
 	
 	public static final Item OCEAN_HELMET = new OceanArmor("ocean_helmet", ARMOR_MATERIAL_SPA, 1, EntityEquipmentSlot.HEAD);
 	public static final Item OCEAN_CHEST = new OceanArmor("ocean_chest", ARMOR_MATERIAL_SPA, 1, EntityEquipmentSlot.CHEST);
-	public static final Item OCEAN_LEGGINGS = new OceanArmor("ocean_leggings", ARMOR_MATERIAL_SPA, 2, EntityEquipmentSlot.LEGS);
+	public static final Item OCEAN_LEGGINGS = new OceanArmor("ocean_leggings", ARMOR_MATERIAL_SPA, 1, EntityEquipmentSlot.LEGS);
 	public static final Item OCEAN_BOOTS = new OceanArmor("ocean_boots", ARMOR_MATERIAL_SPA, 1, EntityEquipmentSlot.FEET);
 	
 	//Accessories

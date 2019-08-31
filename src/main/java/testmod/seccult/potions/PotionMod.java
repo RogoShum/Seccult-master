@@ -29,7 +29,7 @@ public class PotionMod extends Potion {
 		return hasEffect(entity, this);
 	}
 
-	public boolean hasEffect(EntityLivingBase entity, Potion potion) {
+	public static boolean hasEffect(EntityLivingBase entity, Potion potion) {
 		return entity.getActivePotionEffect(potion) != null;
 	}
 

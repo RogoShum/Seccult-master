@@ -24,9 +24,10 @@ public class ModMagicks {
 	public static final String CopyMagick = "copy";
 	public static final String TheWorldMagick = "theworld";
 	public static final String KraftWorkMagick = "kraftwork";
-	public static final String FloatingMagick = "Floating";
-	public static final String InScaleMagick = "InScale";
-	public static final String ArrowMagick = "Arrow";
+	public static final String FloatingMagick = "floating";
+	public static final String InScaleMagick = "inscale";
+	public static final String ArrowMagick = "arrow";
+	public static final String AllSeeMagick = "allsee";
 	
 	public static final int DamageMagickColor = 0xDC143C;
 	public static final int FlameMagickColor = 0xFF0000;
@@ -43,6 +44,7 @@ public class ModMagicks {
 	public static final int FloatingMagickColor = 0xFFFACD;
 	public static final int InScaleMagickColor = 0xFFFACD;
 	public static final int ArrowMagickColor = 0xFFFACD;
+	public static final int AllSeeMagickColor = 0xFFFACD;
 	
 	@SuppressWarnings("unused")
 	private static Magick Damage;
@@ -74,6 +76,8 @@ public class ModMagicks {
 	private static Magick InScale;
 	@SuppressWarnings("unused")
 	private static Magick Arrow;
+	@SuppressWarnings("unused")
+	private static Magick AllSee;
 	
 
 	private static Set<Magick> magicks = new HashSet<>();
@@ -82,21 +86,22 @@ public class ModMagicks {
 	public static void init()
 	{
 		ImplementationHandler.init();
-		Damage = new DamageMagick(DamageMagick, true);
-		Flame = new FlameMagick(FlameMagick, true);
-		Frozen = new FrozenMagick(FrozenMagick, true);
-		noClip = new NoClipMagick(noClipMagick, true);
-		LoseMind = new LostMindMagick(LoseMindMagick, true);
-		Move = new MoveMagick(MoveMagick, true);
-		WhiteAlbum = new WhiteAlbumMagick(WhiteAlbumMagick, true);
-		GratefulDead = new GratefulDeadMagick(GratefulDeadMagick, true);
-		Teleport = new TeleportMagick(TeleportMagick, true);
-		Copy = new CopyMagick(CopyMagick, true);
-		TheWorld = new TheWorldMagick(TheWorldMagick, true);
-		KraftWork = new KraftWorkMagick(KraftWorkMagick, true);
-		Floating = new FloatingMagick(FloatingMagick, true);
-		InScale = new IncreaseScaleMagick(InScaleMagick, true);
-		Arrow = new ArrowClowCardMagick(ArrowMagick, true);
+		Damage = new DamageMagick(DamageMagick, true, 5, 1.2F);
+		Flame = new FlameMagick(FlameMagick, true, 2, 1);
+		Frozen = new FrozenMagick(FrozenMagick, true, 2, 1);
+		noClip = new NoClipMagick(noClipMagick, true, 50, 0);
+		LoseMind = new LostMindMagick(LoseMindMagick, true, 35, 2);
+		Move = new MoveMagick(MoveMagick, true, 10, 1);
+		WhiteAlbum = new WhiteAlbumMagick(WhiteAlbumMagick, true, 30, 0);
+		GratefulDead = new GratefulDeadMagick(GratefulDeadMagick, true, 10, 2);
+		Teleport = new TeleportMagick(TeleportMagick, true, 100, 1.3F);
+		Copy = new CopyMagick(CopyMagick, true, 500, 1.2F);
+		TheWorld = new TheWorldMagick(TheWorldMagick, true, 500, 2F);
+		KraftWork = new KraftWorkMagick(KraftWorkMagick, true, 60, 3F);
+		Floating = new FloatingMagick(FloatingMagick, true, 20, 1F);
+		InScale = new IncreaseScaleMagick(InScaleMagick, true, 20, 1F);
+		Arrow = new ArrowClowCardMagick(ArrowMagick, true, 30, 1.5F);
+		AllSee = new AllSeeMagick(AllSeeMagick, true, 120, 2F);
 	}
 
 	public static void addMagick(Magick magick) {
@@ -169,7 +174,6 @@ public class ModMagicks {
 		{
 			newList.add(MagickList.get(i));
 		}
-		
 		return newList;
 	}
 }

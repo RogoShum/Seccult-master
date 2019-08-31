@@ -5,8 +5,9 @@ import testmod.seccult.init.ModMagicks;
 
 public class ArrowClowCardMagick extends Magick{
 
-	public ArrowClowCardMagick(String nbtName, boolean hasDetailedText) {
-		super(nbtName, hasDetailedText);
+	public ArrowClowCardMagick(String nbtName, boolean hasDetailedText, float cost1, float cost2) 
+	{
+		super(nbtName, hasDetailedText, cost1, cost2);
 	}
 
 	@Override

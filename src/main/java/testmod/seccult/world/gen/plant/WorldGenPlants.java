@@ -21,9 +21,9 @@ public class WorldGenPlants extends WorldGenerator{
 	public boolean generate(World world, Random rand, BlockPos position) {
 		 if(world.isRemote)
 	        	return false;
-		for (int i = 0; i < 64; i++)
+		for (int i = 0; i < 40; i++)
 		{
-			BlockPos blockpos = position.add(rand.nextInt(8) - rand.nextInt(8), rand.nextInt(4) - rand.nextInt(4), rand.nextInt(8) - rand.nextInt(8));
+			BlockPos blockpos = position.add(rand.nextInt(6) - rand.nextInt(6), rand.nextInt(4) - rand.nextInt(4), rand.nextInt(6) - rand.nextInt(6));
 			
 			if(world.isAirBlock(blockpos) && blockpos.getY() < 255 && ModBlocks.FLOWER.canBlockStay(world, blockpos, ModBlocks.FLOWER.getDefaultState()))
 				world.setBlockState(blockpos, ModBlocks.FLOWER.getDefaultState().withProperty(BlockPlant.VARIANT, TYPE));

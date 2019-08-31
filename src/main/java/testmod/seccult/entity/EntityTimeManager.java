@@ -107,7 +107,7 @@ public class EntityTimeManager extends Entity{
 			if(livings != null && (livings.size() > 0)) {
 			for (int a = 0; a < livings.size(); ++a) {
 				EntityLiving d = livings.get(a);
-				StateManager.setState(d, StateManager.NO_AI, 10);
+				StateManager.setState(d, StateManager.NO_AI, 10, 1);
 			}
 			}
 			

@@ -27,13 +27,19 @@ public abstract class Magick implements Cloneable{
 	protected boolean isSucceed;
 	protected float strengh;
 	protected float attribute;
+	protected float cost;
+	
+	public float strenghCost;
+	public float attributeCost;
 	
 	protected int color;
 	protected float RGB[] = new float[3]; 
 	
-	public Magick(String nbtName, boolean hasDetailedText) {
+	public Magick(String nbtName, boolean hasDetailedText, float cost1, float cost2) {
 		this.nbtName = nbtName;
 		this.hasDetailedText = hasDetailedText;
+		this.strenghCost = cost1;
+		this.attributeCost = cost2;
 		ModMagicks.addMagick(this);
 		
 			RGB[0] = (float)(getColor() >> 16 & 255) / 255.0F;
@@ -43,18 +49,25 @@ public abstract class Magick implements Cloneable{
 	
 	public void setMagickAttribute(Entity Iplayer, Entity e, BlockPos goal, float power, float attribute)
 	{
+		this.setMagickAttribute(Iplayer, e, goal, power, attribute, 0);
+	}
+	
+	public void setMagickAttribute(Entity Iplayer, Entity e, BlockPos goal, float power, float attribute, float cost)
+	{
 		isSucceed = true;
 		this.player = Iplayer;
 		block = goal;
 		entity = e;
 
-		strengh = power;
+		this.strengh = power;
 		this.attribute = attribute;
+		this.cost = cost;
 		
 		if(this.player instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) this.player;
 			
 		data = PlayerDataHandler.get(player);
+		
 		if(strengh > data.getManaStrengh() && !player.isCreative())
 		{
 			plo += strengh - data.getManaStrengh();
@@ -67,11 +80,16 @@ public abstract class Magick implements Cloneable{
 			isSucceed = false;
 		}
 		
-		if(isSucceed && data.getMana() > strengh)
+		if(cost == 0)
+			isSucceed = true;
+		
+		if(isSucceed && data.getMana() > cost)
+			doMagick();
+		else if(player.isCreative())
 			doMagick();
 		else if(!isSucceed)
 			failedToDoMagick(plo / 10);
-		else if(data.getMana() > strengh)
+		else if(data.getMana() > cost)
 			createFailedFX();
 		}
 		else
@@ -109,7 +127,7 @@ public abstract class Magick implements Cloneable{
 	
 	private void doExplosion(float r)
 	{
-		player.world.createExplosion(null, player.posX, player.posY, player.posZ, r, true);
+		player.world.createExplosion(null, player.posX, player.posY, player.posZ, r, false);
 	}
 	
 	protected void doMagick()
@@ -122,6 +140,7 @@ public abstract class Magick implements Cloneable{
 		if(data == null)
 			return;
 		reduceMana();
+		if(!data.player.isCreative())
 		data.addCoolDown((float)Math.sqrt(strengh) * 10);
 	}
 	
@@ -140,7 +159,7 @@ public abstract class Magick implements Cloneable{
 	
 	protected void reduceMana()
 	{
-		data.reduceMana(strengh);
+		data.reduceMana(cost);
 	}
 	
     @Override  

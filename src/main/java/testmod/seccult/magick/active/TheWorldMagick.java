@@ -9,8 +9,9 @@ import testmod.seccult.network.NetworkHandler;
 
 public class TheWorldMagick extends Magick{
 
-	public TheWorldMagick(String nbtName, boolean hasDetailedText) {
-		super(nbtName, hasDetailedText);
+	public TheWorldMagick(String nbtName, boolean hasDetailedText, float cost1, float cost2) 
+	{
+		super(nbtName, hasDetailedText, cost1, cost2);
 	}
 
 	@Override
@@ -27,7 +28,7 @@ public class TheWorldMagick extends Magick{
 		else
 		{
 			MagickFX();
-			StateManager.setState(entity, StateManager.FROZEN, 20 * (int)strengh);
+			StateManager.setState(entity, StateManager.FROZEN, (int)(strengh), (int)attribute);
 		}
 	}
 

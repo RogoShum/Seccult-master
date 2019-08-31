@@ -210,19 +210,24 @@ public class MagickCompiler {
 			}
     		}
     		
-			if(magick != null && block != null && cycle && tick > 15)
-			{
-				for(int x = 0; x < block.size(); x++)
-					magick.setMagickAttribute(e, null, block.get(x), magickpower, magickattribute);
-				done = true;
-			}
+    		if(magick != null && cycle && tick > 15) {
+    			float cost = magick.strenghCost * magickpower;
+    			cost = cost * (magickattribute + 1);
 
-			if(magick != null && entity != null && cycle && tick > 15)
-			{
-				for(int x = 0; x < entity.size(); x++)
-					magick.setMagickAttribute(e, entity.get(x), null, magickpower, magickattribute);
-				done = true;
-			}
+    			if(block != null)
+				{
+					for(int x = 0; x < block.size(); x++)
+					magick.setMagickAttribute(e, null, block.get(x), magickpower, magickattribute, cost);
+					done = true;
+				}
+ 
+				if(entity != null)
+				{
+					for(int x = 0; x < entity.size(); x++)
+					magick.setMagickAttribute(e, entity.get(x), null, magickpower, magickattribute, cost);
+					done = true;
+				}
+    		}
 	}
 	
 	public Entity getEntityHit()

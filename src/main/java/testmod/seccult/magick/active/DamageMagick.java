@@ -12,9 +12,9 @@ import testmod.seccult.network.NetworkHandler;
 public class DamageMagick extends Magick{
 	protected DamageSource damage;
 	
-	public DamageMagick(String nbtName, boolean hasDetailedText) 
+	public DamageMagick(String nbtName, boolean hasDetailedText, float cost1, float cost2) 
 	{
-		super(nbtName, hasDetailedText);
+		super(nbtName, hasDetailedText, cost1, cost2);
 	}
 	
 	@Override

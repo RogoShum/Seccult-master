@@ -11,9 +11,9 @@ import testmod.seccult.magick.magickState.StateManager;
 public class FrozenMagick extends Magick{
 	protected DamageSource damage;
 	
-	public FrozenMagick(String nbtName, boolean hasDetailedText) 
+	public FrozenMagick(String nbtName, boolean hasDetailedText, float cost1, float cost2) 
 	{
-		super(nbtName, hasDetailedText);
+		super(nbtName, hasDetailedText, cost1, cost2);
 	}
 	
 	@Override
@@ -44,7 +44,7 @@ public class FrozenMagick extends Magick{
 		{
 			MagickFX();
 			damage(player);
-			StateManager.setState(entity, StateManager.FROZEN, (int)strengh);
+			StateManager.setState(entity, StateManager.FROZEN, (int)(strengh), (int)attribute);
 			EntityFrozenFX fx = new EntityFrozenFX(entity.world);
 			fx.setPosition(entity.posX, entity.posY, entity.posZ);
 			fx.setOwner(entity);

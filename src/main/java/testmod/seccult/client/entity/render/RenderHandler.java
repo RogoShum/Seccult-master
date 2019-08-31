@@ -44,5 +44,6 @@ public class RenderHandler
 		RenderingRegistry.registerEntityRenderingHandler(EntityMagickBubble.class, m -> new RenderMagickBubble(m));
 		RenderingRegistry.registerEntityRenderingHandler(EntityFrozenFX.class, m -> new RenderFrozenFX(m));
 		RenderingRegistry.registerEntityRenderingHandler(EntityAdvanceLaser.class, m -> new RenderAdvanceLaser(m));
+		RenderingRegistry.registerEntityRenderingHandler(EntitySpirit.class, m -> new RenderSpirit(m));
 	}
 }

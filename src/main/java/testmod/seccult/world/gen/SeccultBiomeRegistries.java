@@ -13,16 +13,28 @@ import testmod.seccult.world.gen.biome.BiomeManaMushroom;
 import testmod.seccult.world.gen.biome.BiomeManaOcean;
 
 public class SeccultBiomeRegistries {
-	public static Biome mana_froest_Mountain = new BiomeManaForest(BiomeManaForest.Type.NORMAL, new BiomeProperties("Mana_Forest_Mountain").setTemperature(0.95f).setRainfall(1.0f).setWaterColor(1)).setRegistryName(Seccult.MODID, "Mana_Forest_Mountain");
-	public static Biome mana_froest_MACICAL = new BiomeManaForest(BiomeManaForest.Type.Magical, new BiomeProperties("Mana_Forest_Magical").setTemperature(0.95f).setRainfall(1.0f).setWaterColor(1)).setRegistryName(Seccult.MODID, "Mana_Forest_Magical");
-	public static Biome mana_froest_FLOWER = new BiomeManaForest(BiomeManaForest.Type.FLOWER, new BiomeProperties("Mana_Forest_Flower").setTemperature(0.95f).setRainfall(1.0f).setWaterColor(1)).setRegistryName(Seccult.MODID, "Mana_Forest_Flower");
-	public static Biome mana_froest_ROOFED = new BiomeManaForest(BiomeManaForest.Type.ROOFED, new BiomeProperties("Mana_Forest_Roofed").setTemperature(0.95f).setRainfall(1.0f).setWaterColor(1)).setRegistryName(Seccult.MODID, "Mana_Forest_Roofed");
+	public static Biome mana_froest_Mountain = new BiomeManaForest(BiomeManaForest.Type.NORMAL, new BiomeProperties("Mana_Forest_Mountain")
+			.setTemperature(0.95f).setRainfall(1.0f).setWaterColor(1).setBaseHeight(3.5F).setHeightVariation(0.3F)).setRegistryName(Seccult.MODID, "Mana_Forest_Mountain");
+	public static Biome mana_froest_MACICAL = new BiomeManaForest(BiomeManaForest.Type.Magical, new BiomeProperties("Mana_Forest_Magical")
+			.setTemperature(0.95f).setRainfall(1.0f).setWaterColor(1).setBaseHeight(3.5F).setHeightVariation(0.2F)).setRegistryName(Seccult.MODID, "Mana_Forest_Magical");
+	public static Biome mana_froest_FLOWER = new BiomeManaForest(BiomeManaForest.Type.FLOWER, new BiomeProperties("Mana_Forest_Flower")
+			.setTemperature(0.95f).setRainfall(1.0f).setWaterColor(1).setBaseHeight(3.5F).setHeightVariation(0.2F)).setRegistryName(Seccult.MODID, "Mana_Forest_Flower");
+	public static Biome mana_froest_ROOFED = new BiomeManaForest(BiomeManaForest.Type.ROOFED, new BiomeProperties("Mana_Forest_Roofed")
+			.setTemperature(0.95f).setRainfall(1.0f).setWaterColor(1).setBaseHeight(3.5F).setHeightVariation(0.2F)).setRegistryName(Seccult.MODID, "Mana_Forest_Roofed");
 	
-	public static Biome mana_Mushroom_Cave = new BiomeManaMushroom(BiomeManaMushroom.Type.CAVE, new BiomeProperties("Mana_Mushroom_Cave").setTemperature(1.25f).setRainfall(1.0f).setWaterColor(1)).setRegistryName(Seccult.MODID, "Mana_Mushroom_Cave");
-	public static Biome mana_Mushroom_Island = new BiomeManaMushroom(BiomeManaMushroom.Type.ISLAND, new BiomeProperties("Mana_Mushroom_Island").setTemperature(1.25f).setRainfall(1.0f).setWaterColor(1)).setRegistryName(Seccult.MODID, "Mana_Mushroom_Island");
-	public static Biome mana_Mushroom_Normal = new BiomeManaMushroom(BiomeManaMushroom.Type.NORMAL, new BiomeProperties("Mana_Mushroom_Normal").setTemperature(1.25f).setRainfall(1.0f).setWaterColor(1)).setRegistryName(Seccult.MODID, "Mana_Mushroom_Normal");
+	public static Biome mana_Mushroom_Cave = new BiomeManaMushroom(BiomeManaMushroom.Type.CAVE, new BiomeProperties("Mana_Mushroom_Cave")
+			.setTemperature(1.25f).setRainfall(1.0f).setWaterColor(1).setBaseHeight(3.0F).setHeightVariation(0.3F)).setRegistryName(Seccult.MODID, "Mana_Mushroom_Cave");
+	public static Biome mana_Mushroom_Island = new BiomeManaMushroom(BiomeManaMushroom.Type.ISLAND, new BiomeProperties("Mana_Mushroom_Island")
+			.setTemperature(1.25f).setRainfall(1.0f).setWaterColor(1).setBaseHeight(3.5F).setHeightVariation(0.2F)).setRegistryName(Seccult.MODID, "Mana_Mushroom_Island");
+	public static Biome mana_Mushroom_Normal = new BiomeManaMushroom(BiomeManaMushroom.Type.NORMAL, new BiomeProperties("Mana_Mushroom_Normal")
+			.setTemperature(1.25f).setRainfall(1.0f).setWaterColor(1).setBaseHeight(3.5F).setHeightVariation(0.2F)).setRegistryName(Seccult.MODID, "Mana_Mushroom_Normal");
 	
-	public static Biome mana_Ocean = new BiomeManaOcean(new BiomeProperties("Mana_Ocean").setTemperature(1.25f).setRainfall(1.0f).setWaterColor(1).setBaseHeight(-1.8F).setHeightVariation(0.1F)).setRegistryName(Seccult.MODID, "Mana_Ocean");
+	public static Biome mana_OceanSide = new BiomeManaOcean(BiomeManaOcean.Type.SIDE, new BiomeProperties("Mana_OceanSide")
+			.setTemperature(1.25f).setRainfall(1.0f).setWaterColor(1).setBaseHeight(3.0F).setHeightVariation(0.3F)).setRegistryName(Seccult.MODID, "Mana_OceanSide");
+	public static Biome mana_Ocean = new BiomeManaOcean(BiomeManaOcean.Type.NORMAL,new BiomeProperties("Mana_Ocean")
+			.setTemperature(1.25f).setRainfall(1.0f).setWaterColor(1).setBaseHeight(1.1F).setHeightVariation(0.3F)).setRegistryName(Seccult.MODID, "Mana_Ocean");
+	public static Biome mana_DeepOcean = new BiomeManaOcean(BiomeManaOcean.Type.DEEP,new BiomeProperties("Mana_DeepOcean")
+			.setTemperature(1.25f).setRainfall(1.0f).setWaterColor(1).setBaseHeight(-1.5F).setHeightVariation(0.3F)).setRegistryName(Seccult.MODID, "Mana_DeepOcean");
 	
 	@Mod.EventBusSubscriber(modid = Seccult.MODID)
 	public static class Register {
@@ -37,7 +49,9 @@ public class SeccultBiomeRegistries {
 					mana_Mushroom_Cave,
 					mana_Mushroom_Island,
 					mana_Mushroom_Normal,
-					mana_Ocean
+					mana_Ocean,
+					mana_OceanSide,
+					mana_DeepOcean
 			};
 			
 			event.getRegistry().registerAll(biomes);
@@ -61,7 +75,9 @@ public class SeccultBiomeRegistries {
 			BiomeDictionary.addTypes(mana_Mushroom_Cave, Type.MUSHROOM);
 			BiomeDictionary.addTypes(mana_Mushroom_Island, Type.MUSHROOM);
 			BiomeDictionary.addTypes(mana_Mushroom_Normal, Type.MUSHROOM);
+			BiomeDictionary.addTypes(mana_OceanSide, Type.BEACH);
 			BiomeDictionary.addTypes(mana_Ocean, Type.OCEAN);
+			BiomeDictionary.addTypes(mana_DeepOcean, Type.OCEAN);
 		}
 	}
 }

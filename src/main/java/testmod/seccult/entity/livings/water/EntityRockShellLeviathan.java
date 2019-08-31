@@ -117,7 +117,7 @@ public class EntityRockShellLeviathan extends EntityWaterCreature{
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
-		
+
 		//update skill cooldown
 		updateCD();
 		
@@ -247,7 +247,7 @@ public class EntityRockShellLeviathan extends EntityWaterCreature{
 	{
 		this.faceEntity(living, 30F, 30F);
 		boolean attack = living.attackEntityFrom(ModDamage.causeNormalEntityDamage(this), 7.5f);
-		if(attack && (living instanceof EntityWaterCreature || living instanceof EntityWaterMob))
+		if(attack && (living instanceof EntityWaterCreature || living instanceof EntityWaterMob) && !(living instanceof EntityRockShellLeviathan))
 		{
 			if(this.getHealth() < this.getMaxHealth())
 			{
@@ -256,6 +256,17 @@ public class EntityRockShellLeviathan extends EntityWaterCreature{
 			else if(this.attackTarget != null)
 			{
 				this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.getMaxHealth() + 2);
+			}
+		}
+		else
+		{
+			if(this.getHealth() < this.getMaxHealth())
+			{
+				this.heal(1f);
+			}
+			else if(this.attackTarget != null)
+			{
+				this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.getMaxHealth() + 1);
 			}
 		}
 	}
@@ -482,7 +493,7 @@ public class EntityRockShellLeviathan extends EntityWaterCreature{
 						creat = true;
 				}
 				
-				if(!creat)
+				if(!creat && living.isEntityAlive())
 				{
 				if(this.huntingTarget == null)
 					this.huntingTarget = living;
@@ -503,6 +514,13 @@ public class EntityRockShellLeviathan extends EntityWaterCreature{
 	@Override
 	public void GroundThing() 
 	{
+		for(int i = 0; i < 2; ++i)
+		{
+		EntityMagickBubble bu = new EntityMagickBubble(this.world, this);
+		bu.setPositionAndRotation(posX + this.rand.nextDouble(), posY + this.getEyeHeight() + this.rand.nextDouble(), posZ + this.rand.nextDouble(), this.rand.nextInt(360), this.rand.nextInt(360));
+		if(!this.world.isRemote)
+		this.world.spawnEntity(bu);
+		}
 	if(!(this.ticksExisted % 20 == 0))
 		return;
 	this.setNoGravity(false);
@@ -709,9 +727,9 @@ public class EntityRockShellLeviathan extends EntityWaterCreature{
 			this.faceEntity(e, 180, 40);
 			EntityAdvanceLaser laser = new EntityAdvanceLaser(this.world);
 			laser.setOwner(this);
-			laser.setDamage(5);
+			laser.setDamage(1);
 			laser.setPositionAndRotation(this.posX + this.LookX(), this.posY + this.getEyeHeight(), this.posZ + this.LookZ(), this.rotationYaw, this.rotationPitch);
-			laser.setWidth(1.5F);
+			laser.setWidth(0.5F);
 			laser.red = 0;
 			laser.blue = 1;
 			laser.green = 1;
@@ -729,7 +747,7 @@ public class EntityRockShellLeviathan extends EntityWaterCreature{
 			this.faceEntity(e, 90, 40);
 			EntityAdvanceLaser laser = new EntityAdvanceLaser(this.world);
 			laser.setOwner(this);
-			laser.setDamage(5);
+			laser.setDamage(1);
 			laser.setPositionAndRotation(this.posX + this.LookX(), this.posY + this.getEyeHeight(), this.posZ + this.LookZ(), this.rotationYaw, this.rotationPitch);
 			laser.setWidth(0.5F);
 			laser.red = 0;

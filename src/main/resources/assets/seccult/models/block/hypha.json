@@ -1,8 +1,8 @@
 {
     "parent": "block/cube_bottom_top",
     "textures": {
-        "bottom": "blocks/dirt",
+        "bottom": "seccult:blocks/hypha_top",
         "top": "seccult:blocks/hypha_top",
-        "side": "seccult:blocks/hypha_side"
+        "side": "seccult:blocks/hypha_top"
     }
 }

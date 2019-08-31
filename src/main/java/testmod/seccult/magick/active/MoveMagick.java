@@ -9,8 +9,9 @@ import testmod.seccult.network.NetworkHandler;
 
 public class MoveMagick extends Magick{
 
-	public MoveMagick(String name, boolean hasDetailedText) {
-		super(name, hasDetailedText);
+	public MoveMagick(String nbtName, boolean hasDetailedText, float cost1, float cost2) 
+	{
+		super(nbtName, hasDetailedText, cost1, cost2);
 	}
 
 	@Override
@@ -41,7 +42,7 @@ public class MoveMagick extends Magick{
 	@Override
 	void MagickFX() 
 	{
-		for(int i = 0; i < strengh * 10; i++) {
+		for(int i = 0; i < strengh * 2; i++) {
 		double[] pos = new double[3], vec = new double[3];
 		if(entity != null)
 		{
@@ -49,9 +50,9 @@ public class MoveMagick extends Magick{
 			pos[1] = entity.posY + (entity.height / 2);
 			pos[2] = entity.posZ;
 			Vec3d look = player.getLookVec();
-			vec[0] = entity.world.rand.nextFloat() / 2 * -look.x * strengh / 2;
-			vec[1] = entity.world.rand.nextFloat() / 2 * -look.y * strengh / 2;
-			vec[2] = entity.world.rand.nextFloat() / 2 * -look.z * strengh / 2;
+			vec[0] = entity.world.rand.nextFloat() / 2 * -look.x * strengh / 8;
+			vec[1] = entity.world.rand.nextFloat() / 2 * -look.y * strengh / 8;
+			vec[2] = entity.world.rand.nextFloat() / 2 * -look.z * strengh / 8;
 		}
 		
 		if(block != null)
@@ -60,13 +61,13 @@ public class MoveMagick extends Magick{
 			pos[1] = block.getY() + 1;
 			pos[2] = block.getZ();
 			Vec3d look = player.getLookVec();
-			vec[0] = player.world.rand.nextFloat() / 10 * -look.x * strengh / 2;
-			vec[1] = player.world.rand.nextFloat() / 10 * -look.y * strengh / 2;
-			vec[2] = player.world.rand.nextFloat() / 10 * -look.z * strengh / 2;
+			vec[0] = player.world.rand.nextFloat() / 10 * -look.x * strengh / 8;
+			vec[1] = player.world.rand.nextFloat() / 10 * -look.y * strengh / 8;
+			vec[2] = player.world.rand.nextFloat() / 10 * -look.z * strengh / 8;
 		}
 		
 		float[] color = {RGB[0], RGB[1], RGB[2]};
-		NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, strengh / 5, 0));
+		NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, strengh / 10, 0));
 		}
 	}
 }

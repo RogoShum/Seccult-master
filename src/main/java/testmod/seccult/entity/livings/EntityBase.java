@@ -8,6 +8,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,6 +34,9 @@ public class EntityBase extends EntityLiving{
 	
 	protected int tick = this.ticksExisted;
 	public boolean isTRboss;
+	
+	protected EntityLivingBase target; 
+	
 	public EntityBase(World worldIn) {
 		super(worldIn);
 	}

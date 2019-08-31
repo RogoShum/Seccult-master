@@ -1,10 +1,8 @@
 package testmod.seccult.magick.active;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.monster.EntityShulker;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import testmod.seccult.init.ModMagicks;
@@ -16,14 +14,15 @@ import testmod.seccult.network.NetworkHandler;
 public class TeleportMagick extends Magick{
 	
 	private boolean directTeleport;
-	public TeleportMagick(String nbtName, boolean hasDetailedText) {
-		super(nbtName, hasDetailedText);
+	public TeleportMagick(String nbtName, boolean hasDetailedText, float cost1, float cost2) 
+	{
+		super(nbtName, hasDetailedText, cost1, cost2);
 	}
 	
 	public TeleportMagick(Entity e, BlockPos pos) {
-		super("null", true);
+		super("null", true, 0, 0);
 		this.directTeleport = true;
-		this.setMagickAttribute(e, e, pos, 0, 0);
+		this.setMagickAttribute(e, e, pos, 0, 0, 0);
 	}
 	
 	@Override
@@ -119,7 +118,7 @@ public class TeleportMagick extends Magick{
 		vec[2] = (this.rand.nextDouble()*0.5D - 0.25D);
 		
 		float[] color = {0, 1, 0.55F};
-        NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, 1, 0));
+        NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, 0.2F, 0));
 		}
 	}
 	

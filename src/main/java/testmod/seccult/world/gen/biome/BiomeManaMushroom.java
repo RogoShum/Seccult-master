@@ -2,14 +2,14 @@ package testmod.seccult.world.gen.biome;
 
 import java.util.Random;
 
-import net.minecraft.block.BlockFlower;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeDecorator;
+import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraft.world.gen.feature.WorldGenBush;
 import net.minecraft.world.gen.feature.WorldGenDeadBush;
@@ -17,6 +17,7 @@ import net.minecraft.world.gen.feature.WorldGenLiquids;
 import net.minecraft.world.gen.feature.WorldGenPumpkin;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import testmod.seccult.entity.livings.water.EntityFish;
 import testmod.seccult.init.ModBlocks;
 import testmod.seccult.world.gen.WorldGenSeccultMushroom;
 
@@ -86,28 +87,6 @@ public class BiomeManaMushroom extends Biome{
         	            int l6 = random.nextInt(16) + 8;
         	            int k10 = random.nextInt(16) + 8;
         	            new WorldGenSeccultMushroom().generate(worldIn, random, worldIn.getHeight(this.chunkPos.add(l6, 0, k10)));
-        	        }
-
-        	        if(net.minecraftforge.event.terraingen.TerrainGen.decorate(worldIn, random, forgeChunkPos, net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.FLOWERS))
-        	        for (int l2 = 0; l2 < this.flowersPerChunk; ++l2)
-        	        {
-        	            int i7 = random.nextInt(16) + 8;
-        	            int l10 = random.nextInt(16) + 8;
-        	            int j14 = worldIn.getHeight(this.chunkPos.add(i7, 0, l10)).getY() + 32;
-
-        	            if (j14 > 0)
-        	            {
-        	                int k17 = random.nextInt(j14);
-        	                BlockPos blockpos1 = this.chunkPos.add(i7, k17, l10);
-        	                BlockFlower.EnumFlowerType blockflower$enumflowertype = biomeIn.pickRandomFlower(random, blockpos1);
-        	                BlockFlower blockflower = blockflower$enumflowertype.getBlockType().getBlock();
-
-        	                if (blockflower.getDefaultState().getMaterial() != Material.AIR)
-        	                {
-        	                    this.flowerGen.setGeneratedBlock(blockflower, blockflower$enumflowertype);
-        	                    this.flowerGen.generate(worldIn, random, blockpos1);
-        	                }
-        	            }
         	        }
 
         	        if(net.minecraftforge.event.terraingen.TerrainGen.decorate(worldIn, random, forgeChunkPos, net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType.GRASS))
@@ -280,7 +259,7 @@ public class BiomeManaMushroom extends Biome{
         	        	{
         	                int i10 = random.nextInt(16) + 8;
         	                int l13 = random.nextInt(16) + 8;
-        	                int i17 = random.nextInt(20) + 20;
+        	                int i17 = random.nextInt(60) + 20;
 
         	                int k19 = random.nextInt(i17);
         	                BlockPos blockpos6 = this.chunkPos.add(i10, k19, l13);
@@ -340,6 +319,7 @@ public class BiomeManaMushroom extends Biome{
         this.spawnableCreatureList.clear();
         this.spawnableWaterCreatureList.clear();
         this.spawnableCreatureList.add(new Biome.SpawnListEntry(EntityMooshroom.class, 8, 4, 8));
+        this.spawnableWaterCreatureList.add(new Biome.SpawnListEntry(EntityFish.class, 20, 4, 4));
     }
     
     @Override
@@ -350,6 +330,34 @@ public class BiomeManaMushroom extends Biome{
     @Override
     public int getSkyColorByTemp(float currentTemperature) {
     	return 524543;
+    }
+    
+    @Override
+    public void genTerrainBlocks(World worldIn, Random rand, ChunkPrimer chunkPrimerIn, int x, int z, double noiseVal) {
+    	this.generateMushRoomTerrain(worldIn, rand, chunkPrimerIn, x, z, noiseVal);
+    }
+    
+    public final void generateMushRoomTerrain(World worldIn, Random rand, ChunkPrimer chunkPrimerIn, int x, int z, double noiseVal)
+    {
+        int l = x & 15;
+        int i1 = z & 15;
+
+        for (int j1 = 255; j1 >= 0; --j1)
+        {
+            if (j1 <= rand.nextInt(5))
+            {
+                chunkPrimerIn.setBlockState(i1, j1, l, BEDROCK);
+            }
+            else
+            {
+                IBlockState iblockstate2 = chunkPrimerIn.getBlockState(i1, j1, l);
+
+                if (iblockstate2.getBlock() == Blocks.STONE)
+                {
+                    chunkPrimerIn.setBlockState(i1, j1, l, ModBlocks.Hypha.getDefaultState());
+                }
+            }
+        }
     }
     
     public Class <? extends Biome > getBiomeClass()

@@ -124,7 +124,7 @@ public class NetworkEffectData implements IMessage {
         				double motionY = 1 - 2*mc.world.rand.nextFloat();
         				double motionZ = 1 - 2*mc.world.rand.nextFloat();
         				
-        				Particle big = new PentagonFX(mc.world, tx, ty, tz, motionX / 25, motionY / 25, motionZ / 25, 1F);
+        				Particle big = new PentagonFX(mc.world, tx, ty, tz, motionX / 25, motionY / 25, motionZ / 25, 0.4F);
         		    	big.setRBGColorF(r, g, b);
         		    	Minecraft.getMinecraft().effectRenderer.addEffect(big);
         			}

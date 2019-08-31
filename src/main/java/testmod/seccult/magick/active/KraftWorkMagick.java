@@ -5,14 +5,14 @@ import testmod.seccult.magick.magickState.StateManager;
 
 public class KraftWorkMagick extends Magick{
 
-	public KraftWorkMagick(String name, boolean hasDetailedText) {
-		super(name, hasDetailedText);
-		// TODO Auto-generated constructor stub
+	public KraftWorkMagick(String nbtName, boolean hasDetailedText, float cost1, float cost2) 
+	{
+		super(nbtName, hasDetailedText, cost1, cost2);
 	}
 
 	@Override
 	void toEntity() {
-			StateManager.setState(entity, StateManager.KraftWork, (int)(strengh + attribute));
+			StateManager.setState(entity, StateManager.KraftWork, (int)(strengh), (int)attribute);
 	}
 
 	@Override

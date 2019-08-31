@@ -37,7 +37,6 @@ public class WorldGenCustomTrees implements IWorldGenerator
 		switch(world.provider.getDimension())
 		{
 		case 1:
-			
 			break;
 			
 		case DimensionMagic.MAGIC_ID:
@@ -60,9 +59,9 @@ public class WorldGenCustomTrees implements IWorldGenerator
 		
 		int heightDiff = maxHeight - minHeight + 1;
 		for(int i = 0; i < chancesToSpawn; i++) {
-			int x = chunkX * 16 + random.nextInt(4)+8;
+			int x = chunkX * 16 + random.nextInt(4)+6;
 			int y = minHeight + random.nextInt(heightDiff);
-			int z = chunkZ * 16 + random.nextInt(4)+8;
+			int z = chunkZ * 16 + random.nextInt(4)+6;
 			if(!world.isRemote)
 			generator.generate(world, random, new BlockPos(x, y, z));
 		}

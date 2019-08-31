@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 import testmod.seccult.init.ModDamage;
 import testmod.seccult.magick.active.FrozenMagick;
 import testmod.seccult.magick.active.Magick;
+import testmod.seccult.magick.magickState.StateManager;
 
 public class EntityAdvanceLaser extends EntityLaserBeamBase{
 
@@ -30,23 +31,10 @@ public class EntityAdvanceLaser extends EntityLaserBeamBase{
 			this.setDead();
 	}
 	
-	/*@Override
-	public void createLaser(World worldIn, double posXIn, double posYIn, double posZIn, Entity player, float height) {
-		SuperLaserBeamFX laser =  new SuperLaserBeamFX(worldIn, posXIn, posYIn, posZIn, player, height);
-		laser.setRBGColorF(1, 0.5F, 0);
-		laser.setAlphaF(1F);
-		laser.setMaxAge(Lwidth);
-		Minecraft.getMinecraft().effectRenderer.addEffect(laser);
-		this.laserbeam = (SuperLaserBeamFX) laser;
-	}*/
-	
 	@Override
     protected void collideWithNearbyEntities()
     {
     	Vec3d lok = this.getLookVec();
-		Vec3d position = this.getPositionVector().addVector(lok.x * distance / 2, lok.y * distance / 2, lok.z * distance / 2);
-    	//AxisAlignedBB boundingBox = new AxisAlignedBB(position.x, position.y, position.z, position.x, position.y, position.z).grow(distance / 2, distance / 2, distance / 2);
-        //List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, boundingBox);
         List<Vec3d> vecs = new ArrayList<>();
         for(float f = 0; f < distance; f+=1.5)
         {
@@ -58,24 +46,12 @@ public class EntityAdvanceLaser extends EntityLaserBeamBase{
         		this.world.spawnParticle(EnumParticleTypes.SNOW_SHOVEL, vec.x, vec.y, vec.z, 
         				this.getLookVec().x * 2 + this.rand.nextDouble(), this.getLookVec().y * 2 + + this.rand.nextDouble(), this.getLookVec().z * 2 + + this.rand.nextDouble());
         	}
+        	else
+        		for(int i = 0; i < 2; ++i)
+            		this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, vec.x, vec.y, vec.z, 
+            				this.getLookVec().x * 2 + this.rand.nextDouble(), this.getLookVec().y * 2 + + this.rand.nextDouble(), this.getLookVec().z * 2 + + this.rand.nextDouble());
         	vecs.add(vec);
         }
-        
-        /*if (!list.isEmpty() && !vecs.isEmpty())
-        {
-            for (int l = 0; l < list.size(); ++l)
-            {
-                Entity entity = list.get(l);
-                for(Vec3d vec: vecs)
-                {
-                	AxisAlignedBB boundingBox1 = new AxisAlignedBB(vec.x, vec.y, vec.z, vec.x, vec.y, vec.z).grow(1, 1, 1);
-                	List<Entity> list1 = this.world.getEntitiesWithinAABBExcludingEntity(this, boundingBox);
-                	for(Entity entity2 : list1)
-                		this.applyEntityCollision(entity2);
-                }
-                
-            }
-        }*/
         
         if (!vecs.isEmpty())
         {
@@ -92,10 +68,11 @@ public class EntityAdvanceLaser extends EntityLaserBeamBase{
 	@Override
 	public void applyEntityCollision(Entity entity) {
 			if(owner != null && entity != owner && !(entity instanceof EntityFrozenFX) && !(entity instanceof EntityLaserBeamBase)) {
+				if(this.ticksExisted % 2 == 0)
 				attackEntityAsMob(entity);
-		    	if(snow)
+		    	if(snow && !StateManager.CheckIfStatedSafe(entity, StateManager.FROZEN))
 		    	{
-		    		Magick m = new FrozenMagick("null", false);
+		    		Magick m = new FrozenMagick("null", false, 0, 0);
 		    		m.setMagickAttribute(owner, entity, null, 5, 5);
 		    	}
 			}

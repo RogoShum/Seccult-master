@@ -13,15 +13,15 @@ import testmod.seccult.world.gen.biome.SeccultBiomeProvider;
 public class MagickWorldProvider extends WorldProvider{
 	@Override
 	protected void init() {
-		this.biomeProvider = new BiomeProvider(this.world.getWorldInfo());
-		/*try {
+		//this.biomeProvider = new BiomeProvider(this.world.getWorldInfo());
+		try {
 			this.biomeProvider = new SeccultBiomeProvider(this.world.getWorldInfo(), this.getSeed());
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
-		}*/
+		}
 		this.hasSkyLight = true;
 		this.doesWaterVaporize = false;
-		//this.world.setSeaLevel(64);
+		this.world.setSeaLevel(120);
 	}
 	
 	@Override
@@ -75,7 +75,6 @@ public class MagickWorldProvider extends WorldProvider{
 	
 	@Override
 	public IChunkGenerator createChunkGenerator() {
-		//return new ChunkGeneratorSeccult(world, true, this.getSeed());
-		return new ChunkGeneratorOverworld(world, this.getSeed(), true, "");
+		return new ChunkGeneratorSeccult(world, this.getSeed(), "");
 	}
 }

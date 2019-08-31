@@ -5,6 +5,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import testmod.seccult.init.ModItems;
+import testmod.seccult.items.armor.ArmorBase;
 import testmod.seccult.items.armor.MagickArmor;
 
 public class MagickHelmet extends MagickArmor{
@@ -17,10 +18,10 @@ public class MagickHelmet extends MagickArmor{
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
 		super.onArmorTick(world, player, itemStack);
+		if(!player.capabilities.isCreativeMode && !hasArmorSetItem(player))
+			player.capabilities.allowFlying = false;
 		if(hasArmorSetItem(player))
 			player.capabilities.allowFlying = true;
-		else
-			player.capabilities.allowFlying = false;
 	}
 	
 	public boolean hasArmorSetItem(EntityPlayer player) {

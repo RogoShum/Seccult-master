@@ -4,9 +4,9 @@ import testmod.seccult.init.ModMagicks;
 
 public class IncreaseScaleMagick extends Magick{
 
-	public IncreaseScaleMagick(String nbtName, boolean hasDetailedText) {
-		super(nbtName, hasDetailedText);
-		// TODO Auto-generated constructor stub
+	public IncreaseScaleMagick(String nbtName, boolean hasDetailedText, float cost1, float cost2) 
+	{
+		super(nbtName, hasDetailedText, cost1, cost2);
 	}
 
 	@Override

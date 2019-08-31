@@ -17,7 +17,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import testmod.seccult.entity.livings.water.EntityRockShellLeviathan.DamageReduce;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.magick.active.Magick;
 import testmod.seccult.magick.active.TeleportMagick;
@@ -25,7 +24,6 @@ import testmod.seccult.network.NetworkEntityMoving;
 import testmod.seccult.network.NetworkHandler;
 
 public class EntityBoneShark extends EntityWaterCreature{
-	private EntityLivingBase target; 
 	private List<DamageReduce> damageList = new ArrayList<DamageReduce>();
 	private int swimingTime;
 	private int warningTime;
@@ -257,7 +255,7 @@ public class EntityBoneShark extends EntityWaterCreature{
 						creat = true;
 				}
 				
-				if(!creat)
+				if(!creat && living.isEntityAlive())
 				{
 				if(this.target == null)
 					this.target = living;

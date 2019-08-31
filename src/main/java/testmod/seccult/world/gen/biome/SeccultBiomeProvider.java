@@ -15,23 +15,15 @@ public class SeccultBiomeProvider extends BiomeProvider{
         super(world);
 
         getBiomesToSpawnIn().clear();
-        getBiomesToSpawnIn().add(SeccultBiomeRegistries.mana_froest_Mountain);
-        getBiomesToSpawnIn().add(SeccultBiomeRegistries.mana_froest_FLOWER);
-        getBiomesToSpawnIn().add(SeccultBiomeRegistries.mana_froest_MACICAL);
-        getBiomesToSpawnIn().add(SeccultBiomeRegistries.mana_froest_ROOFED);
-        getBiomesToSpawnIn().add(SeccultBiomeRegistries.mana_Mushroom_Cave);
-        getBiomesToSpawnIn().add(SeccultBiomeRegistries.mana_Mushroom_Normal);
-        getBiomesToSpawnIn().add(SeccultBiomeRegistries.mana_Mushroom_Island);
-        
         
 		GenLayer biomes = new GenLayerSeccultBiome(1000L);
-		//biomes = new GenLayerSeccult(1000L, biomes);
+		//biomes = new GenLayerSeccult(1001L, biomes);
 
-		//biomes = new GenLayerZoom(1001, biomes);
-		//biomes = new GenLayerZoom(1002, biomes);
-		//biomes = new GenLayerZoom(1003, biomes);
-		//biomes = new GenLayerZoom(1004, biomes);
-		//biomes = new GenLayerZoom(1005, biomes);
+		//biomes = new GenLayerZoom(1002L, biomes);
+		//biomes = new GenLayerZoom(1003L, biomes);
+		//biomes = new GenLayerZoom(1004L, biomes);
+		//biomes = new GenLayerZoom(1005L, biomes);
+		//biomes = new GenLayerZoom(1006L, biomes);
 
 		GenLayer genlayervoronoizoom = new GenLayerVoronoiZoom(10L, biomes);
 

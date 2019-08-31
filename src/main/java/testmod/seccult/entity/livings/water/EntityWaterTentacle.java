@@ -24,7 +24,6 @@ import testmod.seccult.network.NetworkEntityMoving;
 import testmod.seccult.network.NetworkHandler;
 
 public class EntityWaterTentacle extends EntityWaterCreature{
-	private EntityLivingBase target; 
 	private List<DamageReduce> damageList = new ArrayList<DamageReduce>();
 	private int swimingTime;
 	private int warningTime;
@@ -243,7 +242,7 @@ public class EntityWaterTentacle extends EntityWaterCreature{
 						creat = true;
 				}
 				
-				if(!creat)
+				if(!creat && living.isEntityAlive())
 				{
 				if(this.target == null)
 					this.target = living;

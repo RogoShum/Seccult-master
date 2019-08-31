@@ -12,8 +12,9 @@ import testmod.seccult.network.NetworkHandler;
 
 public class FlameMagick extends Magick{
 
-	public FlameMagick(String name, boolean hasDetailedText) {
-		super(name, hasDetailedText);
+	public FlameMagick(String nbtName, boolean hasDetailedText, float cost1, float cost2) 
+	{
+		super(nbtName, hasDetailedText, cost1, cost2);
 	}
 
 	@Override

@@ -88,7 +88,7 @@ public class ItemWand extends ItemBase{
 	            	ma.pushMagickData(MagickList.getCompoundTagAt(slot), player);
 	            }
 	        }
-			return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
+			return ActionResult.newResult(EnumActionResult.PASS, stack);
 	}
 	
 	@Override

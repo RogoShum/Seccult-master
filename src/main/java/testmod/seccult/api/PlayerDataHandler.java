@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -15,13 +14,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.potion.PotionEffect;
 import testmod.seccult.Seccult;
 import testmod.seccult.init.ModDamage;
 import testmod.seccult.items.armor.ArmorBase;
 import testmod.seccult.network.NetworPlayerMagickData;
 import testmod.seccult.network.NetworkHandler;
-import testmod.seccult.network.NetworkPlayerWandData;
 
 public class PlayerDataHandler {
 	
@@ -416,6 +413,7 @@ public class PlayerDataHandler {
 		
 		public void addCoolDown(float CoolDown)
 		{
+			if(regenCooldown < 500)
 			regenCooldown += CoolDown;
 		}
 		

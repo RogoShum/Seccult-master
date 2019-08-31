@@ -1,8 +1,11 @@
 package testmod.seccult.entity.livings.water;
 
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import testmod.seccult.Seccult;
@@ -84,6 +87,15 @@ public abstract class EntityWaterCreature extends EntityBase implements IAnimals
     public boolean canBreatheUnderwater()
     {
         return true;
+    }
+    
+    @Override
+    public boolean getCanSpawnHere() {
+        IBlockState iblockstate = this.world.getBlockState((new BlockPos(this)).down());
+        if(iblockstate.getBlock() instanceof BlockLiquid)
+        	return iblockstate.canEntitySpawn(this);
+        else
+        	return false;
     }
     
     public void onEntityUpdate()

@@ -14,20 +14,23 @@ import testmod.seccult.init.ModMagicks;
 
 public class CopyMagick extends Magick{
 
-	public CopyMagick(String nbtName, boolean hasDetailedText) {
-		super(nbtName, hasDetailedText);
+	public CopyMagick(String nbtName, boolean hasDetailedText, float cost1, float cost2) 
+	{
+		super(nbtName, hasDetailedText, cost1, cost2);
 	}
 
 	@Override
 	void toEntity() {
-		
-		Entity enti = CopyMagick.copyEntity(this.entity);
-	    if(enti != null) 
-	    {
-	    	enti.setPositionAndRotation(this.entity.posX, this.entity.posY, this.entity.posZ, this.entity.rotationYaw, this.entity.rotationPitch);
-	        if(!this.entity.world.isRemote)
-	        	this.entity.world.spawnEntity(enti);
-	    }
+		for(int i = 0; i < this.strengh; i++)
+		{
+			Entity enti = CopyMagick.copyEntity(this.entity);
+			if(enti != null) 
+			{
+				enti.setPositionAndRotation(this.entity.posX, this.entity.posY, this.entity.posZ, this.entity.rotationYaw, this.entity.rotationPitch);
+				if(!this.entity.world.isRemote)
+					this.entity.world.spawnEntity(enti);
+			}
+		}
 	}
 
 	public static Entity copyEntity(Entity preEntity)
@@ -57,28 +60,44 @@ public class CopyMagick extends Magick{
 	@Override
 	void toBlock() 
 	{
-		Block newblock = player.world.getBlockState(block).getBlock();
-        TileEntity tile = player.world.getTileEntity(block);
-        NBTTagCompound tag = null;
-        if (tile != null) {
-        	NBTTagCompound newTag = new NBTTagCompound();
-        	tile.writeToNBT(newTag);
-        	tag = newTag;
-        }
-		
-        ItemStack item = new ItemStack(newblock);
-		EntityItem newItem = new EntityItem(player.world, block.getX(), block.getY() + 1, block.getZ(), item);
-		if(tag != null)
+		if(this.entity != null)
 		{
-			NBTTagCompound data = (NBTTagCompound) tag.getTag("ForgeData");
-			NBTTagCompound caps = (NBTTagCompound) tag.getTag("ForgeCaps");
-			newItem.getEntityData().setTag("ForgeData", data);
-			newItem.getEntityData().setTag("ForgeCaps", caps);
+			return;
 		}
-		if(!this.player.world.isRemote)
-        	this.player.world.spawnEntity(newItem);
+		
+			Block newblock = player.world.getBlockState(block).getBlock();
+			TileEntity tile = player.world.getTileEntity(block);
+			NBTTagCompound tag = null;
+			if (tile != null) {
+				NBTTagCompound newTag = new NBTTagCompound();
+				tile.writeToNBT(newTag);
+				
+				NBTTagCompound newTag1 = new NBTTagCompound();
+				newTag1.setTag("BlockEntityTag", newTag);
+				
+				tag = newTag1;
+				
+			}
+		
+			ItemStack item = new ItemStack(newblock);
+			EntityItem newItem = new EntityItem(player.world, block.getX(), block.getY() + 1, block.getZ(), item);
+			if(tag != null)
+			{
+				NBTTagCompound oldTag = new NBTTagCompound();
+				newItem.writeToNBT(oldTag);
+				
+				if(oldTag.hasKey("Item"))
+					oldTag.getCompoundTag("Item").setTag("tag", tag);
+					
+				newItem.readFromNBT(oldTag);
+			}
+			for(int i = 0; i < this.strengh; i++)
+			{
+				if(!this.player.world.isRemote)
+					this.player.world.spawnEntity(newItem);
+			}
 	}
-
+	
 	@Override
 	void MagickFX() 
 	{

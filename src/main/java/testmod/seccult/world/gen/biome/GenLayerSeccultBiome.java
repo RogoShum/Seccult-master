@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
-import net.minecraft.init.Biomes;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
@@ -13,7 +12,7 @@ import testmod.seccult.world.gen.SeccultBiomeRegistries;
 public class GenLayerSeccultBiome extends GenLayer {
 	private static final int RARE_BIOME_CHANCE = 100;
 	private static final int TYPE_AMOUNT = 3;
-	private static final int AREA = 12;
+	private static final int AREA = 24;
 	
 	protected static final List<Supplier<Biome>> ForestRare = Arrays.asList(
 			() -> SeccultBiomeRegistries.mana_froest_MACICAL
@@ -34,8 +33,13 @@ public class GenLayerSeccultBiome extends GenLayer {
 			() -> SeccultBiomeRegistries.mana_Mushroom_Normal
 	);
 	
+	protected static final List<Supplier<Biome>> OceanRare = Arrays.asList(
+			() -> SeccultBiomeRegistries.mana_DeepOcean
+	);
+	
 	protected static final List<Supplier<Biome>> OceanCommon = Arrays.asList(
-			() -> SeccultBiomeRegistries.mana_Ocean
+			() -> SeccultBiomeRegistries.mana_Ocean,
+			() -> SeccultBiomeRegistries.mana_OceanSide
 	);
 
 	public GenLayerSeccultBiome(long l, GenLayer genlayer) {
@@ -47,12 +51,8 @@ public class GenLayerSeccultBiome extends GenLayer {
 		super(l);
 	}
 
-	/*@Override
+	@Override
 	public int[] getInts(int x, int z, int width, int depth) {
-		//System.out.println("===========");
-		//System.out.println(x);
-		//System.out.println(z);
-		//System.out.println("===========");
 		int xx = x;
 		int zz = z;
 		xx = Math.abs(xx);
@@ -73,43 +73,17 @@ public class GenLayerSeccultBiome extends GenLayer {
 		
 		xx = xx - (AREA * (xScale - 1));
 		zz = zz - (AREA * (zScale - 1));
-
-		/*if(x == 6 &&  z == 6)
-		{
-			int dest[] = IntCache.getIntCache(width * depth);
-
-			for (int dz = 0; dz < depth; dz++) {
-				for (int dx = 0; dx < width; dx++) {
-					initChunkSeed(dx + x, dz + z);
-						dest[dx + dz * width] = Biome.getIdForBiome(Biomes.BEACH);
-					}
-			}
-			System.out.println("yes");
-			System.out.println(xx);
-			System.out.println(zz);
-			return dest;
-		}*/
-		//System.out.println("===========");
-		//System.out.println(xx);
-		
-		/*if(xx > AREA/2)
-			xx = AREA - xx + 1;
-		if(zz > AREA/2)
-			zz = AREA - zz + 1;
-		//System.out.println(xx);
-		//System.out.println("===========");
 		int type = 0;
-		int space = AREA / 2 / TYPE_AMOUNT;
+		int start = AREA / TYPE_AMOUNT / 2;
 		
 		for(int i = 1; i < TYPE_AMOUNT+1; )
 		{
-			int c = i+1;
-			
-			if((xx >= space * i && xx < space * c) || (zz >= space * i && zz < space * c))
+			int whatever = i * start;
+			if((xx >= whatever && xx <= AREA - whatever) && (zz >= i * start && zz <= AREA - whatever))
 			{
-				type = i - 1;
-				i = TYPE_AMOUNT+1;
+				type = i;
 			}
+			
 			++i;
 		}
 		
@@ -124,6 +98,7 @@ public class GenLayerSeccultBiome extends GenLayer {
 				case 0:
 					if (nextInt(RARE_BIOME_CHANCE) == 0) {
 						dest[dx + dz * width] = Biome.getIdForBiome(getRandomBiome(ForestRare));
+						//System.out.println("Rare Forest");
 					} else {
 						dest[dx + dz * width] = Biome.getIdForBiome(getRandomBiome(ForestCommon));
 					}
@@ -131,32 +106,20 @@ public class GenLayerSeccultBiome extends GenLayer {
 				case 1:
 					if (nextInt(RARE_BIOME_CHANCE) == 0) {
 						dest[dx + dz * width] = Biome.getIdForBiome(getRandomBiome(MushroomRare));
+						//System.out.println("Rare MushRoom");
 					} else {
 						dest[dx + dz * width] = Biome.getIdForBiome(getRandomBiome(MushroomCommon));
 					}
 					break;
 				case 2:
+					if (nextInt(3) == 0) {
+						dest[dx + dz * width] = Biome.getIdForBiome(getRandomBiome(OceanRare));
+						//System.out.println("Rare Ocean");
+					} else {
 						dest[dx + dz * width] = Biome.getIdForBiome(getRandomBiome(OceanCommon));
+					}
 					break;
 				}
-			}
-		}
-
-		return dest;
-	}*/
-
-	@Override
-	public int[] getInts(int x, int z, int width, int depth) {
-
-		x = x * 32;
-		z = z * 32;
-		
-		int dest[] = IntCache.getIntCache(width * depth);
-
-		for (int dz = 0; dz < depth; dz++) {
-			for (int dx = 0; dx < width; dx++) {
-				initChunkSeed(dx + x, dz + z);
-					dest[dx + dz * width] = Biome.getIdForBiome(Biomes.BEACH);
 			}
 		}
 

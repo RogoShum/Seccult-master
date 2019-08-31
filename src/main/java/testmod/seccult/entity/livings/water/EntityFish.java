@@ -2,12 +2,16 @@ package testmod.seccult.entity.livings.water;
 
 import java.util.List;
 
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.magick.active.Magick;
+import testmod.seccult.magick.implementation.ImplementationFocused;
 
 public class EntityFish extends EntityWaterCreature{
 	private int swimingTime;
@@ -40,8 +44,13 @@ public class EntityFish extends EntityWaterCreature{
             	EntityWaterCreature.inWaterWalk(this, 0.3F, 1, this.rand.nextInt(2) + 1);
         		if(this.rand.nextInt(4) == 0)
         		{
-        			Magick m = ModMagicks.getMagickFromName(ModMagicks.TeleportMagick);
-        			m.setMagickAttribute(this, this, null, 2 + this.rand.nextInt(8), 0);
+        			int i = 2 + this.rand.nextInt(8);
+        			BlockPos b = ImplementationFocused.getBlockLookedAt(this, i);
+        			if(b != null && this.world.getBlockState(b).getBlock() instanceof BlockLiquid)
+        			{
+        				Magick m = ModMagicks.getMagickFromName(ModMagicks.TeleportMagick);
+        				m.setMagickAttribute(this, this, null, i, 0);
+        			}
         		}
             }
 			
@@ -55,10 +64,18 @@ public class EntityFish extends EntityWaterCreature{
             		EntityWaterCreature.inWaterWalk(this, 0.2F, 5, 1.5F);
             		if(this.rand.nextInt(30) == 0)
             		{
-            			Magick m = ModMagicks.getMagickFromName(ModMagicks.TeleportMagick);
-            			m.setMagickAttribute(this, this, null, 2 + this.rand.nextInt(8), 0);
+            			int i = 2 + this.rand.nextInt(8);
+            			BlockPos b = ImplementationFocused.getBlockLookedAt(this, i);
+            			if(b != null && this.world.getBlockState(b).getBlock() instanceof BlockLiquid)
+            			{
+            				Magick m = ModMagicks.getMagickFromName(ModMagicks.TeleportMagick);
+            				m.setMagickAttribute(this, this, null, i, 0);
+            			}
             		}
             	}
+            	
+            	if(!(world.getBlockState(getPosition().up()).getBlock() instanceof BlockLiquid))
+            		this.motionY -= 1;
             	swimingTime--;
             }
 		}
@@ -69,8 +86,13 @@ public class EntityFish extends EntityWaterCreature{
             	EntityWaterCreature.inWaterWalk(this, 0.3F, 1, this.rand.nextInt(2) + 1);
     			if(this.rand.nextInt(30) == 0)
     			{
-    				Magick m = ModMagicks.getMagickFromName(ModMagicks.TeleportMagick);
-        			m.setMagickAttribute(this, this, null, 4 + this.rand.nextInt(8), 0);
+        			int i = 4 + this.rand.nextInt(8);
+        			BlockPos b = ImplementationFocused.getBlockLookedAt(this, i);
+        			if(b != null && this.world.getBlockState(b).getBlock() instanceof BlockLiquid)
+        			{
+        				Magick m = ModMagicks.getMagickFromName(ModMagicks.TeleportMagick);
+        				m.setMagickAttribute(this, this, null, i, 0);
+        			}
     			}
     			swimingTime += 35;
     			
@@ -99,8 +121,13 @@ public class EntityFish extends EntityWaterCreature{
 		
 		if(source.damageType.equals(DamageSource.IN_WALL.damageType))
 		{
-    		Magick m = ModMagicks.getMagickFromName(ModMagicks.TeleportMagick);
-    		m.setMagickAttribute(this, this, null, 2 + this.rand.nextInt(8), 0);
+			int i = 2 + this.rand.nextInt(8);
+			BlockPos b = ImplementationFocused.getBlockLookedAt(this, i);
+			if(b != null && this.world.getBlockState(b).getBlock() instanceof BlockLiquid)
+			{
+				Magick m = ModMagicks.getMagickFromName(ModMagicks.TeleportMagick);
+				m.setMagickAttribute(this, this, null, i, 0);
+			}
 		}
 		
 		return attack;

@@ -1,5 +1,6 @@
 package testmod.seccult.items;
 
+import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
@@ -16,12 +17,18 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.WorldGenLakes;
+import testmod.seccult.api.PlayerDataHandler;
+import testmod.seccult.api.PlayerDataHandler.PlayerData;
 import testmod.seccult.entity.EntityAdvanceLaser;
 import testmod.seccult.entity.EntityLightingThing;
+import testmod.seccult.entity.SpiritManager;
 import testmod.seccult.entity.livings.EntityEoW;
+import testmod.seccult.entity.livings.EntitySpirit;
 import testmod.seccult.entity.livings.insect.EntityWorm;
 import testmod.seccult.init.ModBlocks;
 import testmod.seccult.world.gen.plant.WorldGenCave;
+import testmod.seccult.world.gen.plant.WorldGenCaveCopy;
 
 public class ItemTerrariaEventThing extends ItemBase{
 
@@ -35,13 +42,35 @@ public class ItemTerrariaEventThing extends ItemBase{
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, @Nonnull EnumHand hand) {
 		ItemStack stack = player.getHeldItem(hand);
 			player.setActiveHand(hand);
-			iceBeam(player);
+			//clearMagick(player);
+			//restoreSpirits(world, player);
+			//iceBeam(player);
 			//spawnLight(player);
 			//spawnEOW(player);
-			//spawnGen(world, player);
+			spawnGen(world, player);
 			//spawnGenBlock(world, player);
 			return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
 	} 
+	
+	public void clearMagick(EntityPlayer player)
+	{
+		PlayerData data = PlayerDataHandler.get(player);
+		int[] i = {0};
+		data.setMagickData(i);
+	}
+	
+	public void restoreSpirits(World world, EntityPlayer player)
+	{
+		List<Entity> entity = world.getEntitiesWithinAABBExcludingEntity(player, player.getEntityBoundingBox().grow(5));
+		for(int i = 0; i < entity.size(); i++)
+		{
+			if(entity.get(i) instanceof EntitySpirit)
+			{
+				EntitySpirit s = (EntitySpirit)entity.get(i);
+				SpiritManager.restore(s);
+			}
+		}
+	}
 	
 	public  void iceBeam(Entity e)
 	{
@@ -68,6 +97,7 @@ public class ItemTerrariaEventThing extends ItemBase{
 	{
 		Random rand = new Random();
 		BlockPos position = player.getPosition().add(2, -2, 2);
+		//new WorldGenLakes(Blocks.AIR).generate(world, rand, position);
 		new WorldGenCave(Blocks.AIR).generate(world, rand, position);
 	}
 	

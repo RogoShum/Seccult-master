@@ -151,7 +151,7 @@ public class EntityAirTentacle extends EntityFlyable{
 						creat = true;
 				}
 				
-				if(!creat)
+				if(!creat && living.isEntityAlive())
 				{
 				if(this.target == null)
 					this.target = living;

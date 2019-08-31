@@ -34,7 +34,7 @@ public class ImplementationFocused extends Implementation{
 							BlockPos b = getBlockLookedAt(eList.get(i), base + addtion);
 						if(e!=null) {
 							float d = e.getDistance(eList.get(i));
-								applyMagickTrail(eList.get(i).world, eList.get(i).posX, eList.get(i).posY + (eList.get(i).getEyeHeight() * 0.8), eList.get(i).posZ, e.posX, e.posY + (e.height / 2), e.posZ, d);
+								applyMagickTrail(eList.get(i).world, eList.get(i).posX, eList.get(i).posY + (eList.get(i).getEyeHeight() * 0.8), eList.get(i).posZ, e.posX, e.posY + (e.height / 2), e.posZ, d * 4);
 							newList.add(e);
 						}
 						

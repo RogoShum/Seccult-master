@@ -5,14 +5,14 @@ import testmod.seccult.magick.magickState.StateManager;
 
 public class GratefulDeadMagick extends Magick{
 
-	public GratefulDeadMagick(String nbtName, boolean hasDetailedText) {
-		super(nbtName, hasDetailedText);
-		// TODO Auto-generated constructor stub
+	public GratefulDeadMagick(String nbtName, boolean hasDetailedText, float cost1, float cost2) 
+	{
+		super(nbtName, hasDetailedText, cost1, cost2);
 	}
 
 	@Override
 	void toEntity() {
-		StateManager.setState(entity, StateManager.GratefulDead, (int)strengh);
+		StateManager.setState(entity, StateManager.GratefulDead, (int)(strengh), (int)attribute);
 	}
 
 	@Override

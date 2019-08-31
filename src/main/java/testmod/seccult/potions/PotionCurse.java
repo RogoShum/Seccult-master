@@ -17,7 +17,6 @@ public class PotionCurse extends PotionMod{
 
 	public PotionCurse() {
 		super("curse", true, 0XFFAB4B, 0);
-		// TODO Auto-generated constructor stub
 	}
 
 	@SubscribeEvent
@@ -43,14 +42,14 @@ public class PotionCurse extends PotionMod{
 				living.addPotionEffect(new PotionEffect(ModPotions.curse, living.getActivePotionEffect(ModPotions.curse).getDuration() + 200, Seccult.rand.nextInt(6) + 1));
 				break;
 			case 4:
-				StateManager.setState(entities.get(randEntity), StateManager.LOST_MIND, 100 * mult);
+				StateManager.setState(entities.get(randEntity), StateManager.LOST_MIND, 100 * mult, 5);
 				break;
 			case 5:
 				if(entities.get(randEntity) instanceof EntityLivingBase)
 				((EntityLivingBase) entities.get(randEntity)).addPotionEffect(new PotionEffect(ModPotions.curse, living.getActivePotionEffect(ModPotions.curse).getDuration() + 200, Seccult.rand.nextInt(6) + 1));
 				break;
 			case 6:
-				StateManager.setState(entities.get(randEntity), StateManager.FROZEN, 100 * mult);
+				StateManager.setState(entities.get(randEntity), StateManager.FROZEN, 100 * mult, 5);
 				break;
 			case 7:
 				if(living instanceof EntityPlayer)

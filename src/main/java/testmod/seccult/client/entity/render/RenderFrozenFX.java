@@ -64,7 +64,7 @@ public class RenderFrozenFX extends Render<EntityFrozenFX>
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_CONSTANT_ALPHA);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(darkPTexture);
 	    GlStateManager.pushMatrix();
-			GlStateManager.color(0, 1F, 1F, 0.2F);
+			GlStateManager.color(0, 0.4F, 0.4F, 0.2F);
 	    	cylinderRender(radius, height);
 		    
 			GlStateManager.pushMatrix();

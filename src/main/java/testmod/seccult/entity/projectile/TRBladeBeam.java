@@ -4,7 +4,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -16,7 +15,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.Seccult;
 import testmod.seccult.client.FX.PropraFX;
 import testmod.seccult.client.FX.RainbowFX;
-import testmod.seccult.init.ModItems;
 import testmod.seccult.items.TRprojectile.TRprojectileID;
 
 public class TRBladeBeam extends TRprojectileBase{

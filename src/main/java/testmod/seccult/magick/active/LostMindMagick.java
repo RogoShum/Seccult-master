@@ -12,9 +12,9 @@ import testmod.seccult.magick.magickState.StateManager;
 public class LostMindMagick extends Magick{
 	protected DamageSource damage;
 	
-	public LostMindMagick(String nbtName, boolean hasDetailedText) 
+	public LostMindMagick(String nbtName, boolean hasDetailedText, float cost1, float cost2) 
 	{
-		super(nbtName, hasDetailedText);
+		super(nbtName, hasDetailedText, cost1, cost2);
 	}
 	
 	@Override
@@ -45,7 +45,7 @@ public class LostMindMagick extends Magick{
 		{
 			MagickFX();
 			damage(player);
-			StateManager.setState(entity, StateManager.LOST_MIND, (int)strengh);
+			StateManager.setState(entity, StateManager.LOST_MIND, (int)(strengh), (int)attribute);
 			entity.attackEntityFrom(damage, attribute);
 		}
 	}

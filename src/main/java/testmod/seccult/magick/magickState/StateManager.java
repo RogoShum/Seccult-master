@@ -38,6 +38,7 @@ public class StateManager {
 			Entity entity = entityList.get(i);
 		if(CheckIfStated(entity, FROZEN) > 0)
 		{
+			int level = getLevel(entity, FROZEN);
 			entity.motionX = 0;
 			entity.motionY = 0;
 			entity.motionZ = 0;
@@ -46,41 +47,51 @@ public class StateManager {
 			setPlayerTP(entity, entity.prevPosX, entity.prevPosY, entity.prevPosZ, 0);
 			entity.setPositionAndRotation(entity.prevPosX, entity.prevPosY, entity.prevPosZ, entity.prevRotationYaw, entity.prevRotationPitch);
 			if(!entity.isEntityAlive())
-				setState(entity, FROZEN, -10);
+				setState(entity, FROZEN, -10, level);
 		}
 		
 		int white = CheckIfStated(entity, WhiteAlbum);
 		if(white > 0)
 		{
-			entity.motionX *= 0.5;
-			entity.motionY *= 0.5;
-			entity.motionZ *= 0.5;
+			int level = getLevel(entity, WhiteAlbum);
+			if(level > 5)
+				level = 5;
+			float motion = 1 - (0.1F * level);
+			
+			entity.motionX *= motion;
+			entity.motionY *= motion;
+			entity.motionZ *= motion;
 			double[] vec = {0,0,0};
 			float[] color = {0,0,0};
 			double[] pos = {entity.posX,entity.posY,entity.posZ};
 			if(entity.ticksExisted % 2 == 0)
 			NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, 0F, 3));
 		    
-			setPlayerMove(entity, entity.motionX *= 0.5, entity.motionY *= 0.5, entity.motionZ *= 0.5, 1);
+			setPlayerMove(entity, entity.motionX *= motion, entity.motionY *= motion, entity.motionZ *= motion, 1);
 			entity.ticksExisted -= 1;
 			
 			entity.setAir(0);
-			List<Entity> eList = event.world.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().grow(3));
+			List<Entity> eList = event.world.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().grow(level));
 			for(Entity e: eList)
 			{
-				setState(e, WhiteAlbum, white / 20);
+				setState(e, WhiteAlbum, white / 20, level);
 			}
 			if(!entity.isEntityAlive())
-				setState(entity, WhiteAlbum, -10);
+				setState(entity, WhiteAlbum, -10, level);
 		}
 		
 		if(CheckIfStated(entity, GratefulDead) > 0)
 		{
-			entity.motionX *= 0.5;
-			entity.motionY *= 0.5;
-			entity.motionZ *= 0.5;
-			setPlayerMove(entity, entity.motionX *= 0.5, entity.motionY *= 0.5, entity.motionZ *= 0.5, 1);
-			entity.ticksExisted += 20;
+			int level = getLevel(entity, GratefulDead);
+			if(level > 5)
+				level = 5;
+			float motion = 1 - (0.1F * level);
+			
+			entity.motionX *= motion;
+			entity.motionY *= motion;
+			entity.motionZ *= motion;
+			setPlayerMove(entity, entity.motionX *= motion, entity.motionY *= motion, entity.motionZ *= motion, 1);
+			entity.ticksExisted += level * 20;
 		}
 		
 		if(CheckIfStated(entity, NOCLIP) > 0)
@@ -145,11 +156,10 @@ public class StateManager {
 				NBTTagCompound oldNbt = getStateListForEntity(entity).getCompoundTag(KraftWork + "TAG");
 				entity.readFromNBT(oldNbt.copy());
 			}
-			
-			if(kraftwork < 5)
-			{
-				getStateListForEntity(entity).removeTag(KraftWork + "TAG");
-			}
+		}
+		else
+		{
+			getStateListForEntity(entity).removeTag(KraftWork + "TAG");
 		}
 		
 		int floating = CheckIfStated(entity, Floating);
@@ -180,15 +190,29 @@ public class StateManager {
 		NBTTagCompound state = getStateListForEntity(entity);
 			if(state.hasKey(s)) 
 			{
-				int tick = state.getInteger(s);
+				NBTTagCompound getState = state.getCompoundTag(s);
+				int tick = getState.getInteger("time");
 				
 				if(tick < 0)
 				{
 					state.removeTag(s);
 					return 0;
 				}
-					state.setInteger(s, tick-1);
-					return tick;
+					
+				getState.setInteger("time", tick-1);
+				return tick;
+			}
+			
+		return 0;
+	}
+	
+	public static int getLevel(Entity entity, String s)
+	{
+		NBTTagCompound state = getStateListForEntity(entity);
+			if(state.hasKey(s)) 
+			{
+				NBTTagCompound getState = state.getCompoundTag(s);
+				return getState.getInteger("level");
 			}
 		return 0;
 	}
@@ -199,7 +223,9 @@ public class StateManager {
 		boolean ifState = false;
 			if(state.hasKey(s)) 
 			{
-				int tick = state.getInteger(s);
+				NBTTagCompound getState = state.getCompoundTag(s);
+				int tick = getState.getInteger("time");
+				
 				if (tick > 0)
 					ifState = true;
 			}
@@ -220,9 +246,12 @@ public class StateManager {
 		NetworkHandler.getNetwork().sendToAllAround(new NetworkEntityMoving(e.getUniqueID(), pos, move, type), new TargetPoint(e.dimension, e.posX, e.posY, e.posZ, 3));
 	}
 	
-	public static void setState(Entity entity, String s, int time)
+	public static void setState(Entity entity, String s, int time, int level)
 	{
-		getStateListForEntity(entity).setInteger(s, time * 20);
+		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setInteger("time", time * 20);
+		nbt.setInteger("level", level);
+		getStateListForEntity(entity).setTag(s, nbt);
 	}
 	
 	public static NBTTagCompound getStateListForEntity(Entity entity) {

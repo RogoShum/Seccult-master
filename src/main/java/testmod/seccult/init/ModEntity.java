@@ -55,6 +55,7 @@ public class ModEntity
 		registerEntityWithoutEgg("lightingthing", EntityLightingThing.class, id++, 128, 1, true);
 		registerEntityWithoutEgg("bubble", EntityMagickBubble.class, id++, 128, 1, true);
 		registerEntityWithoutEgg("frozenfx", EntityFrozenFX.class, id++, 128, 1, true);
+		registerEntityWithoutEgg("spirit", EntitySpirit.class, id++, 128, 1, true);
 	}
 	
 	public static void registerEntity(String name, Class<? extends Entity> entity, int id, int range, int updateFrequency, boolean svu, int color1, int color2) 
