@@ -9,6 +9,7 @@ public class ModDamage {
 	public static final DamageSource normalMagic = new DamageSource("seccult-normal-magick").setMagicDamage();
 	public static final DamageSource pureMagic = new DamageSource("seccult-pure-magick").setDamageBypassesArmor().setMagicDamage().setDamageIsAbsolute();
 	public static final DamageSource darkMagic = new DamageSource("seccult-dark-magick").setDamageBypassesArmor().setMagicDamage().setDamageIsAbsolute().setDamageAllowedInCreativeMode();
+	public static final DamageSource BlackVelvetHell = new DamageSource("seccult-blackVelvetHell").setDamageBypassesArmor().setMagicDamage().setDamageIsAbsolute().setDamageAllowedInCreativeMode();
 	public static final DamageSource forbiddenMagic = new DamageSource("seccult-forbidden-magick").setDamageBypassesArmor().setMagicDamage().setDamageIsAbsolute().setDamageAllowedInCreativeMode().setExplosion().setFireDamage();
 	
 	public static final DamageSource MagickOverLoad = new DamageSource("seccult-overload").setDamageBypassesArmor().setMagicDamage();
@@ -31,6 +32,11 @@ public class ModDamage {
     public static DamageSource causeDarkEntityDamage(Entity player)
     {
         return new EntityDamageSource(darkMagic.damageType, player);
+    }
+    
+    public static DamageSource causeBlackVelvetHellDamage(Entity player)
+    {
+        return new EntityDamageSource(BlackVelvetHell.damageType, player);
     }
     
     public static DamageSource causeForbiddenEntityDamage(Entity player)

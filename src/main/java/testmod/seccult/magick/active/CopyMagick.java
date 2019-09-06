@@ -45,9 +45,9 @@ public class CopyMagick extends Magick{
 	  	{
 	  	   entityNBT.setString("id", EntityList.getKey(EntityItem.class).toString());
 	  	}
-	  	
+	  	UUID id = UUID.randomUUID();
 	  	preEntity.writeToNBT(entityNBT);
-	  	entityNBT.setUniqueId("UUID", UUID.randomUUID());
+	  	entityNBT.setUniqueId("UUID", id);
 	  	if(!(entityNBT.getString("id").equals(""))) {
 	    Entity entity = EntityList.createEntityFromNBT(entityNBT, preEntity.world);
 	    if(entity != null)
@@ -106,6 +106,11 @@ public class CopyMagick extends Magick{
 	@Override
 	public int getColor() {
 		return ModMagicks.CopyMagickColor;
+	}
+
+	@Override
+	public boolean doMagickNeedAtrribute() {
+		return false;
 	}
 
 }

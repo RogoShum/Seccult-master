@@ -24,6 +24,11 @@ public class EntityBloodBeam extends Entity{
 	public EntityBloodBeam(World worldIn) {
 		super(worldIn);
         this.setSize(0.2F, 0.2F);
+		this.setNoGravity(true);
+		this.noClip = true;
+		this.collided = false;
+		this.isImmuneToFire = true;
+		this.setEntityInvulnerable(true);
 	}
 	
 	public EntityBloodBeam(World worldIn, EntityLivingBase o, float d) {
@@ -40,8 +45,7 @@ public class EntityBloodBeam extends Entity{
 	public void onUpdate() {
 		super.onUpdate();
 		if(this.owner != null) {
-			onParticle();
-			Moveto(this.owner.posX, this.owner.posY + (this.owner.height / 2), this.owner.posZ, 1);
+			Moveto(this.owner.posX, this.owner.posY + (this.owner.height / 2), this.owner.posZ, 0.2F);
 			onChargeBlood();
 		}
 		else
@@ -65,10 +69,6 @@ public class EntityBloodBeam extends Entity{
 	      	}
 	      }
 	}
-
-	private void onParticle() {
-		Minecraft.getMinecraft().effectRenderer.addEffect(new LightFX(this.world, this.posX, this.posY, this.posZ, 0, 0, 0, 1));
-	}
 	
 	protected void Moveto(double x, double y, double z, float speed) {
        this.motionX += (Math.signum(x - this.posX) - this.motionX) * speed;
@@ -78,7 +78,7 @@ public class EntityBloodBeam extends Entity{
        this.posX += this.motionX;
        this.posY += this.motionY;
        this.posZ += this.motionZ;
-       
+
        this.motionX *= (double)0.8;
        this.motionY *= (double)0.8;
        this.motionZ *= (double)0.8;
@@ -99,7 +99,7 @@ public class EntityBloodBeam extends Entity{
 	            }
 	        }
         }
-        else
+        else if(!this.getEntityWorld().isRemote)
         	this.setDead();
 	}
     

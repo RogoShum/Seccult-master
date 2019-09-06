@@ -3,16 +3,24 @@ package testmod.seccult.events;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.api.PlayerDataHandler;
 import testmod.seccult.api.accessorie.PlayerAccessorieHandler;
 import testmod.seccult.init.ModDamage;
+import testmod.seccult.init.ModItems;
+import testmod.seccult.items.ItemWand;
 import testmod.seccult.magick.MagickCompiler;
 import testmod.seccult.magick.active.MagickTeleporter;
 
@@ -30,7 +38,23 @@ public class PlayerDataUpdateEvent {
     	MagicDamage.add(ModDamage.pureMagic.damageType);
 	}
 	
-	
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void onRenderWorldLast(RenderWorldLastEvent event) {
+		Minecraft mc = Minecraft.getMinecraft();
+
+		float partialTicks = event.getPartialTicks();
+
+		for(EntityPlayer player : mc.world.playerEntities)
+		{
+			if(player.getHeldItemMainhand().getItem() == ModItems.Wand)
+			{
+				ItemWand wand = (ItemWand) player.getHeldItemMainhand().getItem();
+				wand.render(player, partialTicks);
+			}
+		}
+	}
+    
 	@SubscribeEvent
 	public void onPlayerTick(LivingUpdateEvent event) 
 	{

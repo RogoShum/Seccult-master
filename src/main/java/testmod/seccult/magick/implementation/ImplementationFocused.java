@@ -32,13 +32,13 @@ public class ImplementationFocused extends Implementation{
 						if(eList.get(i)!=null) {
 							Entity e = getEntityLookedAt(eList.get(i), base + addtion);
 							BlockPos b = getBlockLookedAt(eList.get(i), base + addtion);
-						if(e!=null) {
+						if(this.doEntity && e!=null) {
 							float d = e.getDistance(eList.get(i));
 								applyMagickTrail(eList.get(i).world, eList.get(i).posX, eList.get(i).posY + (eList.get(i).getEyeHeight() * 0.8), eList.get(i).posZ, e.posX, e.posY + (e.height / 2), e.posZ, d * 4);
 							newList.add(e);
 						}
 						
-						if(b != null)
+						if(this.doBlock && b != null)
 						{
 							float d = (float)eList.get(i).getDistanceSqToCenter(b);
 							if(e == null)
@@ -132,5 +132,10 @@ public class ImplementationFocused extends Implementation{
 		Vector3 end = origin.copy().add(ray.copy().normalize().multiply(len));
 		RayTraceResult pos = world.rayTraceBlocks(origin.toVec3D(), end.toVec3D());
 		return pos;
+	}
+
+	@Override
+	public boolean doMagickNeedAtrribute() {
+		return false;
 	}
 }

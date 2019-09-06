@@ -14,6 +14,9 @@ public class ModPotions {
 	public static final Potion reflect = new PotionReflect();
 	public static final Potion curse = new PotionCurse();
 	public static final Potion allsee = new PotionAllSeeEye();
+	public static final Potion shield = new PotionShield();
+	public static final Potion protection = new PotionProtection();
+	
 			
 	@SubscribeEvent
 	public static void registerPotions(RegistryEvent.Register<Potion> evt){
@@ -23,5 +26,7 @@ public class ModPotions {
 		evt.getRegistry().register(reflect);
 		evt.getRegistry().register(curse);
 		evt.getRegistry().register(allsee);
+		evt.getRegistry().register(shield);
+		evt.getRegistry().register(protection);
 	}
 }

@@ -6,8 +6,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.magick.ImplementationHandler;
+import testmod.seccult.magick.active.doMagickNeedAtrribute;
 
-public abstract class Implementation implements Cloneable{
+public abstract class Implementation implements Cloneable, doMagickNeedAtrribute{
 	private final String nbtName;
 	private List<Entity> entity;
 	private List<BlockPos> block;
@@ -61,9 +62,9 @@ public abstract class Implementation implements Cloneable{
 	{
 		doBlock = true;
 	}
-
+	
 	public List<Entity> getEntity() {
-		if(entity == null || entity.isEmpty())
+		if(!this.doEntity || entity == null || entity.isEmpty())
 		{
 			return null;
 		}
@@ -71,6 +72,8 @@ public abstract class Implementation implements Cloneable{
 	}
 	
 	public List<BlockPos> getBlock() {
+		if(!this.doBlock)
+			return null;
 		return block;
 	}
 	

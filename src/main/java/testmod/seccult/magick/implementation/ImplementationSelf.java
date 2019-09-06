@@ -17,4 +17,9 @@ public class ImplementationSelf extends Implementation{
 		pl.add(player);
 		setEntity(pl);
 	}
+
+	@Override
+	public boolean doMagickNeedAtrribute() {
+		return false;
+	}
 }

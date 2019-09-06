@@ -1,20 +1,23 @@
 package testmod.seccult.client.entity.render;
 
-import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import testmod.seccult.Seccult;
+import testmod.seccult.client.entity.model.ModelArrow;
+import testmod.seccult.entity.EntityClowCardArrow;
 
 @SideOnly(Side.CLIENT)
-public class RenderClowArrow extends Render<Entity>
+public class RenderClowArrow extends Render<EntityClowCardArrow>
 {
-	public static final ResourceLocation ARROW = new ResourceLocation("textures/entity/projectiles/arrow.png");
+	public static final ResourceLocation ARROW = new ResourceLocation(Seccult.MODID + ":textures/entity/arrow.png");
+	private static ModelBase arrow = new ModelArrow();
 	
     public RenderClowArrow(RenderManager renderManagerIn)
     {
@@ -24,72 +27,29 @@ public class RenderClowArrow extends Render<Entity>
     /**
      * Renders the desired {@code T} type Entity.
      */
-    public void doRender(Entity entity, double x, double y, double z, float entityYaw, float partialTicks)
+    public void doRender(EntityClowCardArrow entity, double x, double y, double z, float entityYaw, float partialTicks)
     {
-        this.bindEntityTexture(entity);
-        GlStateManager.color(0.0F, 0.75F, 1.0F, 1.0F);
+    	super.doRender(entity, x, y, z, entityYaw, partialTicks);
+    	int zz = 15728880;
+        int cc = zz % 65536;
+        int k = zz / 65536;
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)cc, (float)k);
         GlStateManager.pushMatrix();
-        GlStateManager.disableLighting();
         GlStateManager.translate((float)x, (float)y, (float)z);
-        GlStateManager.rotate(entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * partialTicks - 90.0F, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate(entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks, 0.0F, 0.0F, 1.0F);
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferbuilder = tessellator.getBuffer();
-
-        GlStateManager.enableRescaleNormal();
-
-
-       // GlStateManager.rotate(45.0F, 1.0F, 0.0F, 0.0F);
-        GlStateManager.scale(0.05625F, 0.05625F, 0.05625F);
-        GlStateManager.translate(-4.0F, 0.0F, 0.0F);
-
-        if (this.renderOutlines)
-        {
-            GlStateManager.enableColorMaterial();
-            GlStateManager.enableOutlineMode(this.getTeamColor(entity));
-        }
-
-        GlStateManager.glNormal3f(0.05625F, 0.0F, 0.0F);
-        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-        bufferbuilder.pos(-7.0D, -2.0D, -2.0D).tex(0.0D, 0.15625D).endVertex();
-        bufferbuilder.pos(-7.0D, -2.0D, 2.0D).tex(0.15625D, 0.15625D).endVertex();
-        bufferbuilder.pos(-7.0D, 2.0D, 2.0D).tex(0.15625D, 0.3125D).endVertex();
-        bufferbuilder.pos(-7.0D, 2.0D, -2.0D).tex(0.0D, 0.3125D).endVertex();
-        tessellator.draw();
-        GlStateManager.glNormal3f(-0.05625F, 0.0F, 0.0F);
-        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-        bufferbuilder.pos(-7.0D, 2.0D, -2.0D).tex(0.0D, 0.15625D).endVertex();
-        bufferbuilder.pos(-7.0D, 2.0D, 2.0D).tex(0.15625D, 0.15625D).endVertex();
-        bufferbuilder.pos(-7.0D, -2.0D, 2.0D).tex(0.15625D, 0.3125D).endVertex();
-        bufferbuilder.pos(-7.0D, -2.0D, -2.0D).tex(0.0D, 0.3125D).endVertex();
-        tessellator.draw();
-
-        for (int j = 0; j < 4; ++j)
-        {
-            //GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
-            GlStateManager.glNormal3f(0.0F, 0.0F, 0.05625F);
-            bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-            bufferbuilder.pos(-8.0D, -2.0D, 0.0D).tex(0.0D, 0.0D).endVertex();
-            bufferbuilder.pos(8.0D, -2.0D, 0.0D).tex(0.5D, 0.0D).endVertex();
-            bufferbuilder.pos(8.0D, 2.0D, 0.0D).tex(0.5D, 0.15625D).endVertex();
-            bufferbuilder.pos(-8.0D, 2.0D, 0.0D).tex(0.0D, 0.15625D).endVertex();
-            tessellator.draw();
-        }
-
-        if (this.renderOutlines)
-        {
-            GlStateManager.disableOutlineMode();
-            GlStateManager.disableColorMaterial();
-        }
-
-        GlStateManager.disableRescaleNormal();
-        GlStateManager.enableLighting();
+        GlStateManager.scale(0.065F, 0.065F, 0.065F);
+        GlStateManager.rotate((180-entityYaw) * 0.017453292F * (180F / (float)Math.PI), 0.0F, 1.0F, 0.0F);
+	    GlStateManager.rotate(-entity.rotationPitch * 0.017453292F * (180F / (float)Math.PI), 1.0F, 0.0F, 0.0F);
+        GlStateManager.enableBlend();
+        GlStateManager.color(0.3F, 0.3F, 1.0F, 0.75F);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(ARROW);
+        arrow.render(entity, 0, 0, 0, 0, 0, 1);
+        GlStateManager.disableBlend();
         GlStateManager.popMatrix();
-        super.doRender(entity, x, y, z, entityYaw, partialTicks);
+        
     }
 
 	@Override
-	protected ResourceLocation getEntityTexture(Entity entity) {
-		return ARROW;
+	protected ResourceLocation getEntityTexture(EntityClowCardArrow entity) {
+		return null;
 	}
 }

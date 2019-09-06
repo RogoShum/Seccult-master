@@ -20,7 +20,7 @@ public class SpellButton extends GuiButton{
 	public int spellAttribute;
 	public int sortID;
 	public boolean sortLock;
-	
+
 	public String spellPower_name;
 	public String spellAttribute_name;
     float r,g,b;
@@ -49,8 +49,7 @@ public class SpellButton extends GuiButton{
 	
 	public void defineAttribute()
 	{
-		
-		if(this.id >= 5)
+		if(this.id >= 7)
 			this.isMagickButton = true;
 		
 		spellPower_name = "spell_power_name";
@@ -128,6 +127,7 @@ public class SpellButton extends GuiButton{
 	        }
 			drawLayer(mc);
         GlStateManager.color(1.0F, 1.0F, 1.0F);
+        
         String MagickName = ModMagicks.GetMagickStringByID(this.id);
         String BUTTON_PATH = Seccult.MODID + ":" + "textures/gui/button/" + MagickName + ".png";
         ResourceLocation BUTTON_TEXTURE = new ResourceLocation(BUTTON_PATH);

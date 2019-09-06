@@ -97,4 +97,9 @@ public class ElectroMagick extends Magick{
 	public int getColor() {
 		return ModMagicks.DamageMagickColor;
 	}
+
+	@Override
+	public boolean doMagickNeedAtrribute() {
+		return false;
+	}
 }

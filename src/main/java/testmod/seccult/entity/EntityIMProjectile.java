@@ -7,7 +7,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -25,6 +24,8 @@ public class EntityIMProjectile extends EntityThrowable{
 	private float scale;
 	
 	private Particle core;
+	private boolean doBlock;
+	private boolean doEntity;
 	
     public EntityIMProjectile(World worldIn) {
 		super(worldIn);
@@ -48,10 +49,12 @@ public class EntityIMProjectile extends EntityThrowable{
 			IMProjectile(pos.posX, pos.posY + (pos.height / 2), pos.posZ);
 	}
 
-	public void setData(NBTTagCompound magick, NBTTagList select)
+	public void setData(NBTTagCompound magick, NBTTagList select, boolean doEntity, boolean doBlock)
 	{
 		this.LoadMagick = magick;
 		this.LoadSelect = select;
+		this.doEntity = doEntity;
+		this.doBlock = doBlock;
 	}
 	
 	public void setScale(float s)
@@ -67,12 +70,12 @@ public class EntityIMProjectile extends EntityThrowable{
 		double y = 1 - 2*world.rand.nextFloat();
 		double z = 1 - 2*world.rand.nextFloat();
 
-		Particle fx2 = new LightFX(this.world, this.posX, this.posY, this.posZ, x / 15, y / 15, z / 15);
+		Particle fx2 = new LightFX(this.world, this.posX, this.posY, this.posZ, x / 25, y / 25, z / 25, scale);
 		fx2.setRBGColorF(particleRedIn, particleGreenIn, particleBlueIn);
 		Minecraft.getMinecraft().effectRenderer.addEffect(fx2);
 		
 		if(core == null) {
-		Particle fx = new PentagonFX(this.world, this.posX, this.posY, this.posZ, 0, 0, 0, 5);
+		Particle fx = new PentagonFX(this.world, this.posX, this.posY, this.posZ, 0, 0, 0, 10 * scale);
 		fx.setRBGColorF(particleRedIn, particleGreenIn, particleBlueIn);
 		this.core = fx;
 		Minecraft.getMinecraft().effectRenderer.addEffect(fx);
@@ -104,7 +107,7 @@ public class EntityIMProjectile extends EntityThrowable{
 				 NBTTagCompound newMagickNBT = LoadMagick.copy();
 				 newMagickNBT.setTag("BlockHit", this.newDoubleNBTList(result.hitVec.x, result.hitVec.y - 1, result.hitVec.z));
 				 MagickCompiler newMagick = new MagickCompiler();
-				 newMagick.pushMagickData(newMagickNBT, LoadSelect, this.thrower);
+				 newMagick.pushMagickData(newMagickNBT, LoadSelect, this.thrower, this.doEntity, this.doBlock);
 			 }
         }
 
@@ -114,7 +117,7 @@ public class EntityIMProjectile extends EntityThrowable{
 				 NBTTagCompound newMagickNBT = LoadMagick.copy();
 				 newMagickNBT.setUniqueId("EntityHit", result.entityHit.getUniqueID());
 				 MagickCompiler newMagick = new MagickCompiler();
-				 newMagick.pushMagickData(newMagickNBT, LoadSelect, this.thrower);
+				 newMagick.pushMagickData(newMagickNBT, LoadSelect, this.thrower, this.doEntity, this.doBlock);
 			 }
         }
 		

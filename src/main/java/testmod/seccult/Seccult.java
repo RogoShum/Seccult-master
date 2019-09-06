@@ -2,6 +2,9 @@ package testmod.seccult;
 
 import java.util.Random;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -11,12 +14,16 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.blocks.tileEntity.tileGenerator;
 import testmod.seccult.client.FX.ModFX;
 import testmod.seccult.client.gui.GuiElementLoader;
 import testmod.seccult.creativetab.CreativeTabsLoader;
 import testmod.seccult.events.ModEventHandler;
+import testmod.seccult.init.ModItems;
 import testmod.seccult.init.ModMagicks;
+import testmod.seccult.items.ItemWand;
 import testmod.seccult.network.NetworkHandler;
 import testmod.seccult.util.handlers.RegistryHandler;
 import testmod.seccult.world.gen.DimensionMagic;
@@ -69,7 +76,7 @@ public class Seccult
 	{
 		ModEventHandler.RegisterEvents();
 		
-		/*Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor()
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor()
 		{
 			@SideOnly(Side.CLIENT)
 			@Override
@@ -79,7 +86,7 @@ public class Seccult
 
 					return ItemWand.getWandStyle(stack, tintIndex);
 			}
-		}, ModItems.Wand);*/
+		}, ModItems.Wand);
 	}
 }
 

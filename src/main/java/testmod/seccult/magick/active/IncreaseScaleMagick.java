@@ -32,4 +32,10 @@ public class IncreaseScaleMagick extends Magick{
 		return ModMagicks.InScaleMagickColor;
 	}
 
+	@Override
+	public boolean doMagickNeedAtrribute() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

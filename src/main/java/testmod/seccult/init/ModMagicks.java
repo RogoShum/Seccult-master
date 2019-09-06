@@ -11,7 +11,6 @@ import testmod.seccult.magick.active.*;
 import testmod.seccult.magick.implementation.Implementation;
 
 public class ModMagicks {
-
 	public static final String DamageMagick = "damage";
 	public static final String FlameMagick = "flame";
 	public static final String FrozenMagick = "frozen";
@@ -28,6 +27,11 @@ public class ModMagicks {
 	public static final String InScaleMagick = "inscale";
 	public static final String ArrowMagick = "arrow";
 	public static final String AllSeeMagick = "allsee";
+	public static final String ShieldMagick = "shield";
+	public static final String ProtectMagick = "protect";
+	public static final String LifeAbsorptionMagick = "lifeabsorption";
+	public static final String BlackVelvetHellMagick = "blackvelvethell";
+	public static final String CatchTheSoulMagick = "catchthesoul";
 	
 	public static final int DamageMagickColor = 0xDC143C;
 	public static final int FlameMagickColor = 0xFF0000;
@@ -41,10 +45,15 @@ public class ModMagicks {
 	public static final int CopyMagickColor = 0xDDA0DD;
 	public static final int TheWorldMagickColor = 0xFFF5EE;
 	public static final int KraftWorkMagickColor = 0xDEB887;
-	public static final int FloatingMagickColor = 0xFFFACD;
+	public static final int FloatingMagickColor = 0xF08080;
 	public static final int InScaleMagickColor = 0xFFFACD;
-	public static final int ArrowMagickColor = 0xFFFACD;
-	public static final int AllSeeMagickColor = 0xFFFACD;
+	public static final int ArrowMagickColor = 0x48D1CC;
+	public static final int AllSeeMagickColor = 0xBA55D3;
+	public static final int ShieldMagickColor = 0x7FFFAA;
+	public static final int ProtectMagickColor = 0x7FFFAA;
+	public static final int LifeAbsorptionMagickColor = 0xFF0000;
+	public static final int BlackVelvetHellMagickColor = 0x4B0082;
+	public static final int CatchTheSoulMagickColor = 0xB0C4DE;
 	
 	@SuppressWarnings("unused")
 	private static Magick Damage;
@@ -78,7 +87,16 @@ public class ModMagicks {
 	private static Magick Arrow;
 	@SuppressWarnings("unused")
 	private static Magick AllSee;
-	
+	@SuppressWarnings("unused")
+	private static Magick Shield;
+	@SuppressWarnings("unused")
+	private static Magick Protect;
+	@SuppressWarnings("unused")
+	private static Magick LifeAbsorption;
+	@SuppressWarnings("unused")
+	private static Magick BlackVelvetHell;
+	@SuppressWarnings("unused")
+	private static Magick CatchTheSoul;
 
 	private static Set<Magick> magicks = new HashSet<>();
 	private static ArrayList<String> MagickList = new ArrayList<String>();
@@ -99,9 +117,14 @@ public class ModMagicks {
 		TheWorld = new TheWorldMagick(TheWorldMagick, true, 500, 2F);
 		KraftWork = new KraftWorkMagick(KraftWorkMagick, true, 60, 3F);
 		Floating = new FloatingMagick(FloatingMagick, true, 20, 1F);
-		InScale = new IncreaseScaleMagick(InScaleMagick, true, 20, 1F);
+		//InScale = new IncreaseScaleMagick(InScaleMagick, true, 20, 1F);
 		Arrow = new ArrowClowCardMagick(ArrowMagick, true, 30, 1.5F);
 		AllSee = new AllSeeMagick(AllSeeMagick, true, 120, 2F);
+		Shield = new ShieldMagick(ShieldMagick, true, 120, 3F);
+		Protect = new ProtectionMagick(ProtectMagick, true, 0.5F, 1.2F);
+		LifeAbsorption = new LifeAbsorptionMagick(LifeAbsorptionMagick, true, 5, 3F);
+		BlackVelvetHell = new BlackVelvetHellMagick(BlackVelvetHellMagick, true, 5000, 10F);
+		CatchTheSoul = new CatchTheSoulMagick(CatchTheSoulMagick, true, 1000, 10F);
 	}
 
 	public static void addMagick(Magick magick) {

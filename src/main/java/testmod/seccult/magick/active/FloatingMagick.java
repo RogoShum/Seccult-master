@@ -29,4 +29,9 @@ public class FloatingMagick extends Magick{
 	@Override
 	void MagickFX() {
 	}
+
+	@Override
+	public boolean doMagickNeedAtrribute() {
+		return false;
+	}
 }

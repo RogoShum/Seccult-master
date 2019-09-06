@@ -18,7 +18,7 @@ public class ImplementationGroup extends Implementation{
 
 	@Override
 	public void getTarget() {
-		if(getEntity() != null) 
+		if(this.doEntity && getEntity() != null) 
 		{
 			List<Entity> eList = getEntity();
 			List<Entity> newList = new ArrayList<>();
@@ -38,7 +38,7 @@ public class ImplementationGroup extends Implementation{
 			setEntity(newList);
 		}
 		
-		if(getBlock() != null && getEntity() == null)
+		if(this.doBlock && getBlock() != null && getEntity() == null)
 		{
 			List<BlockPos> bList = getBlock();
 			List<BlockPos> newList = new ArrayList<>();
@@ -75,5 +75,10 @@ public class ImplementationGroup extends Implementation{
 		vec[2] = 1 - 2*world.rand.nextFloat();
 		float[] color = {this.color[0], this.color[1],this.color[2]};
 		 NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, particles, 103));
+	}
+
+	@Override
+	public boolean doMagickNeedAtrribute() {
+		return false;
 	}
 }

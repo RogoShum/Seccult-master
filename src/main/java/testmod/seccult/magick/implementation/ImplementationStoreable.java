@@ -17,15 +17,22 @@ public class ImplementationStoreable extends Implementation{
 	public void getTarget() {
 	}
 
-	public void setData(NBTTagCompound magick, NBTTagList select)
+	public void setData(NBTTagCompound magick, NBTTagList select, boolean doEntity, boolean doBlock)
 	{
 		this.LoadMagick = magick;
 		this.LoadSelect = select;
+		this.doEntity = doEntity;
+		this.doBlock = doBlock;
 	}
 	
 	public void setScale(float scale)
 	{
 		this.scale = scale;
+	}
+
+	@Override
+	public boolean doMagickNeedAtrribute() {
+		return false;
 	}
 	
 }

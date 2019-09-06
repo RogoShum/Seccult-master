@@ -41,6 +41,9 @@ public class MagickCompiler {
 	List<Entity> entity = new ArrayList<>();
 	List<BlockPos> block = new ArrayList<>();
 	
+	private boolean doEntity = true;
+	private boolean doBlock = true;
+	
 	public MagickCompiler() {}
 
 	public static NBTTagCompound compileMagick(int[][] MagickData, int[][] Selector, int[][] SelectorPower, int[][] SelectorAttribute, int amount,  boolean e, boolean b)
@@ -69,9 +72,13 @@ public class MagickCompiler {
         	
         	Magick.appendTag(MagickNBT);
     	}
+    	NBTTagCompound MagickAttribute = new NBTTagCompound();
+    	MagickAttribute.setBoolean("doEntity", e);
+    	MagickAttribute.setBoolean("doBlock", b);
     	
     	NewMagickNBTList.setTag("Magick", Magick);
     	NewMagickNBTList.setTag("Selector", Select);
+    	NewMagickNBTList.setTag("MagickAttribute", MagickAttribute);
 		return NewMagickNBTList;
 	}
 	
@@ -86,6 +93,9 @@ public class MagickCompiler {
 			int slot = MagickNBT.getInteger("Slot");
 			
 			NBTTagList selector = new NBTTagList();
+			
+			NBTTagCompound MagickAttribute = magickNbt.getCompoundTag("MagickAttribute");
+			
 			for(int x = 0; x < LoadSelect.tagCount(); x++)
 			{
 				if(LoadSelect.getCompoundTagAt(x).getInteger("Slot") == slot) {
@@ -100,11 +110,28 @@ public class MagickCompiler {
 			if(e == null || e.world.isRemote)
 				return;
 			newMagick.toDo = true;
+			newMagick.doEntity = MagickAttribute.getBoolean("doEntity");
+			newMagick.doBlock = MagickAttribute.getBoolean("doBlock");
+    		if(magick == null && !MagickNBT.hasNoTags()) {
+    			magick = ModMagicks.getMagickFromName(
+				ModMagicks.GetMagickStringByID(
+				MagickNBT.getInteger("Magick")));
+			if(magick != null)
+			{
+				color = magick.getRGB();
+			}
+    		}
+			
 			PlayerDataUpdateEvent.compiler.add(newMagick);
 		}
 	}
 	
-	public void pushMagickData(NBTTagCompound magickNbt, NBTTagList selectNbt, Entity e)
+	public float[] getColor()
+	{
+		return this.color;
+	}
+	
+	public void pushMagickData(NBTTagCompound magickNbt, NBTTagList selectNbt, Entity e, boolean doEntity, boolean doBlock)
 	{
 			MagickCompiler newMagick = new MagickCompiler();
 			newMagick.MagickNBT = magickNbt;
@@ -113,6 +140,8 @@ public class MagickCompiler {
 			if(e == null || e.world.isRemote)
 				return;
 			newMagick.toDo = true;
+			newMagick.doEntity = doEntity;
+			newMagick.doBlock = doBlock;
 			PlayerDataUpdateEvent.compiler.add(newMagick);
 	}
 	
@@ -168,6 +197,8 @@ public class MagickCompiler {
 			block.add(getBlockHit());
     		}
     		
+    		
+    		
     		if(!cycle) {
 			NBTTagCompound SelectNBT = Select.getCompoundTagAt(order);
 			Implementation imples = (ImplementationHandler.getImplementationFromName(
@@ -176,6 +207,10 @@ public class MagickCompiler {
 			int implesattributeBase = SelectNBT.getInteger("SelectorPower");
 			int implesattributeAddtion =  SelectNBT.getInteger("SelectorAttribute");
 			imples.color = this.color;
+			if(this.doEntity)
+				imples.doEntity();
+			if(this.doBlock)
+				imples.doBlock();
 			imples.setPlayer(e);
 			imples.getTarget();
 			imples.setAttribute(implesattributeBase, implesattributeAddtion);
@@ -194,7 +229,7 @@ public class MagickCompiler {
 				ModMagicks.getMagickFromName(
 						ModMagicks.GetMagickStringByID(
 								MagickNBT.getInteger("Magick")));
-				IMStore.setData(MagickNBT.copy(), NewList);
+				IMStore.setData(MagickNBT.copy(), NewList, this.doEntity, this.doBlock);
 				IMStore.setScale(implesattributeBase + implesattributeAddtion);
 				IMStore.getTarget();
 				done = true;

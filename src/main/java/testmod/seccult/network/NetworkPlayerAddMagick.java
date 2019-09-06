@@ -26,9 +26,12 @@ public class NetworkPlayerAddMagick implements IMessage {
 	private long ulong;
 	private long uleast;
 	
+	private boolean doEntity;
+	private boolean doBlock;
+	
     public NetworkPlayerAddMagick() {}
     
-    public NetworkPlayerAddMagick(UUID p, int[][] list, int[][] list1, int[][] list2, int[][] list3, int amount)
+    public NetworkPlayerAddMagick(UUID p, int[][] list, int[][] list1, int[][] list2, int[][] list3, int amount, boolean doEntity, boolean doBlock)
     {
     	this.PUUID = p;
     	this.MagickData = list;
@@ -37,6 +40,9 @@ public class NetworkPlayerAddMagick implements IMessage {
     	this.Selector = list1;
     	this.SelectorPower = list2;
     	this.SelectorAttribute = list3;
+    	
+    	this.doBlock = doBlock;
+    	this.doEntity = doEntity;
     }
 
     @Override
@@ -78,6 +84,9 @@ public class NetworkPlayerAddMagick implements IMessage {
         uleast = buf.readLong();
         ulong = buf.readLong();
         PUUID = new UUID(ulong, uleast);
+        
+        this.doBlock = buf.readBoolean();
+        this.doEntity = buf.readBoolean();
     }
 
     @Override
@@ -101,6 +110,9 @@ public class NetworkPlayerAddMagick implements IMessage {
     	
     	buf.writeLong(PUUID.getLeastSignificantBits());
     	buf.writeLong(PUUID.getMostSignificantBits());
+    	
+    	buf.writeBoolean(doBlock);
+    	buf.writeBoolean(doEntity);
     }
     
     public static class PacketMessageHandler implements IMessageHandler<NetworkPlayerAddMagick, IMessage> {
@@ -109,9 +121,8 @@ public class NetworkPlayerAddMagick implements IMessage {
 			World world = ctx.getServerHandler().player.world;
         	EntityPlayer player = world.getPlayerEntityByUUID(message.PUUID);
         	PlayerData data = PlayerDataHandler.get(player);
-        	System.out.println(message.length);
         	if(message.length > 0)
-        		data.addMagick(MagickCompiler.compileMagick(message.MagickData, message.Selector, message.SelectorPower, message.SelectorAttribute, message.length, true, true));
+        		data.addMagick(MagickCompiler.compileMagick(message.MagickData, message.Selector, message.SelectorPower, message.SelectorAttribute, message.length, message.doEntity, message.doBlock));
         	else
         	{
         		NBTTagCompound delete = new NBTTagCompound();

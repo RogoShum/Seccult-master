@@ -20,6 +20,7 @@ import testmod.seccult.api.PlayerDataHandler;
 import testmod.seccult.api.PlayerDataHandler.PlayerData;
 import testmod.seccult.client.gui.button.SpellButton;
 import testmod.seccult.init.ModMagicks;
+import testmod.seccult.magick.active.Magick;
 import testmod.seccult.network.NetworkHandler;
 import testmod.seccult.network.NetworkPlayerAddMagick;
 
@@ -218,7 +219,6 @@ public class SpellProgrammerGui extends GuiScreen
 
     private void clickedSpellButton(int mouseX, int mouseY, int state)
     {
-
         for (int i = 0; i < this.SelectedButtonList.size(); ++i)
         {
             SpellButton button = this.SelectedButtonList.get(i);
@@ -307,13 +307,13 @@ public class SpellProgrammerGui extends GuiScreen
     			z++;
     		}
     		
-    		if((z < 5 && z % 4 == 0) || (z>5) && (z-1)%4 == 0) 
+    		if((z < 7 && z % 4 == 0) || (z>7) && (z-1)%4 == 0) 
     		{
     			hdis = 0;
     			wdis += 17;
     		}
     		
-    		if(z == 5) 
+    		if(z == 7) 
     		{
     			wdis = 49;
     			hdis = 0;
@@ -370,8 +370,9 @@ public class SpellProgrammerGui extends GuiScreen
 			if(selected.id == 0)
 				closePanel();
 		    String power_name = I18n.format(selected.spellPower_name);
-			String attribute_name = I18n.format(selected.spellAttribute_name);
 		    this.fontRenderer.drawString(power_name, offsetX + 196, offsetY + 90, 0x404040);
+		    
+		    String attribute_name = I18n.format(selected.spellAttribute_name);
 		    this.fontRenderer.drawString(attribute_name, offsetX + 196, offsetY + 100, 0x404040);
 		    
 		    String name = ModMagicks.getI18nNameByID(selected.id);
@@ -436,35 +437,60 @@ public class SpellProgrammerGui extends GuiScreen
 	private void openPanel()
 	{
 		if(PanelOpen)
-		{	
+		{
+			Magick magick = ModMagicks.getMagickFromName(
+		    		ModMagicks.GetMagickStringByID(this.selected.id));
+			
+			
+			boolean doAttribute = true;
+			if(selected.id >= 7)
+				doAttribute = magick.doMagickNeedAtrribute();
+			else
+				doAttribute = false;
+			
 			GlStateManager.pushMatrix();
 			this.drawTexturedModalRect(selected.x - 8, selected.y -18, 80, 176, 32, 16);
 			GlStateManager.popMatrix();
 			String power = String.valueOf(selected.spellPower);
-			String attribute = String.valueOf(selected.spellAttribute);
 		    this.fontRenderer.drawString(power, selected.x - 1, selected.y - 15, 0x404040);
-		    this.fontRenderer.drawString(attribute, selected.x + 11, selected.y - 15, 0x404040);
+		    
+		    
+		    if(doAttribute)
+		    {
+		    	String attribute = String.valueOf(selected.spellAttribute);
+		    	this.fontRenderer.drawString(attribute, selected.x + 11, selected.y - 15, 0x404040);
+		    }
 
 			for(int i = 0; i < PanelButtonList.size(); i++)
 			{
-				PanelButtonList.get(i).enabled = true;
+					PanelButtonList.get(i).enabled = true;
 					switch(PanelButtonList.get(i).id)
 					{
 						case BUTTON_UP_A:
 							PanelButtonList.get(i).x = selected.x - 1;
 							PanelButtonList.get(i).y = selected.y - 16;
 							break;
-						case BUTTON_UP_B:
-							PanelButtonList.get(i).x = selected.x + 11;
-							PanelButtonList.get(i).y = selected.y - 16;
-							break;
 						case BUTTON_DOWN_A:
 							PanelButtonList.get(i).x = selected.x - 1;
 							PanelButtonList.get(i).y = selected.y - 6;
 							break;
+						case BUTTON_UP_B:
+							if(doAttribute)
+						    {
+							PanelButtonList.get(i).x = selected.x + 11;
+							PanelButtonList.get(i).y = selected.y - 16;
+						    }
+							else
+								PanelButtonList.get(i).enabled = false;
+							break;
 						case BUTTON_DOWN_B:
+							if(doAttribute)
+						    {
 							PanelButtonList.get(i).x = selected.x + 11;
 							PanelButtonList.get(i).y = selected.y - 6;
+						    }
+							else
+								PanelButtonList.get(i).enabled = false;
 							break;
 						case BUTTON_FORK:
 							PanelButtonList.get(i).x = selected.x + 19;
@@ -493,11 +519,17 @@ public class SpellProgrammerGui extends GuiScreen
         	 if(button.getLinked != null && button.getLinked.prveLinked != button)
         		 button.getLinked = null;
         	 
-        	 if(!button.hasLinked) 
-        	 {
-        		 canProgeammer = false;
-        		 return;
-        	 }
+        	 if((button.id != 5 && button.id != 6) && !button.hasLinked)
+        	{
+        		canProgeammer = false;
+        		return;
+        	}
+        	 
+        	else if((button.id == 5 || button.id == 6) && button.hasLinked)
+        	{
+        		canProgeammer = false;
+         		return;
+        	}
         }
         
         canProgeammer = true;
@@ -551,6 +583,9 @@ public class SpellProgrammerGui extends GuiScreen
     
     private boolean magickCompiler()
     {
+    	boolean doEntity = true;
+    	boolean doBlock = true;
+    	
     	int[][] MagickThing = new int[4][];
 
 		int amount = 0;
@@ -582,6 +617,10 @@ public class SpellProgrammerGui extends GuiScreen
     			
     			amount++;
     		}
+    		else if(SelectedButtonList.get(i).id == 5)
+    			doEntity = false;
+    		else if(SelectedButtonList.get(i).id == 6)
+    			doBlock = false;
     	}
     	
 		MagickThing[0] = new int[amount];
@@ -612,7 +651,7 @@ public class SpellProgrammerGui extends GuiScreen
 				SelectorAttributeList[i][z] = ListSelectorAttribute.get(i)[z];
 			}
 		}
-    	NetworkHandler.getNetwork().sendToServer(new NetworkPlayerAddMagick(player.getUniqueID(), MagickThing, SelectorList, SelectorPowerList, SelectorAttributeList, amount));
+    	NetworkHandler.getNetwork().sendToServer(new NetworkPlayerAddMagick(player.getUniqueID(), MagickThing, SelectorList, SelectorPowerList, SelectorAttributeList, amount, doEntity, doBlock));
     	//SelectedButtonList.clear();
     	selected = null;
     	chooseToLink = null;

@@ -32,4 +32,9 @@ public class GratefulDeadMagick extends Magick{
 		return ModMagicks.GratefulDeadMagickColor;
 	}
 
+	@Override
+	public boolean doMagickNeedAtrribute() {
+		return true;
+	}
+
 }

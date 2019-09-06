@@ -25,7 +25,10 @@ public class LayerJellyFish implements LayerRenderer<EntityJellyfish>
     {
         if (!entity.isInvisible())
         {
-            GlStateManager.color(1.0F, 1.0F, 1.0F, entity.getSwing() / 90F);
+        	float blend = entity.getSwing() / 90F;
+        	if(blend < 0.12F)
+        		blend = 0.12F;
+            GlStateManager.color(1.0F, 1.0F, 1.0F, blend);
             GlStateManager.enableNormalize();
             GlStateManager.enableBlend();
             Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURESD);

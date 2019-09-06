@@ -106,9 +106,9 @@ public class NetworkEffectData implements IMessage {
         	            double d3 = (1 - 2*StateManager.rand.nextFloat()) / 2;
         	            double d4 = (1 - 2*StateManager.rand.nextFloat()) / 2;
         	            double d5 = (1 - 2*StateManager.rand.nextFloat()) / 2;
-        	        	Particle me = new LightFX(mc.world, (d0 +x) / 2.0D, (d1 +y) / 2.0D, (d2 +z) / 2.0D, d3/6, d4/6, d5/6, 1);
+        	        	Particle me = new LightFX(mc.world, (d0 +x) / 2.0D, (d1 +y) / 2.0D, (d2 +z) / 2.0D, d3/6, d4/6, d5/6, 0.3F);
         	        	me.setRBGColorF(r, g, b);
-        	        	Particle smoke = new StarFX(mc.world, d0, d1, d2, d3 / 5, d4 / 5, d5 / 5, 1);
+        	        	Particle smoke = new StarFX(mc.world, d0, d1, d2, d3 / 5, d4 / 5, d5 / 5, 0.3f);
         	        	Minecraft.getMinecraft().effectRenderer.addEffect(me);
         	        	Minecraft.getMinecraft().effectRenderer.addEffect(smoke);
         				}
@@ -137,18 +137,9 @@ public class NetworkEffectData implements IMessage {
         			       double d3 = (1 - 2*StateManager.rand.nextFloat()) / 2;
         			       double d4 = (1 - 2*StateManager.rand.nextFloat()) / 2;
         			       double d5 = (1 - 2*StateManager.rand.nextFloat()) / 2;
-        			    	Particle me = new LightFX(mc.world, (d0 + x) / 2.0D, (d1 + y) / 2.0D, (d2 + z) / 2.0D, d3, d4, d5, 3);
-        			    	me.setRBGColorF(r, g, b);
-        			    	Particle smoke = new StarFX(mc.world, d0, d1, d2, d3 / 2, d4 / 2, d5 / 2, message.scale / 3);
-        			    	smoke.setRBGColorF(r, g, b);
-        			    	Particle pop = new LightFX(mc.world, d0, d1, d2, -d3, -d4, -d5, message.scale / 4);
-        			    	pop.setRBGColorF(r, g, b);
-        			    	Particle big = new LightFX(mc.world, d0, d1, d2, -d3 / 5, -d4 / 5, -d5 / 5, message.scale * 2);
+        			    	Particle big = new LightFX(mc.world, d0, d1, d2, -d3 / 20, -d4 / 20, -d5 / 20, message.scale / 2);
         			    	big.setRBGColorF(r, g, b);
         			    	big.setMaxAge(60);
-        			    	Minecraft.getMinecraft().effectRenderer.addEffect(me);
-        			    	Minecraft.getMinecraft().effectRenderer.addEffect(smoke);
-        			    	Minecraft.getMinecraft().effectRenderer.addEffect(pop);
         			    	Minecraft.getMinecraft().effectRenderer.addEffect(big);
         				}
         			break;
@@ -160,7 +151,7 @@ public class NetworkEffectData implements IMessage {
         				motionX = motionX * message.scale / 4;
         				motionY = motionY * message.scale / 4;
         				motionZ = motionZ * message.scale / 4;
-        				Particle big = new LightFX(mc.world, x, y, z, motionX, motionY, motionZ, message.scale * 10);
+        				Particle big = new LightFX(mc.world, x, y, z, motionX / 4, motionY / 4, motionZ / 4, message.scale * 5);
         		    	big.setRBGColorF(r, g, b);
         				big.setMaxAge(10);
         		    	Minecraft.getMinecraft().effectRenderer.addEffect(big);

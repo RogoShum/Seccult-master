@@ -29,4 +29,9 @@ public class WhiteAlbumMagick extends Magick{
 		return ModMagicks.WhiteAlbumMagickColor;
 	}
 
+	@Override
+	public boolean doMagickNeedAtrribute() {
+		return true;
+	}
+
 }

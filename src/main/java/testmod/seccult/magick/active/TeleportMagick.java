@@ -137,4 +137,9 @@ public class TeleportMagick extends Magick{
 		return ModMagicks.TeleportMagickColor;
 	}
 
+	@Override
+	public boolean doMagickNeedAtrribute() {
+		return false;
+	}
+
 }

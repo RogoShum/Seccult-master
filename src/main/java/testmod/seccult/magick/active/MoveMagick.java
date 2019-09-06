@@ -18,13 +18,13 @@ public class MoveMagick extends Magick{
 	void toEntity() {
 		Vec3d QAQ = player.getLookVec();
 		MagickFX();
-		entity.motionX = QAQ.scale(0.5).x *(strengh + attribute);
-		entity.motionY = QAQ.scale(0.5).y *(strengh + attribute);
-		entity.motionZ = QAQ.scale(0.5).z *(strengh + attribute);
+		entity.motionX = QAQ.scale(0.5).x *(strengh);
+		entity.motionY = QAQ.scale(0.5).y *(strengh);
+		entity.motionZ = QAQ.scale(0.5).z *(strengh);
 		if(entity instanceof EntityPlayer)
 		{
 			EntityPlayer player = (EntityPlayer) entity;
-			StateManager.setPlayerMove(player, QAQ.scale(0.5).x *(strengh + attribute), QAQ.scale(0.5).y *(strengh + attribute), QAQ.scale(0.5).z *(strengh + attribute), 1);
+			StateManager.setPlayerMove(player, QAQ.scale(0.5).x *(strengh), QAQ.scale(0.5).y *(strengh), QAQ.scale(0.5).z *(strengh), 1);
 		}
 	}
 
@@ -69,5 +69,10 @@ public class MoveMagick extends Magick{
 		float[] color = {RGB[0], RGB[1], RGB[2]};
 		NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, strengh / 10, 0));
 		}
+	}
+
+	@Override
+	public boolean doMagickNeedAtrribute() {
+		return false;
 	}
 }

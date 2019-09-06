@@ -54,4 +54,9 @@ public class TheWorldMagick extends Magick{
 		return ModMagicks.TheWorldMagickColor;
 	}
 
+	@Override
+	public boolean doMagickNeedAtrribute() {
+		return true;
+	}
+
 }

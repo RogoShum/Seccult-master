@@ -63,11 +63,10 @@ public class SpellSelectGui extends GuiScreen
     	super.initGui();
     	xSize = 256;
     	ySize = 188;
-    	//自动计算屏幕正中心的位置
+
     	offsetX = (this.width - this.xSize) / 2;
     	offsetY = (this.height - this.ySize) / 2;
-    	//添加新按钮
-    	//同时对按钮的显示功能进行覆写
+
     	this.buttonList.add(new GuiButton(BUTTON_SHIFT, offsetX + 195, offsetY + 6, 16, 16, "")
     	{
     		@Override
@@ -161,18 +160,6 @@ public class SpellSelectGui extends GuiScreen
 			GlStateManager.scale(2.3, 2.3, 2.3);
 			this.drawTexturedModalRect(selectedOne.x / 1000, selectedOne.y / 1000, 128, 172 + 4, 16, 16);
 			GlStateManager.popMatrix();
-		    /*String power_name = I18n.format(selected.spellPower_name);
-			String attribute_name = I18n.format(selected.spellAttribute_name);
-		    this.fontRenderer.drawString(power_name, offsetX + 196, offsetY + 90, 0x404040);
-		    this.fontRenderer.drawString(attribute_name, offsetX + 196, offsetY + 100, 0x404040);
-		    
-		    String name = ModMagicks.getI18nNameByID(selected.id);
-		    String spell_name = I18n.format(name);
-		    this.fontRenderer.drawString(spell_name, offsetX + 196, offsetY + 62, 0x404040);
-		    
-		    String introduction = ModMagicks.getI18nNameByID(selected.id);
-		    String spell_introduction = I18n.format(introduction);
-		    this.fontRenderer.drawString(spell_introduction, offsetX + 196, offsetY + 72, 0x404040);*/
     	}
     	
     	if(selectedTwo != null)
@@ -183,19 +170,6 @@ public class SpellSelectGui extends GuiScreen
 			GlStateManager.scale(2.3, 2.3, 2.3);
 			this.drawTexturedModalRect(selectedOne.x / 1000, selectedOne.y / 1000, 112, 172 + 4, 16, 16);
 			GlStateManager.popMatrix();
-			
-		    /*String power_name = I18n.format(selected.spellPower_name);
-			String attribute_name = I18n.format(selected.spellAttribute_name);
-		    this.fontRenderer.drawString(power_name, offsetX + 196, offsetY + 90, 0x404040);
-		    this.fontRenderer.drawString(attribute_name, offsetX + 196, offsetY + 100, 0x404040);
-		    
-		    String name = ModMagicks.getI18nNameByID(selected.id);
-		    String spell_name = I18n.format(name);
-		    this.fontRenderer.drawString(spell_name, offsetX + 196, offsetY + 62, 0x404040);
-		    
-		    String introduction = ModMagicks.getI18nNameByID(selected.id);
-		    String spell_introduction = I18n.format(introduction);
-		    this.fontRenderer.drawString(spell_introduction, offsetX + 196, offsetY + 72, 0x404040);*/
     	}
     	
     }
@@ -217,9 +191,7 @@ public class SpellSelectGui extends GuiScreen
     		}
     		if(selectedTwo == null)
     		{
-    			System.out.println(button);
     			selectedOne = (SpellButton) button;
-    			System.out.println(selectedOne);
     		}
     		if(selectedOne == null)
     			selectedTwo = (SpellButton) button;
@@ -232,15 +204,17 @@ public class SpellSelectGui extends GuiScreen
         case BUTTON_DELETE:
         	if(selectedOne != null)
         	{
-        		NetworkHandler.getNetwork().sendToServer(new NetworkPlayerAddMagick(player.getUniqueID(), null, null, null, null, -selectedOne.sortID));
+        		NetworkHandler.getNetwork().sendToServer(new NetworkPlayerAddMagick(player.getUniqueID(), null, null, null, null, -selectedOne.sortID, false, false));
         		this.buttonList.remove(selectedOne);
         		selectedOne = null;
+        		onGuiClosed();
         	}
         	if(selectedTwo != null)
         	{
-        		NetworkHandler.getNetwork().sendToServer(new NetworkPlayerAddMagick(player.getUniqueID(), null, null, null, null, -selectedTwo.sortID));
+        		NetworkHandler.getNetwork().sendToServer(new NetworkPlayerAddMagick(player.getUniqueID(), null, null, null, null, -selectedTwo.sortID, false, false));
         		this.buttonList.remove(selectedTwo);
         		selectedTwo = null;
+        		onGuiClosed();
         	}
             break;
         default:

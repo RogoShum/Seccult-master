@@ -25,7 +25,11 @@ public class StateManager {
 	public static final String GratefulDead = "GratefulDead";
 	public static final String KraftWork = "KraftWork";
 	public static final String Floating = "Floating";
+	public static final String Shield = "Shield";
+	public static final String Protection = "Protection";
+	
 	public static Random rand = new Random();
+	
 	public StateManager() 
 	{
 	}
@@ -111,14 +115,15 @@ public class StateManager {
 		
 		if(CheckIfStated(entity, LOST_MIND) > 0)
 		{
-			entity.motionX = 1 - 2*rand.nextFloat();
-			entity.motionY = 1 - 2*rand.nextFloat();
-			entity.motionZ = 1 - 2*rand.nextFloat();
+			int level = getLevel(entity, LOST_MIND);
+			entity.motionX = (1 - 2*rand.nextFloat()) * level;
+			entity.motionY = (1 - 2*rand.nextFloat()) * level;
+			entity.motionZ = (1 - 2*rand.nextFloat()) * level;
 			
 			if(entity instanceof EntityPlayer)
 			{
 				EntityPlayer player = (EntityPlayer) entity;
-				setPlayerMove(player, 1 - 2*rand.nextFloat(), 1 - 2*rand.nextFloat(), 1 - 2*rand.nextFloat(), 1);
+				setPlayerMove(player, (1 - 2*rand.nextFloat()) * level, (1 - 2*rand.nextFloat()) * level, (1 - 2*rand.nextFloat()) * level, 1);
 			}
 			
 			entity.setRotationYawHead(rand.nextInt(360));
@@ -151,7 +156,7 @@ public class StateManager {
 				continue;
 			}
 
-			if(kraftwork > 5 && getStateListForEntity(entity).hasKey(KraftWork + "TAG"))
+			if(getStateListForEntity(entity).hasKey(KraftWork + "TAG"))
 			{
 				NBTTagCompound oldNbt = getStateListForEntity(entity).getCompoundTag(KraftWork + "TAG");
 				entity.readFromNBT(oldNbt.copy());
@@ -165,9 +170,6 @@ public class StateManager {
 		int floating = CheckIfStated(entity, Floating);
 		if(floating > 0)
 		{
-			//entity.onGround = true;
-			//entity.setAir(0);
-			//entity.fallDistance = 0;
 			if(entity.isSneaking())
 			{
 				if(entity.motionY > 0.2)
@@ -182,6 +184,17 @@ public class StateManager {
 				setPlayerMove(entity, entity.motionX, 0, entity.motionZ, 3);
 			}
 		}
+		
+		int shield = CheckIfStated(entity, Shield);
+		if(shield > 0)
+		{
+		}
+		
+		int protection = CheckIfStated(entity, Protection);
+		if(protection > 0)
+		{
+		}
+		
 		}
 	}
 	

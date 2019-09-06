@@ -32,4 +32,9 @@ public class ArrowClowCardMagick extends Magick{
 		return ModMagicks.ArrowMagickColor;
 	}
 
+	@Override
+	public boolean doMagickNeedAtrribute() {
+		return true;
+	}
+
 }

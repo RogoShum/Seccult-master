@@ -45,5 +45,7 @@ public class RenderHandler
 		RenderingRegistry.registerEntityRenderingHandler(EntityFrozenFX.class, m -> new RenderFrozenFX(m));
 		RenderingRegistry.registerEntityRenderingHandler(EntityAdvanceLaser.class, m -> new RenderAdvanceLaser(m));
 		RenderingRegistry.registerEntityRenderingHandler(EntitySpirit.class, m -> new RenderSpirit(m));
+		RenderingRegistry.registerEntityRenderingHandler(EntityShieldFX.class, m -> new RenderShieldFX(m));
+		RenderingRegistry.registerEntityRenderingHandler(EntityProtectionShieldFX.class, m -> new RenderProtectionShieldFX(m));
 	}
 }

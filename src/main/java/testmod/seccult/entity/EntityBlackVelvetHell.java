@@ -1,5 +1,7 @@
 package testmod.seccult.entity;
 
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -10,6 +12,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import testmod.seccult.init.ModDamage;
 
 public class EntityBlackVelvetHell extends Entity{
 	private static final DataParameter<Float> Size = EntityDataManager.<Float>createKey(EntityBlackVelvetHell.class, DataSerializers.FLOAT);
@@ -25,6 +28,11 @@ public class EntityBlackVelvetHell extends Entity{
 	public EntityBlackVelvetHell(World worldIn) {
 		super(worldIn);
 		this.setSize(1.0F, 1.0F);
+		this.setNoGravity(true);
+		this.noClip = true;
+		this.collided = false;
+		this.isImmuneToFire = true;
+		this.setEntityInvulnerable(true);
 	}
 
 	public void nb»Ànb ±() {
@@ -97,6 +105,7 @@ public class EntityBlackVelvetHell extends Entity{
 				this.overQuest = true;
 				return;
 			}
+			
 			prisoner.ticksExisted -= 1;
 			prisoner.posX = prisoner.prevPosX;
 			prisoner.posY = prisoner.prevPosY;
@@ -111,14 +120,15 @@ public class EntityBlackVelvetHell extends Entity{
 			
 			if((prisoner instanceof EntityLivingBase))
 			{
-				
 				EntityLivingBase living = (EntityLivingBase) prisoner;
 				if(living.getHealth() < tiktok)
-					living.onDeath(DamageSource.causeIndirectMagicDamage(this, Owner));
-				living.setHealth(living.getHealth() - tiktok);
-				if(tiktok > 100 && prisoner.isEntityAlive()) {
-					living.onDeath(DamageSource.causeIndirectMagicDamage(this, Owner));
+					living.onDeath(ModDamage.causeBlackVelvetHellDamage(this.Owner));
+					living.setHealth(living.getHealth() - tiktok);
+				
+				if(tiktok > 100 && (prisoner.isEntityAlive() || !prisoner.isDead)) {
+					living.onDeath(ModDamage.causeBlackVelvetHellDamage(this.Owner));
 					living.setHealth(-1000);
+					living.isDead = true;
 					living.setDead();
 				}
 			}
@@ -126,6 +136,23 @@ public class EntityBlackVelvetHell extends Entity{
 			{
 				prisoner.isDead = true;
 				prisoner.setDead();
+			}
+			
+			if(tiktok > 200 && (prisoner.isEntityAlive() || !prisoner.isDead))
+			{
+				NBTTagCompound emptyTag = new NBTTagCompound();
+				this.prisoner.readFromNBT(emptyTag);
+			}
+			
+			if(tiktok > 300 && (prisoner.isEntityAlive() || !prisoner.isDead))
+			{
+				List<Entity> list = this.world.getLoadedEntityList();
+				for(int i = 0; i < list.size(); i++)
+				{
+					Entity e = list.get(i);
+					if(e == this.prisoner);
+					list.set(i, null);
+				}
 			}
 		}
 		else if(!this.world.isRemote && this.prisoner == null || (this.prisoner instanceof EntityBlackVelvetHell)){

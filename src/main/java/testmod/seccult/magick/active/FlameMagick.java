@@ -92,4 +92,9 @@ public class FlameMagick extends Magick{
 	public int getColor() {
 		return ModMagicks.FlameMagickColor;
 	}
+
+	@Override
+	public boolean doMagickNeedAtrribute() {
+		return false;
+	}
 }

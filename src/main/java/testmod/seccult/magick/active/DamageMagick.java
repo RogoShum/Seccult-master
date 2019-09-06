@@ -97,4 +97,9 @@ public class DamageMagick extends Magick{
 	public int getColor() {
 		return ModMagicks.DamageMagickColor;
 	}
+
+	@Override
+	public boolean doMagickNeedAtrribute() {
+		return false;
+	}
 }

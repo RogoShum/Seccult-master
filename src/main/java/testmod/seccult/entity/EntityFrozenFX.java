@@ -20,8 +20,8 @@ public class EntityFrozenFX extends Entity{
 	protected long upperleast = 0;
 	protected Entity owner;
 	
-	private static final DataParameter<Float> Length = EntityDataManager.<Float>createKey(EntityLaserBeamBase.class, DataSerializers.FLOAT);
-	private static final DataParameter<Float> Width = EntityDataManager.<Float>createKey(EntityLaserBeamBase.class, DataSerializers.FLOAT);
+	private static final DataParameter<Float> Length = EntityDataManager.<Float>createKey(EntityFrozenFX.class, DataSerializers.FLOAT);
+	private static final DataParameter<Float> Width = EntityDataManager.<Float>createKey(EntityFrozenFX.class, DataSerializers.FLOAT);
 	
 	public EntityFrozenFX(World worldIn) {
 		super(worldIn);

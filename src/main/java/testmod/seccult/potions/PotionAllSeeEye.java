@@ -30,7 +30,8 @@ public class PotionAllSeeEye extends PotionMod{
 					mob.addPotionEffect(new PotionEffect(ModPotions.allsee, effect.getDuration(), 1));
 				}
 			}
-	}
+
+		}
 	}
 	
 	public static boolean hasAllSee(EntityPlayer mob)

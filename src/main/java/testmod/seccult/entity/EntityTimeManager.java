@@ -49,6 +49,11 @@ public class EntityTimeManager extends Entity{
 	public EntityTimeManager(World worldIn) {
 		super(worldIn);
 		this.setSize(1.0F, 1.0F);
+		this.setNoGravity(true);
+		this.noClip = true;
+		this.collided = false;
+		this.isImmuneToFire = true;
+		this.setEntityInvulnerable(true);
 	}
 	
 	@Override

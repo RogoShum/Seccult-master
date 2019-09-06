@@ -43,4 +43,9 @@ public class AllSeeMagick extends Magick{
 	public int getColor() {
 		return ModMagicks.AllSeeMagickColor;
 	}
+
+	@Override
+	public boolean doMagickNeedAtrribute() {
+		return true;
+	}
 }

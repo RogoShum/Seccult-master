@@ -25,6 +25,10 @@ public class EntitySpirit extends EntityBase{
 	public EntitySpirit(World worldIn) {
 		super(worldIn);
 		this.setNoGravity(true);
+		this.noClip = true;
+		this.collided = false;
+		this.isImmuneToFire = true;
+		this.setEntityInvulnerable(true);
 	}
 	
 	public EntityLivingBase getEntity()

@@ -10,7 +10,7 @@ import testmod.seccult.api.PlayerDataHandler;
 import testmod.seccult.api.PlayerDataHandler.PlayerData;
 import testmod.seccult.init.ModMagicks;
 
-public abstract class Magick implements Cloneable{
+public abstract class Magick implements Cloneable, doMagickNeedAtrribute{
 	private final String nbtName;
 	private final boolean hasDetailedText;
 	

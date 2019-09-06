@@ -1,5 +1,6 @@
 package testmod.seccult.items;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -11,24 +12,24 @@ import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenLakes;
 import testmod.seccult.api.PlayerDataHandler;
 import testmod.seccult.api.PlayerDataHandler.PlayerData;
 import testmod.seccult.entity.EntityAdvanceLaser;
 import testmod.seccult.entity.EntityLightingThing;
+import testmod.seccult.entity.EntityShieldFX;
 import testmod.seccult.entity.SpiritManager;
 import testmod.seccult.entity.livings.EntityEoW;
 import testmod.seccult.entity.livings.EntitySpirit;
-import testmod.seccult.entity.livings.insect.EntityWorm;
 import testmod.seccult.init.ModBlocks;
+import testmod.seccult.init.ModMagicks;
+import testmod.seccult.potions.ModPotions;
 import testmod.seccult.world.gen.plant.WorldGenCave;
-import testmod.seccult.world.gen.plant.WorldGenCaveCopy;
 
 public class ItemTerrariaEventThing extends ItemBase{
 
@@ -42,21 +43,40 @@ public class ItemTerrariaEventThing extends ItemBase{
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, @Nonnull EnumHand hand) {
 		ItemStack stack = player.getHeldItem(hand);
 			player.setActiveHand(hand);
-			//clearMagick(player);
+			
+			//protection(player);
+			clearMagick(player);
+			addMagick(player);
 			//restoreSpirits(world, player);
 			//iceBeam(player);
 			//spawnLight(player);
 			//spawnEOW(player);
-			spawnGen(world, player);
+			//spawnGen(world, player);
 			//spawnGenBlock(world, player);
 			return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
 	} 
-	
+
 	public void clearMagick(EntityPlayer player)
 	{
 		PlayerData data = PlayerDataHandler.get(player);
 		int[] i = {0};
 		data.setMagickData(i);
+	}
+	
+	public void addMagick(EntityPlayer player)
+	{
+		ArrayList<String> list = ModMagicks.GetAllMagickID();
+		for(int  i = 0; i < list.size(); i++)
+		PlayerDataHandler.get(player).addMagickData(i);
+	}
+	
+	public void protection(EntityPlayer player)
+	{
+		EntityShieldFX shield = new EntityShieldFX(player.world);
+		shield.setOwner(player, 60, 1);
+		shield.setPosition(player.posX, player.posY, player.posZ);
+		if(!player.world.isRemote)
+			player.world.spawnEntity(shield);
 	}
 	
 	public void restoreSpirits(World world, EntityPlayer player)

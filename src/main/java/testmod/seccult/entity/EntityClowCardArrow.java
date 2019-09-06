@@ -35,18 +35,16 @@ public class EntityClowCardArrow extends Entity{
 
 	@Override
 	public void onUpdate() {
-		// TODO Auto-generated method stub
 		super.onUpdate();
 		Move();
 		collideWithNearbyEntities();
-		if(this.ticksExisted > 10)
 		Split();
 		if(this.ticksExisted > 200)
 			this.setDead();
 	}
 	
 	private void Split() {
-		if(this.Split > 1)
+		if(this.Split > 1 && this.ticksExisted > 5)
 		{
 			int times = this.rand.nextInt(2) + 1;
 			for(int i = 0; i < times; times--)
@@ -74,6 +72,7 @@ public class EntityClowCardArrow extends Entity{
 			this.setDead();
 			return;
 		}
+		//System.out.println(this.world.isRemote + " " +this.getPositionVector());
 		this.motionX = this.getLookVec().x / 2 * speed;
 		this.motionY = this.getLookVec().y / 2 * speed;
 		this.motionZ = this.getLookVec().z / 2 * speed;
@@ -85,6 +84,8 @@ public class EntityClowCardArrow extends Entity{
 		this.lastTickPosX = this.posX;
 		this.lastTickPosY = this.posY;
 		this.lastTickPosZ = this.posZ;
+		
+		this.setPosition(posX, posY, posZ);
 	}
 	
     protected void collideWithNearbyEntities()
@@ -92,30 +93,47 @@ public class EntityClowCardArrow extends Entity{
         List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(0.5));
         if (!list.isEmpty())
         {
+        	//System.out.println(list);
             for (int l = 0; l < list.size(); ++l)
             {
                 Entity entity = list.get(l);
-                this.applyEntityCollision(entity);
+                if(!(entity instanceof EntityClowCardArrow))
+                	this.applyEntityCollision(entity);
             }
         }
     }
 	
 	@Override
 	public void applyEntityCollision(Entity entityIn) {
-		//super.applyEntityCollision(entityIn);
-		if(!(entityIn instanceof EntityClowCardArrow) && (owner != null && entityIn != owner))
+		if(owner != null)
 		{
-			entityIn.attackEntityFrom(ModDamage.causeNormalEntityDamage(owner), this.damage);
+			if(entityIn != owner)
+			{
+				entityIn.attackEntityFrom(ModDamage.causeNormalEntityDamage(owner), this.damage);
+			}
 		}
-		else if(!(entityIn instanceof EntityClowCardArrow))
+		else
+		{
 			entityIn.attackEntityFrom(ModDamage.causeNormalEntityDamage(this), this.damage);
+		}
 	}
 	
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound compound) {
+		if(compound.hasKey("Split"))
+			this.Split = compound.getInteger("Split");
+		
+		if(compound.hasKey("damage"))
+			this.damage = compound.getInteger("damage");
+		
+		if(compound.hasKey("speed"))
+			this.speed = compound.getFloat("speed");
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound compound) {
+		compound.setFloat("Split", this.Split);
+		compound.setFloat("speed", this.speed);
+		compound.setFloat("damage", this.damage);
 	}
 }

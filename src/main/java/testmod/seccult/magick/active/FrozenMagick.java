@@ -25,18 +25,6 @@ public class FrozenMagick extends Magick{
 	{
 		damage = ModDamage.causeNormalEntityDamage(pl);
 	}
-	
-	public void doMagickToEntity(Entity e) 
-	{
-		if(e != null)
-		{
-			Vec3d QAQ = e.getLookVec();
-			QAQ.scale(0.2);
-			e.motionX = QAQ.x * strengh;
-			e.motionY = QAQ.y * strengh;
-			e.motionZ = QAQ.z * strengh;
-		}
-	}
 
 	@Override
 	void toEntity() {
@@ -66,5 +54,10 @@ public class FrozenMagick extends Magick{
 	@Override
 	public int getColor() {
 		return ModMagicks.FrozenMagickColor;
+	}
+
+	@Override
+	public boolean doMagickNeedAtrribute() {
+		return true;
 	}
 }

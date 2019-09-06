@@ -63,4 +63,9 @@ public class LostMindMagick extends Magick{
 	public int getColor() {
 		return ModMagicks.LoseMindMagickColor;
 	}
+
+	@Override
+	public boolean doMagickNeedAtrribute() {
+		return true;
+	}
 }

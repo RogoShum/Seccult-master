@@ -29,6 +29,9 @@ public class EntityIMCircle extends Entity{
 	private float particleBlueIn;
 	private Entity owner;
 	
+	private boolean doEntity;
+	private boolean doBlock;
+	
 	private float scale;
 	private boolean done;
 	
@@ -46,10 +49,12 @@ public class EntityIMCircle extends Entity{
 		this.setSize(0, 0);
 	}
 
-	public void setData(NBTTagCompound magick, NBTTagList select)
+	public void setData(NBTTagCompound magick, NBTTagList select, boolean doEntity, boolean doBlock)
 	{
 		this.LoadMagick = magick;
 		this.LoadSelect = select;
+		this.doEntity = doEntity;
+		this.doBlock = doBlock;
 	}
 	
 	@Override
@@ -113,7 +118,7 @@ public class EntityIMCircle extends Entity{
 			 NBTTagCompound newMagickNBT = LoadMagick.copy();
 			 newMagickNBT.setUniqueId("EntityHit", hit.getUniqueID());
 			 MagickCompiler newMagick = new MagickCompiler();
-			 newMagick.pushMagickData(newMagickNBT, LoadSelect, this.owner);
+			 newMagick.pushMagickData(newMagickNBT, LoadSelect, this.owner, this.doEntity, this.doBlock);
 			 worked.add(hit);
 		 }
 	}

@@ -13,7 +13,7 @@ public class ImplementationProjectile extends ImplementationStoreable{
 
 	@Override
 	public void getTarget() {
-		if(getEntity() != null) 
+		if(this.doEntity && getEntity() != null) 
 		{
 			List<Entity> eList = getEntity();
 			for(int i = 0; i < eList.size(); i++)
@@ -23,7 +23,7 @@ public class ImplementationProjectile extends ImplementationStoreable{
 					EntityIMProjectile projec = new EntityIMProjectile(player.world);
 					projec.setEntityIMProjectile(player, IMentity);
 					projec.shoot(IMentity.getLookVec().x * 0.1, IMentity.getLookVec().y * 0.1, IMentity.getLookVec().z * 0.1, base, addtion);
-					projec.setData(LoadMagick, LoadSelect);
+					projec.setData(LoadMagick, LoadSelect, this.doEntity, this.doBlock);
 					projec.setColor(this.color[0], this.color[1], this.color[2]);
 					projec.setScale(scale);
 					player.world.spawnEntity(projec);
@@ -31,7 +31,7 @@ public class ImplementationProjectile extends ImplementationStoreable{
 			}
 			setEntity(null);
 		}
-		else if(getBlock() != null)
+		else if(this.doBlock && getBlock() != null)
 		{
 			setBlock(getBlock());
 		}

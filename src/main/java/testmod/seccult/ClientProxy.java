@@ -35,6 +35,12 @@ public class ClientProxy extends CommonProxy
 		ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(new ResourceLocation(Seccult.MODID, filename), id));
 	}
 	
+	public static void callSphere()
+	{
+	    GlStateManager.callList(ClientProxy.sphereIdOutside);
+	    GlStateManager.callList(ClientProxy.sphereIdInside);
+	}
+	
 	public void init()
 	{
 		keyBindings = new KeyBinding[3]; 

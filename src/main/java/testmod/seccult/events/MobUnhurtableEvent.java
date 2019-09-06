@@ -9,7 +9,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
@@ -22,7 +21,6 @@ import testmod.seccult.entity.EntityBloodBeam;
 import testmod.seccult.entity.livings.EntityBase;
 import testmod.seccult.entity.livings.EntityLight;
 import testmod.seccult.entity.livings.EntityNotoriousBIG;
-import testmod.seccult.entity.projectile.TRBladeBeam;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.util.RogoDamage;
 
