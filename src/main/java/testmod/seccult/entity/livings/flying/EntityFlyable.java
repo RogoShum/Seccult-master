@@ -43,6 +43,7 @@ public abstract class EntityFlyable extends EntityBase implements IAnimals
     {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(6.0D);
+        this.getAttributeMap().registerAttribute(SharedMonsterAttributes.FLYING_SPEED);
     }
 
     public boolean getIsBatHanging()

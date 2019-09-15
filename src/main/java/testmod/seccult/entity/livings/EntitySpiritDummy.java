@@ -4,12 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityFlyHelper;
+import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Blocks;
@@ -20,6 +25,7 @@ import net.minecraft.nbt.NBTTagString;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.Path;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
@@ -27,8 +33,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.client.GuiIngameForge;
 import testmod.seccult.entity.livings.flying.EntityFlyable;
+import testmod.seccult.entity.livings.water.EntityWaterCreature;
+import testmod.seccult.init.ModItems;
+import testmod.seccult.init.ModMagicks;
 import testmod.seccult.items.ItemSoulStone;
+import testmod.seccult.magick.active.Magick;
 import testmod.seccult.magick.implementation.ImplementationFocused;
 
 public class EntitySpiritDummy extends EntityBase{
@@ -44,14 +55,19 @@ public class EntitySpiritDummy extends EntityBase{
 	
 	private float Awaydistance = 2;
 	private float defenceColdDown = 100;
-	private boolean DodgeDirection = false;
+	
+	private Path path = null;
+	private int lostTime;
+
 	private List<String> hurtedMe = new ArrayList<String>();
 	
 	private static final DataParameter<ItemStack> ItemStackSoul = EntityDataManager.<ItemStack>createKey(EntitySpiritDummy.class, DataSerializers.ITEM_STACK);
 	
 	private static final DataParameter<Boolean> canFly = EntityDataManager.<Boolean>createKey(EntitySpiritDummy.class, DataSerializers.BOOLEAN);
-	
 	private static final DataParameter<Boolean> canSwim = EntityDataManager.<Boolean>createKey(EntitySpiritDummy.class, DataSerializers.BOOLEAN);
+	
+	private static final DataParameter<Integer> L_M = EntityDataManager.<Integer>createKey(EntitySpiritDummy.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> R_M = EntityDataManager.<Integer>createKey(EntitySpiritDummy.class, DataSerializers.VARINT);
 	
 	private int walkingTime;
 
@@ -67,12 +83,48 @@ public class EntitySpiritDummy extends EntityBase{
 		this.addMagickData(26);
 	}
 	
+	public Magick getLeftHandMagick()
+	{
+		if(this.getMagickID_L() != 0)
+		{
+			Magick magick = ModMagicks.getMagickFromName(
+					ModMagicks.GetMagickStringByID(this.getMagickID_L()));
+			return magick;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	public Magick getRightHandMagick()
+	{
+		if(this.getMagickID_R() != 0)
+		{
+			Magick magick = ModMagicks.getMagickFromName(
+					ModMagicks.GetMagickStringByID(this.getMagickID_R()));
+			return magick;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
 	public EntityLivingBase getEntity()
 	{
 		if(this.SoulStone != ItemStack.EMPTY && this.SoulStone != null)
 			return ItemSoulStone.getSoul(this.SoulStone, this.world);
 		else
 			return null;
+	}
+	
+	public boolean hasSoulStone()
+	{
+		if(this.getSoulStone().getItem() == ModItems.SoulStone)
+			return true;
+		else
+			return false;
 	}
 	
 	@Override
@@ -82,6 +134,11 @@ public class EntitySpiritDummy extends EntityBase{
 		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(5D);
 		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_SPEED).setBaseValue(0D);
 		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(5D);
+	}
+	
+	@Override
+	public boolean canBreatheUnderwater() {
+		return this.getCanSwim();
 	}
 	
 	@Override
@@ -147,11 +204,21 @@ public class EntitySpiritDummy extends EntityBase{
 				this.heal(getMaxHealth());
 				
 				if(living instanceof EntityFlying || living instanceof EntityFlyable)
+				{
 					this.setCanFly(true);
+					this.moveHelper = new EntityFlyHelper(this);
+				}
 				else
+				{
 					this.setCanFly(false);
+					this.moveHelper = new EntityMoveHelper(this);
+				}
+				
+				if(living instanceof EntityWaterMob || living instanceof EntityWaterCreature)
+					this.setCanSwim(true);
+				else
+					this.setCanSwim(false);
 			}
-			
 			return true;
 		}
 		
@@ -185,12 +252,12 @@ public class EntitySpiritDummy extends EntityBase{
 				|| source.getDamageType().equals(DamageSource.STARVE.getDamageType()))
 			return false;
 		
+		if(this.getCanFly() && source.damageType.equals(DamageSource.FALL.damageType))
+			return false;
 		if(source.getTrueSource() == this.getLastAttackedEntity() || source.getTrueSource() == this.getRevengeTarget())
 			this.Awaydistance += 0.3;
 		if(this.Awaydistance > 12)
 			this.Awaydistance = 12;
-		
-		this.defenceColdDown += 100;
 		
 		Entity eI = source.getImmediateSource();
 		
@@ -208,6 +275,8 @@ public class EntitySpiritDummy extends EntityBase{
 		
 		if(eS != null && !(eS instanceof EntityPlayer) && !(eS instanceof EntitySpiritDummy))
 		{
+			this.defenceColdDown += 100;
+			
 			ResourceLocation className = EntityList.getKey(eS.getClass());
 		    if(className != null) 
 		    {
@@ -238,6 +307,10 @@ public class EntitySpiritDummy extends EntityBase{
 			this.Owner = null;
 			this.OwnerUUID = null;
 			NBTTagCompound tag = new NBTTagCompound();
+			this.setCanFly(false);
+			this.setCanSwim(false);
+			this.setMagickID_L(0);
+			this.setMagickID_R(0);
 			this.writeToNBT(tag);
 			tag.removeTag("OwnerUUID");
 			tag.removeTag("SoulStone");
@@ -256,42 +329,6 @@ public class EntitySpiritDummy extends EntityBase{
 	public void onUpdate()
 	{
 		super.onUpdate();
-		this.turn(1);
-		this.turn(2);
-
-		/*if(this.ticksExisted % 20 == 0)
-		{
-		System.out.println(this.OwnerUUID);
-		System.out.println(this.Owner);
-		System.out.println(this.hurtedMe);
-		System.out.println(this.SoulStone);
-		}
-		*/
-		if(this.isBurning())
-		{
-			Iterable<BlockPos> pos = BlockPos.getAllInBox(this.getPosition().add(-7, -5, -7), this.getPosition().add(7, 5, 7));
-			
-			for(BlockPos bPos : pos)
-			{
-				if(this.world.getBlockState(bPos).getBlock() == Blocks.WATER || this.world.getBlockState(bPos).getBlock() == Blocks.FLOWING_WATER)
-				{
-					this.moveHelper.setMoveTo(bPos.getX(), bPos.getY(), bPos.getZ(), this.getSpeed());
-				}
-			}
-			
-		}
-		
-		if(this.Owner == null && this.OwnerUUID != null)
-		{
-			List<Entity> entity = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(64));
-			
-			for(int i = 0; i < entity.size(); i++)
-			{
-				Entity e = entity.get(i);
-				if(e.getUniqueID().equals(this.OwnerUUID))
-					this.Owner = (EntityLivingBase) e;
-			}
-		}
 		
 		if(this.ColdDown_Left > 0)
 			ColdDown_Left--;
@@ -305,9 +342,41 @@ public class EntitySpiritDummy extends EntityBase{
 		if(this.defenceColdDown > 0)
 			this.defenceColdDown--;
 		
+		if(this.Owner == null && this.OwnerUUID != null)
+		{
+			List<Entity> entity = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(64));
+			
+			for(int i = 0; i < entity.size(); i++)
+			{
+				Entity e = entity.get(i);
+				if(e.getUniqueID().equals(this.OwnerUUID))
+					this.Owner = (EntityLivingBase) e;
+			}
+		}
+		
 		if(this.Owner != null)
 		{
 			protectOwner();
+		}
+		else
+			return;
+		
+		this.turn(1);
+		this.turn(2);
+
+		if(this.isBurning())
+		{
+			Iterable<BlockPos> pos = BlockPos.getAllInBox(this.getPosition().add(-7, -5, -7), this.getPosition().add(7, 5, 7));
+			
+			for(BlockPos bPos : pos)
+			{
+				if(this.world.getBlockState(bPos).getBlock() == Blocks.WATER || this.world.getBlockState(bPos).getBlock() == Blocks.FLOWING_WATER)
+				{
+					this.moveHelper.setMoveTo(bPos.getX(), bPos.getY(), bPos.getZ(), this.getSpeed());
+					this.tryJump();
+				}
+			}
+			
 		}
 		
 		awayFromProjectile();
@@ -315,6 +384,9 @@ public class EntitySpiritDummy extends EntityBase{
 	
 	protected void tryDodge()
 	{
+		if(this.defenceColdDown > 5)
+			return;
+		
 		if(this.rand.nextInt(5) == 0)
 		this.motionX *= this.motionZ * this.rand.nextFloat();
 		else
@@ -335,11 +407,16 @@ public class EntitySpiritDummy extends EntityBase{
 		
 		BlockPos LposBlock = new BlockPos(this.getPositionVector().addVector(this.LookX() * 2, -1, this.LookZ() * 2));
 
+		if(!(this.world.getBlockState(pos).getBlock() instanceof BlockLiquid) && !(this.world.getBlockState(Lpos).getBlock() instanceof BlockLiquid)
+				&& !(this.world.getBlockState(posAir).getBlock() instanceof BlockLiquid) && !(this.world.getBlockState(posBlock).getBlock() instanceof BlockLiquid)
+				&& !(this.world.getBlockState(LposAir).getBlock() instanceof BlockLiquid) && !(this.world.getBlockState(LposBlock).getBlock() instanceof BlockLiquid))
+		{
 		if(this.world.getBlockState(pos).isFullBlock() || (!this.world.getBlockState(posAir).isFullBlock() && this.world.getBlockState(posBlock).isFullBlock()))
 			this.motionY += 0.1F;
 		
 		if(this.world.getBlockState(Lpos).isFullBlock() || (!this.world.getBlockState(LposAir).isFullBlock() && this.world.getBlockState(LposBlock).isFullBlock()))
 			this.motionY += 0.1F;
+		}
 	}
 	
 	protected void awayFromProjectile()
@@ -353,7 +430,7 @@ public class EntitySpiritDummy extends EntityBase{
 			Entity trackedEntity = ImplementationFocused.getEntityMotionAt(entity.get(i), 100);
 			if(trackedEntity == this)
 			{
-				this.AwayFrom(entity.get(i).posX, entity.get(i).posY, entity.get(i).posZ, (float)(this.getSpeed()));
+				this.AwayFrom(entity.get(i).posX, entity.get(i).posY, entity.get(i).posZ, (float)(this.getSpeed() / 100));
 				this.tryDodge();
 			}
 			}
@@ -365,10 +442,9 @@ public class EntitySpiritDummy extends EntityBase{
 		{
 			if(entity_mob.get(i) instanceof EntityMob)
 			{
-				this.AwayFrom(entity_mob.get(i).posX, entity_mob.get(i).posY, entity_mob.get(i).posZ, (float)(this.getSpeed() / 100));
+				this.AwayFrom(entity_mob.get(i).posX, entity_mob.get(i).posY, entity_mob.get(i).posZ, (float)(this.getSpeed() / 20));
 				this.tryDodge();
 			}
-			
 			
 			String id = "oh";
 			ResourceLocation className = EntityList.getKey(entity_mob.get(i).getClass());
@@ -379,8 +455,14 @@ public class EntitySpiritDummy extends EntityBase{
 			
 		    if(hurtedMe.contains(id))
 		    {
-		    	this.faceEntity(entity.get(i), 20, 20);
-		    	this.tryMagickAttack(entity.get(i));
+		    	
+		    	if(entity.get(i) instanceof EntityLivingBase)
+		    	{
+		    		this.faceEntity(entity.get(i), 20, 20);
+			    	this.tryMagickAttack(entity.get(i));
+		    	}
+		    	else
+		    		this.defenceColdDown += 10;
 		    }
 		}
 		
@@ -398,7 +480,7 @@ public class EntitySpiritDummy extends EntityBase{
 			if(entity_too_close.get(i) instanceof EntityMob || entity_too_close.get(i) instanceof EntityThrowable || hurtedMe.contains(id))
 			{
 				this.defenceColdDown += 35;
-				this.AwayFrom(entity_mob.get(i).posX, entity_mob.get(i).posY, entity_mob.get(i).posZ, (float)(this.getSpeed()));
+				this.AwayFrom(entity_mob.get(i).posX, entity_mob.get(i).posY, entity_mob.get(i).posZ, (float)(this.getSpeed() / 20));
 				this.tryDodge();
 			}
 		}
@@ -406,10 +488,15 @@ public class EntitySpiritDummy extends EntityBase{
 	
 	protected void protectOwner()
 	{
-		if(this.getRevengeTarget() == null && this.Owner.getRevengeTarget() != this)
+		if(this.Owner.getRevengeTarget() != this)
+		{
 			this.setRevengeTarget(this.Owner.getRevengeTarget());
-		if(this.getLastAttackedEntity() == null && this.Owner.getLastAttackedEntity() != this)
+		}
+		
+		if(this.Owner.getLastAttackedEntity() != this)
+		{
 			this.setLastAttackedEntity(this.Owner.getLastAttackedEntity());
+		}
 		
 		if(this.getRevengeTarget() == this.Owner)
 			this.setRevengeTarget(null);
@@ -422,30 +509,28 @@ public class EntitySpiritDummy extends EntityBase{
 		
 		if(this.getLastAttackedEntity() instanceof EntitySpiritDummy && ((EntitySpiritDummy)this.getLastAttackedEntity()).Owner == this.Owner)
 			this.setLastAttackedEntity(null);
-		
+
 		if(this.getRevengeTarget() == null && this.getLastAttackedEntity() == null)
 			standBy();
-		else if (this.getRevengeTarget() != null && Owner.getDistance(this) < 16)
+		else if (this.getRevengeTarget() != null && this.getDistance(Owner) < 24)
 		{
 			faceEntity(this.getRevengeTarget(), 30, 90);
 			tryMagickAttack(this.getRevengeTarget());
 		}
-		else if (this.getLastAttackedEntity() != null && Owner.getDistance(this) < 16)
+		else if (this.getLastAttackedEntity() != null && this.getDistance(Owner) < 24)
 		{
 			faceEntity(this.getLastAttackedEntity(), 30, 90);
 			tryMagickAttack(this.getLastAttackedEntity());
 		}
 		else
-		if(Owner.getDistance(this) > 16)
+		if(Owner.getDistance(this) > 32)
 		{
 			faceEntity(Owner, 30, 90);
-			//Path path = this.navigator.getPathToEntityLiving(Owner);
-			//this.navigator.setPath(path, this.getSpeed());
 			this.moveHelper.setMoveTo(Owner.posX, Owner.posY, Owner.posZ, this.getSpeed());
 			tryJump();
 		}
 		
-		if(Owner.getDistance(this) > 32)
+		if(Owner.getDistance(this) > 64)
 		{
 			this.attemptTeleport(Owner.posX, Owner.posY, Owner.posZ);
 		}
@@ -453,9 +538,14 @@ public class EntitySpiritDummy extends EntityBase{
 	
 	protected void tryMagickAttack(Entity entity)
 	{
+		if(this.canEntityBeSeen(entity))
+		{
+			lostTime=0;
 		if (this.getDistanceSq(entity) < Awaydistance) 
 		{
-			this.AwayFrom(entity.posX, entity.posY, entity.posZ, (float)(this.getSpeed() / 100));
+			this.AwayFrom(entity.posX, entity.posY, entity.posZ, (float)(this.getSpeed() / 50));
+			this.motionX += 0.2 - 0.4 * this.rand.nextFloat();
+			this.motionZ += 0.2 - 0.4 * this.rand.nextFloat();
 			tryJump();
 		}
 		
@@ -463,6 +553,16 @@ public class EntitySpiritDummy extends EntityBase{
 		{
 			this.moveHelper.setMoveTo(entity.posX, entity.posY, entity.posZ, this.getSpeed());
 			tryJump();
+		}
+		}
+		else
+		{
+			this.lostTime++;
+			if(lostTime > 100)
+			{
+				this.path = this.navigator.getPathToEntityLiving(entity);
+				this.navigator.setPath(path, this.getSpeed());
+			}
 		}
 		
 		if(this.rand.nextInt(10) == 0)
@@ -495,7 +595,7 @@ public class EntitySpiritDummy extends EntityBase{
 		if(this.defenceColdDown <= 5)
 		{
 			this.getAttackingMagic(DoYouGotMagickHand.RightHand);
-			
+
 			if(this.rightHandMagick != null && this.ColdDown_Right <= 1 && this.canSeeTarget(entity) && ManaValue > 20)
 			{
 				if(doFocusMagick(DoYouGotMagickHand.RightHand, entity, getAttackDamage(), getAttackDamage()))
@@ -509,13 +609,25 @@ public class EntitySpiritDummy extends EntityBase{
 		{
 			this.getDefenceMagic(DoYouGotMagickHand.RightHand);
 			
-			if(this.rightHandMagick != null)
+			if(this.rightHandMagick != null && this.ticksExisted % 5 == 0)
 			{
 				if(doProtectMagick(getAttackDamage(), getAttackSpeed()) && ManaValue > 1)
 				{
-					this.ManaValue -= 1;
+					this.ManaValue -= 2;
 				}
 			}
+		}
+		
+		if(this.rightHandMagick != null)
+		{
+			if(!this.world.isRemote)
+				this.setMagickID_R(ModMagicks.GetMagickIDByString(this.rightHandMagick.getNbtName()));
+		}
+		
+		if(this.leftHandMagick != null)
+		{
+			if(!this.world.isRemote)
+				this.setMagickID_L(ModMagicks.GetMagickIDByString(this.leftHandMagick.getNbtName()));
 		}
 	}
 	
@@ -532,23 +644,9 @@ public class EntitySpiritDummy extends EntityBase{
 		{
 			this.moveHelper.setMoveTo(Owner.posX, Owner.posY, Owner.posZ, this.getSpeed());
 			tryJump();
-			//Path path = this.navigator.getPathToEntityLiving(Owner);
-			//this.navigator.setPath(path, this.getSpeed());
 			walkingTime--;
 		}
 	}
-	
-    /*@SideOnly(Side.CLIENT)
-    public int getBrightnessForRender()
-    {
-        return 15728880;
-    }
-
-    public float getBrightness()
-    {
-        return 5.0F;
-    }
-	*/
 	
 	@Override
 	protected void entityInit() 
@@ -556,13 +654,16 @@ public class EntitySpiritDummy extends EntityBase{
 		super.entityInit();
 		this.dataManager.register(ItemStackSoul, ItemStack.EMPTY);
 		this.dataManager.register(canFly, false);
+		this.dataManager.register(canSwim, false);
+		this.dataManager.register(L_M, 0);
+		this.dataManager.register(R_M, 0);
 	}
 	
 	public void setSoulStone(ItemStack nbt) 
 	{
 		this.dataManager.set(ItemStackSoul, nbt);
 	}
-	  
+	
 	public ItemStack getSoulStone() 
 	{
 		return this.dataManager.get(ItemStackSoul);
@@ -588,6 +689,26 @@ public class EntitySpiritDummy extends EntityBase{
 		return this.dataManager.get(canSwim).booleanValue();
 	}
 	
+	public void setMagickID_L(int id) 
+	{
+		this.dataManager.set(L_M, id);
+	}
+	  
+	public int getMagickID_L() 
+	{
+		return this.dataManager.get(L_M).intValue();
+	}
+	
+	public void setMagickID_R(int id) 
+	{
+		this.dataManager.set(R_M, id);
+	}
+	  
+	public int getMagickID_R() 
+	{
+		return this.dataManager.get(R_M).intValue();
+	}
+	
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
@@ -595,6 +716,12 @@ public class EntitySpiritDummy extends EntityBase{
 		{
 			NBTTagCompound tag = new NBTTagCompound();
 			this.SoulStone.writeToNBT(tag);
+			nbt.setTag("SoulStone", tag);
+		}
+		else if(this.getSoulStone() != ItemStack.EMPTY && this.getSoulStone() != null)
+		{
+			NBTTagCompound tag = new NBTTagCompound();
+			this.getSoulStone().writeToNBT(tag);
 			nbt.setTag("SoulStone", tag);
 		}
 		
@@ -612,6 +739,20 @@ public class EntitySpiritDummy extends EntityBase{
 			}
 			nbt.setTag("hurtedMe", list);
 		}
+		
+		if(this.getCanFly())
+		{
+			nbt.setBoolean("canFly", true);
+		}
+		else
+			nbt.setBoolean("canFly", false);
+		
+		if(this.getCanSwim())
+		{
+			nbt.setBoolean("canSwim", true);
+		}
+		else
+			nbt.setBoolean("canSwim", false);
 	}
 	
 	@Override
@@ -623,6 +764,7 @@ public class EntitySpiritDummy extends EntityBase{
 			ItemStack stack = new ItemStack(soulStone);
 			if(stack.getItem() instanceof ItemSoulStone)
 				this.SoulStone = stack;
+			this.setSoulStone(stack);
 		}
 		
 		if(nbt.hasUniqueId("OwnerUUID"))
@@ -638,6 +780,16 @@ public class EntitySpiritDummy extends EntityBase{
 			{
 				this.hurtedMe.add(list.getStringTagAt(i));
 			}
+		}
+		
+		if(nbt.hasKey("canFly"))
+		{
+			this.setCanFly(nbt.getBoolean("canFly"));
+		}
+		
+		if(nbt.hasKey("canSwim"))
+		{
+			this.setCanFly(nbt.getBoolean("canSwim"));
 		}
 	}
 }

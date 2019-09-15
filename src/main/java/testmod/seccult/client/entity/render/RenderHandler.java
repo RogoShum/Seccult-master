@@ -48,6 +48,6 @@ public class RenderHandler
 		RenderingRegistry.registerEntityRenderingHandler(EntityShieldFX.class, m -> new RenderShieldFX(m));
 		RenderingRegistry.registerEntityRenderingHandler(EntityProtectionShieldFX.class, m -> new RenderProtectionShieldFX(m));
 		RenderingRegistry.registerEntityRenderingHandler(EntitySpiritContainer.class, m -> new RenderSpiritContainer(m));
-		//RenderingRegistry.registerEntityRenderingHandler(EntitySpiritDummy.class, m -> new RenderSpiritDummy(m));
+		RenderingRegistry.registerEntityRenderingHandler(EntitySpiritDummy.class, m -> new RenderDummySystem(m));
 	}
 }

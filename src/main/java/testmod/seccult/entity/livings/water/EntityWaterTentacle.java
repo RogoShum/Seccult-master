@@ -42,6 +42,7 @@ public class EntityWaterTentacle extends EntityWaterCreature{
         this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.7D);
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(5.0D);
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).setBaseValue(10.0D);
+        this.getEntityAttribute(SWIM_SPEED).setBaseValue(4);
 	}
 	
 	@Override

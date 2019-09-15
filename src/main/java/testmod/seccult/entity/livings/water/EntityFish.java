@@ -32,6 +32,7 @@ public class EntityFish extends EntityWaterCreature{
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
+        this.getEntityAttribute(SWIM_SPEED).setBaseValue(2);
 	}
 	
 	@Override

@@ -69,6 +69,7 @@ public class EntityRockShellLeviathan extends EntityWaterCreature{
         this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(10.0D);
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).setBaseValue(10.0D);
+        this.getEntityAttribute(SWIM_SPEED).setBaseValue(3);
 	}
 	
 	public void setDefenseMode(boolean bool)

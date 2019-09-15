@@ -11,14 +11,22 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import testmod.seccult.init.ModItems;
 
 public class ItemSoulStone extends ItemBase{
 
 	public ItemSoulStone(String name) {
 		super(name);
+		this.maxStackSize = 1;
+		this.setMaxDamage(2);
 	}
-
+	
+	@Override
+	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
+		if(stack.getItemDamage() > 1)
+			stack.setItemDamage(1);
+	}
+	
 	public static boolean putSoul(ItemStack stack, EntityLivingBase living)
 	{
 		if(!stack.hasTagCompound())
@@ -75,13 +83,6 @@ public class ItemSoulStone extends ItemBase{
 	
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-		
-		if(playerIn.getHeldItemMainhand().getItem() == ModItems.SoulStone)
-		{
-			Entity e = ItemSoulStone.getSoul(playerIn.getHeldItemMainhand(), worldIn);
-			System.out.println(e);
-		}
-		
 		return new ActionResult<ItemStack>(EnumActionResult.PASS, playerIn.getHeldItem(handIn));
 	}
 }

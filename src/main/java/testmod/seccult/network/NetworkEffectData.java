@@ -108,14 +108,9 @@ public class NetworkEffectData implements IMessage {
         			break;
         		case 4:
         			par = new ThunderFX(mc.world,x,y,z, xx, yy, zz, r, g, message.scale);
-        			
-        				mc.world.playSound(mc.player, x, y, z, SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.PLAYERS, 1.0F, 2);
-        				mc.world.playSound(mc.player, x, y, z, SoundEvents.ENTITY_LIGHTNING_IMPACT, SoundCategory.PLAYERS, 2.0F, 1.8F + Seccult.rand.nextFloat() * 0.2F);
         			break;
         		case 5:
         			int distancec = (int) message.scale;
-
-        			mc.world.playSound(mc.player, x, y, z, SoundEvents.ENTITY_PARROT_FLY, SoundCategory.PLAYERS, 4.0F, 2);
 
         			for (int i = 0; i < distancec; i++) {
         				double trailFactor = i / (distancec - 1.0D);
@@ -144,9 +139,6 @@ public class NetworkEffectData implements IMessage {
         		    	big.setRBGColorF(r, g, b);
         		    	Minecraft.getMinecraft().effectRenderer.addEffect(big);
         			}
-
-        			mc.world.playSound(mc.player, x, y, z, SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.PLAYERS, 2.0F, 2);
-        			mc.world.playSound(mc.player, xx, yy, zz, SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.PLAYERS, 2.0F, 1);
 
         			for (int i = 0; i < distanceee; i++) {
         				double trailFactor = i / (distanceee - 1.0D);
@@ -202,9 +194,6 @@ public class NetworkEffectData implements IMessage {
         		    	big.setRBGColorF(r, g, b);
         		    	Minecraft.getMinecraft().effectRenderer.addEffect(big);
         			}
-        			
-        			mc.world.playSound(mc.player, x, y, z, SoundEvents.ENTITY_FIREWORK_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.6F + mc.world.rand.nextFloat() * 0.4F);
-        			mc.world.playSound(mc.player, x, y, z, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, SoundCategory.PLAYERS, 1.0F, mc.world.rand.nextFloat());
         			break;
         		case 102:
         			for(int i = 0; i < (message.scale * 2); i++) {

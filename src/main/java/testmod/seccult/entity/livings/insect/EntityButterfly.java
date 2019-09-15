@@ -26,6 +26,7 @@ public class EntityButterfly extends EntityFlyable implements IEntityInsect{
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(1);
 	}
 	
 	@Override

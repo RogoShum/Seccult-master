@@ -11,7 +11,6 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -24,7 +23,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ThunderFX extends Particle
 {
     private static ResourceLocation darkPTexture = new ResourceLocation("seccult:textures/entity/darktexture.png");
-	public static TextureAtlasSprite test3;
 
 	private double TposX;
 	private double TposY;
@@ -132,7 +130,6 @@ public class ThunderFX extends Particle
 
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);
             GlStateManager.pushMatrix();
-            
             GlStateManager.depthMask(false);
             Minecraft.getMinecraft().getTextureManager().bindTexture(darkPTexture);
             GlStateManager.enableBlend();
@@ -166,8 +163,8 @@ public class ThunderFX extends Particle
             		GlStateManager.translate(pos.x - entityIn.posX, pos.y - entityIn.posY, pos.z - entityIn.posZ);
             		GlStateManager.rotate(-this.point.get(i).yaw, 0, 1, 0);
             		GlStateManager.rotate(this.point.get(i).pitch, 1, 0, 0);
-        			cylinder.draw(0.015F * particleScale, 0, finaldis + 0.5F, 4, 1);
-        			cylinder.draw(0.035F * particleScale, 0, finaldis + 0.5F, 4, 1);
+        			cylinder.draw(0.015F * particleScale, 0, finaldis, 4, 1);
+        			cylinder.draw(0.035F * particleScale, 0, finaldis, 4, 1);
         			GlStateManager.popMatrix();
             	}
             	else
@@ -181,11 +178,10 @@ public class ThunderFX extends Particle
         			cylinder.draw(0.035F * particleScale, 0.035f * particleScale, NewSpace, 4, 1);
         			GlStateManager.popMatrix();
             	}
-            }
-            GlStateManager.disableBlend();
-            GlStateManager.depthMask(true);
-            GlStateManager.popMatrix();
-            
+        	}
+    	GlStateManager.disableBlend();
+    	GlStateManager.depthMask(true);
+    	GlStateManager.popMatrix();
     }
     
     protected FXPoint faceEntity(Vec3d vec)

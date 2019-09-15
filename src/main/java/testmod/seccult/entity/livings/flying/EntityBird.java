@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.block.BlockAir;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
@@ -72,6 +73,17 @@ public class EntityBird extends EntityFlyable
         {
         	headRotationX =  0.5462880558742251F;
         }
+	}
+	
+	@Override
+	protected void entityInit() {
+		super.entityInit();
+	}
+	
+	@Override
+	protected void applyEntityAttributes() {
+		super.applyEntityAttributes();
+		this.getEntityAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(2.5);
 	}
 	
 	@Override

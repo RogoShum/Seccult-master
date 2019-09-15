@@ -5,11 +5,14 @@ import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import testmod.seccult.Seccult;
 import testmod.seccult.entity.EntityProtectionShieldFX;
 import testmod.seccult.entity.EntityShieldFX;
 import testmod.seccult.network.NetworkEffectData;
@@ -69,17 +72,24 @@ public class ImplementationFocused extends Implementation{
 	{
 		if(this.FXType == 1)
 		{
-			double[] pos = new double[3], vec = new double[3];
-			pos[0] = srcX;
-			pos[1] = srcY;
-			pos[2] = srcZ;
-			vec[0] = destX;
-			vec[1] = destY;
-			vec[2] = destZ;
-			float[] color = {this.player.rotationYaw, this.player.rotationPitch, 0};
-			if(LightingScale < 0.8F)
-				LightingScale = 0.8F;
-			NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, LightingScale, 4));
+			int times = (int)this.LightingScale / 3;
+			for(int i = 0; i < times + 1; ++i)
+			{
+				double[] pos = new double[3], vec = new double[3];
+				pos[0] = srcX;
+				pos[1] = srcY;
+				pos[2] = srcZ;
+				vec[0] = destX;
+				vec[1] = destY;
+				vec[2] = destZ;
+				float[] color = {this.player.rotationYaw, this.player.rotationPitch, 0};
+				if(LightingScale < 0.8F)
+					LightingScale = 0.8F;
+				NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, LightingScale, 4));
+			}
+			
+			world.playSound(null, new BlockPos(this.player.getPositionVector()), SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.PLAYERS, 1.0F, 2);
+			world.playSound(null, new BlockPos(this.player.getPositionVector()), SoundEvents.ENTITY_LIGHTNING_IMPACT, SoundCategory.PLAYERS, 2.0F, 1.8F + Seccult.rand.nextFloat() * 0.2F);
 		}
 		else if(this.FXType == 2)
 		{
@@ -92,6 +102,7 @@ public class ImplementationFocused extends Implementation{
 			vec[2] = destZ;
 			float[] color = {this.color[0], this.color[1], this.color[2]};
 	        NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, particles, 5));
+	        world.playSound(null, new BlockPos(this.player.getPositionVector()), SoundEvents.ENTITY_PARROT_FLY, SoundCategory.PLAYERS, 4.0F, 2);
 		}
 		else if(this.FXType == 3)
 		{
@@ -104,6 +115,8 @@ public class ImplementationFocused extends Implementation{
 			vec[2] = destZ;
 			float[] color = {this.color[0], this.color[1], this.color[2]};
 	        NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, particles, 6));
+	        world.playSound(null, new BlockPos(this.player.getPositionVector()), SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.PLAYERS, 2.0F, 2);
+	        world.playSound(null, new BlockPos(this.player.getPositionVector()), SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.PLAYERS, 2.0F, 1);
 		}
 		else
 		{
@@ -116,6 +129,10 @@ public class ImplementationFocused extends Implementation{
 		vec[2] = destZ;
 		float[] color = {this.color[0], this.color[1], this.color[2]};
         NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, particles, 101));
+        
+        world.playSound(null, new BlockPos(this.player.getPositionVector()), SoundEvents.ENTITY_FIREWORK_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.6F + player.world.rand.nextFloat() * 0.4F);
+        world.playSound(null, new BlockPos(this.player.getPositionVector()), SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, SoundCategory.PLAYERS, 1.0F, player.world.rand.nextFloat());
+
 		}
 	}
 	
@@ -182,13 +199,12 @@ public class ImplementationFocused extends Implementation{
 					EntityShieldFX shield = (EntityShieldFX) lookedEntity;
 					if(shield.getOwner() == e)
 						owner = true;
-						
 				}
 				
 				if(lookedEntity instanceof EntityProtectionShieldFX)
 				{
 					EntityProtectionShieldFX shield = (EntityProtectionShieldFX) lookedEntity;
-					if(shield.getOwner() != e)
+					if(shield.getOwner() == e)
 						owner = true;
 				}
 				
