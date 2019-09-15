@@ -136,7 +136,7 @@ public abstract class EntityFlyable extends EntityBase implements IAnimals
     public boolean attackEntityFrom(DamageSource source, float amount)
     {
     	if(!this.world.isRemote && source == DamageSource.STARVE && this.posY > dropLine && this.getHealth() < 1)
-    		this.dropItem(ModItems.Terraria_Blade, 1);
+    		this.dropItem(ModItems.SPA, 1);
     	return super.attackEntityFrom(source, amount);
     }
 

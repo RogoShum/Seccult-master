@@ -83,6 +83,7 @@ public class SpiritRenderBase extends RenderLivingBase<EntityLivingBase>
 	    	    if(this.renderer != null && this.model != null && this.tex != null)
 	    	    {
 	    	    	GlStateManager.pushMatrix();
+	    	    	GlStateManager.depthMask(false);
 	    	    	this.setBlurLayer();
 	    	        GlStateManager.enableBlend();
 	    	        GlStateManager.enableAlpha();
@@ -94,12 +95,14 @@ public class SpiritRenderBase extends RenderLivingBase<EntityLivingBase>
 	    	    	this.renderer.doRender(Ospirit, x, y, z, Ospirit.rotationYaw, 1);
 	    	    	GlStateManager.disableAlpha();
 	    	    	GlStateManager.disableBlend();
+	    	    	GlStateManager.depthMask(true);
 	    	    	GlStateManager.popMatrix();
 	    	    }
 	    	    else
 	    	    {
 	    	    	
 	    	    	GlStateManager.pushMatrix();
+	    	    	GlStateManager.depthMask(false);
 	    	    	this.setBlurLayer();
 	    	        GlStateManager.enableBlend();
 	    	        GlStateManager.enableAlpha();
@@ -110,6 +113,7 @@ public class SpiritRenderBase extends RenderLivingBase<EntityLivingBase>
 	    			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
 	    	    	GlStateManager.disableAlpha();
 	    	    	GlStateManager.disableBlend();
+	    	    	GlStateManager.depthMask(true);
 	    	    	GlStateManager.popMatrix();
 	    	    	
 	    	    	LightFX par = new LightFX(entity.world, entity.posX, entity.posY + entity.height / 2, entity.posZ, 0, 0, 0, 2F);

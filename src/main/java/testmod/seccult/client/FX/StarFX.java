@@ -51,9 +51,15 @@ public class StarFX extends Particle
         this.width = 0.1F;
         this.height = 0.1F;
         this.particleScale = this.rand.nextFloat() * 0.2F + a;
+        
+        if(this.particleScale < 0.1F)
+        	this.particleScale = 0.1F;
+        
         this.particleAlpha = 0.5F; // So MC renders us on the alpha layer, value not actually used
         this.lightParticleScale = this.particleScale;
         this.particleMaxAge = (int)(20 * a);
+        if(this.particleMaxAge < 1)
+        	this.particleMaxAge = 1;
         this.particleRed = 1F;
         this.particleGreen = 0.0F;
         this.particleBlue = 0.0F;

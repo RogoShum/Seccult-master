@@ -13,8 +13,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import testmod.seccult.events.PlayerDataUpdateEvent;
 import testmod.seccult.init.ModMagicks;
+import testmod.seccult.magick.active.ElectroMagick;
+import testmod.seccult.magick.active.FlameMagick;
+import testmod.seccult.magick.active.FrozenMagick;
 import testmod.seccult.magick.active.Magick;
 import testmod.seccult.magick.implementation.Implementation;
+import testmod.seccult.magick.implementation.ImplementationFocused;
 import testmod.seccult.magick.implementation.ImplementationStoreable;
 
 public class MagickCompiler {
@@ -197,8 +201,6 @@ public class MagickCompiler {
 			block.add(getBlockHit());
     		}
     		
-    		
-    		
     		if(!cycle) {
 			NBTTagCompound SelectNBT = Select.getCompoundTagAt(order);
 			Implementation imples = (ImplementationHandler.getImplementationFromName(
@@ -211,6 +213,26 @@ public class MagickCompiler {
 				imples.doEntity();
 			if(this.doBlock)
 				imples.doBlock();
+			
+			if(magick instanceof ElectroMagick && imples instanceof ImplementationFocused)
+			{
+				ImplementationFocused Fimples = (ImplementationFocused) imples;
+				Fimples.setFXType(1);
+				Fimples.setLightingScale(magickpower / 3);
+			}
+			
+			if(magick instanceof FrozenMagick && imples instanceof ImplementationFocused)
+			{
+				ImplementationFocused Fimples = (ImplementationFocused) imples;
+				Fimples.setFXType(2);
+			}
+			
+			if(magick instanceof FlameMagick && imples instanceof ImplementationFocused)
+			{
+				ImplementationFocused Fimples = (ImplementationFocused) imples;
+				Fimples.setFXType(3);
+			}
+			
 			imples.setPlayer(e);
 			imples.getTarget();
 			imples.setAttribute(implesattributeBase, implesattributeAddtion);
@@ -245,9 +267,9 @@ public class MagickCompiler {
 			}
     		}
     		
-    		if(magick != null && cycle && tick > 15) {
+    		if(magick != null && cycle && tick > 5) {
     			float cost = magick.strenghCost * magickpower;
-    			cost = cost * (magickattribute + 1);
+    			cost = cost * magick.attributeCost * magickattribute;
 
     			if(block != null)
 				{

@@ -15,6 +15,8 @@ import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import testmod.seccult.api.PlayerDataHandler;
+import testmod.seccult.api.PlayerDataHandler.PlayerData;
 import testmod.seccult.client.FX.ATFX;
 import testmod.seccult.client.FX.LightFX;
 import testmod.seccult.entity.EntityBloodBeam;
@@ -103,6 +105,20 @@ public class MobUnhurtableEvent {
 		if(event.getEntityLiving() instanceof EntityNotoriousBIG && DamageII.contains(event.getSource().getDamageType())) {
 			event.setCanceled(true);
 		}
+		
+		EntityLivingBase e = event.getEntityLiving();
+		if(e instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer) e;
+			PlayerData data = PlayerDataHandler.get(player);
+			
+			if(data.isMutekiGamer()) {
+				event.setCanceled(true);
+				player.hurtResistantTime = 20000;
+				player.isDead = false;
+				player.deathTime = 0;
+				player.setHealth(player.getMaxHealth());
+			}
+		}
 	}
 	
 	@SubscribeEvent
@@ -110,7 +126,9 @@ public class MobUnhurtableEvent {
 		EntityLivingBase e = event.getEntityLiving();
 		if(e instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) e;
-			if(player.getEntityData().hasKey("YesYourHighness") && player.getEntityData().getInteger("YesYourHighness") == 1) {
+			PlayerData data = PlayerDataHandler.get(player);
+			
+			if(data.isMutekiGamer()) {
 				player.hurtResistantTime = 20000;
 				player.isDead = false;
 				player.deathTime = 0;
@@ -124,7 +142,9 @@ public class MobUnhurtableEvent {
 		EntityLivingBase e = event.getEntityLiving();
 		if(e instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) e;
-			if(player.getEntityData().hasKey("YesYourHighness") && player.getEntityData().getInteger("YesYourHighness") == 1) {
+			PlayerData data = PlayerDataHandler.get(player);
+			
+			if(data.isMutekiGamer()) {
 				player.hurtResistantTime = 20000;
 		        player.isDead = false;
 				player.deathTime = 0;

@@ -72,19 +72,7 @@ public class EntityLaserBeamBase extends Entity{
     		this.snow = true;
     	}
     		Vec3d lok = this.getLookVec();
-    		BlockPos block = ImplementationFocused.getBlockLookedAt(this, 120);
-    		if(block == null)
-    		{
-       		 	Vec3d position = this.getPositionVector().addVector(lok.x * 120, lok.y * 120, lok.z * 120);
-       		 	block = new BlockPos(position);
-    		}
-    		else
-    		block.add(lok.x * -1, lok.y * -1, lok.z * -1);
-    		float dx = (float) (block.getX() - this.posX);
-    	    float dy = (float) (block.getY() - this.posY);
-    		float dz = (float) (block.getZ() - this.posZ);
-    		distance = (float) Math.sqrt(dx*dx + dy*dy + dz*dz);
-    		
+    		calculateLength();
     		this.setLength(distance);
     		
     	 	/*if(this.world.isRemote && laserbeam == null || (laserbeam != null && !laserbeam.isAlive()))
@@ -122,15 +110,23 @@ public class EntityLaserBeamBase extends Entity{
     	this.collideWithNearbyEntities();
     }
 
-	/*public void createLaser(World worldIn, double posXIn, double posYIn, double posZIn, Entity player, float height)
+	public void calculateLength()
 	{
-		SuperLaserBeamFX laser =  new SuperLaserBeamFX(worldIn, posXIn, posYIn, posZIn, player, height);
-		laser.setRBGColorF(1, 0.5F, 0);
-		laser.setAlphaF(1F);
-		laser.setMaxAge(3);
-		Minecraft.getMinecraft().effectRenderer.addEffect(laser);
-		this.laserbeam = (SuperLaserBeamFX) laser;
-	}*/
+		Vec3d lok = this.getLookVec();
+		BlockPos block = ImplementationFocused.getBlockLookedAt(this, 120);
+		if(block == null)
+		{
+   		 	Vec3d position = this.getPositionVector().addVector(lok.x * 120, lok.y * 120, lok.z * 120);
+   		 	block = new BlockPos(position);
+		}
+		else
+		block.add(lok.x * -1, lok.y * -1, lok.z * -1);
+		float dx = (float) (block.getX() - this.posX);
+	    float dy = (float) (block.getY() - this.posY);
+		float dz = (float) (block.getZ() - this.posZ);
+		distance = (float) Math.sqrt(dx*dx + dy*dy + dz*dz);
+		
+	}
     
 	public void setSnow()
 	{

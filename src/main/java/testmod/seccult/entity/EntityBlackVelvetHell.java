@@ -101,7 +101,7 @@ public class EntityBlackVelvetHell extends Entity{
 		if(this.overQuest)
 			this.nbÈËnbÖ¸Êý++;
 		if(this.prisoner != null && !(this.prisoner instanceof EntityBlackVelvetHell)) {
-			if(!prisoner.isEntityAlive()) {
+			if(!prisoner.isEntityAlive() && prisoner.isDead) {
 				this.overQuest = true;
 				return;
 			}
@@ -147,12 +147,8 @@ public class EntityBlackVelvetHell extends Entity{
 			if(tiktok > 300 && (prisoner.isEntityAlive() || !prisoner.isDead))
 			{
 				List<Entity> list = this.world.getLoadedEntityList();
-				for(int i = 0; i < list.size(); i++)
-				{
-					Entity e = list.get(i);
-					if(e == this.prisoner);
-					list.set(i, null);
-				}
+				if(list.contains(this.prisoner))
+					list.remove(this.prisoner);
 			}
 		}
 		else if(!this.world.isRemote && this.prisoner == null || (this.prisoner instanceof EntityBlackVelvetHell)){

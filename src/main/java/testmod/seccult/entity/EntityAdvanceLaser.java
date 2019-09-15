@@ -6,11 +6,13 @@ import java.util.List;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import testmod.seccult.init.ModDamage;
 import testmod.seccult.magick.active.FrozenMagick;
 import testmod.seccult.magick.active.Magick;
+import testmod.seccult.magick.implementation.ImplementationFocused;
 import testmod.seccult.magick.magickState.StateManager;
 
 public class EntityAdvanceLaser extends EntityLaserBeamBase{
@@ -64,6 +66,28 @@ public class EntityAdvanceLaser extends EntityLaserBeamBase{
                 }
         }
     }
+	
+	@Override
+	public void calculateLength() {
+		Vec3d lok = this.getLookVec();
+		Entity entity = ImplementationFocused.getEntityLookedAt(this, 120, this.owner);
+		if(entity == null)
+		{
+		BlockPos block = ImplementationFocused.getBlockLookedAt(this, 120);
+		if(block == null)
+		{
+   		 	Vec3d position = this.getPositionVector().addVector(lok.x * 120, lok.y * 120, lok.z * 120);
+   		 	block = new BlockPos(position);
+		}
+		else
+		block.add(lok.x * -1, lok.y * -1, lok.z * -1);
+		distance = (float) this.getDistance(block.getX(), block.getY(), block.getZ());
+		}
+		else
+		{
+			distance = (float) this.getDistance(entity.posX + lok.x * -1, entity.posY + lok.y * -1, entity.posZ + lok.z * -1);
+		}
+	}
 	
 	@Override
 	public void applyEntityCollision(Entity entity) {

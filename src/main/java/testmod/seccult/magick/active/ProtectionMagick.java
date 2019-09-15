@@ -5,7 +5,7 @@ import net.minecraft.util.DamageSource;
 import testmod.seccult.entity.EntityProtectionShieldFX;
 import testmod.seccult.init.ModMagicks;
 
-public class ProtectionMagick extends Magick{
+public class ProtectionMagick extends Magick implements DefenceMagic{
 	protected DamageSource damage;
 	
 	public ProtectionMagick(String nbtName, boolean hasDetailedText, float cost1, float cost2) 
@@ -26,7 +26,7 @@ public class ProtectionMagick extends Magick{
 			EntityProtectionShieldFX fx = new EntityProtectionShieldFX(entity.world);
 			double lookX = entity.getLookVec().x;
 			double lookZ = entity.getLookVec().z;
-			fx.setPositionAndRotation(entity.posX + lookX * this.strengh / 8, entity.posY + entity.height / 2, entity.posZ + lookZ * this.strengh / 8, entity.rotationYaw, entity.rotationPitch);
+			fx.setPositionAndRotation(entity.posX + lookX * this.strengh / 4, entity.posY + entity.height / 4, entity.posZ + lookZ * this.strengh / 4, entity.rotationYaw, entity.rotationPitch);
 			fx.setOwner((EntityLivingBase)entity, (int)this.strengh);
 			if(!entity.world.isRemote)
 				entity.world.spawnEntity(fx); 
@@ -50,5 +50,10 @@ public class ProtectionMagick extends Magick{
 	@Override
 	public boolean doMagickNeedAtrribute() {
 		return false;
+	}
+	
+	@Override
+	public boolean doMagickNeedStrength() {
+		return true;
 	}
 }

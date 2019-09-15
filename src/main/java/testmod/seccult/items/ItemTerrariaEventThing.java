@@ -1,4 +1,4 @@
-package testmod.seccult.items;
+ package testmod.seccult.items;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,20 +6,27 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import testmod.seccult.Seccult;
 import testmod.seccult.api.PlayerDataHandler;
 import testmod.seccult.api.PlayerDataHandler.PlayerData;
+import testmod.seccult.client.FX.ThunderFX;
 import testmod.seccult.entity.EntityAdvanceLaser;
 import testmod.seccult.entity.EntityLightingThing;
 import testmod.seccult.entity.EntityShieldFX;
@@ -28,7 +35,10 @@ import testmod.seccult.entity.livings.EntityEoW;
 import testmod.seccult.entity.livings.EntitySpirit;
 import testmod.seccult.init.ModBlocks;
 import testmod.seccult.init.ModMagicks;
+import testmod.seccult.magick.implementation.ImplementationFocused;
+import testmod.seccult.magick.implementation.ImplementationProjectile;
 import testmod.seccult.potions.ModPotions;
+import testmod.seccult.world.gen.DimensionMagic;
 import testmod.seccult.world.gen.plant.WorldGenCave;
 
 public class ItemTerrariaEventThing extends ItemBase{
@@ -45,8 +55,20 @@ public class ItemTerrariaEventThing extends ItemBase{
 			player.setActiveHand(hand);
 			
 			//protection(player);
+			//if(player.dimension != DimensionMagic.SPIRIT_ID)
+				//player.changeDimension(DimensionMagic.SPIRIT_ID);
 			clearMagick(player);
 			addMagick(player);
+			/*Entity entity = ImplementationFocused.getEntityLookedAt(player, 120);
+			if(entity != null && world.isRemote)
+			{
+				
+			Vec3d vec = player.getLookVec();
+			Particle p = new ThunderFX(world, player.posX, player.posY + player.getEyeHeight(), player.posZ, entity.posX, entity.posY + entity.height / 2, entity.posZ, player.rotationYaw, 
+					player.rotationPitch, 2);
+			Minecraft.getMinecraft().effectRenderer.addEffect(p);
+			}
+			*/
 			//restoreSpirits(world, player);
 			//iceBeam(player);
 			//spawnLight(player);
@@ -92,7 +114,7 @@ public class ItemTerrariaEventThing extends ItemBase{
 		}
 	}
 	
-	public  void iceBeam(Entity e)
+	public void iceBeam(Entity e)
 	{
 			EntityAdvanceLaser laser = new EntityAdvanceLaser(e.world);
 			laser.setOwner(e);

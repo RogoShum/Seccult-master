@@ -84,10 +84,10 @@ public class EntityProtectionShieldFX extends Entity{
 				double lookX = owner.getLookVec().x;
 				double lookZ = owner.getLookVec().z;
 				
-			this.setPositionAndRotation(owner.posX + lookX * this.getScale() / 8, owner.posY + owner.height / 2, owner.posZ + lookZ * this.getScale() / 8, owner.rotationYaw, owner.rotationPitch);
+			this.setPositionAndRotation(owner.posX + lookX * this.strengh / 4, owner.posY + owner.height / 4, owner.posZ + lookZ * this.strengh / 4, owner.rotationYaw, owner.rotationPitch);
 		}
 
-		this.setSize(this.getScale() * 0.8F, this.getScale());
+		this.setSize(this.getScale() * 0.8F * 2, this.getScale()*2);
 		
 		if(!this.world.isRemote)
 			this.setBlend(this.Blend);
@@ -169,14 +169,14 @@ public class EntityProtectionShieldFX extends Entity{
 	
     protected void collideWithNearbyEntities()
     {
-        List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(this.Scale * 1.5F));
+        List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(this.Scale / 2));
 
         if (!list.isEmpty())
         {
             for (int l = 0; l < list.size(); ++l)
             {
                 Entity entity = list.get(l);
-                if(this.owner != null && entity != this.owner)
+                if(this.owner != null && entity != this.owner && !(entity instanceof EntityBloodBeam))
                 {
                 	this.applyEntityCollision(entity);
                 	this.Blend = 0.4F;
@@ -212,7 +212,7 @@ public class EntityProtectionShieldFX extends Entity{
 
                     if (!entityIn.isBeingRidden())
                     {
-                        entityIn.addVelocity(d0 * 5, 0.0D, d1 * 5);
+                        entityIn.addVelocity(d0 * 5 * this.getScale(), 0.0D, d1 * 5 * this.getScale());
                     }
                 }
 	}

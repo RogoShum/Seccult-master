@@ -4,14 +4,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import testmod.seccult.client.FX.LightFX;
 
 public class EntityBloodBeam extends Entity{
 	
@@ -50,6 +48,11 @@ public class EntityBloodBeam extends Entity{
 		}
 		else
 			loadUUID();
+		
+		if(!this.world.isRemote && this.ticksExisted > 20 && this.owner == null)
+		{
+			this.setDead();
+		}
 	}
 
 	private void onChargeBlood() {

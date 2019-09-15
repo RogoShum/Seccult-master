@@ -9,7 +9,7 @@ import testmod.seccult.init.ModMagicks;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
 
-public class DamageMagick extends Magick{
+public class DamageMagick extends Magick implements AttackingMagic{
 	protected DamageSource damage;
 	
 	public DamageMagick(String nbtName, boolean hasDetailedText, float cost1, float cost2) 
@@ -46,7 +46,8 @@ public class DamageMagick extends Magick{
 			MagickFX();
 			damage(player);
 			EntityLivingBase living = (EntityLivingBase) entity;
-			living.attackEntityFrom(damage, strengh);
+			living.hurtResistantTime = -1;
+			living.attackEntityFrom(ModDamage.causeNormalEntityDamage(player), strengh);
 			living.hurtResistantTime = -1;
 		}
 		else if(player != null)
@@ -101,5 +102,10 @@ public class DamageMagick extends Magick{
 	@Override
 	public boolean doMagickNeedAtrribute() {
 		return false;
+	}
+	
+	@Override
+	public boolean doMagickNeedStrength() {
+		return true;
 	}
 }

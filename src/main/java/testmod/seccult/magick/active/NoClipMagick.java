@@ -34,4 +34,9 @@ public class NoClipMagick extends Magick{
 	public boolean doMagickNeedAtrribute() {
 		return false;
 	}
+	
+	@Override
+	public boolean doMagickNeedStrength() {
+		return true;
+	}
 }

@@ -22,8 +22,17 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import testmod.seccult.entity.EntityUsingMagicHelper;
+import testmod.seccult.init.ModMagicks;
+import testmod.seccult.magick.ImplementationHandler;
+import testmod.seccult.magick.MagickCompilerForEntity;
+import testmod.seccult.magick.active.ArrowClowCardMagick;
+import testmod.seccult.magick.active.AttackingMagic;
+import testmod.seccult.magick.active.ControllerMagic;
+import testmod.seccult.magick.active.DefenceMagic;
+import testmod.seccult.magick.active.Magick;
 
-public class EntityBase extends EntityLiving{
+public class EntityBase extends EntityLiving implements EntityUsingMagicHelper{
 	protected float swing;
 	protected boolean swingUp;	
 	
@@ -36,6 +45,13 @@ public class EntityBase extends EntityLiving{
 	public boolean isTRboss;
 	
 	protected EntityLivingBase target; 
+	
+	protected int[] magickData = {0};
+	
+	protected int[] emptyMagickData = {0};
+	
+	protected Magick leftHandMagick;
+	protected Magick rightHandMagick;
 	
 	public EntityBase(World worldIn) {
 		super(worldIn);
@@ -74,6 +90,30 @@ public class EntityBase extends EntityLiving{
         this.dataManager.register(Day, Byte.valueOf((byte)0));
         this.dataManager.register(Sleep, Byte.valueOf((byte)0));
     }
+	
+	public void addMagickData(int id)
+	{	
+		if(hasMagick(id))
+			return;
+		int[] NewData = new int[magickData.length + 1];
+		for(int i = 0; i < magickData.length; i++)
+		{
+			NewData[i] = magickData[i];
+		}
+		NewData[magickData.length] = id;
+		magickData = NewData;
+	}
+    
+	public boolean hasMagick(int id)
+	{
+		for(int i = 0; i < magickData.length; i++)
+		{
+			if(magickData[i] == id)
+			return true;
+		}
+		
+		return false;
+	}
 	
     public boolean getIsDayTime()
     {
@@ -122,12 +162,12 @@ public class EntityBase extends EntityLiving{
 	
 	public boolean canSeeTarget(Entity e)
     {
-    	return	canSeeTarget(e.posX, e.posY, e.posZ);
+    	return	canSeeTarget(e.posX, e.posY + e.getEyeHeight(), e.posZ);
     }
 	
     public boolean canSeeTarget(double pX, double pY, double pZ)
     {
-    	return (this.world.rayTraceBlocks(new Vec3d(this.posX, this.posY + 0.55D, this.posZ), new Vec3d(pX, pY, pZ), false) == null);
+    	return (this.world.rayTraceBlocks(new Vec3d(this.posX, this.posY + this.getEyeHeight(), this.posZ), new Vec3d(pX, pY, pZ), false) == null);
     }
 	
 	protected void doSwing()
@@ -170,9 +210,12 @@ public class EntityBase extends EntityLiving{
 	protected void turn(int dis)
 	{
 		BlockPos pos = this.getPosition().add(LookX() * dis, LookY() * dis, LookZ() * dis);
-		if(this.world.isAirBlock(pos) || this.world.getBlockState(pos).getBlock() == Blocks.LAVA)
+		if(!this.world.isAirBlock(pos) || this.world.getBlockState(pos).getBlock() == Blocks.LAVA || this.world.getBlockState(pos.up()).getBlock() == Blocks.FIRE || this.world.getBlockState(pos).getBlock() == Blocks.FLOWING_LAVA)
 		{
 			this.rotationYaw += this.rand.nextInt(50);
+			this.motionX += this.LookX() / 10;
+			this.motionY += this.LookY() / 10;
+			this.motionZ += this.LookZ() / 10;
 		}
 	}
 	
@@ -218,6 +261,12 @@ public class EntityBase extends EntityLiving{
         this.motionX += (Math.signum(x - this.posX) - this.motionX) * speed;
         this.motionY += (Math.signum(y - this.posY) - this.motionY) * speed;
         this.motionZ += (Math.signum(z - this.posZ) - this.motionZ) * speed;
+	}
+	
+	protected void AwayFrom(double x, double y, double z, float speed) {
+        this.motionX -= (Math.signum(x - this.posX) - this.motionX) * speed;
+        this.motionY -= (Math.signum(y - this.posY) - this.motionY) * speed / 20;
+        this.motionZ -= (Math.signum(z - this.posZ) - this.motionZ) * speed;
 	}
 	
 	//copy from dragon
@@ -278,4 +327,246 @@ public class EntityBase extends EntityLiving{
 
         return flag;
     }
+
+	@Override
+	public void getAttackingMagic(DoYouGotMagickHand hand) 
+	{
+		Magick magic = randomSwitchMagic(EnumType.Attacking);
+		if(magic != null)
+		{
+			if(hand == DoYouGotMagickHand.LeftHand)
+				leftHandMagick = magic;
+			
+			if(hand == DoYouGotMagickHand.RightHand)
+				rightHandMagick = magic;
+		}
+	}
+
+	@Override
+	public void getDefenceMagic(DoYouGotMagickHand hand) 
+	{
+		Magick magic = randomSwitchMagic(EnumType.Defence);
+		if(magic != null)
+			rightHandMagick = magic;
+	}
+
+	@Override
+	public void getControlMagic(DoYouGotMagickHand hand) 
+	{
+		Magick magic = randomSwitchMagic(EnumType.Control);
+		if(magic != null)
+		{
+			if(hand == DoYouGotMagickHand.LeftHand)
+				leftHandMagick = magic;
+			
+			if(hand == DoYouGotMagickHand.RightHand)
+				rightHandMagick = magic;
+		}
+	}
+	
+	public boolean doFocusMagick(DoYouGotMagickHand hand, Entity entity, int strength, int attribute)
+	{
+		if(hand == DoYouGotMagickHand.LeftHand)
+		if(this.leftHandMagick != null && this.leftHandMagick instanceof AttackingMagic)
+		{
+			int distance = (int) this.getDistance(entity); 
+			
+			if(this.leftHandMagick instanceof ArrowClowCardMagick)
+			{
+				int MagickId = ModMagicks.GetMagickIDByString(this.leftHandMagick.getNbtName());
+				int ImpleId = ModMagicks.GetMagickIDByString(ImplementationHandler.SelfI);
+				
+				int[] imple = {ImpleId};
+				int[] imple_strength = {0};
+				int[] imple_attribute = {0};
+				
+				MagickCompilerForEntity compiler = new MagickCompilerForEntity(this, MagickId, strength, attribute, imple, imple_strength, imple_attribute);
+				return compiler.Compile();
+			}
+			else
+			{
+				int MagickId = ModMagicks.GetMagickIDByString(this.leftHandMagick.getNbtName());
+				int ImpleId = ModMagicks.GetMagickIDByString(ImplementationHandler.SelfI);
+				int ImpleId_1 = ModMagicks.GetMagickIDByString(ImplementationHandler.FocuseI);
+				
+				int[] imple = {ImpleId, ImpleId_1};
+				int[] imple_strength = {0, distance + 3};
+				int[] imple_attribute = {0, 0};
+				
+				MagickCompilerForEntity compiler = new MagickCompilerForEntity(this, MagickId, strength, attribute, imple, imple_strength, imple_attribute);
+				return compiler.Compile();
+			}
+		}
+		
+		if(hand == DoYouGotMagickHand.RightHand)
+			if(this.rightHandMagick != null && this.rightHandMagick instanceof AttackingMagic)
+			{
+				if(this.rightHandMagick instanceof ArrowClowCardMagick)
+				{
+					int MagickId = ModMagicks.GetMagickIDByString(this.leftHandMagick.getNbtName());
+					int ImpleId = ModMagicks.GetMagickIDByString(ImplementationHandler.SelfI);
+					
+					int[] imple = {ImpleId};
+					int[] imple_strength = {0};
+					int[] imple_attribute = {0};
+					
+					MagickCompilerForEntity compiler = new MagickCompilerForEntity(this, MagickId, strength, attribute, imple, imple_strength, imple_attribute);
+					return compiler.Compile();
+				}
+				else
+				{
+				int distance = (int) this.getDistance(entity); 
+				
+				int MagickId = ModMagicks.GetMagickIDByString(this.rightHandMagick.getNbtName());
+				int ImpleId = ModMagicks.GetMagickIDByString(ImplementationHandler.SelfI);
+				int ImpleId_1 = ModMagicks.GetMagickIDByString(ImplementationHandler.FocuseI);
+				
+				int[] imple = {ImpleId, ImpleId_1};
+				int[] imple_strength = {0, distance + 3};
+				int[] imple_attribute = {0, 0};
+				
+				MagickCompilerForEntity compiler = new MagickCompilerForEntity(this, MagickId, strength, attribute, imple, imple_strength, imple_attribute);
+				return compiler.Compile();
+				}
+			}
+		
+		return false;
+	}
+	
+	public boolean doControlMagick(DoYouGotMagickHand hand, Entity entity, int strength, int attribute)
+	{
+		if(hand == DoYouGotMagickHand.LeftHand)
+		if(this.leftHandMagick != null && this.leftHandMagick instanceof ControllerMagic)
+		{
+			int distance = (int) this.getDistance(entity); 
+			
+			int MagickId = ModMagicks.GetMagickIDByString(this.leftHandMagick.getNbtName());
+			int ImpleId = ModMagicks.GetMagickIDByString(ImplementationHandler.SelfI);
+			int ImpleId_1 = ModMagicks.GetMagickIDByString(ImplementationHandler.FocuseI);
+			
+			int[] imple = {ImpleId, ImpleId_1};
+			int[] imple_strength = {0, distance + 3};
+			int[] imple_attribute = {0, 0};
+			
+			MagickCompilerForEntity compiler = new MagickCompilerForEntity(this, MagickId, strength, attribute, imple, imple_strength, imple_attribute);
+			return compiler.Compile();
+		}
+		
+		if(hand == DoYouGotMagickHand.RightHand)
+			if(this.rightHandMagick != null && this.rightHandMagick instanceof ControllerMagic)
+			{
+				int distance = (int) this.getDistance(entity); 
+				
+				int MagickId = ModMagicks.GetMagickIDByString(this.rightHandMagick.getNbtName());
+				int ImpleId = ModMagicks.GetMagickIDByString(ImplementationHandler.SelfI);
+				int ImpleId_1 = ModMagicks.GetMagickIDByString(ImplementationHandler.FocuseI);
+				
+				int[] imple = {ImpleId, ImpleId_1};
+				int[] imple_strength = {0, distance + 3};
+				int[] imple_attribute = {0, 0};
+				
+				MagickCompilerForEntity compiler = new MagickCompilerForEntity(this, MagickId, strength, attribute, imple, imple_strength, imple_attribute);
+				return compiler.Compile();
+			}
+		
+		return false;
+	}
+	
+	public boolean doCircleMagick(DoYouGotMagickHand hand, Entity entity, int strength, int attribute)
+	{
+		if(hand == DoYouGotMagickHand.LeftHand)
+		if(this.leftHandMagick != null && this.leftHandMagick instanceof AttackingMagic)
+		{
+			int distance = (int) this.getDistance(entity); 
+			
+			int MagickId = ModMagicks.GetMagickIDByString(this.leftHandMagick.getNbtName());
+			int ImpleId = ModMagicks.GetMagickIDByString(ImplementationHandler.SelfI);
+			int ImpleId_1 = ModMagicks.GetMagickIDByString(ImplementationHandler.FocuseI);
+			int ImpleId_2 = ModMagicks.GetMagickIDByString(ImplementationHandler.CircleI);
+			
+			int[] imple = {ImpleId, ImpleId_1, ImpleId_2};
+			int[] imple_strength = {0, distance + 3, 5};
+			int[] imple_attribute = {0, 0, 0};
+			
+			MagickCompilerForEntity compiler = new MagickCompilerForEntity(this, MagickId, strength, attribute, imple, imple_strength, imple_attribute);
+			return compiler.Compile();
+		}
+		
+		if(hand == DoYouGotMagickHand.RightHand)
+			if(this.rightHandMagick != null && this.rightHandMagick instanceof AttackingMagic)
+			{
+				int distance = (int) this.getDistance(entity); 
+				
+				int MagickId = ModMagicks.GetMagickIDByString(this.rightHandMagick.getNbtName());
+				int ImpleId = ModMagicks.GetMagickIDByString(ImplementationHandler.SelfI);
+				int ImpleId_1 = ModMagicks.GetMagickIDByString(ImplementationHandler.FocuseI);
+				int ImpleId_2 = ModMagicks.GetMagickIDByString(ImplementationHandler.CircleI);
+				
+				int[] imple = {ImpleId, ImpleId_1, ImpleId_2};
+				int[] imple_strength = {0, distance + 3, 5};
+				int[] imple_attribute = {0, 0, 0};
+				
+				MagickCompilerForEntity compiler = new MagickCompilerForEntity(this, MagickId, strength, attribute, imple, imple_strength, imple_attribute);
+				return compiler.Compile();
+			}
+		
+		return false;
+	}
+	
+	public boolean doProtectMagick(int strength, int attribute)
+	{
+		if(this.rightHandMagick != null && this.rightHandMagick instanceof DefenceMagic)
+		{
+			int MagickId = ModMagicks.GetMagickIDByString(this.rightHandMagick.getNbtName());
+			int ImpleId = ModMagicks.GetMagickIDByString(ImplementationHandler.SelfI);
+			
+			int[] imple = {ImpleId};
+			int[] imple_strength = {0};
+			int[] imple_attribute = {0};
+			
+			MagickCompilerForEntity compiler = new MagickCompilerForEntity(this, MagickId, strength, attribute, imple, imple_strength, imple_attribute);
+			return compiler.Compile();
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public Magick randomSwitchMagic(EnumType type) {
+		
+		if(this.magickData == null || this.magickData == this.emptyMagickData)
+			return null;
+		
+		int randomChance = this.magickData.length * 2;
+		
+		for(int i = 0; i < randomChance; ++i)
+		{
+			int order = this.rand.nextInt(this.magickData.length);
+			int id = this.magickData[order];
+			Magick magick = ModMagicks.getMagickFromName(ModMagicks.GetMagickStringByID(id));
+			
+			if(type == EnumType.Attacking && magick instanceof AttackingMagic)
+			{
+				return magick;
+			}
+			
+			if(type == EnumType.Defence && magick instanceof DefenceMagic)
+			{
+				return magick;
+			}
+			
+			if(type == EnumType.Control && magick instanceof ControllerMagic)
+			{
+				return magick;
+			}
+		}
+		
+		return null;
+	}
+	
+	public static enum DoYouGotMagickHand
+	{
+		LeftHand,
+		RightHand
+	}
 }

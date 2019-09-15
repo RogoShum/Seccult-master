@@ -1,6 +1,5 @@
 package testmod.seccult.items;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 import javax.annotation.Nonnull;
@@ -58,6 +57,7 @@ public class ItemWand extends ItemBase{
 	private float scale;
 	private float[] staffColor = {1,1,1};
 	private static ResourceLocation sphere = new ResourceLocation("seccult:textures/spell/sphere.png");
+	private static ResourceLocation circle = new ResourceLocation("seccult:textures/spell/circle.png");
 	private static ResourceLocation moon = new ResourceLocation("seccult:textures/spell/moon.png");
 	private static ResourceLocation ball = new ResourceLocation("seccult:textures/spell/ball.png");
 	private static ResourceLocation star = new ResourceLocation("seccult:textures/spell/star.png");
@@ -101,7 +101,7 @@ public class ItemWand extends ItemBase{
 				pos[1] = player.posY + player.height / 2;
 				pos[2] = player.posZ;
 				doCircle = 0;
-	            NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, this.staffColor, 0, 100));
+	            NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, this.staffColor, 0.3F, 100));
 	            
 	            return ActionResult.newResult(EnumActionResult.PASS, player.getHeldItem(hand));
 	        }
@@ -126,28 +126,21 @@ public class ItemWand extends ItemBase{
 		 
 		 EntityPlayer pl = (EntityPlayer) player;
 		 
-		 if(player.isHandActive() && doCircle > 20 && pl.ticksExisted % 2 == 0)
+		 if(Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown() && doCircle > 20 && pl.ticksExisted % 2 == 0)
 		 {
-			 ArrayList<String> list = ModMagicks.GetAllMagickID();
-			for(int  i = 0; i < list.size(); i++)
-			PlayerDataHandler.get(pl).addMagickData(i);
-
 	        if (!player.world.isRemote && MagickList != null)
 	        {
 	        	int slot = stack.getTagCompound().getInteger("Slot");
-	            if (Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown())
-	            {
 	            	MagickCompiler ma = new MagickCompiler();
 	            	ma.pushMagickData(MagickList.getCompoundTagAt(slot), player);
 	            	this.staffColor = ma.getColor();
-	            }
 	        }
 	        
 			double[] pos = new double[3], vec = new double[3];
 			pos[0] = player.posX;
 			pos[1] = player.posY + player.height / 2;
 			pos[2] = player.posZ;
-         NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, this.staffColor, 0, 100));
+			NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, this.staffColor, 0.3F, 100));
 		 }
 	}
 	
@@ -189,6 +182,17 @@ public class ItemWand extends ItemBase{
         float blue = colorVal[2];
         
 		GlStateManager.pushMatrix();
+	    GlStateManager.enableBlend();
+	    GlStateManager.blendFunc(SourceFactor.SRC_COLOR, DestFactor.ONE_MINUS_CONSTANT_ALPHA);
+	    GlStateManager.color(red, green, blue);
+	    GlStateManager.translate(x, y + 0.01, z);
+	    tex.bindTexture(circle);
+	    Disk disk = new Disk();
+	    disk.setTextureFlag(true);
+	    disk.draw(0, s1 * 1.5F, 16, 16);    
+	    GlStateManager.popMatrix();
+        
+		/*GlStateManager.pushMatrix();
 	    GlStateManager.enableBlend();
 	    GlStateManager.blendFunc(SourceFactor.SRC_COLOR, DestFactor.ONE_MINUS_CONSTANT_ALPHA);
 	    GlStateManager.color(red, green, blue);
@@ -238,58 +242,41 @@ public class ItemWand extends ItemBase{
 	    	disk.draw(0, s1 * 1.1F, 16, 16);
 	    	GlStateManager.popMatrix();
 	    }
-		
+		*/
 		GlStateManager.enableCull();
 		GlStateManager.popMatrix();
 	}
-	
-	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand,
-			EnumFacing facing, float hitX, float hitY, float hitZ) {
-			int x = pos.getX(), y = pos.getY(), z = pos.getZ();
-			int side = facing.getIndex();
-			
-			switch(side) {
-			case 0:
-			default:
-				y--;
-				break;
-			case 1:
-				y++;
-				break;
-			case 2:
-				z--;
-				break;
-			case 3:
-				z++;
-				break;
-			case 4:
-				x--;
-				break;
-			case 5:
-				x++;
-				break;
-			}
-			
-			if(!player.canPlayerEdit(new BlockPos(x, y, z), facing, player.getHeldItem(hand))) {
-				return EnumActionResult.FAIL;
-			}
-			
-			IBlockState location = worldIn.getBlockState(new BlockPos(x, y, z));
-			if(location == Blocks.AIR.getDefaultState()) {
-				ModBlocks.PORTAL.trySpawnPortal(worldIn, new BlockPos(x, y, z));
-			}
-			player.getHeldItem(hand).shrink(1);
-			return EnumActionResult.SUCCESS;
-	}
-	
-
 	
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
 		KeyBinding[] keyBindings = ClientProxy.keyBindings;
 
+		KeyBinding[] keyNumber = {keyBindings[3], keyBindings[4], keyBindings[5], keyBindings[6], keyBindings[7], keyBindings[8]
+				,keyBindings[9], keyBindings[10], keyBindings[11]};
+		
+        if (!worldIn.isRemote && MagickList != null)
+        {
+            if (entityIn instanceof EntityPlayer && isSelected)
+            {
+            	int limit = MagickList.tagCount();
+            	if(limit > 9)
+            		limit = 9;
+            	for(int k = 0; k < limit; k++)
+            	{
+            		if(keyNumber[k].isPressed())
+            		{
+            			stack.getTagCompound().setInteger("Slot", k);
+                        double[] pos = new double[3], vec = new double[3];
+            			pos[0] = entityIn.posX;
+            			pos[1] = entityIn.posY + entityIn.height / 2;
+            			pos[2] = entityIn.posZ;
+            			doCircle = 0;
+                        NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, this.staffColor, 0.3F, 100));
+            		}
+            	}
+            }
+        }
 		if(!stack.hasTagCompound())
 			stack.setTagCompound(new NBTTagCompound());
 		boolean hasUUID = stack.getTagCompound().hasKey("UUIDLeast") && stack.getTagCompound().hasKey("UUIDMost");

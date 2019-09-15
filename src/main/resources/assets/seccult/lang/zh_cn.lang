@@ -78,3 +78,36 @@ entity.bubble.name=泡泡
 entity.frozenfx.name=冰块
 entity.spirit.name=灵魂
 entity.shield.name=盾
+
+//keyBind
+key.seccult.keyBind=Seccult功能按键
+key.keyboard.desc=飞行键
+key.c.desc=查看法术
+key.b.desc=打开饰品栏
+key.1.desc=快速切换法术1
+key.2.desc=快速切换法术2
+key.3.desc=快速切换法术3
+key.4.desc=快速切换法术4
+key.5.desc=快速切换法术5
+key.6.desc=快速切换法术6
+key.7.desc=快速切换法术7
+key.8.desc=快速切换法术8
+key.9.desc=快速切换法术9
+
+//Magic
+spell_self_name = 选择自我
+spell_self_name_introduction = 选择玩家作为使用者
+spell_power_name =   
+spell_none =   
+
+spell_damage_name = 攻击魔法
+spell_damage_name_introduction = 直接对实体造成伤害
+spell_power_affiliated_name = 数值用于增加伤害值
+
+spell_flame_name = 火焰魔法
+spell_flame_name_introduction = 烧灼实体
+
+spell_frozen_name = 冻结魔法
+spell_frozen_name_introduction = 造成伤害并冰冻实体
+
+spell_time = 数值用于增加效果时长

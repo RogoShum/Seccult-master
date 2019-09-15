@@ -1,17 +1,11 @@
 package testmod.seccult.entity;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Queue;
 import java.util.UUID;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleManager;
-import net.minecraft.client.particle.particleHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -123,35 +117,7 @@ public class EntityTimeManager extends Entity{
 				frozeEntity(p);
 			}
 			}
-			/*ParticleManager render = Minecraft.getMinecraft().effectRenderer;
-			Field partic;
-			Field particleAge;
-			try {
-				
-				partic = ParticleManager.class.getDeclaredField("queue");
-				partic.setAccessible(true);
-				Queue<Particle> queue = (Queue<Particle>) partic.get(render);
-				if (!queue.isEmpty())
-				{
-					for (Particle particle = queue.poll(); particle != null; particle = queue.poll())
-					{
-						particleAge = Particle.class.getDeclaredField("particleAge");
-						particleAge.setAccessible(true);
-						int age = (int)particleAge.get(particle);
-						particleAge.set(particle, --age);
-						particle.setPosition(particleHelper.getPrevPosX(particle), particleHelper.getPrevPosY(particle), particleHelper.getPrevPosZ(particle));
-					}
-				}
-			} catch (NoSuchFieldException e) {
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-			 */
+			
 		    List<Entity> list = MyLord.world.getEntitiesWithinAABBExcludingEntity(MyLord, MyLord.getEntityBoundingBox().grow(MyRange));
 		    Entity entity = null;    
 

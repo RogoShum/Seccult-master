@@ -13,4 +13,9 @@ public class ImplementationSelectBlock extends Implementation{
 	public boolean doMagickNeedAtrribute() {
 		return false;
 	}
+	
+	@Override
+	public boolean doMagickNeedStrength() {
+		return false;
+	}
 }

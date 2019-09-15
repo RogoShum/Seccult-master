@@ -23,6 +23,7 @@ public class ModBlocks
 	public static final Block SPELLPROGRAMMER = new SpellProgrammer("spellprogrammer");
 	public static final BlockPortal PORTAL = new BlockPortal();
 	public static final Block OreSpawn = new BlockOreSpawn("ore_spawn", Material.WOOD);
+	public static final Block Unkonw = new BlockUnkonw("un_know", Material.CLAY);
 	
 	//Plant
 	public static final BlockPlant FLOWER = new BlockPlant("flower");

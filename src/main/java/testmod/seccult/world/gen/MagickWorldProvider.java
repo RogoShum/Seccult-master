@@ -4,16 +4,12 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
-import net.minecraft.world.biome.BiomeProvider;
-import net.minecraft.world.border.WorldBorder;
-import net.minecraft.world.gen.ChunkGeneratorOverworld;
 import net.minecraft.world.gen.IChunkGenerator;
 import testmod.seccult.world.gen.biome.SeccultBiomeProvider;
 
 public class MagickWorldProvider extends WorldProvider{
 	@Override
 	protected void init() {
-		//this.biomeProvider = new BiomeProvider(this.world.getWorldInfo());
 		try {
 			this.biomeProvider = new SeccultBiomeProvider(this.world.getWorldInfo(), this.getSeed());
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
@@ -42,12 +38,6 @@ public class MagickWorldProvider extends WorldProvider{
         return new Vec3d((double)f1, (double)f2, (double)f3);
 	}
 	
-	/*@Override
-	public void onWorldUpdateEntities() {
-		super.onWorldUpdateEntities();
-		//this.world.setWorldTime((Calendar.HOUR - 6) * 1000 + Calendar.MINUTE * (1000 / 60));
-	}*/
-
 	@Override
 	public boolean isSurfaceWorld() {
 		return true;
@@ -66,11 +56,6 @@ public class MagickWorldProvider extends WorldProvider{
 	@Override
 	public boolean doesXZShowFog(int x, int z) {
 		return true;
-	}
-	
-	@Override
-	public WorldBorder createWorldBorder() {
-		return new WorldBorder();
 	}
 	
 	@Override

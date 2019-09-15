@@ -75,4 +75,9 @@ public class MoveMagick extends Magick{
 	public boolean doMagickNeedAtrribute() {
 		return false;
 	}
+	
+	@Override
+	public boolean doMagickNeedStrength() {
+		return true;
+	}
 }

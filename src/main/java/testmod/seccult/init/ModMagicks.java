@@ -32,6 +32,10 @@ public class ModMagicks {
 	public static final String LifeAbsorptionMagick = "lifeabsorption";
 	public static final String BlackVelvetHellMagick = "blackvelvethell";
 	public static final String CatchTheSoulMagick = "catchthesoul";
+	public static final String AvadaKedavraMagick = "avadakedavra";
+	public static final String SoulControlMagick = "soulcontrol";
+	public static final String ElectroMagick = "electro";
+	public static final String PosionMagick = "posion";
 	
 	public static final int DamageMagickColor = 0xDC143C;
 	public static final int FlameMagickColor = 0xFF0000;
@@ -54,6 +58,10 @@ public class ModMagicks {
 	public static final int LifeAbsorptionMagickColor = 0xFF0000;
 	public static final int BlackVelvetHellMagickColor = 0x4B0082;
 	public static final int CatchTheSoulMagickColor = 0xB0C4DE;
+	public static final int AvadaKedavraMagickColor = 0x006400;
+	public static final int SoulControlMagickColor = 0xB0C4DE;
+	public static final int ElectroMagickColor = 0xE1FFFF;
+	public static final int PosionMagickColor = 0x00FF7F;
 	
 	@SuppressWarnings("unused")
 	private static Magick Damage;
@@ -97,6 +105,14 @@ public class ModMagicks {
 	private static Magick BlackVelvetHell;
 	@SuppressWarnings("unused")
 	private static Magick CatchTheSoul;
+	@SuppressWarnings("unused")
+	private static Magick AvadaKedavra;
+	@SuppressWarnings("unused")
+	private static Magick SoulControl;
+	@SuppressWarnings("unused")
+	private static Magick Electro;
+	@SuppressWarnings("unused")
+	private static Magick Posion;
 
 	private static Set<Magick> magicks = new HashSet<>();
 	private static ArrayList<String> MagickList = new ArrayList<String>();
@@ -105,8 +121,10 @@ public class ModMagicks {
 	{
 		ImplementationHandler.init();
 		Damage = new DamageMagick(DamageMagick, true, 5, 1.2F);
-		Flame = new FlameMagick(FlameMagick, true, 2, 1);
-		Frozen = new FrozenMagick(FrozenMagick, true, 2, 1);
+		Flame = new FlameMagick(FlameMagick, true, 3, 1);
+		Frozen = new FrozenMagick(FrozenMagick, true, 20, 2);
+		Electro = new ElectroMagick(ElectroMagick, true, 3, 1F);
+		Posion = new PosionMagick(PosionMagick, true, 3, 1F);
 		noClip = new NoClipMagick(noClipMagick, true, 50, 0);
 		LoseMind = new LostMindMagick(LoseMindMagick, true, 35, 2);
 		Move = new MoveMagick(MoveMagick, true, 10, 1);
@@ -118,13 +136,15 @@ public class ModMagicks {
 		KraftWork = new KraftWorkMagick(KraftWorkMagick, true, 60, 3F);
 		Floating = new FloatingMagick(FloatingMagick, true, 20, 1F);
 		//InScale = new IncreaseScaleMagick(InScaleMagick, true, 20, 1F);
-		Arrow = new ArrowClowCardMagick(ArrowMagick, true, 30, 1.5F);
+		Arrow = new ArrowClowCardMagick(ArrowMagick, true, 5, 1.5F);
 		AllSee = new AllSeeMagick(AllSeeMagick, true, 120, 2F);
 		Shield = new ShieldMagick(ShieldMagick, true, 120, 3F);
 		Protect = new ProtectionMagick(ProtectMagick, true, 0.5F, 1.2F);
 		LifeAbsorption = new LifeAbsorptionMagick(LifeAbsorptionMagick, true, 5, 3F);
 		BlackVelvetHell = new BlackVelvetHellMagick(BlackVelvetHellMagick, true, 5000, 10F);
 		CatchTheSoul = new CatchTheSoulMagick(CatchTheSoulMagick, true, 1000, 10F);
+		AvadaKedavra = new AvadaKedavraMagick(AvadaKedavraMagick, true, 2000, 2.5F);
+		SoulControl = new SoulControlMagick(SoulControlMagick, true, 40, 0);
 	}
 
 	public static void addMagick(Magick magick) {

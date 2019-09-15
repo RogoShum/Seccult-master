@@ -37,8 +37,8 @@ public class RenderProtectionShieldFX extends Render<EntityProtectionShieldFX>
          OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);
          GlStateManager.pushMatrix();
          float scale = entity.getScale();
-         GlStateManager.translate(x + entity.getLookVec().x * scale / 2, y + entity.height / 2, z + entity.getLookVec().z * scale / 2);
-         scale = scale * 2;
+         GlStateManager.translate(x - entity.getLookVec().x * scale, y + entity.height / 2, z - entity.getLookVec().z * scale);
+         scale = scale * 4;
          float blend = entity.getBlend();
          GlStateManager.rotate(-entityYaw  * 0.017453292F * (180F / (float)Math.PI), 0.0F, 1.0F, 0.0F);
  	    GlStateManager.rotate(-(-entity.rotationPitch + 90F) * 0.017453292F * (180F / (float)Math.PI), 1.0F, 0.0F, 0.0F);

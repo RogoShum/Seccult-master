@@ -1,5 +1,6 @@
 package testmod.seccult.world.gen.biome;
 
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.GenLayerVoronoiZoom;
@@ -29,7 +30,7 @@ public class SeccultBiomeProvider extends BiomeProvider{
 
 		biomes.initWorldGenSeed(seed);
 		genlayervoronoizoom.initWorldGenSeed(seed);
-		
+
 		ModReclection.BiomeProvider_SetgenBiomes(this, biomes);
 		ModReclection.BiomeProvider_SetbiomeIndexLayer(this, genlayervoronoizoom);
     }

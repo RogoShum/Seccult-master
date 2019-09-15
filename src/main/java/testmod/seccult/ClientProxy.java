@@ -43,12 +43,21 @@ public class ClientProxy extends CommonProxy
 	
 	public void init()
 	{
-		keyBindings = new KeyBinding[3]; 
+		keyBindings = new KeyBinding[12]; 
 		  
 		// instantiate the key bindings
-		keyBindings[0] = new KeyBinding("key.keyboard.desc", Keyboard.KEYBOARD_SIZE, "key.seccult.keyboard");
-		keyBindings[1] = new KeyBinding("key.c.desc", Keyboard.KEY_C, "key.seccult.c");
-		keyBindings[2] = new KeyBinding("key.b.desc", Keyboard.KEY_B, "key.seccult.b");
+		keyBindings[0] = new KeyBinding("key.keyboard.desc", Keyboard.KEYBOARD_SIZE, "key.seccult.keyBind");
+		keyBindings[1] = new KeyBinding("key.c.desc", Keyboard.KEY_C, "key.seccult.keyBind");
+		keyBindings[2] = new KeyBinding("key.b.desc", Keyboard.KEY_B, "key.seccult.keyBind");
+		keyBindings[3] = new KeyBinding("key.1.desc", Keyboard.KEY_1, "key.seccult.keyBind");
+		keyBindings[4] = new KeyBinding("key.2.desc", Keyboard.KEY_NUMPAD2, "key.seccult.keyBind");
+		keyBindings[5] = new KeyBinding("key.3.desc", Keyboard.KEY_NUMPAD3, "key.seccult.keyBind");
+		keyBindings[6] = new KeyBinding("key.4.desc", Keyboard.KEY_NUMPAD4, "key.seccult.keyBind");
+		keyBindings[7] = new KeyBinding("key.5.desc", Keyboard.KEY_NUMPAD5, "key.seccult.keyBind");
+		keyBindings[8] = new KeyBinding("key.6.desc", Keyboard.KEY_NUMPAD6, "key.seccult.keyBind");
+		keyBindings[9] = new KeyBinding("key.7.desc", Keyboard.KEY_NUMPAD7, "key.seccult.keyBind");
+		keyBindings[10] = new KeyBinding("key.8.desc", Keyboard.KEY_NUMPAD8, "key.seccult.keyBind");
+		keyBindings[11] = new KeyBinding("key.9.desc", Keyboard.KEY_NUMPAD9, "key.seccult.keyBind");
 		  
 		// register all the key bindings
 		for (int i = 0; i < keyBindings.length; ++i) 

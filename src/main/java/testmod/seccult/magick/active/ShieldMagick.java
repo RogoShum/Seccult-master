@@ -5,7 +5,7 @@ import net.minecraft.util.DamageSource;
 import testmod.seccult.entity.EntityShieldFX;
 import testmod.seccult.init.ModMagicks;
 
-public class ShieldMagick extends Magick{
+public class ShieldMagick extends Magick implements DefenceMagic{
 	protected DamageSource damage;
 	
 	public ShieldMagick(String nbtName, boolean hasDetailedText, float cost1, float cost2) 
@@ -47,6 +47,11 @@ public class ShieldMagick extends Magick{
 
 	@Override
 	public boolean doMagickNeedAtrribute() {
+		return true;
+	}
+	
+	@Override
+	public boolean doMagickNeedStrength() {
 		return true;
 	}
 }

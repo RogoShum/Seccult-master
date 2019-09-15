@@ -3,10 +3,18 @@ package testmod.seccult.events;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.net.ssl.HandshakeCompletedEvent;
+
+import org.lwjgl.util.glu.Disk;
+
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -17,6 +25,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.api.PlayerDataHandler;
+import testmod.seccult.api.PlayerDataHandler.PlayerData;
 import testmod.seccult.api.accessorie.PlayerAccessorieHandler;
 import testmod.seccult.init.ModDamage;
 import testmod.seccult.init.ModItems;
@@ -29,8 +38,9 @@ public class PlayerDataUpdateEvent {
     public static List<MagickCompiler> compiler = new ArrayList<>();
     public static List<MagickTeleporter> Teleporter = new ArrayList<>();
     
+	private static ResourceLocation geass = new ResourceLocation("seccult:textures/spell/geass.png");
     
-    public PlayerDataUpdateEvent() 
+    public PlayerDataUpdateEvent()
     {
     	MagicDamage.add(ModDamage.darkMagic.damageType);
     	MagicDamage.add(ModDamage.forbiddenMagic.damageType);
@@ -52,9 +62,15 @@ public class PlayerDataUpdateEvent {
 				ItemWand wand = (ItemWand) player.getHeldItemMainhand().getItem();
 				wand.render(player, partialTicks);
 			}
+			
+			PlayerData data = PlayerDataHandler.get(player);
+			if(data.isMutekiGamer())
+			{
+				QAQ.render(player, partialTicks);
+			}
 		}
 	}
-    
+	
 	@SubscribeEvent
 	public void onPlayerTick(LivingUpdateEvent event) 
 	{
@@ -105,6 +121,48 @@ public class PlayerDataUpdateEvent {
 		{
 			EntityPlayer player = (EntityPlayer)event.getSource().getTrueSource();
 			PlayerDataHandler.get(player).levelUpper();
+		}
+	}
+	
+	public static class QAQ
+	{
+	    
+		@SideOnly(Side.CLIENT)
+		public static void render(EntityPlayer player, float partTicks) {
+			RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
+			double x = player.lastTickPosX + (player.posX - player.lastTickPosX) * partTicks - renderManager.viewerPosX;
+			double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * partTicks - renderManager.viewerPosY;
+			double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partTicks - renderManager.viewerPosZ;
+			
+			if(!player.isSneaking())
+				renderGeass(x + player.getLookVec().x / 5, y, z + player.getLookVec().z / 2, player.rotationYaw);
+			else
+				renderGeass(x + player.getLookVec().x / 5, y - 0.3F, z + player.getLookVec().z / 2, player.rotationYaw);
+		}
+
+
+		public static void renderGeass(double x, double y, double z, float yaw) {
+			TextureManager tex = Minecraft.getMinecraft().getTextureManager();
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(x, y + 1.65F, z);
+			GlStateManager.rotate(180F, 0F, 0F, 1F);
+			GlStateManager.rotate(yaw, 0F, 1F, 0F);
+			GlStateManager.disableCull();
+			GlStateManager.disableLighting();
+	        
+			GlStateManager.pushMatrix();
+		    GlStateManager.enableBlend();
+		    GlStateManager.blendFunc(SourceFactor.SRC_COLOR, DestFactor.ONE_MINUS_CONSTANT_ALPHA);
+		    GlStateManager.color(1.0F, 0.2F, 0.2F, 0.12F);
+		    //GlStateManager.translate(x, y + 0.01, z);
+		    tex.bindTexture(geass);
+		    Disk disk = new Disk();
+		    disk.setTextureFlag(true);
+		    disk.draw(0, 0.3F, 16, 16);    
+		    GlStateManager.popMatrix();
+		    
+			GlStateManager.enableCull();
+			GlStateManager.popMatrix();
 		}
 	}
 }

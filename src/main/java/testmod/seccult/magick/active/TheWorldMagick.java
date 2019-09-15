@@ -7,7 +7,7 @@ import testmod.seccult.magick.magickState.StateManager;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
 
-public class TheWorldMagick extends Magick{
+public class TheWorldMagick extends Magick implements ControllerMagic{
 
 	public TheWorldMagick(String nbtName, boolean hasDetailedText, float cost1, float cost2) 
 	{
@@ -59,4 +59,8 @@ public class TheWorldMagick extends Magick{
 		return true;
 	}
 
+	@Override
+	public boolean doMagickNeedStrength() {
+		return true;
+	}
 }

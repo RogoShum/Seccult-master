@@ -35,4 +35,8 @@ public class ImplementationStoreable extends Implementation{
 		return false;
 	}
 	
+	@Override
+	public boolean doMagickNeedStrength() {
+		return true;
+	}
 }

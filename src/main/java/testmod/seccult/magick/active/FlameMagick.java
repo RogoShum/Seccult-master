@@ -4,13 +4,13 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
+import testmod.seccult.init.ModDamage;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
 
-public class FlameMagick extends Magick{
+public class FlameMagick extends Magick implements AttackingMagic{
 
 	public FlameMagick(String nbtName, boolean hasDetailedText, float cost1, float cost2) 
 	{
@@ -27,14 +27,15 @@ public class FlameMagick extends Magick{
 		
 		if(strengh < 15)
 		{
-			living.setFire((int) strengh);
-			living.attackEntityFrom(DamageSource.IN_FIRE, strengh);
+			living.setFire((int) strengh / 2);
+			living.attackEntityFrom(ModDamage.causeMagickFireDamage(player), strengh);
 			living.hurtResistantTime = -1;
 		}
 		else
 		{
 			living.setFire((int) strengh);
 			living.hurtResistantTime = -1;
+			living.attackEntityFrom(ModDamage.causeMagickFlameDamage(player), strengh);
 			living.world.newExplosion(null, living.posX, living.posY, living.posZ, strengh / 2, true, true);
 			living.hurtResistantTime = -1;
 		}
@@ -96,5 +97,10 @@ public class FlameMagick extends Magick{
 	@Override
 	public boolean doMagickNeedAtrribute() {
 		return false;
+	}
+	
+	@Override
+	public boolean doMagickNeedStrength() {
+		return true;
 	}
 }

@@ -52,14 +52,36 @@ public class SpellButton extends GuiButton{
 		if(this.id >= 7)
 			this.isMagickButton = true;
 		
-		spellPower_name = "spell_power_name";
+		spellPower_name = "seccult:normal";
 		switch(id)
 		{
-			case 6:
-				spellAttribute_name = "spell_power_affiliated_name";
-				break;
 			case 7:
-				spellAttribute_name = "spell_time_name";
+				spellPower_name = "spell_power_affiliated_name";
+				spellAttribute_name = "spell_none";
+				break;
+			case 8:
+				spellPower_name = "spell_power_affiliated_name";
+				spellAttribute_name = "spell_none";
+				break;
+			case 9:
+				spellPower_name = "spell_power_affiliated_name";
+				spellAttribute_name = "spell_none";
+				break;
+			case 10:
+				spellPower_name = "spell_power_affiliated_name";
+				spellAttribute_name = "spell_none";
+				break;
+			case 11:
+				spellPower_name = "spell_power_affiliated_name";
+				spellAttribute_name = "spell_none";
+				break;
+			case 12:
+				spellPower_name = "spell_time";
+				spellAttribute_name = "spell_none";
+				break;
+			case 14:
+				spellPower_name = "spell_time";
+				spellAttribute_name = "spell_none";
 				break;
 			default:
 				spellAttribute_name = "spell_none";

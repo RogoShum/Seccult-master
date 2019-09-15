@@ -38,4 +38,8 @@ public class IncreaseScaleMagick extends Magick{
 		return false;
 	}
 
+	@Override
+	public boolean doMagickNeedStrength() {
+		return true;
+	}
 }

@@ -113,4 +113,8 @@ public class CopyMagick extends Magick{
 		return false;
 	}
 
+	@Override
+	public boolean doMagickNeedStrength() {
+		return true;
+	}
 }

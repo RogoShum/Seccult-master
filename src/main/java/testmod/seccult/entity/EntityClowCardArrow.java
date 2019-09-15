@@ -2,6 +2,7 @@ package testmod.seccult.entity;
 
 import java.util.List;
 
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -67,7 +68,7 @@ public class EntityClowCardArrow extends Entity{
 	}
 
 	private void Move() {
-		if(!this.world.isAirBlock(getPosition()))
+		if(!this.world.isAirBlock(getPosition()) && !(this.world.getBlockState(getPosition()).getBlock() instanceof BlockLiquid))
 		{
 			this.setDead();
 			return;
@@ -109,12 +110,16 @@ public class EntityClowCardArrow extends Entity{
 		{
 			if(entityIn != owner)
 			{
-				entityIn.attackEntityFrom(ModDamage.causeNormalEntityDamage(owner), this.damage);
+				entityIn.hurtResistantTime = -1;
+				entityIn.attackEntityFrom(ModDamage.causePureEntityDamage(owner), this.damage);
+				entityIn.hurtResistantTime = -1;
 			}
 		}
 		else
 		{
-			entityIn.attackEntityFrom(ModDamage.causeNormalEntityDamage(this), this.damage);
+			entityIn.hurtResistantTime = -1;
+			entityIn.attackEntityFrom(ModDamage.causePureEntityDamage(this), this.damage);
+			entityIn.hurtResistantTime = -1;
 		}
 	}
 	

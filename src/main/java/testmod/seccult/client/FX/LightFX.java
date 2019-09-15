@@ -81,9 +81,9 @@ public class LightFX extends Particle
 	@Override
     public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ)
     {
-		this.particleRed += (1 - rand.nextFloat() * 2) *0.0005;
-		this.particleGreen += (1 - rand.nextFloat() * 2) *0.0005;
-		this.particleBlue += (1 - rand.nextFloat() * 2) *0.0005;
+		this.particleRed += (0.5 - rand.nextFloat()) *0.0005;
+		this.particleGreen += (0.5 - rand.nextFloat()) *0.0005;
+		this.particleBlue += (0.5 - rand.nextFloat()) *0.0005;
     	if(this.particleAge < this.particleMaxAge / 2)
     	{
     		float f = ((float)this.particleAge + partialTicks) / (float)this.particleMaxAge;

@@ -25,7 +25,7 @@ public class RenderTRMagick extends Render<TRMagickProjectile>
     }
     
     public void doRender(TRMagickProjectile par1Entity, double x, double y, double z, float entityYaw, float partialTicks) {
-    	 GlStateManager.pushMatrix();
+    	 /*GlStateManager.pushMatrix();
          this.bindEntityTexture(par1Entity);
          GlStateManager.translate((float)x, (float)y, (float)z);
          GlStateManager.enableRescaleNormal();
@@ -61,7 +61,7 @@ public class RenderTRMagick extends Render<TRMagickProjectile>
          }
 
          GlStateManager.disableRescaleNormal();
-         GlStateManager.popMatrix();
+         GlStateManager.popMatrix();*/
          super.doRender(par1Entity, x, y, z, entityYaw, partialTicks);
     }
     

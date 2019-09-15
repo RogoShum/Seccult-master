@@ -3,7 +3,7 @@ package testmod.seccult.magick.active;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.magick.magickState.StateManager;
 
-public class WhiteAlbumMagick extends Magick{
+public class WhiteAlbumMagick extends Magick implements ControllerMagic{
 
 	public WhiteAlbumMagick(String nbtName, boolean hasDetailedText, float cost1, float cost2) 
 	{
@@ -34,4 +34,8 @@ public class WhiteAlbumMagick extends Magick{
 		return true;
 	}
 
+	@Override
+	public boolean doMagickNeedStrength() {
+		return true;
+	}
 }

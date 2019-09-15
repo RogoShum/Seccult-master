@@ -2,15 +2,15 @@ package testmod.seccult.magick.active;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.DamageSource;
+import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.Vec3d;
 import testmod.seccult.init.ModDamage;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
 
-public class ElectroMagick extends Magick{
-	protected DamageSource damage;
+public class ElectroMagick extends Magick implements AttackingMagic{
 	
 	public ElectroMagick(String nbtName, boolean hasDetailedText, float cost1, float cost2) 
 	{
@@ -20,11 +20,6 @@ public class ElectroMagick extends Magick{
 	@Override
 	public void doMagick() {
 		super.doMagick();
-	}
-	
-	public void damage(Entity pl)
-	{
-		damage = ModDamage.causeNormalEntityDamage(pl);
 	}
 	
 	public void doMagickToEntity(Entity e) 
@@ -44,10 +39,26 @@ public class ElectroMagick extends Magick{
 		if(entity instanceof EntityLivingBase && player != null)
 		{
 			MagickFX();
-			damage(player);
 			EntityLivingBase living = (EntityLivingBase) entity;
-			living.attackEntityFrom(damage, strengh);
 			living.hurtResistantTime = -1;
+			
+			strengh = strengh - 5;
+			if(strengh < 0)
+			{
+				strengh = 0;
+			}
+			else
+			{
+			if(strengh < 15)
+			{
+				living.attackEntityFrom(ModDamage.causeMagickElectroDamage(player), strengh);
+			}
+			else
+				living.attackEntityFrom(ModDamage.causeMagickThunderDamage(player), strengh);
+			}
+			living.hurtResistantTime = -1;
+
+			entity.onStruckByLightning(new EntityLightningBolt(entity.world, entity.posX, entity.posY, entity.posZ, true));
 		}
 		else if(player != null)
 		{
@@ -57,7 +68,7 @@ public class ElectroMagick extends Magick{
 
 	@Override
 	void toBlock() {
-		player.world.destroyBlock(block, true);
+		player.world.setBlockState(block.up(), Blocks.FIRE.getDefaultState());
 		MagickFX();
 	}
 
@@ -95,11 +106,16 @@ public class ElectroMagick extends Magick{
 
 	@Override
 	public int getColor() {
-		return ModMagicks.DamageMagickColor;
+		return ModMagicks.ElectroMagickColor;
 	}
 
 	@Override
 	public boolean doMagickNeedAtrribute() {
 		return false;
+	}
+	
+	@Override
+	public boolean doMagickNeedStrength() {
+		return true;
 	}
 }

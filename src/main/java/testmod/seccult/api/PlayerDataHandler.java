@@ -1,6 +1,5 @@
 package testmod.seccult.api;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -8,10 +7,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -19,11 +14,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.Seccult;
 import testmod.seccult.init.ModDamage;
-import testmod.seccult.init.ModItems;
 import testmod.seccult.items.armor.ArmorBase;
 import testmod.seccult.network.NetworPlayerMagickData;
 import testmod.seccult.network.NetworkHandler;
@@ -71,9 +63,6 @@ public class PlayerDataHandler {
 			t = i + r;
 		}
 		catch(Exception e) {
-			System.out.println("hashCode " + (player.hashCode() << 1));
-			System.out.println("World " + player.getEntityWorld());
-			System.out.println("Remote " + player.getEntityWorld().isRemote);
 		}
 		return t;
 	}
@@ -113,7 +102,6 @@ public class PlayerDataHandler {
 		private float MaxManaValue;
 		
 		private float ExtraManaValue;
-		private float lastTickMaxManaValue;
 		
 		private float proficiency;
 		
@@ -126,6 +114,8 @@ public class PlayerDataHandler {
 		private int[] magickData = {0};
 		
 		private int wand;
+		
+		private boolean mutekiGamer;
 		
 		public EntityPlayer player;
 		private final boolean client;
@@ -243,9 +233,6 @@ public class PlayerDataHandler {
 		}
 
 		public void writeToNBT(NBTTagCompound cmp) {
-			
-
-			
 			cmp.setFloat(TAG_MANA_TALENT_VALUE, ManaTalentValue);
 			cmp.setFloat(TAG_COMTROL_ABILITY, ControlAbility);
 			cmp.setFloat(TAG_MANA_STRENGH, ManaStrengh);
@@ -509,9 +496,7 @@ public class PlayerDataHandler {
 		public void tick() {
 			if(client)
 				return;
-			//ManaValue = 0;
-			//regenCooldown = 30;
-			//System.out.println(regenCooldown);
+			
 			if(Float.isNaN(ManaValue))
 				ManaValue = 0;
 			
@@ -646,6 +631,17 @@ public class PlayerDataHandler {
 				return getMagickList().getCompoundTagAt(i);
 			else
 				return null;
+		}
+		
+		public boolean isMutekiGamer()
+		{
+			return this.mutekiGamer;
+		}
+		
+		public void setMutekiGamer(boolean bool)
+		{
+			System.out.println(client + " " + bool);
+			this.mutekiGamer = bool;
 		}
 	}
 }

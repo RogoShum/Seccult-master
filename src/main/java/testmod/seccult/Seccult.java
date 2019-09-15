@@ -68,7 +68,7 @@ public class Seccult
 		new GuiElementLoader();
 		proxy.sphereRender();
 		proxy.init();
-		DimensionMagic.register();
+		//DimensionMagic.register();
 	}
 	
 	@EventHandler

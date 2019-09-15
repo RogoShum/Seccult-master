@@ -1,15 +1,12 @@
 package testmod.seccult.magick.active;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.Vec3d;
 import testmod.seccult.init.ModDamage;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.magick.magickState.StateManager;
 
-public class LostMindMagick extends Magick{
+public class LostMindMagick extends Magick implements ControllerMagic{
 	protected DamageSource damage;
 	
 	public LostMindMagick(String nbtName, boolean hasDetailedText, float cost1, float cost2) 
@@ -25,18 +22,6 @@ public class LostMindMagick extends Magick{
 	public void damage(Entity pl)
 	{
 		damage = ModDamage.causeNormalEntityDamage(pl);
-	}
-	
-	public void doMagickToEntity(Entity e) 
-	{
-		if(e != null)
-		{
-			Vec3d QAQ = e.getLookVec();
-			QAQ.scale(0.2);
-			e.motionX = QAQ.x * strengh;
-			e.motionY = QAQ.y * strengh;
-			e.motionZ = QAQ.z * strengh;
-		}
 	}
 
 	@Override
@@ -66,6 +51,11 @@ public class LostMindMagick extends Magick{
 
 	@Override
 	public boolean doMagickNeedAtrribute() {
+		return true;
+	}
+	
+	@Override
+	public boolean doMagickNeedStrength() {
 		return true;
 	}
 }

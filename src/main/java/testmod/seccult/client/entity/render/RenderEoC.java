@@ -31,7 +31,13 @@ public class RenderEoC extends RenderLiving<EntityEoC>{
 	    GlStateManager.scale(7.4F, 7.4F, 7.4F);
 	    GlStateManager.rotate(-entityYaw  * 0.017453292F * (180F / (float)Math.PI), 0.0F, 1.0F, 0.0F);
 	    GlStateManager.rotate(-(-entity.rotationPitch + 90F) * 0.017453292F * (180F / (float)Math.PI), 1.0F, 0.0F, 0.0F);
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+	    boolean flag1 = entity.hurtTime > 0 || entity.deathTime > 0;
+	    
+	    if(flag1)
+	    	GlStateManager.color(1.0F, 0.75F, 0.75F, 1.0F);
+	    else
+	    	GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+	    
         GlStateManager.enableNormalize();
         //GlStateManager.enableBlend();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);

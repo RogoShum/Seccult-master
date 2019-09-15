@@ -81,4 +81,9 @@ public class ImplementationGroup extends Implementation{
 	public boolean doMagickNeedAtrribute() {
 		return false;
 	}
+	
+	@Override
+	public boolean doMagickNeedStrength() {
+		return true;
+	}
 }

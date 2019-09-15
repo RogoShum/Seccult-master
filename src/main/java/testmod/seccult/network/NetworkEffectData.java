@@ -7,11 +7,19 @@ import com.google.common.collect.AbstractIterator;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import testmod.seccult.Seccult;
 import testmod.seccult.client.FX.*;
 import testmod.seccult.magick.magickState.StateManager;
 
@@ -98,6 +106,71 @@ public class NetworkEffectData implements IMessage {
         			mc.world.spawnParticle(EnumParticleTypes.SNOW_SHOVEL, d0, d1, d2, 0, 0, 0);
         		    }
         			break;
+        		case 4:
+        			par = new ThunderFX(mc.world,x,y,z, xx, yy, zz, r, g, message.scale);
+        			
+        				mc.world.playSound(mc.player, x, y, z, SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.PLAYERS, 1.0F, 2);
+        				mc.world.playSound(mc.player, x, y, z, SoundEvents.ENTITY_LIGHTNING_IMPACT, SoundCategory.PLAYERS, 2.0F, 1.8F + Seccult.rand.nextFloat() * 0.2F);
+        			break;
+        		case 5:
+        			int distancec = (int) message.scale;
+
+        			mc.world.playSound(mc.player, x, y, z, SoundEvents.ENTITY_PARROT_FLY, SoundCategory.PLAYERS, 4.0F, 2);
+
+        			for (int i = 0; i < distancec; i++) {
+        				double trailFactor = i / (distancec - 1.0D);
+        				double tx = x + (xx - x) * trailFactor + mc.world.rand.nextGaussian() * 0.005;
+        				double ty = y + (yy - y) * trailFactor + mc.world.rand.nextGaussian() * 0.005;
+        				double tz = z + (zz - z) * trailFactor + mc.world.rand.nextGaussian() * 0.005;
+        				double motionX = 1 - 2*mc.world.rand.nextFloat();
+        				double motionY = 1 - 2*mc.world.rand.nextFloat();
+        				double motionZ = 1 - 2*mc.world.rand.nextFloat();
+        				
+        				mc.world.spawnParticle(EnumParticleTypes.SNOW_SHOVEL, tx, ty, tz, motionX / 25, motionY / 25, motionZ / 25);
+        			}
+        			break;
+        		case 6:
+        			int distanceee = (int) message.scale;
+        			for (int i = 0; i < distanceee; i++) {
+        				double trailFactor = i / (distanceee - 1.0D);
+        				double tx = x + (xx - x) * trailFactor + mc.world.rand.nextGaussian() * 0.005;
+        				double ty = y + (yy - y) * trailFactor + mc.world.rand.nextGaussian() * 0.005;
+        				double tz = z + (zz - z) * trailFactor + mc.world.rand.nextGaussian() * 0.005;
+        				double motionX = 0.25F - 0.5 * mc.world.rand.nextFloat();
+        				double motionY = 1.8F - 2*mc.world.rand.nextFloat();
+        				double motionZ = 0.25F - 0.5 * mc.world.rand.nextFloat();
+        				
+        				Particle big = new LightFX(mc.world, tx, ty, tz, motionX / 50, motionY / 50, motionZ / 50, 1.0F + mc.world.rand.nextFloat());
+        		    	big.setRBGColorF(r, g, b);
+        		    	Minecraft.getMinecraft().effectRenderer.addEffect(big);
+        			}
+
+        			mc.world.playSound(mc.player, x, y, z, SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.PLAYERS, 2.0F, 2);
+        			mc.world.playSound(mc.player, xx, yy, zz, SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.PLAYERS, 2.0F, 1);
+
+        			for (int i = 0; i < distanceee; i++) {
+        				double trailFactor = i / (distanceee - 1.0D);
+        				double tx = x + (xx - x) * trailFactor + mc.world.rand.nextGaussian() * 0.005;
+        				double ty = y + (yy - y) * trailFactor + mc.world.rand.nextGaussian() * 0.005;
+        				double tz = z + (zz - z) * trailFactor + mc.world.rand.nextGaussian() * 0.005;
+        				double motionX = 0.5F - mc.world.rand.nextFloat();
+        				double motionY = 0.8F - mc.world.rand.nextFloat();
+        				double motionZ = 0.5F - mc.world.rand.nextFloat();
+        				
+        				Particle big = new LightFX(mc.world, tx, ty, tz, motionX / 50, motionY / 50, motionZ / 50, 0.5F);
+        		    	big.setRBGColorF(1, 1, 1);
+        		    	
+        		    	Particle bigW = new LightFX(mc.world, tx, ty, tz, motionX / 100, motionY / 50, motionZ / 100, 0.8F);
+        		    	bigW.setRBGColorF(0.8F, 0.7F, 0.1F);
+        		    	
+        		    	//Particle aa = new LightFX(mc.world, tx, ty, tz, motionX / 50, motionY / 50, motionZ / 50, 0.6F + mc.world.rand.nextFloat());
+        		    	//aa.setRBGColorF(r, g, b);
+        		    	//Minecraft.getMinecraft().effectRenderer.addEffect(aa);
+        		    	Minecraft.getMinecraft().effectRenderer.addEffect(bigW);
+        		    	Minecraft.getMinecraft().effectRenderer.addEffect(big);
+        			}
+        			
+        			break;
         		case 100:
         			for(int i = 0; i < 20 ; i++) {
         	            double d0 = (double)((float)message.pos[0] + mc.world.rand.nextFloat());
@@ -106,12 +179,13 @@ public class NetworkEffectData implements IMessage {
         	            double d3 = (1 - 2*StateManager.rand.nextFloat()) / 2;
         	            double d4 = (1 - 2*StateManager.rand.nextFloat()) / 2;
         	            double d5 = (1 - 2*StateManager.rand.nextFloat()) / 2;
-        	        	Particle me = new LightFX(mc.world, (d0 +x) / 2.0D, (d1 +y) / 2.0D, (d2 +z) / 2.0D, d3/6, d4/6, d5/6, 0.3F);
+        	        	Particle me = new LightFX(mc.world, (d0 +x) / 2.0D, (d1 +y) / 2.0D, (d2 +z) / 2.0D, d3/6, d4/6, d5/6, message.scale);
         	        	me.setRBGColorF(r, g, b);
-        	        	Particle smoke = new StarFX(mc.world, d0, d1, d2, d3 / 5, d4 / 5, d5 / 5, 0.3f);
+        	        	Particle smoke = new StarFX(mc.world, d0, d1, d2, d3 / 5, d4 / 5, d5 / 5, message.scale / 3);
         	        	Minecraft.getMinecraft().effectRenderer.addEffect(me);
         	        	Minecraft.getMinecraft().effectRenderer.addEffect(smoke);
         				}
+
         			break;
         		case 101:
         			int distance = (int) message.scale;
@@ -128,6 +202,9 @@ public class NetworkEffectData implements IMessage {
         		    	big.setRBGColorF(r, g, b);
         		    	Minecraft.getMinecraft().effectRenderer.addEffect(big);
         			}
+        			
+        			mc.world.playSound(mc.player, x, y, z, SoundEvents.ENTITY_FIREWORK_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.6F + mc.world.rand.nextFloat() * 0.4F);
+        			mc.world.playSound(mc.player, x, y, z, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, SoundCategory.PLAYERS, 1.0F, mc.world.rand.nextFloat());
         			break;
         		case 102:
         			for(int i = 0; i < (message.scale * 2); i++) {

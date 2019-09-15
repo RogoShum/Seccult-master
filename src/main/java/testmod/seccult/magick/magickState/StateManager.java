@@ -5,6 +5,7 @@ import java.util.Random;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
@@ -12,9 +13,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import testmod.seccult.Seccult;
+import testmod.seccult.entity.EntityProtectionShieldFX;
+import testmod.seccult.entity.EntityShieldFX;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkEntityMoving;
 import testmod.seccult.network.NetworkHandler;
+import testmod.seccult.potions.ModPotions;
 
 public class StateManager {
 	public static final String FROZEN = "Frozen";
@@ -43,13 +47,27 @@ public class StateManager {
 		if(CheckIfStated(entity, FROZEN) > 0)
 		{
 			int level = getLevel(entity, FROZEN);
-			entity.motionX = 0;
-			entity.motionY = 0;
-			entity.motionZ = 0;
-			entity.ticksExisted -= 1;
-			setPlayerMove(entity, 0, 0, 0, 1);
-			setPlayerTP(entity, entity.prevPosX, entity.prevPosY, entity.prevPosZ, 0);
-			entity.setPositionAndRotation(entity.prevPosX, entity.prevPosY, entity.prevPosZ, entity.prevRotationYaw, entity.prevRotationPitch);
+
+			float motion = 1 - (0.1F * level);
+			if(level < 6)
+			{
+			entity.motionX *= motion;
+			entity.motionY *= motion;
+			entity.motionZ *= motion;
+		    
+			setPlayerMove(entity, entity.motionX *= motion, entity.motionY *= motion, entity.motionZ *= motion, 1);
+			}
+			else
+			{
+				entity.motionX = 0;
+				entity.motionY = 0;
+				entity.motionZ = 0;
+			    
+				setPlayerMove(entity, 0, 0, 0, 1);
+				
+				setPlayerTP(entity, entity.prevPosX, entity.prevPosY, entity.prevPosZ, 0);
+				entity.setPositionAndRotation(entity.prevPosX, entity.prevPosY, entity.prevPosZ, entity.prevRotationYaw, entity.prevRotationPitch);
+			}
 			if(!entity.isEntityAlive())
 				setState(entity, FROZEN, -10, level);
 		}
@@ -261,13 +279,28 @@ public class StateManager {
 	
 	public static void setState(Entity entity, String s, int time, int level)
 	{
+		if(entity instanceof EntityShieldFX || entity instanceof EntityProtectionShieldFX) return;
+		
+		if(entity instanceof EntityLivingBase)
+		{
+			EntityLivingBase living = (EntityLivingBase) entity;
+			if(living.isPotionActive(ModPotions.protection) || living.isPotionActive(ModPotions.shield))
+			{
+				if(s.equals(FROZEN) || s.equals(LOST_MIND) || s.equals(NO_AI) || s.equals(WhiteAlbum) || s.equals(KraftWork))
+					return;
+			}
+		}
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setInteger("time", time * 20);
 		nbt.setInteger("level", level);
 		getStateListForEntity(entity).setTag(s, nbt);
+		
 	}
 	
 	public static NBTTagCompound getStateListForEntity(Entity entity) {
+		if(entity == null)
+			return new NBTTagCompound();
+		
 		NBTTagCompound forgeData = entity.getEntityData();
 		if(!forgeData.hasKey(EntityPlayer.PERSISTED_NBT_TAG))
 			forgeData.setTag(EntityPlayer.PERSISTED_NBT_TAG, new NBTTagCompound());

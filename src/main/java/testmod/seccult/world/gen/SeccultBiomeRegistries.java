@@ -11,6 +11,7 @@ import testmod.seccult.Seccult;
 import testmod.seccult.world.gen.biome.BiomeManaForest;
 import testmod.seccult.world.gen.biome.BiomeManaMushroom;
 import testmod.seccult.world.gen.biome.BiomeManaOcean;
+import testmod.seccult.world.gen.biome.BiomeManaSpirit;
 
 public class SeccultBiomeRegistries {
 	public static Biome mana_froest_Mountain = new BiomeManaForest(BiomeManaForest.Type.NORMAL, new BiomeProperties("Mana_Forest_Mountain")
@@ -36,6 +37,13 @@ public class SeccultBiomeRegistries {
 	public static Biome mana_DeepOcean = new BiomeManaOcean(BiomeManaOcean.Type.DEEP,new BiomeProperties("Mana_DeepOcean")
 			.setTemperature(1.25f).setRainfall(1.0f).setWaterColor(1).setBaseHeight(-1.5F).setHeightVariation(0.3F)).setRegistryName(Seccult.MODID, "Mana_DeepOcean");
 	
+	public static Biome Oblivion = new BiomeManaSpirit(BiomeManaSpirit.Type.NORMAL, new BiomeProperties("Oblivion")
+			.setTemperature(0.95f).setRainfall(1.0f).setWaterColor(1)).setRegistryName(Seccult.MODID, "Oblivion");
+	public static Biome Oblivion_Skyrim = new BiomeManaSpirit(BiomeManaSpirit.Type.SKYTIM, new BiomeProperties("Oblivion_Skyrim")
+			.setTemperature(0.95f).setRainfall(1.0f).setWaterColor(1)).setRegistryName(Seccult.MODID, "Oblivion_Skyrim");
+	public static Biome Oblivion_Summerest = new BiomeManaSpirit(BiomeManaSpirit.Type.SUMMEREST, new BiomeProperties("Oblivion_Summerest")
+			.setTemperature(0.95f).setRainfall(1.0f).setWaterColor(1)).setRegistryName(Seccult.MODID, "Oblivion_Summerest");
+	
 	@Mod.EventBusSubscriber(modid = Seccult.MODID)
 	public static class Register {
 		
@@ -51,7 +59,10 @@ public class SeccultBiomeRegistries {
 					mana_Mushroom_Normal,
 					mana_Ocean,
 					mana_OceanSide,
-					mana_DeepOcean
+					mana_DeepOcean,
+					Oblivion,
+					Oblivion_Skyrim,
+					Oblivion_Summerest
 			};
 			
 			event.getRegistry().registerAll(biomes);
@@ -78,6 +89,10 @@ public class SeccultBiomeRegistries {
 			BiomeDictionary.addTypes(mana_OceanSide, Type.BEACH);
 			BiomeDictionary.addTypes(mana_Ocean, Type.OCEAN);
 			BiomeDictionary.addTypes(mana_DeepOcean, Type.OCEAN);
+			
+			BiomeDictionary.addTypes(Oblivion, Type.END);
+			BiomeDictionary.addTypes(Oblivion_Skyrim, Type.VOID);
+			BiomeDictionary.addTypes(Oblivion_Summerest, Type.END);
 		}
 	}
 }

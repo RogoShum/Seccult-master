@@ -61,6 +61,7 @@ public class RenderFrozenFX extends Render<EntityFrozenFX>
         GlStateManager.enableNormalize();
         GlStateManager.enableBlend();
         GlStateManager.enableAlpha();
+        GlStateManager.depthMask(false);
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_CONSTANT_ALPHA);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(darkPTexture);
 	    GlStateManager.pushMatrix();
@@ -78,7 +79,7 @@ public class RenderFrozenFX extends Render<EntityFrozenFX>
 			GlStateManager.popMatrix();
 			GlStateManager.popMatrix();
 			
-			
+			GlStateManager.depthMask(true);
         GlStateManager.disableBlend();
         GlStateManager.disableNormalize();
         GlStateManager.popMatrix();

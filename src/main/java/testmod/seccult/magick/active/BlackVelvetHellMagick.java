@@ -5,7 +5,7 @@ import net.minecraft.util.DamageSource;
 import testmod.seccult.entity.EntityBlackVelvetHell;
 import testmod.seccult.init.ModMagicks;
 
-public class BlackVelvetHellMagick extends Magick{
+public class BlackVelvetHellMagick extends Magick implements SlayMagic{
 	protected DamageSource damage;
 	
 	public BlackVelvetHellMagick(String nbtName, boolean hasDetailedText, float cost1, float cost2) 
@@ -47,6 +47,11 @@ public class BlackVelvetHellMagick extends Magick{
 
 	@Override
 	public boolean doMagickNeedAtrribute() {
+		return false;
+	}
+	
+	@Override
+	public boolean doMagickNeedStrength() {
 		return false;
 	}
 }

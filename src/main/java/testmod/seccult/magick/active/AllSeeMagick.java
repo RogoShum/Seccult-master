@@ -48,4 +48,9 @@ public class AllSeeMagick extends Magick{
 	public boolean doMagickNeedAtrribute() {
 		return true;
 	}
+	
+	@Override
+	public boolean doMagickNeedStrength() {
+		return true;
+	}
 }

@@ -28,6 +28,8 @@ public class EntityShieldFX extends Entity{
 	private int time;
 	private float scaleMult;
 	
+	private float OwnerHleath;
+	
 	private static final DataParameter<Float> IBlend = EntityDataManager.<Float>createKey(EntityShieldFX.class, DataSerializers.FLOAT);
 	private static final DataParameter<Float> IScale = EntityDataManager.<Float>createKey(EntityShieldFX.class, DataSerializers.FLOAT);
 	private static final DataParameter<Boolean> Realease = EntityDataManager.<Boolean>createKey(EntityShieldFX.class, DataSerializers.BOOLEAN);
@@ -45,6 +47,7 @@ public class EntityShieldFX extends Entity{
 	public void setOwner(EntityLivingBase owner, int time, float scaleMult)
 	{
 		this.owner = owner;
+		this.OwnerHleath = owner.getHealth();
 		this.time = time * 20;
 		this.scaleMult = scaleMult;
 		this.upperUUID = owner.getUniqueID();
@@ -89,6 +92,21 @@ public class EntityShieldFX extends Entity{
 
 		if(this.owner != null)
 		{
+			if(owner.getHealth() < this.OwnerHleath)
+			{
+				owner.isDead = false;
+				owner.deathTime = -1;
+				owner.setHealth(this.OwnerHleath);
+			}
+			
+			if(!owner.isEntityAlive() || owner.isDead)
+			{
+				owner.isDead = false;
+				owner.deathTime = -1;
+				owner.setHealth(this.OwnerHleath);
+				if(this.world.isRemote)
+					this.world.spawnEntity(owner);
+			}
 			owner.addPotionEffect(new PotionEffect(ModPotions.shield, 10, 6, false, false));
 			if(StateManager.CheckIfStatedSafe(owner, StateManager.Shield))
 			{
@@ -114,6 +132,7 @@ public class EntityShieldFX extends Entity{
 					this.Scale = scale;
 				
 				this.setScale(this.Scale * scaleMult);
+				this.setSize(this.Scale * scaleMult, this.Scale * scaleMult);
 			}
 			else
 			{
@@ -203,7 +222,7 @@ public class EntityShieldFX extends Entity{
             for (int l = 0; l < list.size(); ++l)
             {
                 Entity entity = list.get(l);
-                if(this.owner != null && entity != this.owner)
+                if(this.owner != null && entity != this.owner && !(entity instanceof EntityBloodBeam))
                 {
                 	this.applyEntityCollision(entity);
                 	this.Blend = 0.2F;
@@ -259,7 +278,7 @@ public class EntityShieldFX extends Entity{
 
                     if (!entityIn.isBeingRidden())
                     {
-                        entityIn.addVelocity(d0 * 5, 0.0D, d1 * 5);
+                        entityIn.addVelocity(d0 * 5 * this.getScale(), 0.0D, d1 * 5 * this.getScale());
                     }
                 }
 	}

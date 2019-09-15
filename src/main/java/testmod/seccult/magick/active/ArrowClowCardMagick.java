@@ -3,7 +3,7 @@ package testmod.seccult.magick.active;
 import testmod.seccult.entity.EntityClowCardArrow;
 import testmod.seccult.init.ModMagicks;
 
-public class ArrowClowCardMagick extends Magick{
+public class ArrowClowCardMagick extends Magick implements AttackingMagic{
 
 	public ArrowClowCardMagick(String nbtName, boolean hasDetailedText, float cost1, float cost2) 
 	{
@@ -12,7 +12,7 @@ public class ArrowClowCardMagick extends Magick{
 
 	@Override
 	void toEntity() {
-		EntityClowCardArrow newArrow = new EntityClowCardArrow(entity.world, entity, (int)strengh, strengh, (int)attribute + 1);
+		EntityClowCardArrow newArrow = new EntityClowCardArrow(entity.world, entity, (int)strengh, strengh / 2, (int)attribute);
 		newArrow.setPositionAndRotation(entity.posX, entity.posY + (entity.height * 0.7), entity.posZ, entity.rotationYaw, entity.rotationPitch);
 		entity.world.spawnEntity(newArrow);
 	}
@@ -37,4 +37,8 @@ public class ArrowClowCardMagick extends Magick{
 		return true;
 	}
 
+	@Override
+	public boolean doMagickNeedStrength() {
+		return true;
+	}
 }

@@ -3,7 +3,7 @@ package testmod.seccult.magick.active;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.magick.magickState.StateManager;
 
-public class GratefulDeadMagick extends Magick{
+public class GratefulDeadMagick extends Magick implements ControllerMagic{
 
 	public GratefulDeadMagick(String nbtName, boolean hasDetailedText, float cost1, float cost2) 
 	{
@@ -37,4 +37,8 @@ public class GratefulDeadMagick extends Magick{
 		return true;
 	}
 
+	@Override
+	public boolean doMagickNeedStrength() {
+		return true;
+	}
 }

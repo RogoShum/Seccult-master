@@ -20,7 +20,9 @@ import testmod.seccult.api.PlayerDataHandler;
 import testmod.seccult.api.PlayerDataHandler.PlayerData;
 import testmod.seccult.client.gui.button.SpellButton;
 import testmod.seccult.init.ModMagicks;
+import testmod.seccult.magick.ImplementationHandler;
 import testmod.seccult.magick.active.Magick;
+import testmod.seccult.magick.implementation.Implementation;
 import testmod.seccult.network.NetworkHandler;
 import testmod.seccult.network.NetworkPlayerAddMagick;
 
@@ -48,7 +50,7 @@ public class SpellProgrammerGui extends GuiScreen
     private SpellButton clicked;
     private SpellButton selected;
     private SpellButton chooseToLink;
-    private boolean ismagickButton;
+
     protected List<GuiButton> PanelButtonList = Lists.<GuiButton>newArrayList();
     protected List<SpellButton> SelectedButtonList = Lists.<SpellButton>newArrayList();
 	public List<String> tooltip = new ArrayList<String>();
@@ -297,23 +299,23 @@ public class SpellProgrammerGui extends GuiScreen
     	for(int i = 0; i < magick.length; i++)
     	{
     		
-    		if(!ismagickButton && magick[i] >= 3)
+    		/*if(!ismagickButton && magick[i] >= 8)
     		{
     			ismagickButton = true;
-    			z = 3;
+    			z = 8;
     		}
     		else
-    		{
+    		{*/
     			z++;
-    		}
+    		//}
     		
-    		if((z < 7 && z % 4 == 0) || (z>7) && (z-1)%4 == 0) 
+    		if((z < 8 && z % 5 == 0) || (z>8) && (z)%4 == 0) 
     		{
     			hdis = 0;
     			wdis += 17;
     		}
     		
-    		if(z == 7) 
+    		if(z == 8) 
     		{
     			wdis = 49;
     			hdis = 0;
@@ -339,7 +341,7 @@ public class SpellProgrammerGui extends GuiScreen
 		GlStateManager.color(1F, 1F, 1F);
 		mc.getTextureManager().bindTexture(TEXTURE);
 		this.drawTexturedModalRect(offsetX + 15, offsetY, 83, 0, this.xSize + 1, this.ySize);
-		this.drawTexturedModalRect(offsetX + 192, offsetY + 60, 200, this.ySize + 4, 48, 72);
+		this.drawTexturedModalRect(offsetX + 192, offsetY + 60, 200, this.ySize + 4, 52, 88);
 		this.drawTexturedModalRect(offsetX - 87, offsetY, 0, 0, 83, this.ySize);
 		
 		GlStateManager.popMatrix();
@@ -369,19 +371,20 @@ public class SpellProgrammerGui extends GuiScreen
 				openPanel();
 			if(selected.id == 0)
 				closePanel();
-		    String power_name = I18n.format(selected.spellPower_name);
-		    this.fontRenderer.drawString(power_name, offsetX + 196, offsetY + 90, 0x404040);
-		    
-		    String attribute_name = I18n.format(selected.spellAttribute_name);
-		    this.fontRenderer.drawString(attribute_name, offsetX + 196, offsetY + 100, 0x404040);
-		    
+			
 		    String name = ModMagicks.getI18nNameByID(selected.id);
 		    String spell_name = I18n.format(name);
 		    this.fontRenderer.drawString(spell_name, offsetX + 196, offsetY + 62, 0x404040);
 		    
 		    String introduction = ModMagicks.getI18nNameByID(selected.id);
-		    String spell_introduction = I18n.format(introduction);
+		    String spell_introduction = I18n.format(introduction + "_introduction");
 		    this.fontRenderer.drawString(spell_introduction, offsetX + 196, offsetY + 72, 0x404040);
+		    
+		    String power_name = I18n.format(selected.spellPower_name);
+		    this.fontRenderer.drawString(power_name, offsetX + 196, offsetY + 90, 0x404040);
+		    
+		    String attribute_name = I18n.format(selected.spellAttribute_name);
+		    this.fontRenderer.drawString(attribute_name, offsetX + 196, offsetY + 100, 0x404040);
     	}
     	else {
     		closePanel();
@@ -438,22 +441,42 @@ public class SpellProgrammerGui extends GuiScreen
 	{
 		if(PanelOpen)
 		{
-			Magick magick = ModMagicks.getMagickFromName(
-		    		ModMagicks.GetMagickStringByID(this.selected.id));
-			
-			
 			boolean doAttribute = true;
-			if(selected.id >= 7)
-				doAttribute = magick.doMagickNeedAtrribute();
-			else
-				doAttribute = false;
+			boolean doStrengh = true;
 			
+			if(selected.id >= 7)
+			{
+				Magick magick = ModMagicks.getMagickFromName(
+			    		ModMagicks.GetMagickStringByID(this.selected.id));
+				doAttribute = magick.doMagickNeedAtrribute();
+				doStrengh = magick.doMagickNeedStrength();
+			}
+			else
+			{
+				Implementation implementation = ImplementationHandler.getImplementationFromName(
+						ModMagicks.GetMagickStringByID(this.selected.id));
+				doAttribute = implementation.doMagickNeedAtrribute();
+				doStrengh = implementation.doMagickNeedStrength();
+			}
+			
+			if(!doStrengh && !doAttribute)
+				return;
+
 			GlStateManager.pushMatrix();
 			this.drawTexturedModalRect(selected.x - 8, selected.y -18, 80, 176, 32, 16);
 			GlStateManager.popMatrix();
-			String power = String.valueOf(selected.spellPower);
-		    this.fontRenderer.drawString(power, selected.x - 1, selected.y - 15, 0x404040);
+			
 		    
+		    if(doStrengh && !doAttribute)
+		    {
+		    	String power = String.valueOf(selected.spellPower);
+			    this.fontRenderer.drawString(power, selected.x + 6, selected.y - 15, 0x404040);
+		    }
+		    else if(doStrengh)
+		    {
+		    	String power = String.valueOf(selected.spellPower);
+			    this.fontRenderer.drawString(power, selected.x - 1, selected.y - 15, 0x404040);
+		    }
 		    
 		    if(doAttribute)
 		    {
@@ -467,12 +490,30 @@ public class SpellProgrammerGui extends GuiScreen
 					switch(PanelButtonList.get(i).id)
 					{
 						case BUTTON_UP_A:
+							if(doStrengh && !doAttribute)
+						    {
+							PanelButtonList.get(i).x = selected.x + 6;
+							PanelButtonList.get(i).y = selected.y - 16;
+						    }
+							else
+							if(doStrengh)
+						    {
 							PanelButtonList.get(i).x = selected.x - 1;
 							PanelButtonList.get(i).y = selected.y - 16;
+						    }
 							break;
 						case BUTTON_DOWN_A:
+							if(doStrengh && !doAttribute)
+						    {
+							PanelButtonList.get(i).x = selected.x + 6;
+							PanelButtonList.get(i).y = selected.y - 6;
+						    }
+							else
+							if(doStrengh)
+						    {
 							PanelButtonList.get(i).x = selected.x - 1;
 							PanelButtonList.get(i).y = selected.y - 6;
+						    }
 							break;
 						case BUTTON_UP_B:
 							if(doAttribute)

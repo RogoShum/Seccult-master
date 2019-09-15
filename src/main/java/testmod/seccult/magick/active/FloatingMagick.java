@@ -3,7 +3,7 @@ package testmod.seccult.magick.active;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.magick.magickState.StateManager;
 
-public class FloatingMagick extends Magick{
+public class FloatingMagick extends Magick implements ControllerMagic{
 
 	public FloatingMagick(String nbtName, boolean hasDetailedText, float cost1, float cost2) 
 	{
@@ -33,5 +33,10 @@ public class FloatingMagick extends Magick{
 	@Override
 	public boolean doMagickNeedAtrribute() {
 		return false;
+	}
+	
+	@Override
+	public boolean doMagickNeedStrength() {
+		return true;
 	}
 }

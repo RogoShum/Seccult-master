@@ -142,4 +142,8 @@ public class TeleportMagick extends Magick{
 		return false;
 	}
 
+	@Override
+	public boolean doMagickNeedStrength() {
+		return true;
+	}
 }

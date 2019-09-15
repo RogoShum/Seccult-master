@@ -159,9 +159,8 @@ public class EntityLightingThing extends Entity{
 		for(int i = 0; i < entity.size(); ++i)
 		{
 			Entity e = entity.get(i);
-			if(e instanceof EntityLivingBase && !(e instanceof EntityRockShellLeviathan)  && !(e instanceof EntityVillager) && this.canSeeTarget(e))
+			if(e instanceof EntityLivingBase && !(e instanceof EntityRockShellLeviathan)  && !(e instanceof EntityVillager) && this.canSeeTarget(e) && e.isEntityAlive())
 			{
-				
 				boolean creat = false;
 				EntityLivingBase living = (EntityLivingBase) e;
 				if(living instanceof EntityPlayer)

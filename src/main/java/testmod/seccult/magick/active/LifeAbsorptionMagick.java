@@ -4,10 +4,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
 import testmod.seccult.Seccult;
 import testmod.seccult.entity.EntityBloodBeam;
-import testmod.seccult.entity.EntityShieldFX;
 import testmod.seccult.init.ModMagicks;
 
-public class LifeAbsorptionMagick extends Magick{
+public class LifeAbsorptionMagick extends Magick implements AttackingMagic{
 	protected DamageSource damage;
 	
 	public LifeAbsorptionMagick(String nbtName, boolean hasDetailedText, float cost1, float cost2) 
@@ -54,6 +53,11 @@ public class LifeAbsorptionMagick extends Magick{
 
 	@Override
 	public boolean doMagickNeedAtrribute() {
+		return true;
+	}
+	
+	@Override
+	public boolean doMagickNeedStrength() {
 		return true;
 	}
 }
