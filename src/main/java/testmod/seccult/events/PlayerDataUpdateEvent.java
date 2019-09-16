@@ -3,8 +3,6 @@ package testmod.seccult.events;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.net.ssl.HandshakeCompletedEvent;
-
 import org.lwjgl.util.glu.Disk;
 
 import net.minecraft.client.Minecraft;

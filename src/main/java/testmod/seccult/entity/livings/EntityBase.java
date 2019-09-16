@@ -219,6 +219,18 @@ public class EntityBase extends EntityLiving implements EntityUsingMagicHelper{
 		}
 	}
 	
+	protected void turn(float dis)
+	{
+		BlockPos pos = this.getPosition().add(LookX() * dis, LookY() * dis, LookZ() * dis);
+		if(this.world.getBlockState(pos).getBlock() == Blocks.LAVA || this.world.getBlockState(pos.up()).getBlock() == Blocks.FIRE || this.world.getBlockState(pos).getBlock() == Blocks.FLOWING_LAVA)
+		{
+			this.rotationYaw += this.rand.nextInt(50);
+			this.motionX += this.LookX() / 10;
+			this.motionY += this.LookY() / 10;
+			this.motionZ += this.LookZ() / 10;
+		}
+	}
+	
 	public boolean getIfCloestTarget(Entity self, Entity target, Entity prevTarget)
 	{
 		return getIfCloestTarget(self, target.posX, target.posY, target.posZ, prevTarget.posX, prevTarget.posY, prevTarget.posZ);
@@ -261,6 +273,12 @@ public class EntityBase extends EntityLiving implements EntityUsingMagicHelper{
         this.motionX += (Math.signum(x - this.posX) - this.motionX) * speed;
         this.motionY += (Math.signum(y - this.posY) - this.motionY) * speed;
         this.motionZ += (Math.signum(z - this.posZ) - this.motionZ) * speed;
+	}
+	
+	protected void AwayFrom(int x, int y, int z, double speed) {
+        this.motionX -= (Math.signum(x - this.posX) - this.motionX) * speed;
+        this.motionY -= (Math.signum(y - this.posY) - this.motionY) * speed / 20;
+        this.motionZ -= (Math.signum(z - this.posZ) - this.motionZ) * speed;
 	}
 	
 	protected void AwayFrom(double x, double y, double z, float speed) {

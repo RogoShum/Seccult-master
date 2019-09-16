@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import net.minecraft.block.BlockFire;
 import net.minecraft.block.BlockLiquid;
-import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.EntityList;
@@ -33,7 +34,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.client.GuiIngameForge;
 import testmod.seccult.entity.livings.flying.EntityFlyable;
 import testmod.seccult.entity.livings.water.EntityWaterCreature;
 import testmod.seccult.init.ModItems;
@@ -73,7 +73,7 @@ public class EntitySpiritDummy extends EntityBase{
 
 	public EntitySpiritDummy(World worldIn) {
 		super(worldIn);
-		this.setSize(1, 1.5F);
+		this.setSize(0.6F, 1.5F);
 		
 		this.addMagickData(8);
 		this.addMagickData(9);
@@ -273,6 +273,9 @@ public class EntitySpiritDummy extends EntityBase{
 		    }
 		}
 		
+		if(eS instanceof EntitySpiritDummy && ((EntitySpiritDummy) eS).Owner == this.Owner)
+			return false;
+		
 		if(eS != null && !(eS instanceof EntityPlayer) && !(eS instanceof EntitySpiritDummy))
 		{
 			this.defenceColdDown += 100;
@@ -311,6 +314,7 @@ public class EntitySpiritDummy extends EntityBase{
 			this.setCanSwim(false);
 			this.setMagickID_L(0);
 			this.setMagickID_R(0);
+			this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5D);
 			this.writeToNBT(tag);
 			tag.removeTag("OwnerUUID");
 			tag.removeTag("SoulStone");
@@ -326,6 +330,7 @@ public class EntitySpiritDummy extends EntityBase{
 		return this.height + 0.1F;
 	}
 	
+	//
 	public void onUpdate()
 	{
 		super.onUpdate();
@@ -341,6 +346,9 @@ public class EntitySpiritDummy extends EntityBase{
 		
 		if(this.defenceColdDown > 0)
 			this.defenceColdDown--;
+		
+		if(this.getHealth() > 0)
+			this.deathTime = 0;
 		
 		if(this.Owner == null && this.OwnerUUID != null)
 		{
@@ -361,8 +369,16 @@ public class EntitySpiritDummy extends EntityBase{
 		else
 			return;
 		
-		this.turn(1);
-		this.turn(2);
+			Iterable<BlockPos> Bpos = BlockPos.getAllInBox(this.getPosition().add(-2, -2, -2), this.getPosition().add(2, 2, 2));
+			
+			for(BlockPos bPos : Bpos)
+			{
+				if(this.world.getBlockState(bPos).getBlock() == Blocks.LAVA || this.world.getBlockState(bPos).getBlock() == Blocks.LAVA || this.world.getBlockState(bPos).getBlock() instanceof BlockFire)
+				{
+					this.AwayFrom(bPos.getX(), bPos.getY(), bPos.getZ(), this.getSpeed() / 10);
+					this.tryJump();
+				}
+			}
 
 		if(this.isBurning())
 		{
@@ -382,15 +398,13 @@ public class EntitySpiritDummy extends EntityBase{
 		awayFromProjectile();
 	}
 	
-	protected void tryDodge()
+	protected void tryDodge(float vaule, double x, double z)
 	{
-		if(this.defenceColdDown > 5)
-			return;
+		this.motionX += z * vaule;
 		
-		if(this.rand.nextInt(5) == 0)
-		this.motionX *= this.motionZ * this.rand.nextFloat();
-		else
-		this.motionZ *= this.motionX * this.rand.nextFloat();
+		this.motionZ += x * vaule;
+		
+		this.tryJump();
 	}
 	
 	protected void tryJump()
@@ -407,6 +421,11 @@ public class EntitySpiritDummy extends EntityBase{
 		
 		BlockPos LposBlock = new BlockPos(this.getPositionVector().addVector(this.LookX() * 2, -1, this.LookZ() * 2));
 
+		if(this.world.getBlockState(pos.up()).getBlock() instanceof BlockFire)
+			this.world.setBlockToAir(pos.up());
+		if(this.world.getBlockState(Lpos.up()).getBlock() instanceof BlockFire)
+			this.world.setBlockToAir(Lpos.up());
+		
 		if(!(this.world.getBlockState(pos).getBlock() instanceof BlockLiquid) && !(this.world.getBlockState(Lpos).getBlock() instanceof BlockLiquid)
 				&& !(this.world.getBlockState(posAir).getBlock() instanceof BlockLiquid) && !(this.world.getBlockState(posBlock).getBlock() instanceof BlockLiquid)
 				&& !(this.world.getBlockState(LposAir).getBlock() instanceof BlockLiquid) && !(this.world.getBlockState(LposBlock).getBlock() instanceof BlockLiquid))
@@ -430,8 +449,8 @@ public class EntitySpiritDummy extends EntityBase{
 			Entity trackedEntity = ImplementationFocused.getEntityMotionAt(entity.get(i), 100);
 			if(trackedEntity == this)
 			{
-				this.AwayFrom(entity.get(i).posX, entity.get(i).posY, entity.get(i).posZ, (float)(this.getSpeed() / 100));
-				this.tryDodge();
+				this.AwayFrom(entity.get(i).posX, entity.get(i).posY, entity.get(i).posZ, (float)(this.getSpeed() / 40));
+				this.tryDodge((float)this.getSpeed() / 3, entity.get(i).motionX, entity.get(i).motionZ);
 			}
 			}
 		}
@@ -442,8 +461,8 @@ public class EntitySpiritDummy extends EntityBase{
 		{
 			if(entity_mob.get(i) instanceof EntityMob)
 			{
-				this.AwayFrom(entity_mob.get(i).posX, entity_mob.get(i).posY, entity_mob.get(i).posZ, (float)(this.getSpeed() / 20));
-				this.tryDodge();
+				this.AwayFrom(entity_mob.get(i).posX, entity_mob.get(i).posY, entity_mob.get(i).posZ, (float)(this.getSpeed() / 5));
+				//this.tryDodge((float)this.getSpeed() / 5, entity_mob.get(i).motionX, entity_mob.get(i).motionZ);
 			}
 			
 			String id = "oh";
@@ -458,8 +477,7 @@ public class EntitySpiritDummy extends EntityBase{
 		    	
 		    	if(entity.get(i) instanceof EntityLivingBase)
 		    	{
-		    		this.faceEntity(entity.get(i), 20, 20);
-			    	this.tryMagickAttack(entity.get(i));
+		    		this.setRevengeTarget((EntityLivingBase)entity.get(i));
 		    	}
 		    	else
 		    		this.defenceColdDown += 10;
@@ -480,24 +498,24 @@ public class EntitySpiritDummy extends EntityBase{
 			if(entity_too_close.get(i) instanceof EntityMob || entity_too_close.get(i) instanceof EntityThrowable || hurtedMe.contains(id))
 			{
 				this.defenceColdDown += 35;
-				this.AwayFrom(entity_mob.get(i).posX, entity_mob.get(i).posY, entity_mob.get(i).posZ, (float)(this.getSpeed() / 20));
-				this.tryDodge();
+				//this.AwayFrom(entity_mob.get(i).posX, entity_mob.get(i).posY, entity_mob.get(i).posZ, (float)(this.getSpeed() / 5));
+				this.tryDodge((float)this.getSpeed(), entity_too_close.get(i).motionX, entity_too_close.get(i).motionZ);
 			}
 		}
 	}
 	
 	protected void protectOwner()
 	{
-		if(this.Owner.getRevengeTarget() != this)
+		if(this.getRevengeTarget() == null && this.Owner.getRevengeTarget() != this)
 		{
 			this.setRevengeTarget(this.Owner.getRevengeTarget());
 		}
 		
-		if(this.Owner.getLastAttackedEntity() != this)
+		if(this.getLastAttackedEntity() == null && this.Owner.getLastAttackedEntity() != this)
 		{
 			this.setLastAttackedEntity(this.Owner.getLastAttackedEntity());
 		}
-		
+
 		if(this.getRevengeTarget() == this.Owner)
 			this.setRevengeTarget(null);
 		
@@ -512,12 +530,12 @@ public class EntitySpiritDummy extends EntityBase{
 
 		if(this.getRevengeTarget() == null && this.getLastAttackedEntity() == null)
 			standBy();
-		else if (this.getRevengeTarget() != null && this.getDistance(Owner) < 24)
+		else if (this.getRevengeTarget() != null && this.getDistance(Owner) < 32)
 		{
 			faceEntity(this.getRevengeTarget(), 30, 90);
 			tryMagickAttack(this.getRevengeTarget());
 		}
-		else if (this.getLastAttackedEntity() != null && this.getDistance(Owner) < 24)
+		else if (this.getLastAttackedEntity() != null && this.getDistance(Owner) < 32)
 		{
 			faceEntity(this.getLastAttackedEntity(), 30, 90);
 			tryMagickAttack(this.getLastAttackedEntity());
@@ -534,6 +552,13 @@ public class EntitySpiritDummy extends EntityBase{
 		{
 			this.attemptTeleport(Owner.posX, Owner.posY, Owner.posZ);
 		}
+	}
+	
+	@Override
+	protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
+		if(this.getCanFly())
+		fallDistance = 0;
+		super.updateFallState(y, onGroundIn, state, pos);
 	}
 	
 	protected void tryMagickAttack(Entity entity)
@@ -562,36 +587,39 @@ public class EntitySpiritDummy extends EntityBase{
 			{
 				this.path = this.navigator.getPathToEntityLiving(entity);
 				this.navigator.setPath(path, this.getSpeed());
+				this.faceEntity(entity, 40, 90);
+				lostTime = 0;
 			}
 		}
-		
-		if(this.rand.nextInt(10) == 0)
+
+		if(this.leftHandMagick == null || this.rand.nextInt(10) == 0)
 		{
 			this.getControlMagic(DoYouGotMagickHand.LeftHand);
-			
+		}
+		else if(this.rand.nextInt(4) == 0)
+		{
+			this.getAttackingMagic(DoYouGotMagickHand.LeftHand);
+		}
+		
 			if(this.leftHandMagick != null && this.ColdDown_Left <= 1 && this.canSeeTarget(entity) && ManaValue > 20)
 			{
 				if(doControlMagick(DoYouGotMagickHand.LeftHand, entity, getAttackDamage(), getAttackDamage()))
 				{
 					this.ColdDown_Left = 35 - this.getAttackSpeed();
+					if(ColdDown_Left < 0)
+						this.ColdDown_Left = 0;
 					this.ManaValue -= 20;
 				}
-			}
-		}
-		else
-		{
-			this.getAttackingMagic(DoYouGotMagickHand.LeftHand);
-			
-			if(this.leftHandMagick != null && this.ColdDown_Left <= 1 && this.canSeeTarget(entity) && ManaValue > 20)
-			{
+				
 				if(doFocusMagick(DoYouGotMagickHand.LeftHand, entity, getAttackDamage(), getAttackDamage()))
 				{
 					this.ColdDown_Left = 35 - this.getAttackSpeed();
+					if(ColdDown_Left < 0)
+						this.ColdDown_Left = 0;
 					this.ManaValue -= 20;
 				}
 			}
-		}
-		
+
 		if(this.defenceColdDown <= 5)
 		{
 			this.getAttackingMagic(DoYouGotMagickHand.RightHand);
@@ -601,6 +629,8 @@ public class EntitySpiritDummy extends EntityBase{
 				if(doFocusMagick(DoYouGotMagickHand.RightHand, entity, getAttackDamage(), getAttackDamage()))
 				{
 					this.ColdDown_Right = 35 - this.getAttackSpeed();
+					if(ColdDown_Left < 0)
+						this.ColdDown_Right = 0;
 					this.ManaValue -= 20;
 				}
 			}
@@ -633,8 +663,9 @@ public class EntitySpiritDummy extends EntityBase{
 	
 	protected void standBy()
 	{
-		if(walkingTime <= 10 && Owner.getDistance(this) > 7 || this.rand.nextInt(300) == 0)
+		if(walkingTime <= 0 || Owner.getDistance(this) > 16 || this.rand.nextInt(300) == 0)
 		{
+			if(this.rand.nextInt(40) == 0)
 			walkingTime += this.rand.nextInt(100);
 		}
 		this.Awaydistance = 2F;

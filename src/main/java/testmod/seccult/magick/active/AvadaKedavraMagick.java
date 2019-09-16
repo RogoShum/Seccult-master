@@ -2,6 +2,7 @@ package testmod.seccult.magick.active;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
 import testmod.seccult.entity.livings.EntitySpirit;
@@ -51,7 +52,11 @@ public class AvadaKedavraMagick extends Magick implements SlayMagic{
 					living.setHealth(living.getHealth() - strengh * 300);
 				else
 				{
-					living.getEntityData().setBoolean("AvadaKedavra", true);
+					NBTTagCompound tag = new NBTTagCompound();
+					living.writeToNBT(tag);
+					tag.setBoolean("AvadaKedavra", true);
+					tag.setFloat("Health", living.getHealth() - strengh * 300);
+					living.readFromNBT(tag);
 					living.setHealth(living.getHealth() - strengh * 300);
 					living.onDeath(damage);
 					living.setDead();

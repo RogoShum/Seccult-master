@@ -62,8 +62,8 @@ public class ThunderFX extends Particle
     		float distance = getDis(this.posX, this.posY, this.posZ, this.TposX, this.TposY, this.TposZ);
 
             int space = (int)distance / 2; 
-            if(space < 1)
-            	space = 1;
+            if(space < 2)
+            	space = 2;
             
             if(space > 15)
             	space = 15;

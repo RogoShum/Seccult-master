@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.SoundCategory;
@@ -172,6 +173,9 @@ public class ImplementationFocused extends Implementation{
 		List<Entity> entitiesInBoundingBox = e.getEntityWorld().getEntitiesWithinAABBExcludingEntity(e, e.getEntityBoundingBox().grow(lookVector.x * finalDistance, lookVector.y * finalDistance, lookVector.z * finalDistance).expand(1F, 1F, 1F));
 		double minDistance = distance;
 
+		if(entitiesInBoundingBox.contains(e))
+			entitiesInBoundingBox.remove(e);
+		
 		for(Entity entity : entitiesInBoundingBox) {
 				float collisionBorderSize = entity.getCollisionBorderSize();
 				AxisAlignedBB hitbox = entity.getEntityBoundingBox().expand(collisionBorderSize, collisionBorderSize, collisionBorderSize);
@@ -203,11 +207,11 @@ public class ImplementationFocused extends Implementation{
 				
 				if(lookedEntity instanceof EntityProtectionShieldFX)
 				{
+					
 					EntityProtectionShieldFX shield = (EntityProtectionShieldFX) lookedEntity;
 					if(shield.getOwner() == e)
 						owner = true;
 				}
-				
 				if(!owner)
 					foundEntity = lookedEntity;
 			}
@@ -267,7 +271,7 @@ public class ImplementationFocused extends Implementation{
 					if(lookedEntity instanceof EntityProtectionShieldFX)
 					{
 						EntityProtectionShieldFX shield = (EntityProtectionShieldFX) lookedEntity;
-						if(shield.getOwner() != e)
+						if(shield.getOwner() == e)
 							owner = true;
 					}
 					
@@ -289,7 +293,7 @@ public class ImplementationFocused extends Implementation{
 
 		if(pos != null)
 			distance = pos.hitVec.distanceTo(positionVector);
-
+		
 		Vec3d lookVector = e.getLookVec();
 		Vec3d reachVector = positionVector.addVector(lookVector.x * finalDistance, lookVector.y * finalDistance, lookVector.z * finalDistance);
 
@@ -297,6 +301,9 @@ public class ImplementationFocused extends Implementation{
 		List<Entity> entitiesInBoundingBox = e.getEntityWorld().getEntitiesWithinAABBExcludingEntity(e, e.getEntityBoundingBox().grow(lookVector.x * finalDistance, lookVector.y * finalDistance, lookVector.z * finalDistance).expand(1F, 1F, 1F));
 		double minDistance = distance;
 
+		if(entitiesInBoundingBox.contains(e))
+			entitiesInBoundingBox.remove(e);
+		
 		for(Entity entity : entitiesInBoundingBox) {
 				float collisionBorderSize = entity.getCollisionBorderSize();
 				AxisAlignedBB hitbox = entity.getEntityBoundingBox().expand(collisionBorderSize, collisionBorderSize, collisionBorderSize);
@@ -330,7 +337,7 @@ public class ImplementationFocused extends Implementation{
 					if(lookedEntity instanceof EntityProtectionShieldFX)
 					{
 						EntityProtectionShieldFX shield = (EntityProtectionShieldFX) lookedEntity;
-						if(shield.getOwner() != e)
+						if(shield.getOwner() == e)
 							owner = true;
 					}
 					
@@ -343,7 +350,6 @@ public class ImplementationFocused extends Implementation{
 	
 	public static RayTraceResult raycast(Entity e, double len){
 		Vector3 vec = Vector3.fromEntity(e);
-		if(e instanceof EntityPlayer)
 			vec.add(0, e.getEyeHeight(), 0);
 		
 		Vec3d look = e.getLookVec();
