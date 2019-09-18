@@ -1,6 +1,12 @@
 package testmod.seccult.client.entity.render;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import testmod.seccult.client.FX.FogFX;
 import testmod.seccult.entity.*;
 import testmod.seccult.entity.livings.*;
 import testmod.seccult.entity.livings.flying.EntityAirTentacle;
@@ -8,6 +14,7 @@ import testmod.seccult.entity.livings.flying.EntityBird;
 import testmod.seccult.entity.livings.insect.*;
 import testmod.seccult.entity.livings.water.*;
 import testmod.seccult.entity.projectile.*;
+import testmod.seccult.items.armor.ShadowSkyArmor;
 
 public class RenderHandler 
 {

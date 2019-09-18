@@ -24,6 +24,7 @@ import testmod.seccult.client.FX.OceanHelmetFX;
 import testmod.seccult.client.gui.GuiElementLoader;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.items.armor.OceanArmor;
+import testmod.seccult.items.armor.Ocean.OceanHelmet;
 
 public class HUDHandler {
     int xSize, ySize, offsetX, offsetY;
@@ -94,7 +95,7 @@ public class HUDHandler {
     	{
     		//OceanHelmet(player.world, player.posX,  player.posY,  player.posZ, player);
     		ItemStack item = player.inventory.armorInventory.get(0);
-    		OceanArmor armor = (OceanArmor) item.getItem();
+    		OceanHelmet armor = (OceanHelmet) item.getItem();
     		air = armor.getAir();
     		if(air < 300)
     		{

@@ -13,8 +13,12 @@ import net.minecraftforge.common.util.EnumHelper;
 import testmod.seccult.items.*;
 import testmod.seccult.items.Accessories.*;
 import testmod.seccult.items.TRprojectile.ItemTerraBeam;
-import testmod.seccult.items.armor.*;
+import testmod.seccult.items.armor.Chlorophyte.*;
 import testmod.seccult.items.armor.Magick.*;
+import testmod.seccult.items.armor.Ocean.*;
+import testmod.seccult.items.armor.ShadowSky.*;
+import testmod.seccult.items.armor.SilkFeather.*;
+import testmod.seccult.items.armor.Sorcerer.*;
 import testmod.seccult.items.tools.*;
 import testmod.seccult.items.tools.TRWeapon.*;
 
@@ -25,7 +29,22 @@ public class ModItems
 	//Material
 	public static final ToolMaterial MATERIAL_SPA = EnumHelper.addToolMaterial("material_spa", 32, 0, 9999.0F, 12446F, 200);
 	public static final ArmorMaterial ARMOR_MATERIAL_SPA = EnumHelper.addArmorMaterial("armor_material_spa", "seccult:spa", 5,
-			new int[] {15, 30, 35, 20}, 200, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 0.0F);
+			new int[] {2, 3, 4, 2}, 200, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 2.0F);
+	
+	public static final ArmorMaterial ARMOR_MATERIAL_SILK = EnumHelper.addArmorMaterial("armor_material_silk", "seccult:silk", 5,
+			new int[] {1, 1, 1, 1}, 200, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 50.0F);
+	
+	public static final ArmorMaterial ARMOR_MATERIAL_SORCERER = EnumHelper.addArmorMaterial("armor_material_sorcerer", "seccult:sorcerer", 5,
+			new int[] {4, 5, 5, 3}, 200, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 10.0F);
+	
+	public static final ArmorMaterial ARMOR_MATERIAL_SHADOW = EnumHelper.addArmorMaterial("armor_material_shadow", "seccult:shadow", 5,
+			new int[] {6, 8, 8, 5}, 200, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 8.0F);
+	
+	public static final ArmorMaterial ARMOR_MATERIAL_CHLOROPHYTE = EnumHelper.addArmorMaterial("armor_material_chlorophyte", "seccult:chlorophyte", 5,
+			new int[] {2, 3, 4, 2}, 200, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 19.0F);
+	
+	public static final ArmorMaterial ARMOR_MATERIAL_OCEAN = EnumHelper.addArmorMaterial("armor_material_ocean", "seccult:ocean", 5,
+			new int[] {5, 7, 7, 5}, 200, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 18.0F);
 	
 	//Items
 	public static final Item SPA = new ItemBase("spa");
@@ -80,18 +99,35 @@ public class ModItems
 	//public static final Item StarFury_Beam = new ItemTerraBeam("starfury_beam");
 	
 	//Armor
+	public static final Item SILK_FEATHER_HELMET = new SilkFeatherHelmet("silk_feather_helmet", ARMOR_MATERIAL_SILK, 1, EntityEquipmentSlot.HEAD);
+	public static final Item SILK_FEATHER_CHEST = new SilkFeatherChest("silk_feather_chest", ARMOR_MATERIAL_SILK, 1, EntityEquipmentSlot.CHEST);
+	public static final Item SILK_FEATHER_LEGGINGS = new SilkFeatherLegs("silk_feather_leggings", ARMOR_MATERIAL_SILK, 1, EntityEquipmentSlot.LEGS);
+	public static final Item SILK_FEATHER_BOOTS = new SilkFeatherBoot("silk_feather_boots", ARMOR_MATERIAL_SILK, 1, EntityEquipmentSlot.FEET);
+	
 	public static final Item SPA_HELMET = new MagickHelmet("spa_helmet", ARMOR_MATERIAL_SPA, 1, EntityEquipmentSlot.HEAD);
 	public static final Item SPA_CHEST = new MagickChest("spa_chest", ARMOR_MATERIAL_SPA, 1, EntityEquipmentSlot.CHEST);
 	public static final Item SPA_LEGGINGS = new MagickLegs("spa_leggings", ARMOR_MATERIAL_SPA, 1, EntityEquipmentSlot.LEGS);
 	public static final Item SPA_BOOTS = new MagickBoots("spa_boots", ARMOR_MATERIAL_SPA, 1, EntityEquipmentSlot.FEET);
 	
-	public static final Item RECOVERY_HELMET = new RecoveryHelmet();
-	public static final Item NOCLIP_CHEST = new NoClipChest();
+	public static final Item SORCERER_HELMET = new SorcererHelmet("sorcerer_helmet", ARMOR_MATERIAL_SORCERER, 1, EntityEquipmentSlot.HEAD);
+	public static final Item SORCERER_CHEST = new SorcererChest("sorcerer_chest", ARMOR_MATERIAL_SORCERER, 1, EntityEquipmentSlot.CHEST);
+	public static final Item SORCERER_LEGGINGS = new SorcererLegs("sorcerer_leggings", ARMOR_MATERIAL_SORCERER, 1, EntityEquipmentSlot.LEGS);
+	public static final Item SORCERER_BOOTS = new SorcererBoot("sorcerer_boots", ARMOR_MATERIAL_SORCERER, 1, EntityEquipmentSlot.FEET);
 	
-	public static final Item OCEAN_HELMET = new OceanArmor("ocean_helmet", ARMOR_MATERIAL_SPA, 1, EntityEquipmentSlot.HEAD);
-	public static final Item OCEAN_CHEST = new OceanArmor("ocean_chest", ARMOR_MATERIAL_SPA, 1, EntityEquipmentSlot.CHEST);
-	public static final Item OCEAN_LEGGINGS = new OceanArmor("ocean_leggings", ARMOR_MATERIAL_SPA, 1, EntityEquipmentSlot.LEGS);
-	public static final Item OCEAN_BOOTS = new OceanArmor("ocean_boots", ARMOR_MATERIAL_SPA, 1, EntityEquipmentSlot.FEET);
+	public static final Item CHLOROPHYTE_HELMET = new ChlorophyteHelmet("chlorophyte_helmet", ARMOR_MATERIAL_CHLOROPHYTE, 1, EntityEquipmentSlot.HEAD);
+	public static final Item CHLOROPHYTE_CHEST = new ChlorophyteChest("chlorophyte_chest", ARMOR_MATERIAL_CHLOROPHYTE, 1, EntityEquipmentSlot.CHEST);
+	public static final Item CHLOROPHYTE_LEGGINGS = new ChlorophyteLeggings("chlorophyte_leggings", ARMOR_MATERIAL_CHLOROPHYTE, 1, EntityEquipmentSlot.LEGS);
+	public static final Item CHLOROPHYTE_BOOTS = new ChlorophyteBoot("chlorophyte_boots", ARMOR_MATERIAL_CHLOROPHYTE, 1, EntityEquipmentSlot.FEET);
+	
+	public static final Item OCEAN_HELMET = new OceanHelmet("ocean_helmet", ARMOR_MATERIAL_OCEAN, 1, EntityEquipmentSlot.HEAD);
+	public static final Item OCEAN_CHEST = new OceanChest("ocean_chest", ARMOR_MATERIAL_OCEAN, 1, EntityEquipmentSlot.CHEST);
+	public static final Item OCEAN_LEGGINGS = new OceanLegs("ocean_leggings", ARMOR_MATERIAL_OCEAN, 1, EntityEquipmentSlot.LEGS);
+	public static final Item OCEAN_BOOTS = new OceanBoot("ocean_boots", ARMOR_MATERIAL_OCEAN, 1, EntityEquipmentSlot.FEET);
+	
+	public static final Item SHADOW_SKY_HELMET = new ShadowSkyHelmet("shadow_sky_helmet", ARMOR_MATERIAL_SHADOW, 1, EntityEquipmentSlot.HEAD);
+	public static final Item SHADOW_SKY_CHEST = new ShadowSkyChest("shadow_sky_chest", ARMOR_MATERIAL_SHADOW, 1, EntityEquipmentSlot.CHEST);
+	public static final Item SHADOW_SKY_LEGGINGS = new ShadowSkyLegs("shadow_sky_leggings", ARMOR_MATERIAL_SHADOW, 1, EntityEquipmentSlot.LEGS);
+	public static final Item SHADOW_SKY_BOOTS = new ShadowSkyBoot("shadow_sky_boots", ARMOR_MATERIAL_SHADOW, 1, EntityEquipmentSlot.FEET);
 	
 	//Accessories
 	public static final Item A_LAST_STRUGGLE = new ALastStruggle("last_struggle");

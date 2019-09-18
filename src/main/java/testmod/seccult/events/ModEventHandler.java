@@ -10,5 +10,6 @@ public class ModEventHandler {
 		MinecraftForge.EVENT_BUS.register(new PlayerDataUpdateEvent());
 		MinecraftForge.EVENT_BUS.register(new HUDHandler());
 		MinecraftForge.EVENT_BUS.register(new StateManager());
+		MinecraftForge.EVENT_BUS.register(new EntityRenderHandler());
 	}
 }

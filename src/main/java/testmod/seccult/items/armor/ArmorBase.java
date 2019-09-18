@@ -75,7 +75,6 @@ public class ArmorBase extends ItemArmor implements registerModel
 	@Override
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot,
 			ModelBiped _default) {
-		// TODO Auto-generated method stub
 		return super.getArmorModel(entityLiving, itemStack, armorSlot, _default);
 	}
 }

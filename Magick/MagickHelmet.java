@@ -24,4 +24,8 @@ public class MagickHelmet extends MagickArmor{
 			player.capabilities.allowFlying = true;
 	}
 	
+	public boolean hasArmorSetItem(EntityPlayer player) {
+		return hasArmorSetItem(player, 0, ModItems.SPA_HELMET) && hasArmorSetItem(player, 1, ModItems.SPA_CHEST) && hasArmorSetItem(player, 2, ModItems.SPA_LEGGINGS) && hasArmorSetItem(player, 3, ModItems.SPA_BOOTS);
+	}
+	
 }
