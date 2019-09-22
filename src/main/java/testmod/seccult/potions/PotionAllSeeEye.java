@@ -36,7 +36,8 @@ public class PotionAllSeeEye extends PotionMod{
 	
 	public static boolean hasAllSee(EntityPlayer mob)
 	{
-		if(ArmorBase.hasArmorSetItem(mob, 0, ModItems.SPA_HELMET))
+		if(ArmorBase.hasArmorSetItem(mob, 0, ModItems.SPA_HELMET) || ArmorBase.hasArmorSetItem(mob, 0, ModItems.CHLOROPHYTE_HELMET)
+				 || ArmorBase.hasArmorSetItem(mob, 0, ModItems.SHADOW_SKY_HELMET)  || ArmorBase.hasArmorSetItem(mob, 0, ModItems.OCEAN_HELMET))
 			return true;
 		
 		return false;

@@ -48,6 +48,8 @@ public class MagickCompiler {
 	private boolean doEntity = true;
 	private boolean doBlock = true;
 	
+	public boolean dontCost;
+	
 	public MagickCompiler() {}
 
 	public static NBTTagCompound compileMagick(int[][] MagickData, int[][] Selector, int[][] SelectorPower, int[][] SelectorAttribute, int amount,  boolean e, boolean b)
@@ -269,8 +271,9 @@ public class MagickCompiler {
     		
     		if(magick != null && cycle && tick > 5) {
     			float cost = magick.strenghCost * magickpower;
-    			cost = cost * magick.attributeCost * magickattribute;
-
+    			cost = cost * magick.attributeCost + cost * magick.attributeCost * magickattribute;
+    			if(dontCost)
+    				cost = 0;
     			if(block != null)
 				{
 					for(int x = 0; x < block.size(); x++)

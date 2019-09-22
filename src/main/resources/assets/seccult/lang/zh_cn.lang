@@ -19,13 +19,48 @@ item.fiery_greatsword.name=炽焰之剑
 item.light_bane.name=魔光剑
 item.eow.name=蠕虫诱饵
 item.blackvelvethell.name=黑丝绒地狱
-item.YesYourHighness.name=最高王权
+item.yesyourhighness.name=最高王权
 item.wand.name=法杖
 item.last_prism.name=最终棱镜
 item.last_struggle.name=最后的挣扎
 item.made_in_heaven.name=天堂制造
 item.item_recovery.name=修补者
 item.virtul_body.name=虚拟体验
+item.soul_stone.name=灵魂石
+item.dummy_system.name=灵魂傀儡
+item.meowmere.name=彩虹猫刀
+item.vampire_knives.name=吸血鬼刀
+item.solar_eruption.name=日曜喷发剑
+
+item.ocean_helmet.name=深海头护
+item.ocean_chest.name=深海胸甲
+item.ocean_leggings.name=深海腿护
+item.ocean_boots.name=深海轻靴
+
+item.shadow_sky_helmet.name=影空头护
+item.shadow_sky_chest.name=影空胸甲
+item.shadow_sky_leggings.name=影空腿护
+item.shadow_sky_boots.name=影空轻靴
+
+item.silk_feather_helmet.name=丝羽头护
+item.silk_feather_chest.name=丝羽胸甲
+item.silk_feather_leggings.name=丝羽腿护
+item.silk_feather_boots.name=丝羽轻靴
+
+item.spa_helmet.name=魔装头护
+item.spa_chest.name=魔装胸甲
+item.spa_leggings.name=魔装腿护
+item.spa_boots.name=魔装轻靴
+
+item.sorcerer_helmet.name=巫师头护
+item.sorcerer_chest.name=巫师胸甲
+item.sorcerer_leggings.name=巫师腿护
+item.sorcerer_boots.name=巫师轻靴
+
+item.chlorophyte_helmet.name=叶绿头护
+item.chlorophyte_chest.name=叶绿胸甲
+item.chlorophyte_leggings.name=叶绿腿护
+item.chlorophyte_boots.name=叶绿轻靴
 
 //blocks
 tile.ore_overworld_unterra.name=反大地之源矿
@@ -33,12 +68,40 @@ tile.log_everything.name=万象木
 tile.planks_everything.name=万象树木板
 tile.sapling_everything.name=万象树树苗
 tile.leaves_everything.name=万象树叶
+
+tile.log_whitetree.name=白树原木
+tile.planks_whitetree.name=白树木板
+tile.sapling_whitetree.name=白树树苗
+tile.leaves_whitetree.name=白树树叶
+
+tile.log_bluetree.name=蓝树原木
+tile.planks_bluetree.name=蓝树木板
+tile.sapling_bluetree.name=蓝树树苗
+tile.leaves_bluetree.name=蓝树树叶
+
+tile.log_magicktree.name=魔力原木
+tile.planks_magicktree.name=魔力木板
+tile.sapling_magicktree.name=魔力树苗
+tile.leaves_magicktree.name=魔力树叶
+
 tile.hypha.name=菌丝
 tile.flower.name=花
 tile.latern_fruit.name=灯笼果
 tile.lantern_vine.name=灯笼藤曼
+tile.lantern_vine_null.name=灯笼藤曼
 tile.hypha_light.name=荧光菌丝
+tile.hypha_light_null.name=荧光菌丝
+tile.hypha_light_blue_null.name=荧光菌丝
+tile.hypha_light_blue.name=荧光菌丝
 tile.ore_spawn.name=矿物菌种
+tile.un_know.name=黯淡尘土
+tile.spellprogrammer_null.name=法术编写台
+tile.flower_little_flower.name=小花
+tile.catch_the_soul.name=夺魂花
+tile.flower_c.name=青花
+tile.flower_m.name=品红花
+tile.flower_y.name=黄花
+tile.flower_grass.name=艹
 
 //entities
 entity.light.name=镭弥洱
@@ -94,20 +157,33 @@ key.7.desc=快速切换法术7
 key.8.desc=快速切换法术8
 key.9.desc=快速切换法术9
 
+//Armor
+seccult.none.core=无核心
+seccult.flying.core=飞行核心
+seccult.peace.core=和平核心
+seccult.speed.core=速度核心
+seccult.jump.core=跳跃核心
+seccult.defence.core=防御核心
+seccult.life.core=生命核心
+
+seccult.armor.enhance=魔法控制
+seccult.armor.relief=魔法减免
+seccult.armor.limit=魔法上限
+
 //Magic
-spell_self_name = 选择自我
-spell_self_name_introduction = 选择玩家作为使用者
-spell_power_name =   
-spell_none =   
+spell_self_name=选择自我
+spell_self_introduction=选择玩家作为使用者
+spell_power_name= 
+spell_none= 
 
-spell_damage_name = 攻击魔法
-spell_damage_name_introduction = 直接对实体造成伤害
-spell_power_affiliated_name = 数值用于增加伤害值
+spell_damage_name=攻击魔法
+spell_damage_introduction=直接对实体造成伤害
+spell_power_affiliated_name=数值用于增加伤害值
 
-spell_flame_name = 火焰魔法
-spell_flame_name_introduction = 烧灼实体
+spell_flame_name=火焰魔法
+spell_flame_introduction=烧灼实体
 
-spell_frozen_name = 冻结魔法
-spell_frozen_name_introduction = 造成伤害并冰冻实体
+spell_frozen_name=冻结魔法
+spell_frozen_introduction=造成伤害并冰冻实体
 
-spell_time = 数值用于增加效果时长
+spell_time=数值用于增加效果时长

@@ -28,22 +28,22 @@ public class ModItems
 	
 	//Material
 	public static final ToolMaterial MATERIAL_SPA = EnumHelper.addToolMaterial("material_spa", 32, 0, 9999.0F, 12446F, 200);
-	public static final ArmorMaterial ARMOR_MATERIAL_SPA = EnumHelper.addArmorMaterial("armor_material_spa", "seccult:spa", 5,
+	public static final ArmorMaterial ARMOR_MATERIAL_SPA = EnumHelper.addArmorMaterial("armor_material_spa", "seccult:spa", 10,
 			new int[] {2, 3, 4, 2}, 200, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 2.0F);
 	
 	public static final ArmorMaterial ARMOR_MATERIAL_SILK = EnumHelper.addArmorMaterial("armor_material_silk", "seccult:silk", 5,
 			new int[] {1, 1, 1, 1}, 200, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 50.0F);
 	
-	public static final ArmorMaterial ARMOR_MATERIAL_SORCERER = EnumHelper.addArmorMaterial("armor_material_sorcerer", "seccult:sorcerer", 5,
+	public static final ArmorMaterial ARMOR_MATERIAL_SORCERER = EnumHelper.addArmorMaterial("armor_material_sorcerer", "seccult:sorcerer", 15,
 			new int[] {4, 5, 5, 3}, 200, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 10.0F);
 	
-	public static final ArmorMaterial ARMOR_MATERIAL_SHADOW = EnumHelper.addArmorMaterial("armor_material_shadow", "seccult:shadow", 5,
+	public static final ArmorMaterial ARMOR_MATERIAL_SHADOW = EnumHelper.addArmorMaterial("armor_material_shadow", "seccult:shadow", 30,
 			new int[] {6, 8, 8, 5}, 200, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 8.0F);
 	
-	public static final ArmorMaterial ARMOR_MATERIAL_CHLOROPHYTE = EnumHelper.addArmorMaterial("armor_material_chlorophyte", "seccult:chlorophyte", 5,
+	public static final ArmorMaterial ARMOR_MATERIAL_CHLOROPHYTE = EnumHelper.addArmorMaterial("armor_material_chlorophyte", "seccult:chlorophyte", 25,
 			new int[] {2, 3, 4, 2}, 200, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 19.0F);
 	
-	public static final ArmorMaterial ARMOR_MATERIAL_OCEAN = EnumHelper.addArmorMaterial("armor_material_ocean", "seccult:ocean", 5,
+	public static final ArmorMaterial ARMOR_MATERIAL_OCEAN = EnumHelper.addArmorMaterial("armor_material_ocean", "seccult:ocean", 30,
 			new int[] {5, 7, 7, 5}, 200, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 18.0F);
 	
 	//Items

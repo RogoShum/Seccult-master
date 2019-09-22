@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -160,10 +158,10 @@ public class ImplementationFocused extends Implementation{
 		double distance = finalDistance;
 		RayTraceResult pos = raycast(e, finalDistance);
 		Vec3d positionVector = e.getPositionVector();
-		if(e instanceof EntityPlayer)
+
 			positionVector = positionVector.addVector(0, e.getEyeHeight(), 0);
 
-		if(pos != null)
+			if(pos != null)
 			distance = pos.hitVec.distanceTo(positionVector);
 
 		Vec3d lookVector = e.getLookVec();
@@ -188,13 +186,12 @@ public class ImplementationFocused extends Implementation{
 					}
 				} else if(interceptPosition != null) {
 					double distanceToEntity = positionVector.distanceTo(interceptPosition.hitVec);
-
+					
 					if(distanceToEntity < minDistance || minDistance == 0.0D) {
 						lookedEntity = entity;
 						minDistance = distanceToEntity;
 					}
 				}
-				
 			if(lookedEntity != null && (minDistance < distance || pos == null))
 			{
 				boolean owner = false;
@@ -216,6 +213,7 @@ public class ImplementationFocused extends Implementation{
 					foundEntity = lookedEntity;
 			}
 		}
+		
 		return foundEntity;
 	}
 	
@@ -225,10 +223,10 @@ public class ImplementationFocused extends Implementation{
 		double distance = finalDistance;
 		RayTraceResult pos = raycast(e, finalDistance);
 		Vec3d positionVector = e.getPositionVector();
-		if(e instanceof EntityPlayer)
+
 			positionVector = positionVector.addVector(0, e.getEyeHeight(), 0);
 
-		if(pos != null)
+			if(pos != null)
 			distance = pos.hitVec.distanceTo(positionVector);
 
 		Vec3d lookVector = new Vec3d(e.motionX, e.motionY, e.motionZ);
@@ -237,7 +235,7 @@ public class ImplementationFocused extends Implementation{
 		Entity lookedEntity = null;
 		List<Entity> entitiesInBoundingBox = e.getEntityWorld().getEntitiesWithinAABBExcludingEntity(e, e.getEntityBoundingBox().grow(lookVector.x * finalDistance, lookVector.y * finalDistance, lookVector.z * finalDistance).expand(1F, 1F, 1F));
 		double minDistance = distance;
-
+		
 		for(Entity entity : entitiesInBoundingBox) {
 				float collisionBorderSize = entity.getCollisionBorderSize();
 				AxisAlignedBB hitbox = entity.getEntityBoundingBox().expand(collisionBorderSize, collisionBorderSize, collisionBorderSize);
@@ -288,7 +286,7 @@ public class ImplementationFocused extends Implementation{
 		double distance = finalDistance;
 		RayTraceResult pos = raycast(e, finalDistance);
 		Vec3d positionVector = e.getPositionVector();
-		if(e instanceof EntityPlayer)
+
 			positionVector = positionVector.addVector(0, e.getEyeHeight(), 0);
 
 		if(pos != null)
@@ -351,15 +349,14 @@ public class ImplementationFocused extends Implementation{
 	public static RayTraceResult raycast(Entity e, double len){
 		Vector3 vec = Vector3.fromEntity(e);
 			vec.add(0, e.getEyeHeight(), 0);
-		
 		Vec3d look = e.getLookVec();
-
 		return raycast(e.getEntityWorld(), vec, new Vector3(look), len);
 	}
 	
 	public static RayTraceResult raycast(World world, Vector3 origin, Vector3 ray, double len) {
 		Vector3 end = origin.copy().add(ray.copy().normalize().multiply(len));
 		RayTraceResult pos = world.rayTraceBlocks(origin.toVec3D(), end.toVec3D());
+
 		return pos;
 	}
 

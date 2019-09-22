@@ -40,7 +40,8 @@ public class HUDHandler {
 		float partialTicks = event.getPartialTicks();
 		if (event.getType() == ElementType.AIR) {
 			renderAir(resolution, partialTicks);
-		}else if(event.getType() == ElementType.ALL)
+		}else 
+			if(event.getType() == ElementType.ALL)
 		{
 			openAccessories(resolution, partialTicks);
 			renderMagickBar(resolution, partialTicks);
@@ -94,7 +95,7 @@ public class HUDHandler {
     	if(OceanArmor.hasArmorSetItem(player))
     	{
     		//OceanHelmet(player.world, player.posX,  player.posY,  player.posZ, player);
-    		ItemStack item = player.inventory.armorInventory.get(0);
+    		ItemStack item = player.inventory.armorInventory.get(3);
     		OceanHelmet armor = (OceanHelmet) item.getItem();
     		air = armor.getAir();
     		if(air < 300)

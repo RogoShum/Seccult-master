@@ -13,8 +13,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import testmod.seccult.Seccult;
+import testmod.seccult.entity.EntityDummy;
 import testmod.seccult.entity.EntityProtectionShieldFX;
 import testmod.seccult.entity.EntityShieldFX;
+import testmod.seccult.entity.livings.EntitySpiritDummy;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkEntityMoving;
 import testmod.seccult.network.NetworkHandler;
@@ -134,9 +136,9 @@ public class StateManager {
 		if(CheckIfStated(entity, LOST_MIND) > 0)
 		{
 			int level = getLevel(entity, LOST_MIND);
-			entity.motionX = (1 - 2*rand.nextFloat()) * level;
-			entity.motionY = (1 - 2*rand.nextFloat()) * level;
-			entity.motionZ = (1 - 2*rand.nextFloat()) * level;
+			entity.motionX = (0.25 - 0.5 * rand.nextFloat()) * level;
+			entity.motionY = (0.25 - 0.5 * rand.nextFloat()) * level;
+			entity.motionZ = (0.25 - 0.5 * rand.nextFloat()) * level;
 			
 			if(entity instanceof EntityPlayer)
 			{
@@ -284,7 +286,7 @@ public class StateManager {
 		if(entity instanceof EntityLivingBase)
 		{
 			EntityLivingBase living = (EntityLivingBase) entity;
-			if(living.isPotionActive(ModPotions.protection) || living.isPotionActive(ModPotions.shield))
+			if(living.isPotionActive(ModPotions.protection) || living.isPotionActive(ModPotions.shield) || living instanceof EntitySpiritDummy)
 			{
 				if(s.equals(FROZEN) || s.equals(LOST_MIND) || s.equals(NO_AI) || s.equals(WhiteAlbum) || s.equals(KraftWork))
 					return;

@@ -20,7 +20,7 @@ public class TheWorldMagick extends Magick implements ControllerMagic{
 		{
 			EntityLivingBase pl = (EntityLivingBase) entity;
 			pl.getEntityData().setInteger("TimeStop", 1);
-			EntityTimeManager time = new EntityTimeManager(pl.world, pl, 5 * (int)attribute, -20 * (int)strengh);
+			EntityTimeManager time = new EntityTimeManager(pl.world, pl, 2 * (int)attribute, 20 * (int)strengh);
 			time.setPosition(pl.posX, pl.posY, pl.posZ);
 			if(!pl.world.isRemote)
 				pl.world.spawnEntity(time);

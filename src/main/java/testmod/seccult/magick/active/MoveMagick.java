@@ -2,11 +2,14 @@ package testmod.seccult.magick.active;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.fml.common.Mod;
+import testmod.seccult.Seccult;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.magick.magickState.StateManager;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
 
+@Mod.EventBusSubscriber(modid = Seccult.MODID)
 public class MoveMagick extends Magick{
 
 	public MoveMagick(String nbtName, boolean hasDetailedText, float cost1, float cost2) 

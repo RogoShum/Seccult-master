@@ -7,6 +7,8 @@ import java.lang.reflect.Method;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.CombatTracker;
 import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.gen.layer.GenLayer;
 import testmod.seccult.api.PlayerDataHandler.PlayerData;
@@ -48,11 +50,12 @@ public class ModReclection {
 		ManaValue.set(data, vaule);
 	}
 	
-	public static void renderLayer(RenderLivingBase<EntityLivingBase> renderer, EntityLivingBase living, float limbSwing, float limbSwingAmount,
-			float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
+	public static void EntityCombat(EntityPlayer player, EntityLivingBase living) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
 	{
-		Method layer = RenderLivingBase.class.getDeclaredMethod("renderLayers", EntityLivingBase.class, float.class, float.class, float.class, float.class, float.class, float.class, float.class);
-		layer.setAccessible(true);
-		layer.invoke(renderer, living, limbSwing, limbSwingAmount, 1, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+		Field combat = EntityLivingBase.class.getDeclaredField("_combatTracker");
+		combat.setAccessible(true);
+		CombatTracker tracker = new CombatTracker(null);
+		tracker.reset();
+		combat.set(living, tracker);
 	}
 }

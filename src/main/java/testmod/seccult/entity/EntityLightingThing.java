@@ -150,6 +150,7 @@ public class EntityLightingThing extends Entity{
                 this.applyEntityCollision(entity);
             }
         }
+        
     }
 	
 	public void findPrey()
@@ -171,9 +172,12 @@ public class EntityLightingThing extends Entity{
 				}
 				
 				if(!creat)
-				this.prey = (EntityLivingBase) e;
+					this.prey = (EntityLivingBase) e;
 			}
 		}
+		
+		if(this.prey == null)
+			this.setDead();
 	}
 	
 	public boolean canSeeTarget(Entity e)

@@ -22,6 +22,7 @@ public class ShadowSkyChest extends ShadowSkyArmor{
 	public ShadowSkyChest(String name, ArmorMaterial materialIn, int renderIndexIn,
 			EntityEquipmentSlot equipmentSlotIn) {
 		super(name, materialIn, renderIndexIn, equipmentSlotIn);
+		setMagickAttribute(0.3F, 4, 3F);
 	}
 
 	@Override
@@ -75,9 +76,30 @@ public class ShadowSkyChest extends ShadowSkyArmor{
 			return;
 		
 		EntityPlayer player = (EntityPlayer)event.getEntityLiving();
-		if(hasShadowHelmet(player) && Seccult.rand.nextInt(7) == 0)
-			event.setCanceled(true);
 		
+		int chance = 7;
+		
+		if(hasShadowHelmet(player))
+			chance--;
+		
+		if(hasArmorSetItem(player, 1, ModItems.SHADOW_SKY_CHEST))
+			chance--;
+		
+		if(hasArmorSetItem(player, 2, ModItems.SHADOW_SKY_LEGGINGS))
+			chance--;
+		
+		if(hasArmorSetItem(player, 3, ModItems.SHADOW_SKY_BOOTS))
+			chance--;
+		
+		if(player.isSneaking())
+			chance--;
+		
+		if(!player.world.isDaytime())
+			chance--;
+		
+		 if(Seccult.rand.nextInt(chance) == 0)
+			 event.setCanceled(true);
+			 
 		if(hasArmorSetItem(player) && event.getSource().damageType.equals(DamageSource.FALL.damageType))
 			event.setCanceled(true);
 		

@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.client.resources.I18n;
 import testmod.seccult.magick.ImplementationHandler;
 import testmod.seccult.magick.active.*;
 import testmod.seccult.magick.implementation.Implementation;
@@ -178,8 +179,8 @@ public class ModMagicks {
 		String magick = MagickList.get(id);
 		if(magick != null)
 		{
-			String I18n = "spell_" + magick + "_introduction";
-			return I18n;
+			String I18nString = I18n.format("spell_" + magick + "_introduction");
+			return I18nString;
 		}
 		
 		return null;
@@ -190,8 +191,8 @@ public class ModMagicks {
 		String magick = MagickList.get(id);
 		if(magick != null)
 		{
-			String I18n = "spell_" + magick + "_name";
-			return I18n;
+			String I18nString = I18n.format("spell_" + magick + "_name");
+			return I18nString;
 		}
 		
 		return null;

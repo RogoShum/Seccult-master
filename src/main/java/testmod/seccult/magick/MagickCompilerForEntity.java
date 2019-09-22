@@ -16,6 +16,8 @@ public class MagickCompilerForEntity {
 	private int[] imple_attribute;
 	private Entity entity;
 	
+	private boolean dontCost;
+	
 	public MagickCompilerForEntity(Entity entity, int magick, int strength, int attribute, int[] imple, int[] imple_strength, int[] imple_attribute) 
 	{
 		this.entity = entity;
@@ -25,6 +27,11 @@ public class MagickCompilerForEntity {
 		this.imple_attribute = imple_attribute;
 		this.strength = strength;
 		this.attribute = attribute;
+	}
+	
+	public void DontCost()
+	{
+		this.dontCost = true;
 	}
 	
 	public boolean Compile()
@@ -100,6 +107,8 @@ public class MagickCompilerForEntity {
 		MagickCompiler compiler = new MagickCompiler();
 		if(this.entity != null)
 		{
+			if(dontCost)
+			compiler.dontCost = true;
 			compiler.pushMagickData(tag, this.entity);
 			return true;
 		}

@@ -96,20 +96,21 @@ public class PentagonFX extends Particle
 	@Override
     public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ)
     {
-    	if(this.particleAge < this.particleMaxAge / 2)
+		if(!test)
     	{
-    		float f = ((float)this.particleAge + partialTicks) / (float)this.particleMaxAge;
-    		f = 1.0F - f;
-    		f = f * f;
-    		f = 1.0F - f;
-    		this.particleScale = this.lightParticleScale * f;
-    	}
-    	else if(this.particleAge >= this.particleMaxAge / 2 && particleScale > 0)
-    	{
-    		this.particleScale -= 0.01;
-    	}
-    	if(!test)
-    	{
+			if(this.particleAge < this.particleMaxAge / 2)
+	    	{
+	    		float f = ((float)this.particleAge + partialTicks) / (float)this.particleMaxAge;
+	    		f = 1.0F - f;
+	    		f = f * f;
+	    		f = 1.0F - f;
+	    		this.particleScale = this.lightParticleScale * f;
+	    	}
+	    	else if(this.particleAge >= this.particleMaxAge / 2 && particleScale > 0)
+	    	{
+	    		this.particleScale -= 0.01;
+	    	}
+			
     		this.particleRed += (1 - rand.nextFloat() * 2) *0.0005;
     		this.particleGreen += (1 - rand.nextFloat() * 2) *0.0005;
     		this.particleBlue += (1 - rand.nextFloat() * 2) *0.0005;
@@ -118,9 +119,10 @@ public class PentagonFX extends Particle
     	else 
     	{
     		this.particleAlpha = 0.7F;
-    		if(particleAge > particleMaxAge / 2)
-    			particleAge = 0;
+    		particleAge = 0;
     	}
+    	
+    	
     	GlStateManager.pushMatrix();
     	GlStateManager.color(particleRed, particleGreen, particleBlue, (particleMaxAge - particleAge) / particleMaxAge);
         super.renderParticle(buffer, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);

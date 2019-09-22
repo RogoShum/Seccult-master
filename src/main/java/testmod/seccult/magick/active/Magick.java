@@ -118,6 +118,7 @@ public abstract class Magick implements Cloneable, doMagickNeedAtrribute{
 	private void failedToDoMagick(float s)
 	{
 		doExplosion(s);
+		createFailedFX();
 		reduceMana();
 	}
 	

@@ -57,6 +57,19 @@ public class ArmorBase extends ItemArmor implements registerModel
 		return false;
 	}
 	
+	public static boolean damageArmorSetItem(EntityPlayer player, int i, int amount) {
+		if(player == null || player.inventory == null || player.inventory.armorInventory == null)
+			return false;
+		
+		ItemStack stack = player.inventory.armorInventory.get(3 - i);
+		if(stack.isEmpty())
+			return false;
+
+		stack.damageItem(amount, player);
+
+		return true;
+	}
+	
 	public float getMagicRelief()
 	{
 		return MagicRelief;

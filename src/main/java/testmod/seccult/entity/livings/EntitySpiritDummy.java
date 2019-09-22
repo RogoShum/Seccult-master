@@ -506,6 +506,11 @@ public class EntitySpiritDummy extends EntityBase{
 	
 	protected void protectOwner()
 	{
+		if(this.getRevengeTarget() == null && this.Owner.getAttackingEntity() != this)
+		{
+			this.setRevengeTarget(this.Owner.getAttackingEntity());
+		}
+		
 		if(this.getRevengeTarget() == null && this.Owner.getRevengeTarget() != this)
 		{
 			this.setRevengeTarget(this.Owner.getRevengeTarget());

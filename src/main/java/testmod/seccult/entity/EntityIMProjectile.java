@@ -66,27 +66,28 @@ public class EntityIMProjectile extends EntityThrowable{
 	public void onUpdate() {
 		super.onUpdate();
 		if(!this.world.isRemote) {
-		double x = 1 - 2*world.rand.nextFloat();
-		double y = 1 - 2*world.rand.nextFloat();
-		double z = 1 - 2*world.rand.nextFloat();
+			for(int c = 0; c < 5; ++c)
+			{
+			double x = 0.5 - world.rand.nextFloat();
+			double y = 0.5 - world.rand.nextFloat();
+			double z = 0.5 - world.rand.nextFloat();
 
-		Particle fx2 = new LightFX(this.world, this.posX, this.posY, this.posZ, x / 25, y / 25, z / 25, scale);
-		fx2.setRBGColorF(particleRedIn, particleGreenIn, particleBlueIn);
-		Minecraft.getMinecraft().effectRenderer.addEffect(fx2);
-		
-		if(core == null) {
-		Particle fx = new PentagonFX(this.world, this.posX, this.posY, this.posZ, 0, 0, 0, 10 * scale);
-		fx.setRBGColorF(particleRedIn, particleGreenIn, particleBlueIn);
-		this.core = fx;
-		Minecraft.getMinecraft().effectRenderer.addEffect(fx);
-		}
-		if(this.core != null)
-		{
-			PentagonFX fx = (PentagonFX) this.core;
+			Particle fx2 = new LightFX(this.world, this.posX, this.posY, this.posZ, x / 25, y / 25, z / 25, scale / 2);
+			fx2.setRBGColorF(particleRedIn, particleGreenIn, particleBlueIn);
+			Minecraft.getMinecraft().effectRenderer.addEffect(fx2);
+			}
+			if(core == null) {
+			PentagonFX fx = new PentagonFX(this.world, this.posX, this.posY, this.posZ, 0, 0, 0, scale);
+			fx.setRBGColorF(particleRedIn, particleGreenIn, particleBlueIn);
 			fx.setTest(true);
-			fx.setPosition(this.posX, this.posY, this.posZ);
-		}
-		}
+			this.core = fx;
+			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+			}
+			if(this.core != null)
+			{
+				this.core.setPosition(this.posX, this.posY, this.posZ);
+			}
+			}
 	}
 	
 	@Override

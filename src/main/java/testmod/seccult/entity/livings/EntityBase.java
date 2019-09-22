@@ -549,6 +549,20 @@ public class EntityBase extends EntityLiving implements EntityUsingMagicHelper{
 		return false;
 	}
 	
+	public boolean doPoisionMagick(int strength, int attribute)
+	{
+				int MagickId = ModMagicks.GetMagickIDByString(ModMagicks.PosionMagick);
+				int ImpleId = ModMagicks.GetMagickIDByString(ImplementationHandler.SelfI);
+				int ImpleId_1 = ModMagicks.GetMagickIDByString(ImplementationHandler.ProjectileI);
+				
+				int[] imple = {ImpleId, ImpleId_1};
+				int[] imple_strength = {0, 2};
+				int[] imple_attribute = {0, 0};
+				
+				MagickCompilerForEntity compiler = new MagickCompilerForEntity(this, MagickId, strength, attribute, imple, imple_strength, imple_attribute);
+				return compiler.Compile();
+	}
+	
 	@Override
 	public Magick randomSwitchMagic(EnumType type) {
 		

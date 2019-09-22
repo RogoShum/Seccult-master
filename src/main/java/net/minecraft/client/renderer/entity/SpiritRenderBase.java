@@ -13,14 +13,11 @@ import net.minecraft.client.renderer.entity.RendererHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.client.FX.LightFX;
 import testmod.seccult.entity.livings.EntitySpirit;
-import testmod.seccult.network.NetworkEffectData;
-import testmod.seccult.network.NetworkHandler;
 import testmod.seccult.potions.PotionAllSeeEye;
 
 @SideOnly(Side.CLIENT)

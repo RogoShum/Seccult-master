@@ -6,12 +6,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -205,6 +207,12 @@ public class EntityTimeManager extends Entity{
 	      if (living instanceof EntityTameable)
 	      {
 	        living.motionY -= 1.0E-006D;
+	      }
+	      
+	      if (hitEntity instanceof EntityPlayer)
+	      {
+	    	  EntityPlayer player = (EntityPlayer)hitEntity;
+	    	  StateManager.setPlayerTP(player, player.prevPosX, player.prevPosY, player.prevPosZ, 0);
 	      }
 	      
 	      if (hitEntity instanceof EntityPlayerMP)

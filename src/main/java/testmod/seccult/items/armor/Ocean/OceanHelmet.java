@@ -2,6 +2,7 @@ package testmod.seccult.items.armor.Ocean;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.MobEffects;
@@ -22,10 +23,19 @@ public class OceanHelmet extends OceanArmor{
 	
 	public OceanHelmet(String name, ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot equipmentSlotIn) {
 		super(name, materialIn, renderIndexIn, equipmentSlotIn);
+		setMagickAttribute(0.1F, 1, 1F);
 	}
 
 	@Override
-	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
+	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
+		
+		if(!(entityIn instanceof EntityPlayer))
+			return;
+		EntityPlayer player = (EntityPlayer)entityIn;
+		
+		ItemStack itemStack = stack;
+		
 		if(itemStack.getItem() == ModItems.OCEAN_HELMET)
 		{
 			if (hasArmorSetItem(player) && EnchantmentHelper.getEnchantmentLevel(Enchantments.RESPIRATION, itemStack) < 3) {
@@ -52,10 +62,9 @@ public class OceanHelmet extends OceanArmor{
 		
 		if(player.capabilities.isCreativeMode)
 			return;
-		
-        if (air == -20)
+
+        if (air <= -20)
         {
-            air = 0;
             for (int i = 0; i < 8; ++i)
             {
                 float f2 = Seccult.rand.nextFloat() - Seccult.rand.nextFloat();
@@ -63,8 +72,9 @@ public class OceanHelmet extends OceanArmor{
                 float f1 = Seccult.rand.nextFloat() - Seccult.rand.nextFloat();
                 player.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, player.posX + (double)f2, player.posY + (double)f, player.posZ + (double)f1, player.motionX, player.motionY, player.motionZ);
             }
-
+            
             player.attackEntityFrom(DamageSource.DROWN, 2.0F);
+            air = 1;
         }
 		
 		if(!player.isInWater())
@@ -87,6 +97,11 @@ public class OceanHelmet extends OceanArmor{
             	air--;
             }
 		}
+	}
+	
+	@Override
+	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
+		
 	}
 	
 	public int getAir()
