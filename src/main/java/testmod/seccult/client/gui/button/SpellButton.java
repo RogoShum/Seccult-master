@@ -52,10 +52,10 @@ public class SpellButton extends GuiButton{
 		if(this.id >= 7)
 			this.isMagickButton = true;
 		
-		spellPower_name = "seccult:normal";
+		spellPower_name = "spell_normal";
 		switch(id)
 		{
-			case 7:
+			case 7: //Damage
 				spellPower_name = "spell_power_affiliated_name";
 				spellAttribute_name = "spell_none";
 				break;
@@ -67,7 +67,7 @@ public class SpellButton extends GuiButton{
 				spellPower_name = "spell_power_affiliated_name";
 				spellAttribute_name = "spell_none";
 				break;
-			case 10:
+			case 10: //Electro
 				spellPower_name = "spell_power_affiliated_name";
 				spellAttribute_name = "spell_none";
 				break;
@@ -79,8 +79,76 @@ public class SpellButton extends GuiButton{
 				spellPower_name = "spell_time";
 				spellAttribute_name = "spell_none";
 				break;
-			case 14:
+			case 13: //LoseMind
 				spellPower_name = "spell_time";
+				spellAttribute_name = "spell_power_mult_name";
+				break;
+			case 14:
+				spellPower_name = "spell_power_mult_name";
+				spellAttribute_name = "spell_none";
+				break;
+			case 15:
+				spellPower_name = "spell_time";
+				spellAttribute_name = "spell_power_mult_name";
+				break;
+			case 16: //GratefulDead
+				spellPower_name = "spell_time";
+				spellAttribute_name = "spell_power_mult_name";
+				break;
+			case 17:
+				spellPower_name = "spell_power_mult_name";
+				spellAttribute_name = "spell_none";
+				break;
+			case 18:
+				spellPower_name = "spell_power_mult_name";
+				spellAttribute_name = "spell_none";
+				break;
+			case 19: //TheWorld
+				spellPower_name = "spell_time";
+				spellAttribute_name = "spell_range";
+				break;
+			case 20:
+				spellPower_name = "spell_time";
+				spellAttribute_name = "spell_none";
+				break;
+			case 21:
+				spellPower_name = "spell_time";
+				spellAttribute_name = "spell_none";
+				break;
+			case 22: //Arrow
+				spellPower_name = "spell_power_affiliated_name";
+				spellAttribute_name = "spell_power_mult_name";
+				break;
+			case 23:
+				spellPower_name = "spell_time";
+				spellAttribute_name = "spell_power_mult_name";
+				break;
+			case 24:
+				spellPower_name = "spell_power_mult_name";
+				spellAttribute_name = "spell_range";
+				break;
+			case 25: //Protect
+				spellPower_name = "spell_power_mult_name";
+				spellAttribute_name = "spell_range";
+				break;
+			case 26:
+				spellPower_name = "spell_power_affiliated_name";
+				spellAttribute_name = "spell_power_mult_name";
+				break;
+			case 27:
+				spellPower_name = "spell_none";
+				spellAttribute_name = "spell_none";
+				break;
+			case 28:
+				spellPower_name = "spell_none";
+				spellAttribute_name = "spell_none";
+				break;
+			case 29:
+				spellPower_name = "spell_power_affiliated_name";
+				spellAttribute_name = "spell_none";
+				break;
+			case 30:
+				spellPower_name = "spell_none";
 				spellAttribute_name = "spell_none";
 				break;
 			default:

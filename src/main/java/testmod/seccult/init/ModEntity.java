@@ -60,6 +60,7 @@ public class ModEntity
 		registerEntityWithoutEgg("protection_shield", EntityProtectionShieldFX.class, id++, 128, 1, true);
 		registerEntityWithoutEgg("spirit_container", EntitySpiritContainer.class, id++, 128, 1, true);
 		registerEntityWithoutEgg("spirit_dummy", EntitySpiritDummy.class, id++, 128, 1, true);
+		registerEntityWithoutEgg("king_crimson", EntityKingCrimson.class, id++, 128, 1, true);
 	}
 	
 	public static void registerEntity(String name, Class<? extends Entity> entity, int id, int range, int updateFrequency, boolean svu, int color1, int color2) 

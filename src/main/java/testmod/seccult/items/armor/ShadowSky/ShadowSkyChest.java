@@ -15,6 +15,7 @@ import testmod.seccult.Seccult;
 import testmod.seccult.client.FX.FogFX;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.items.armor.ShadowSkyArmor;
+import testmod.seccult.items.armor.MagickArmor.CoreType;
 
 @Mod.EventBusSubscriber(modid = Seccult.MODID)
 public class ShadowSkyChest extends ShadowSkyArmor{
@@ -28,7 +29,7 @@ public class ShadowSkyChest extends ShadowSkyArmor{
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
 		super.onArmorTick(world, player, itemStack);
-		
+			addMagickCore(itemStack, CoreType.FlyingCore);
 		if(!hasArmorSetItem(player))
 			return;
 		

@@ -43,7 +43,6 @@ public class HUDHandler {
 		}else 
 			if(event.getType() == ElementType.ALL)
 		{
-			openAccessories(resolution, partialTicks);
 			renderMagickBar(resolution, partialTicks);
 		}
 	}
@@ -77,15 +76,6 @@ public class HUDHandler {
             GlStateManager.popMatrix();
         }
     }
-	
-	@SideOnly(Side.CLIENT)
-	public void openAccessories(ScaledResolution scaledRes, float pticks)
-	{
-		EntityPlayer player = mc.player;
-		KeyBinding[] keyBindings = ClientProxy.keyBindings;
-		if(keyBindings[2].isPressed())
-			player.openGui(Seccult.instance, GuiElementLoader.GUI_Accessories, player.world, (int)player.posX, (int)player.posY, (int)player.posZ);
-	}
 	
 	@SideOnly(Side.CLIENT)
     protected void renderAir(ScaledResolution scaledRes, float pticks)

@@ -34,7 +34,7 @@ public class OceanArmor extends MagickArmor{
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
 		super.onArmorTick(world, player, itemStack);
-		addMagickCore(itemStack, CoreType.LifeCore);
+		
 		if(hasArmorSetItem(player))
 		{
 			List<Entity> en = world.getEntitiesWithinAABBExcludingEntity(player, player.getEntityBoundingBox().grow(32));

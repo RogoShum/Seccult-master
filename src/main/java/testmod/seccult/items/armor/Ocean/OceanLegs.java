@@ -13,4 +13,10 @@ public class OceanLegs extends OceanArmor{
 		super(name, materialIn, renderIndexIn, equipmentSlotIn);
 		setMagickAttribute(0.1F, 2, 1F);
 	}
+	
+	@Override
+	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
+		super.onArmorTick(world, player, itemStack);
+		addMagickCore(itemStack, CoreType.SpeedCore);
+	}
 }

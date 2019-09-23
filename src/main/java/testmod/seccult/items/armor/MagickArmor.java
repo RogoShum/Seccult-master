@@ -18,7 +18,9 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -142,33 +144,72 @@ public class MagickArmor extends ArmorBase{
 		return coreType0.equals(CoreType.JumpCore) || coreType1.equals(CoreType.JumpCore) || coreType2.equals(CoreType.JumpCore) || coreType3.equals(CoreType.JumpCore);
 	}
 	
+	public static boolean hasAttackCore(EntityPlayer player)
+	{
+		String coreType0 = getCore(player.inventory.armorItemInSlot(0));
+		String coreType1 = getCore(player.inventory.armorItemInSlot(1));
+		String coreType2 = getCore(player.inventory.armorItemInSlot(2));
+		String coreType3 = getCore(player.inventory.armorItemInSlot(3));
+		return coreType0.equals(CoreType.AttackCore) || coreType1.equals(CoreType.AttackCore) || coreType2.equals(CoreType.AttackCore) || coreType3.equals(CoreType.AttackCore);
+	}
+	
 	@SubscribeEvent
 	public static void jumpCore(LivingJumpEvent event)
 	{
-		System.out.println("QAQ");
 		if(!(event.getEntityLiving() instanceof EntityPlayer))
 			return;
-		System.out.println("QAQ");
+
 		EntityPlayer player = (EntityPlayer) event.getEntityLiving();
-		player.motionY += 0.2F;
-		StateManager.setPlayerMove(player, player.motionX, player.motionY += 0.2F, player.motionZ, 1);
+		if(hasJumpCore(player))
+		{
+			player.motionY += 0.2F;
+			StateManager.setPlayerMove(player, player.motionX, player.motionY += 0.2F, player.motionZ, 1);
+		}
 		
+	}
+	
+	@SubscribeEvent
+	public static void attackCore(LivingAttackEvent event)
+	{
+		if(!(event.getSource().getTrueSource() instanceof EntityPlayer))
+			return;
+		
+		EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
+		if(hasAttackCore(player))
+		{
+			if(event.getEntityLiving() != null)
+				event.getEntityLiving().hurtTime = -1;
+		}
+	}
+	
+	@SubscribeEvent
+	public static void attackCore(LivingHurtEvent event)
+	{
+		if(!(event.getSource().getTrueSource() instanceof EntityPlayer))
+			return;
+		
+		EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
+		if(hasAttackCore(player))
+		{
+			if(event.getEntityLiving() != null)
+				event.getEntityLiving().hurtTime = -1;
+		}
 	}
 	
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		super.addInformation(stack, worldIn, tooltip, flagIn);
-		this.addStringToTooltip("&b" + getCore(stack), tooltip);
+		addStringToTooltip("&b" + getCore(stack), tooltip);
 		if(GuiScreen.isShiftKeyDown())
 		{
-			this.addStringToTooltip("&5" + Magick_Enhance + " " + this.getMagicEnhance(), tooltip);
-			this.addStringToTooltip("&5" + Magick_Relife + " " + this.getMagicRelief(), tooltip);
-			this.addStringToTooltip("&5" + Magick_Limit + " " + this.getMagicUpperlimit(), tooltip);
+			addStringToTooltip("&5" + Magick_Enhance + " " + this.getMagicEnhance(), tooltip);
+			addStringToTooltip("&5" + Magick_Relife + " " + this.getMagicRelief(), tooltip);
+			addStringToTooltip("&5" + Magick_Limit + " " + this.getMagicUpperlimit(), tooltip);
 		}
 	}
 	
-	public void addStringToTooltip(String s, List<String> tooltip) {
+	public static void addStringToTooltip(String s, List<String> tooltip) {
 		tooltip.add(s.replaceAll("&", "\u00a7"));
 	}
 	
@@ -189,7 +230,6 @@ public class MagickArmor extends ArmorBase{
 		if(!stack.hasTagCompound())
 			stack.setTagCompound(new NBTTagCompound());
 		
-		
 		String coreType = getCore(stack);
 
 		if (slot == armorType) {
@@ -207,6 +247,9 @@ public class MagickArmor extends ArmorBase{
 			}
 			if(coreType.equals(CoreType.LifeCore))
 			attrib.put(SharedMonsterAttributes.MAX_HEALTH.getName(), new AttributeModifier(uuid, "Magick modifier", 1F, 1));
+			
+			if(coreType.equals(CoreType.AttackCore))
+				attrib.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(uuid, "Magick modifier", 3F, 1));
 		}
 		return attrib;
 	}
@@ -219,5 +262,6 @@ public class MagickArmor extends ArmorBase{
 		public static final String JumpCore = I18n.format("seccult.jump.core");
 		public static final String DefenceCore = I18n.format("seccult.defence.core");
 		public static final String LifeCore = I18n.format("seccult.life.core");
+		public static final String AttackCore = I18n.format("seccult.attack.core");
 	}
 }

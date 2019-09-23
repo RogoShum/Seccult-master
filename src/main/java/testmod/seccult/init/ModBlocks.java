@@ -40,4 +40,7 @@ public class ModBlocks
 	
 	//generator
 	public static final Block Mush_Gen = new BlockGenerator();
+	
+	//tile
+	public static final Block KILLER_QUEEN = new BlockKillerQueen("killer_queen");
 }

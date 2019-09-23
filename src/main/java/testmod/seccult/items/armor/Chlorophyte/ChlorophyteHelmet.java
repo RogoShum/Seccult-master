@@ -27,7 +27,7 @@ public class ChlorophyteHelmet extends ChlorophyteArmor{
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
 		super.onArmorTick(world, player, itemStack);
-		//addMagickCore(itemStack, CoreType.PeaceCore);
+		addMagickCore(itemStack, CoreType.AttackCore);
 		if(hasArmorSetItem(player))
 		for (int i = 0; i < 5; i++) {
 			double tx = player.posX + (player.world.rand.nextFloat() * 0.1F);

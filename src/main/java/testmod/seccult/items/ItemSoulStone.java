@@ -1,5 +1,9 @@
 package testmod.seccult.items;
 
+import java.util.List;
+
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
@@ -11,6 +15,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import testmod.seccult.items.armor.MagickArmor;
 
 public class ItemSoulStone extends ItemBase{
 
@@ -50,6 +55,13 @@ public class ItemSoulStone extends ItemBase{
 		}
 		
 		return false;
+	}
+	
+	@Override
+	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		super.addInformation(stack, worldIn, tooltip, flagIn);
+		if(getSoul(stack, worldIn) != null)
+			MagickArmor.addStringToTooltip(I18n.format(getSoul(stack, worldIn).getName()), tooltip);
 	}
 	
 	public static EntityLivingBase getSoul(ItemStack stack, World world)

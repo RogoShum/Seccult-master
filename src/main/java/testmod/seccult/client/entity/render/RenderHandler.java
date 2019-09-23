@@ -56,5 +56,6 @@ public class RenderHandler
 		RenderingRegistry.registerEntityRenderingHandler(EntityProtectionShieldFX.class, m -> new RenderProtectionShieldFX(m));
 		RenderingRegistry.registerEntityRenderingHandler(EntitySpiritContainer.class, m -> new RenderSpiritContainer(m));
 		RenderingRegistry.registerEntityRenderingHandler(EntitySpiritDummy.class, m -> new RenderDummySystem(m));
+		RenderingRegistry.registerEntityRenderingHandler(EntityKingCrimson.class, m -> new RenderKingCrimson(m));
 	}
 }

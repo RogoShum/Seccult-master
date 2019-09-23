@@ -136,7 +136,6 @@ public class ModMagicks {
 		TheWorld = new TheWorldMagick(TheWorldMagick, true, 500, 2F);
 		KraftWork = new KraftWorkMagick(KraftWorkMagick, true, 60, 3F);
 		Floating = new FloatingMagick(FloatingMagick, true, 20, 1F);
-		//InScale = new IncreaseScaleMagick(InScaleMagick, true, 20, 1F);
 		Arrow = new ArrowClowCardMagick(ArrowMagick, true, 5, 1.5F);
 		AllSee = new AllSeeMagick(AllSeeMagick, true, 120, 2F);
 		Shield = new ShieldMagick(ShieldMagick, true, 120, 3F);
@@ -191,7 +190,7 @@ public class ModMagicks {
 		String magick = MagickList.get(id);
 		if(magick != null)
 		{
-			String I18nString = I18n.format("spell_" + magick + "_name");
+			String I18nString = I18n.format("spell_" + magick);
 			return I18nString;
 		}
 		

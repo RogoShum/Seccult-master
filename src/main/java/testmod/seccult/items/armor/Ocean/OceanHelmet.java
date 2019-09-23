@@ -16,6 +16,7 @@ import testmod.seccult.ModReclection;
 import testmod.seccult.Seccult;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.items.armor.OceanArmor;
+import testmod.seccult.items.armor.MagickArmor.CoreType;
 
 public class OceanHelmet extends OceanArmor{
 
@@ -101,7 +102,8 @@ public class OceanHelmet extends OceanArmor{
 	
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
-		
+		super.onArmorTick(world, player, itemStack);
+		addMagickCore(itemStack, CoreType.AttackCore);
 	}
 	
 	public int getAir()

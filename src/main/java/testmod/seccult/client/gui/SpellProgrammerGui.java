@@ -138,7 +138,7 @@ public class SpellProgrammerGui extends GuiScreen
             {
                 GlStateManager.color(1.0F, 1.0F, 1.0F);
                 mc.getTextureManager().bindTexture(TEXTURE);
-                this.drawTexturedModalRect(this.x, this.y, 80, 192, this.width, this.height);
+                this.drawTexturedModalRect(this.x, this.y, 56, ySize + 20, this.width, this.height);
 			}
 		}
 		};
@@ -151,7 +151,7 @@ public class SpellProgrammerGui extends GuiScreen
             {
                 GlStateManager.color(1.0F, 1.0F, 1.0F);
                 mc.getTextureManager().bindTexture(TEXTURE);
-                this.drawTexturedModalRect(this.x, this.y, 80, 192, this.width, this.height);
+                this.drawTexturedModalRect(this.x, this.y, 56, ySize + 20, this.width, this.height);
 			}
 		}
 		};
@@ -164,7 +164,7 @@ public class SpellProgrammerGui extends GuiScreen
             {
                 GlStateManager.color(1.0F, 1.0F, 1.0F);
                 mc.getTextureManager().bindTexture(TEXTURE);
-                this.drawTexturedModalRect(this.x, this.y, 80, 194, this.width, this.height);
+                this.drawTexturedModalRect(this.x, this.y, 56, ySize + 28, this.width, this.height);
 			}
 		}
 		};
@@ -177,7 +177,7 @@ public class SpellProgrammerGui extends GuiScreen
             {
                 GlStateManager.color(1.0F, 1.0F, 1.0F);
                 mc.getTextureManager().bindTexture(TEXTURE);
-                this.drawTexturedModalRect(this.x, this.y, 80, 194, this.width, this.height);
+                this.drawTexturedModalRect(this.x, this.y, 56, ySize + 28, this.width, this.height);
 			}
 		}
 		};
@@ -190,7 +190,7 @@ public class SpellProgrammerGui extends GuiScreen
             {
                 GlStateManager.color(1.0F, 1.0F, 1.0F);
                 mc.getTextureManager().bindTexture(TEXTURE);
-                this.drawTexturedModalRect(this.x, this.y, 88, 192, this.width, this.height);
+                this.drawTexturedModalRect(this.x, this.y, 56, ySize + 36, this.width, this.height);
 			}
 		}
 		};
@@ -341,7 +341,7 @@ public class SpellProgrammerGui extends GuiScreen
 		GlStateManager.color(1F, 1F, 1F);
 		mc.getTextureManager().bindTexture(TEXTURE);
 		this.drawTexturedModalRect(offsetX + 15, offsetY, 83, 0, this.xSize + 1, this.ySize);
-		this.drawTexturedModalRect(offsetX + 192, offsetY + 60, 200, this.ySize + 4, 52, 88);
+		this.drawTexturedModalRect(offsetX + 192, offsetY + 60, 63, this.ySize + 20, 104, 64);
 		this.drawTexturedModalRect(offsetX - 87, offsetY, 0, 0, 83, this.ySize);
 		
 		GlStateManager.popMatrix();
@@ -373,7 +373,7 @@ public class SpellProgrammerGui extends GuiScreen
 				closePanel();
 			
 		    String name = ModMagicks.getI18nNameByID(selected.id);
-		    String spell_name = I18n.format(name);
+		    String spell_name = I18n.format(name + "_name");
 		    this.fontRenderer.drawString(spell_name, offsetX + 196, offsetY + 62, 0x404040);
 		    
 		    String introduction = ModMagicks.getI18nNameByID(selected.id);

@@ -233,7 +233,7 @@ public class TRprojectileBase extends Entity{
             int var1 = MathHelper.floor(this.posX);
             int var2 = MathHelper.floor(this.getEntityBoundingBox().minY);
             int var3 = MathHelper.floor(this.posZ);
-            
+            this.motionY -= (double)0.2F;
             if (this.smotionX > 0.0D && this.world.getBlockState(new BlockPos(var1 + 1, var2, var3)).getBlock() != Blocks.AIR)
             {
                 this.motionX = this.smotionX = -this.smotionX;

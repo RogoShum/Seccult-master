@@ -1,6 +1,7 @@
 package testmod.seccult.entity.livings;
 
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -12,7 +13,7 @@ public class EntityStand extends EntityLiving{
 	
 	private static final DataParameter<Float> StandEnergy = EntityDataManager.<Float>createKey(EntityStand.class, DataSerializers.FLOAT);
 	
-	protected EntityLiving Owner;
+	protected EntityLivingBase Owner;
 	
 	protected double MyMaxSpeed;
 	protected double MyMaxStrength;
@@ -44,7 +45,7 @@ public class EntityStand extends EntityLiving{
 		super(worldIn);
 	}
 
-	public void setOwner(EntityLiving a) {
+	public void setOwner(EntityLivingBase a) {
 		this.Owner = a;
 	}
 
@@ -66,7 +67,10 @@ public class EntityStand extends EntityLiving{
 	}
 	
 	protected void EnergyCalculate() {
-		EntityLiving owner = this.Owner;
+		if(this.Owner == null)
+			return;
+		
+		EntityLivingBase owner = this.Owner;
 		setStandEnergy(owner.getHealth() / owner.getMaxHealth());
 		
 		if(getStandEnergy() < 50 && getStandEnergy() > 25) {

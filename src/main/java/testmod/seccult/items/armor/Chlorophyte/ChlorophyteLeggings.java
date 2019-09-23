@@ -16,7 +16,6 @@ public class ChlorophyteLeggings extends ChlorophyteArmor{
 
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
-		// TODO Auto-generated method stub
 		super.onArmorTick(world, player, itemStack);
 		addMagickCore(itemStack, CoreType.SpeedCore);
 	}
