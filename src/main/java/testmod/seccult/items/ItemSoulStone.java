@@ -2,12 +2,15 @@ package testmod.seccult.items;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
@@ -15,14 +18,25 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import testmod.seccult.Seccult;
 import testmod.seccult.items.armor.MagickArmor;
 
 public class ItemSoulStone extends ItemBase{
-
+	private static final ResourceLocation soul_Prefix = new ResourceLocation(Seccult.MODID, "hassoul");
+	
 	public ItemSoulStone(String name) {
 		super(name);
 		this.maxStackSize = 1;
 		this.setMaxDamage(2);
+		
+		this.addPropertyOverride(soul_Prefix, new IItemPropertyGetter() {
+			@SideOnly(Side.CLIENT)
+			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+				return getSoul(stack, worldIn) != null ? 1 : 0;
+			}
+		});
 	}
 	
 	@Override

@@ -56,6 +56,7 @@ public class ModItems
 	public static final Item Wand = new ItemWand("wand");
 	public static final Item SoulStone = new ItemSoulStone("soul_stone");
 	public static final Item DummySystem = new ItemDummySystem("dummy_system");
+	public static final Item MagickCore = new ItemMagickCore("magick_core");
 	
 	//Tools
 	public static final Item SPA_SOWRD = new SwordTool("spa_sword");

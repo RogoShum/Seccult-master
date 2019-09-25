@@ -63,7 +63,7 @@ public class tileKillerQueen extends TileEntity implements ITickable {
 
 	public void doRingSound()
 	{
-		this.world.playSound(null, pos, ModSounds.ringRingRing, SoundCategory.VOICE, 0.2F, 1);
+		this.world.playSound(null, pos, ModSounds.ringRingRing, SoundCategory.VOICE, 0.01F, 0.8F + this.world.rand.nextFloat());
 	}
 	
 	public boolean hasEntity(Entity victim)

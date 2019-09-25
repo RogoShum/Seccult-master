@@ -80,6 +80,8 @@ public class CopyMagick extends Magick{
 			}
 		
 			ItemStack item = new ItemStack(newblock);
+			for(int i = 0; i < this.strengh; i++)
+			{
 			EntityItem newItem = new EntityItem(player.world, block.getX(), block.getY() + 1, block.getZ(), item);
 			if(tag != null)
 			{
@@ -91,8 +93,7 @@ public class CopyMagick extends Magick{
 					
 				newItem.readFromNBT(oldTag);
 			}
-			for(int i = 0; i < this.strengh; i++)
-			{
+			
 				if(!this.player.world.isRemote)
 					this.player.world.spawnEntity(newItem);
 			}

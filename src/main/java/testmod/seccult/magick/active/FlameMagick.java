@@ -82,7 +82,7 @@ public class FlameMagick extends Magick implements AttackingMagic{
 		if(block != null)
 		{
 			pos[0] = block.getX();
-			pos[1] = block.getY() + 1;
+			pos[1] = block.getY() + 0.5F;
 			pos[2] = block.getZ();
 		}
 		float[] color = {RGB[0], RGB[1], RGB[2]};

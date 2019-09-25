@@ -97,9 +97,9 @@ public class ItemWand extends ItemBase{
 	            }
 	            
 	            double[] pos = new double[3], vec = new double[3];
-				pos[0] = player.posX;
+				pos[0] = player.posX - player.width / 2;
 				pos[1] = player.posY + player.height / 2;
-				pos[2] = player.posZ;
+				pos[2] = player.posZ - player.width / 2;
 				doCircle = 0;
 	            NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, this.staffColor, 0.3F, 100));
 	            
@@ -137,9 +137,9 @@ public class ItemWand extends ItemBase{
 	        }
 	        
 			double[] pos = new double[3], vec = new double[3];
-			pos[0] = player.posX;
+			pos[0] = player.posX - player.width / 2;
 			pos[1] = player.posY + player.height / 2;
-			pos[2] = player.posZ;
+			pos[2] = player.posZ - player.width / 2;
 			NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, this.staffColor, 0.3F, 100));
 		 }
 	}

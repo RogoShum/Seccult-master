@@ -544,10 +544,24 @@ public class SpellProgrammerGui extends GuiScreen
 
     private void handleCanBeCompile()
     {
-    	if(this.SelectedButtonList.size() < 1)
+    	if(this.SelectedButtonList.size() < 2)
     	{
     		canProgeammer = false;
     		return;
+    	}
+    	
+    	if(this.SelectedButtonList.size() < 3)
+    	{
+    		for (int i = 0; i < this.SelectedButtonList.size(); ++i)
+            {
+            	 SpellButton button = this.SelectedButtonList.get(i);
+            	 
+            	 if(button.id == 5 || button.id == 6)
+            	 {
+            		 canProgeammer = false;
+            		 return;
+            	 }
+            }
     	}
     	
         for (int i = 0; i < this.SelectedButtonList.size(); ++i)

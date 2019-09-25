@@ -23,6 +23,7 @@ import testmod.seccult.creativetab.CreativeTabsLoader;
 import testmod.seccult.events.ModEventHandler;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.init.ModMagicks;
+import testmod.seccult.items.ItemMagickCore;
 import testmod.seccult.items.ItemWand;
 import testmod.seccult.network.NetworkHandler;
 import testmod.seccult.util.handlers.RegistryHandler;
@@ -87,6 +88,16 @@ public class Seccult
 					return ItemWand.getWandStyle(stack, tintIndex);
 			}
 		}, ModItems.Wand);
+		
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor()
+		{
+			@SideOnly(Side.CLIENT)
+			@Override
+			public int colorMultiplier(ItemStack stack, int tintIndex) {
+
+					return ItemMagickCore.getMagickColorInt(stack);
+			}
+		}, ModItems.MagickCore);
 	}
 }
 

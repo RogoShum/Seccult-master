@@ -43,4 +43,5 @@ public class ModBlocks
 	
 	//tile
 	public static final Block KILLER_QUEEN = new BlockKillerQueen("killer_queen");
+	public static final Block Enchanting_Staff = new BlockEnchantingStaff("enchanting_staff");
 }

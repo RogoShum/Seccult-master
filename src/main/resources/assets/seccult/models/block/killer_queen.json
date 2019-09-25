@@ -4,6 +4,7 @@
 	"textures": {
 		"body": "seccult:blocks/phone_body",
 		"top": "seccult:blocks/phone_number"
+		"particle": "seccult:blocks/phone_body"
 	},
 	"elements": [
 		{

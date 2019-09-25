@@ -1,3 +1,14 @@
 {
-    "parent": "seccult:block/spellprogrammer"
+   "parent": "item/generated",
+   "textures": {
+       "layer0": "seccult:items/spellprogrammer_item"
+   },
+	"overrides": [
+	{
+      "predicate": {
+        "damage": 0
+      },
+      "model": "seccult:block/spellprogrammer"
+    }
+  ]
 }

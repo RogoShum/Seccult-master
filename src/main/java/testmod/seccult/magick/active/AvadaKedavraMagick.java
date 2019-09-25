@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
+import testmod.seccult.blocks.tileEntity.tileEnchantingStaff;
 import testmod.seccult.entity.livings.EntitySpirit;
 import testmod.seccult.init.ModDamage;
 import testmod.seccult.init.ModMagicks;
@@ -74,7 +75,10 @@ public class AvadaKedavraMagick extends Magick implements SlayMagic{
 	}
 
 	@Override
-	void toBlock() {}
+	void toBlock() 
+	{
+
+	}
 
 	@Override
 	void MagickFX() 

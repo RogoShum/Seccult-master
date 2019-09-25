@@ -1,0 +1,20 @@
+{
+   "parent": "item/generated",
+   "textures": {
+       "layer0": "seccult:items/magick_core"
+   },
+	"overrides": [
+    {
+      "predicate": {
+        "seccult:core_type": 0
+      },
+      "model": "seccult:item/magick_core_empty"
+    },
+	{
+      "predicate": {
+        "seccult:core_type": 1
+      },
+      "model": "seccult:item/magick_core_full"
+    }
+  ]
+}

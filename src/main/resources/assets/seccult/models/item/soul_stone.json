@@ -6,13 +6,13 @@
 	"overrides": [
     {
       "predicate": {
-        "damage": 0
+        "seccult:hassoul": 0
       },
       "model": "seccult:item/soul_stone_0"
     },
 	{
       "predicate": {
-        "damage": 0.1
+        "seccult:hassoul": 1
       },
       "model": "seccult:item/soul_stone_1"
     }

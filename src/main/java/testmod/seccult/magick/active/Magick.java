@@ -8,6 +8,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import testmod.seccult.api.PlayerDataHandler;
 import testmod.seccult.api.PlayerDataHandler.PlayerData;
+import testmod.seccult.blocks.tileEntity.tileEnchantingStaff;
 import testmod.seccult.init.ModMagicks;
 
 public abstract class Magick implements Cloneable, doMagickNeedAtrribute{
@@ -136,7 +137,19 @@ public abstract class Magick implements Cloneable, doMagickNeedAtrribute{
 		if(entity != null)
 		toEntity();
 		if(block != null)
-		toBlock();
+		{
+			toBlock();
+
+			tileEnchantingStaff staff = (tileEnchantingStaff) this.player.world.getTileEntity(block);
+			if(staff != null && staff.getClass() == tileEnchantingStaff.class)
+			{
+				if(this.strengh != 0)
+					staff.trandMagick(this.clone(), (int)(this.strenghCost * this.strengh));
+				else
+					staff.trandMagick(this.clone(), (int)(this.strenghCost));
+			}
+		}
+
 		
 		if(data == null)
 			return;

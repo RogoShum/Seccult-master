@@ -57,7 +57,7 @@ public class ImplementationFocused extends Implementation{
 						{
 							float d = (float)eList.get(i).getDistanceSqToCenter(b);
 							if(e == null)
-							applyMagickTrail(eList.get(i).world, eList.get(i).posX, eList.get(i).posY + (eList.get(i).getEyeHeight() * 0.8), eList.get(i).posZ, b.getX(), b.getY() + 1, b.getZ(), d);
+							applyMagickTrail(eList.get(i).world, eList.get(i).posX, eList.get(i).posY + (eList.get(i).getEyeHeight() * 0.8), eList.get(i).posZ, b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5, d);
 							newbList.add(b);
 						}
 						}

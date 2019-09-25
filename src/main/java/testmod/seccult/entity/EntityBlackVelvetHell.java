@@ -37,7 +37,7 @@ public class EntityBlackVelvetHell extends Entity{
 
 	public void nb人nb时() {
 		setPrisoner(nb人nb指数);
-		if(getPrisoner() > 15) {
+		if(getPrisoner() > 3) {
 			this.setDead();
 		}
 	}
@@ -49,7 +49,7 @@ public class EntityBlackVelvetHell extends Entity{
 	
 	@Override
 	public void setDead() {
-		if(!getEntityWorld().isRemote && getPrisoner() > 10) {
+		if(!getEntityWorld().isRemote && getPrisoner() > 2) {
 			this.isDead = true;
 		}else if(getEntityWorld().isRemote){
 			this.isDead = true;

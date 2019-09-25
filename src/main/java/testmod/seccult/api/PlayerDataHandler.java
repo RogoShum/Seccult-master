@@ -233,17 +233,27 @@ public class PlayerDataHandler {
 		}
 
 		public void writeToNBT(NBTTagCompound cmp) {
-			cmp.setFloat(TAG_MANA_TALENT_VALUE, ManaTalentValue);
-			cmp.setFloat(TAG_COMTROL_ABILITY, ControlAbility);
-			cmp.setFloat(TAG_MANA_STRENGH, ManaStrengh);
-			cmp.setFloat(TAG_GROWTH_ABILITY, GrowthAbility);
-			
-			cmp.setFloat(TAG_MANA_VALUE, ManaValue);
-			cmp.setFloat(TAG_MAX_MANA_VALUE, MaxManaValue);
-			
-			cmp.setFloat(TAG_PROFICIENCY_LEVEL, proficiency);
-			cmp.setTag(Seccult.MagickList, MagickList);
-			setMagickData(player, magickData);
+			try{
+				cmp.setFloat(TAG_MANA_TALENT_VALUE, ManaTalentValue);
+				cmp.setFloat(TAG_COMTROL_ABILITY, ControlAbility);
+				cmp.setFloat(TAG_MANA_STRENGH, ManaStrengh);
+				cmp.setFloat(TAG_GROWTH_ABILITY, GrowthAbility);
+				
+				cmp.setFloat(TAG_MANA_VALUE, ManaValue);
+				cmp.setFloat(TAG_MAX_MANA_VALUE, MaxManaValue);
+				
+				cmp.setFloat(TAG_PROFICIENCY_LEVEL, proficiency);
+				if(MagickList == null)
+				{
+					MagickList = new NBTTagList();
+				}
+				cmp.setTag(Seccult.MagickList, MagickList);
+				setMagickData(player, magickData);
+			}
+			catch(Exception e)
+			{
+				System.out.println("sth. wrong");
+			}
 		}
 		
 		public static int getColor(){

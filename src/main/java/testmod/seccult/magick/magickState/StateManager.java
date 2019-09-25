@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -110,6 +111,11 @@ public class StateManager {
 			if(level > 5)
 				level = 5;
 			float motion = 1 - (0.1F * level);
+			
+			if(entity instanceof EntityAgeable)
+			{
+				((EntityAgeable) entity).setGrowingAge(((EntityAgeable) entity).getGrowingAge() + level * 20);
+			}
 			
 			entity.motionX *= motion;
 			entity.motionY *= motion;
