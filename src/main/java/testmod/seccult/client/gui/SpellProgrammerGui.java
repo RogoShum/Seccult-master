@@ -35,6 +35,8 @@ public class SpellProgrammerGui extends GuiScreen
     private EntityPlayer player;
     private boolean canProgeammer;
 	private int[] magick;
+	private float Strength;
+	private float Control;
     private static final int BUTTON_CONFIRM = 100;
     private static final int BUTTON_DELETE = 99;
     
@@ -63,6 +65,8 @@ public class SpellProgrammerGui extends GuiScreen
     	this.player = player;
         PlayerData data = PlayerDataHandler.get(player);
         magick = data.getAllMagickData();
+        Strength = data.getManaStrengh();
+        Control = data.getManaStrengh();
         canProgeammer = true;
     } 
     
@@ -620,9 +624,13 @@ public class SpellProgrammerGui extends GuiScreen
             break;
         case BUTTON_UP_A:
         	selected.spellPower += 1;
+        	if(selected.spellPower > this.Strength)
+        		selected.spellPower = (int) this.Strength;
             break;
         case BUTTON_UP_B:
         	selected.spellAttribute += 1;
+        	if(selected.spellAttribute > this.Control)
+        		selected.spellAttribute = (int) this.Control;
             break;
         case BUTTON_DOWN_A:
         	selected.spellPower -= 1;

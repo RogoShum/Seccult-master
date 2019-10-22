@@ -80,7 +80,6 @@ public class EntityShieldFX extends Entity{
 			this.Blend = 0.0F;
 		
 		if(!this.world.isRemote && this.ticksExisted % 20 == 0)
-			System.out.println(this.time - this.ticksExisted);
 		
 		if(!this.world.isRemote && this.owner == null)
 		{

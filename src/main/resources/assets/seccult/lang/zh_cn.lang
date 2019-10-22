@@ -31,21 +31,36 @@ item.dummy_system.name=灵魂傀儡
 item.meowmere.name=彩虹猫刀
 item.vampire_knives.name=吸血鬼刀
 item.solar_eruption.name=日曜喷发剑
+item.magick_core.name=魔法核心
+item.damage_staff.name=攻击法杖
+item.defence_staff.name=防御法杖
+item.alteration_staff.name=变换法杖
+item.thunder_sword.name=名刀电光丸
+item.magick_caster.name=自动施法
+item.candy_ring.name=糖果戒指
+item.attack_refract.name=转移戒指-伤害性
+item.effect_refract.name=转移戒指-药水效果
+item.friendship_ring.name=友谊戒指
+item.medusa_head.name=美杜莎头颅
+item.knowledge_scroll.name=知识卷轴
 
 item.ocean_helmet.name=深海头护
 item.ocean_chest.name=深海胸甲
 item.ocean_leggings.name=深海腿护
 item.ocean_boots.name=深海轻靴
+item.ocean_sword.name=珍珠剑
 
 item.shadow_sky_helmet.name=影空头护
 item.shadow_sky_chest.name=影空胸甲
 item.shadow_sky_leggings.name=影空腿护
 item.shadow_sky_boots.name=影空轻靴
+item.shadow_sword.name=暗影剑
 
 item.silk_feather_helmet.name=丝羽头护
 item.silk_feather_chest.name=丝羽胸甲
 item.silk_feather_leggings.name=丝羽腿护
 item.silk_feather_boots.name=丝羽轻靴
+item.silk_sword.name=丝羽剑
 
 item.spa_helmet.name=魔装头护
 item.spa_chest.name=魔装胸甲
@@ -56,11 +71,13 @@ item.sorcerer_helmet.name=巫师头护
 item.sorcerer_chest.name=巫师胸甲
 item.sorcerer_leggings.name=巫师腿护
 item.sorcerer_boots.name=巫师轻靴
+item.sorcerer_sword.name=魔剑
 
 item.chlorophyte_helmet.name=叶绿头护
 item.chlorophyte_chest.name=叶绿胸甲
 item.chlorophyte_leggings.name=叶绿腿护
 item.chlorophyte_boots.name=叶绿轻靴
+item.chlorophyte_sword.name=叶绿剑
 
 //blocks
 tile.ore_overworld_unterra.name=反大地之源矿
@@ -97,11 +114,16 @@ tile.ore_spawn.name=矿物菌种
 tile.un_know.name=黯淡尘土
 tile.spellprogrammer_null.name=法术编写台
 tile.flower_little_flower.name=小花
-tile.catch_the_soul.name=夺魂花
+tile.flower_catch_the_soul.name=夺魂花
 tile.flower_c.name=青花
 tile.flower_m.name=品红花
 tile.flower_y.name=黄花
 tile.flower_grass.name=艹
+tile.blue_mushroom.name=品红花
+tile.magenta_mushroom.name=黄花
+tile.blue_magick_mushroom.name=品红花
+tile.magenta_magick_mushroom.name=黄花
+tile.enchanting_staff.name=附魔权杖
 tile.killer_queen.name=杀手皇后
 
 //entities

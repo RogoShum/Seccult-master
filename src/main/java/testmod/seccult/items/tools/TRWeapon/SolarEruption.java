@@ -6,6 +6,6 @@ public class SolarEruption extends ItemWeaponBase{
 
 	public SolarEruption(String name) {
 		super(name);
-		ItemAttribute(true, 105, 0, 19, 24, "seccult:solar", TRprojectileID.SolarEruption_Handle);
+		ItemAttribute(true, 14, 0, 19, 24, "seccult:solar", TRprojectileID.SolarEruption_Handle);
 	}
 }

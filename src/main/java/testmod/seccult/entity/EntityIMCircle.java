@@ -75,7 +75,7 @@ public class EntityIMCircle extends Entity{
 			this.setDead();
 		
 		double[] pos = {this.posX, this.posY, this.posZ};
-		double[] vec = {0, scale / 10, 0};
+		double[] vec = {0, scale / 100 * this.rand.nextDouble(), 0};
 		float[] color = {particleRedIn, particleGreenIn, particleBlueIn};
 		if(this.ticksExisted % 10 == 0)
 		NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, scale, 104));

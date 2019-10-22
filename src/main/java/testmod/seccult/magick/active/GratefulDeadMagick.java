@@ -10,6 +10,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.magick.magickState.StateManager;
@@ -28,7 +30,7 @@ public class GratefulDeadMagick extends Magick implements ControllerMagic{
 
 	@Override
 	void toBlock() {
-		for(int i = 0; i < attribute; ++i)
+		for(int i = 0; i < attribute * strengh; ++i)
 		{
 			ItemStack stack = new ItemStack(Items.DYE);
 			stack.setItemDamage(EnumDyeColor.WHITE.getDyeDamage());
@@ -50,6 +52,16 @@ public class GratefulDeadMagick extends Magick implements ControllerMagic{
                 }
             }
         }*/
+		}
+		
+		if(player.world.getTileEntity(block) != null)
+		{
+			TileEntity tile = player.world.getTileEntity(block);
+			if(tile instanceof ITickable)
+			for(int i = 0; i < attribute * strengh; ++i)
+			{
+				((ITickable) tile).update();
+			}
 		}
 	}
 

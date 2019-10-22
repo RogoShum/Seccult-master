@@ -229,9 +229,9 @@ public class NetworkEffectData implements IMessage {
         				for(BlockPos pos: Blocks)
         				{
         						float randF = mc.world.rand.nextFloat()*2;
-        						if(randF > 1.75 || randF < 0.25)
+        						if(randF > 1.85 || randF < 0.15)
         						{
-        						Particle cc = new LightFX(mc.world, pos.getX(), pos.getY(), pos.getZ(), 0, (float)scale / 50, 0, (message.scale) / 6  * randF);
+        						Particle cc = new LightFX(mc.world, pos.getX(), pos.getY(), pos.getZ(), xx, yy, zz, (message.scale) / 6  * randF);
         						cc.setRBGColorF(r, g, b);
             					Minecraft.getMinecraft().effectRenderer.addEffect(cc);
         						}

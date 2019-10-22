@@ -25,7 +25,7 @@ public class EntityProtectionShieldFX extends Entity{
 	protected EntityLivingBase owner;
 	private float Blend;
 	private float Scale;
-	private int strengh;
+	private float strengh;
 	
 	private static final DataParameter<Float> IBlend = EntityDataManager.<Float>createKey(EntityProtectionShieldFX.class, DataSerializers.FLOAT);
 	private static final DataParameter<Float> IScale = EntityDataManager.<Float>createKey(EntityProtectionShieldFX.class, DataSerializers.FLOAT);
@@ -39,7 +39,7 @@ public class EntityProtectionShieldFX extends Entity{
 		this.setEntityInvulnerable(true);
 	}
 
-	public void setOwner(EntityLivingBase owner, int strengh)
+	public void setOwner(EntityLivingBase owner, float strengh)
 	{
 		this.owner = owner;
 		this.strengh = strengh;
@@ -74,7 +74,7 @@ public class EntityProtectionShieldFX extends Entity{
 
 		if(this.owner != null)
 		{
-			owner.addPotionEffect(new PotionEffect(ModPotions.protection, 10, strengh, false, false));
+			owner.addPotionEffect(new PotionEffect(ModPotions.protection, 10, (int) strengh, false, false));
 			if(StateManager.CheckIfStatedSafe(owner, StateManager.Protection))
 			{
 				this.Blend = 0.6f;
@@ -83,7 +83,7 @@ public class EntityProtectionShieldFX extends Entity{
 				
 				double lookX = owner.getLookVec().x;
 				double lookZ = owner.getLookVec().z;
-				
+
 			this.setPositionAndRotation(owner.posX + lookX * this.strengh / 4, owner.posY + owner.height / 4, owner.posZ + lookZ * this.strengh / 4, owner.rotationYaw, owner.rotationPitch);
 		}
 

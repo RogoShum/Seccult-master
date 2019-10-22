@@ -104,22 +104,18 @@ public class EntityIMProjectile extends EntityThrowable{
 	protected void onImpact(RayTraceResult result) {
 		if (!this.world.isRemote && result.hitVec != null && !result.hitVec.equals(new Vec3d(0, 0, 0)))
         {
-			 if (!this.world.isRemote) {
-				 NBTTagCompound newMagickNBT = LoadMagick.copy();
-				 newMagickNBT.setTag("BlockHit", this.newDoubleNBTList(result.hitVec.x, result.hitVec.y - 1, result.hitVec.z));
-				 MagickCompiler newMagick = new MagickCompiler();
-				 newMagick.pushMagickData(newMagickNBT, LoadSelect, this.thrower, this.doEntity, this.doBlock);
-			 }
+			NBTTagCompound newMagickNBT = LoadMagick.copy();
+			newMagickNBT.setTag("BlockHit", this.newDoubleNBTList(result.hitVec.x, result.hitVec.y - 1, result.hitVec.z));
+			MagickCompiler newMagick = new MagickCompiler();
+			newMagick.pushMagickData(newMagickNBT, LoadSelect, this.thrower, this.doEntity, this.doBlock);
         }
 
 		if (!this.world.isRemote && result.entityHit != null)
         {
-			 if (!this.world.isRemote) {
-				 NBTTagCompound newMagickNBT = LoadMagick.copy();
-				 newMagickNBT.setUniqueId("EntityHit", result.entityHit.getUniqueID());
-				 MagickCompiler newMagick = new MagickCompiler();
-				 newMagick.pushMagickData(newMagickNBT, LoadSelect, this.thrower, this.doEntity, this.doBlock);
-			 }
+			NBTTagCompound newMagickNBT = LoadMagick.copy();
+			newMagickNBT.setUniqueId("EntityHit", result.entityHit.getUniqueID());
+			MagickCompiler newMagick = new MagickCompiler();
+			newMagick.pushMagickData(newMagickNBT, LoadSelect, this.thrower, this.doEntity, this.doBlock);
         }
 		
         if (!this.world.isRemote)

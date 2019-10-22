@@ -29,12 +29,14 @@ public class ItemSoulStone extends ItemBase{
 	public ItemSoulStone(String name) {
 		super(name);
 		this.maxStackSize = 1;
-		this.setMaxDamage(2);
-		
+
 		this.addPropertyOverride(soul_Prefix, new IItemPropertyGetter() {
 			@SideOnly(Side.CLIENT)
 			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
-				return getSoul(stack, worldIn) != null ? 1 : 0;
+				if(entityIn != null)
+					return getSoul(stack, entityIn.world) != null ? 1 : 0;
+				else
+					return getSoul(stack, worldIn) != null ? 1 : 0;
 			}
 		});
 	}
@@ -42,8 +44,6 @@ public class ItemSoulStone extends ItemBase{
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
-		if(stack.getItemDamage() > 1)
-			stack.setItemDamage(1);
 	}
 	
 	public static boolean putSoul(ItemStack stack, EntityLivingBase living)
@@ -63,7 +63,6 @@ public class ItemSoulStone extends ItemBase{
 				 living.writeToNBT(tag);
 				 tag.setString("id", className.toString());
 				 stack.getTagCompound().setTag("soul", tag);
-				 stack.setItemDamage(1);
 				 return true;
 			 }
 		}

@@ -33,8 +33,8 @@ import testmod.seccult.magick.active.MagickTeleporter;
 
 public class PlayerDataUpdateEvent {
     public static final List<String> MagicDamage  = new ArrayList<>();
-    public static List<MagickCompiler> compiler = new ArrayList<>();
-    public static List<MagickTeleporter> Teleporter = new ArrayList<>();
+    private List<MagickCompiler> compiler = new ArrayList<>();
+    private List<MagickTeleporter> Teleporter = new ArrayList<>();
     
 	private static ResourceLocation geass = new ResourceLocation("seccult:textures/spell/geass.png");
     
@@ -44,8 +44,26 @@ public class PlayerDataUpdateEvent {
     	MagicDamage.add(ModDamage.forbiddenMagic.damageType);
     	MagicDamage.add(ModDamage.normalMagic.damageType);
     	MagicDamage.add(ModDamage.pureMagic.damageType);
+    	MagicDamage.add(ModDamage.BlackVelvetHell.damageType);
+    	MagicDamage.add(ModDamage.Electro.damageType);
+    	MagicDamage.add(ModDamage.Fire.damageType);
+    	MagicDamage.add(ModDamage.Flame.damageType);
+    	MagicDamage.add(ModDamage.Flame.damageType);
+    	MagicDamage.add(ModDamage.Frozen.damageType);
+    	MagicDamage.add(ModDamage.Posion.damageType);
+    	MagicDamage.add(ModDamage.Thunder.damageType);
 	}
 	
+    public List<MagickCompiler> getCompiler()
+    {
+    	return this.compiler;
+    }
+    
+    public List<MagickTeleporter> getTeleporter()
+    {
+    	return this.Teleporter;
+    }
+    
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void onRenderWorldLast(RenderWorldLastEvent event) {

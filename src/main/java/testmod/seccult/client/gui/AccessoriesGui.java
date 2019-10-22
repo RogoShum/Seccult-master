@@ -1,5 +1,7 @@
 package testmod.seccult.client.gui;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
@@ -13,16 +15,25 @@ public class AccessoriesGui extends GuiContainer{
 	}
 
 	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		drawDefaultBackground();
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		
+		/*
+		 * GlStateManager.pushMatrix();
+		
+		GlStateManager.popMatrix();
+		 */
+		this.renderHoveredToolTip(mouseX, mouseY);
+	}
+
+	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-		GlStateManager.pushMatrix();
 		mc.getTextureManager().bindTexture(TEXTURE);
-		//drawDefaultBackground();
     	xSize = 176;
     	ySize = 172;
     	offsetX = (this.width - this.xSize) / 2;
     	offsetY = (this.height - this.ySize) / 2;
 		drawTexturedModalRect(offsetX, offsetY, 0, 0, xSize, ySize);
-		GlStateManager.popMatrix();
 	}
-
 }

@@ -27,10 +27,24 @@ public class ItemAccessories extends ItemBase{
 		return false;
 	}
 	
+	public static boolean hasAccessories(EntityPlayer player, Item item)
+	{
+		ItemStack[] stack = PlayerAccessorieHandler.get(player).getAccessories();
+		for(int i = 0; i < stack.length; i++)
+		{
+			if(stack[i] != null && stack[i].getItem() == item)
+				return true;
+		}
+		return false;
+	}
+	
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		if(PlayerAccessorieHandler.get(playerIn).addAccessorie(playerIn.getHeldItem(handIn)))
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+		{
+			playerIn.getHeldItem(handIn).shrink(1);
+			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+		}
 		return new ActionResult<ItemStack>(EnumActionResult.FAIL, playerIn.getHeldItem(handIn));
 	}
 }

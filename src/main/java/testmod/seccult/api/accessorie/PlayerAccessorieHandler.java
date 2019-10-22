@@ -8,7 +8,9 @@ import java.util.Map.Entry;
 import java.util.Random;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiInventory;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -16,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
+import testmod.seccult.ClientProxy;
 import testmod.seccult.Seccult;
 import testmod.seccult.client.gui.GuiElementLoader;
 import testmod.seccult.init.ModItems;
@@ -130,6 +133,12 @@ public class PlayerAccessorieHandler {
 
 		public void tick()
 		{	
+			KeyBinding[] keyBindings = ClientProxy.keyBindings;
+				if(!player.world.isRemote && keyBindings[2].isKeyDown())
+				{
+					player.openGui(Seccult.instance, GuiElementLoader.GUI_Accessories, player.world, (int)player.posX, (int)player.posY, (int)player.posZ);
+				}
+
 			for(int i = 0; i < itemList.length; i++)
 			{
 				if(itemList[i]!=null)
@@ -176,7 +185,7 @@ public class PlayerAccessorieHandler {
 			{
 				if(itemList[i] == null)
 				{
-					itemList[i] = access;
+					itemList[i] = access.copy();
 					return true;
 				}
 			}

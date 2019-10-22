@@ -30,6 +30,7 @@ import testmod.seccult.blocks.tileEntity.tileEnchantingStaff;
 import testmod.seccult.creativetab.CreativeTabsLoader;
 import testmod.seccult.init.ModBlocks;
 import testmod.seccult.init.ModItems;
+import testmod.seccult.items.IMagickable;
 import testmod.seccult.items.ItemMagickable;
 import testmod.seccult.util.registerModel;
 
@@ -57,7 +58,7 @@ public class BlockEnchantingStaff extends BlockContainer implements registerMode
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player,
 			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 
-		if(player.getHeldItem(hand).getItem() instanceof ItemMagickable)
+		if(player.getHeldItem(hand).getItem() instanceof IMagickable)
 		{
 			tileEnchantingStaff staff = (tileEnchantingStaff) worldIn.getTileEntity(pos);
 				if(staff.putMagickableIn(player.getHeldItem(hand)))

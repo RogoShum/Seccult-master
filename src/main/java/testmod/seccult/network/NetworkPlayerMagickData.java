@@ -15,6 +15,8 @@ import testmod.seccult.api.PlayerDataHandler.PlayerData;
 
 public class NetworkPlayerMagickData implements IMessage {
 	private int[] MagickData;
+	private float ControlAbility;
+	private float ManaStrengh;
 	
 	private long ulong;
 	private long uleast;
@@ -24,11 +26,13 @@ public class NetworkPlayerMagickData implements IMessage {
 	
     public NetworkPlayerMagickData() {}
     
-    public NetworkPlayerMagickData(int[] list, UUID p)
+    public NetworkPlayerMagickData(int[] list, UUID p, float c, float s)
     {
     	this.PUUID = p;
     	this.MagickData = list;
     	this.lengh = list.length;
+    	this.ControlAbility = c;
+    	this.ManaStrengh = s;
     }
     
     @Override
@@ -43,6 +47,9 @@ public class NetworkPlayerMagickData implements IMessage {
         list[i] = ByteBufUtils.readVarInt(buf, 2);
         
         MagickData = list;
+        ControlAbility = buf.readFloat();
+        ManaStrengh = buf.readFloat();
+        
     }
 
     @Override
@@ -54,6 +61,8 @@ public class NetworkPlayerMagickData implements IMessage {
     	{
     		ByteBufUtils.writeVarInt(buf, MagickData[i], 2);
     	}
+    	buf.writeFloat(ControlAbility);
+    	buf.writeFloat(ManaStrengh);
     }
     
     public static class PacketMessageHandler implements IMessageHandler<NetworkPlayerMagickData, IMessage> {
@@ -65,7 +74,8 @@ public class NetworkPlayerMagickData implements IMessage {
         	EntityPlayer player = world.getPlayerEntityByUUID(message.PUUID);
         	PlayerData data = PlayerDataHandler.get(player);
         	data.setMagickData(message.MagickData);
-        	
+        	data.setControl(message.ControlAbility);
+        	data.setStrengh(message.ManaStrengh);
             return null;
         }
 }

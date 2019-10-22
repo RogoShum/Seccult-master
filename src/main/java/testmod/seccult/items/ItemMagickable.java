@@ -5,7 +5,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.magick.active.Magick;
 
-public class ItemMagickable extends ItemBase{
+public class ItemMagickable extends ItemBase implements IMagickable{
 
 	public ItemMagickable(String name) {
 		super(name);

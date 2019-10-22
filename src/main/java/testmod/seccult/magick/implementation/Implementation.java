@@ -1,5 +1,6 @@
 package testmod.seccult.magick.implementation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
@@ -20,10 +21,13 @@ public abstract class Implementation implements Cloneable, doMagickNeedAtrribute
 	protected int base;
 	protected int addtion;
 	
+	protected List<Entity> emptyEntity = new ArrayList<Entity>();
+	
 	public Implementation(String nbtName) {
 		this.nbtName = nbtName;
 		ImplementationHandler.addImplementation(this);
 		ModMagicks.addImplementation(this);
+		emptyEntity.add(null);
 	}
 	
 	public abstract void getTarget();

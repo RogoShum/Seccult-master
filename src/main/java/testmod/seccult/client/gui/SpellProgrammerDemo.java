@@ -17,7 +17,8 @@ public class SpellProgrammerDemo extends Container
     {
         super();
         this.programmer = programmer;
-        NetworkHandler.getNetwork().sendToAll(new NetworkPlayerMagickData(PlayerDataHandler.get(player).getAllMagickData(), player.getUniqueID()));
+        NetworkHandler.getNetwork().sendToAll(new NetworkPlayerMagickData(PlayerDataHandler.get(player).getAllMagickData(), player.getUniqueID(), 
+        		PlayerDataHandler.get(player).getTrueControlAbility(), PlayerDataHandler.get(player).getTrueManaStrengh()));
     }
     
     @Override

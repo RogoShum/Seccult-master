@@ -7,7 +7,7 @@ public class MagickBoots extends MagickArmor{
 
 	public MagickBoots(String name, ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot equipmentSlotIn) {
 		super(name, materialIn, renderIndexIn, equipmentSlotIn);
-		setMagickAttribute(1, 50, 50);
+		setMagickAttribute(0.0F, 0.5F, 0.5F);
 	}
 	
 }

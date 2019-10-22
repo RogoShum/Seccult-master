@@ -34,9 +34,18 @@ public class AMadeInHeaven extends ItemAccessories{
 		player.ticksExisted += 20;
 		if(!player.isSneaking())
 		{
-		player.motionX += player.motionX * 0.80;
-		player.motionY += player.motionY * 0.1;
-		player.motionZ += player.motionZ * 0.80;
+			player.motionX += player.motionX * 0.20;
+			player.motionY += player.motionY * 0.05;
+			player.motionZ += player.motionZ * 0.20;
+			
+			if(player.motionX > player.getAIMoveSpeed() * 5)
+				player.motionX = player.getAIMoveSpeed() * 5;
+			
+			if(player.motionY > player.getAIMoveSpeed() * 5)
+				player.motionY = player.getAIMoveSpeed() * 5;
+			
+			if(player.motionZ > player.getAIMoveSpeed() * 5)
+				player.motionZ = player.getAIMoveSpeed() * 5;
 		}
 		if(player.ticksExisted % 200 == 0 && player.getFoodStats().getFoodLevel() > -10)
 		player.getFoodStats().addStats(-1, -1);

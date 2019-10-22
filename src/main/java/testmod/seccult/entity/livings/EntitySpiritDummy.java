@@ -21,6 +21,7 @@ import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.network.datasync.DataParameter;
@@ -38,9 +39,13 @@ import testmod.seccult.entity.livings.flying.EntityFlyable;
 import testmod.seccult.entity.livings.water.EntityWaterCreature;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.init.ModMagicks;
+import testmod.seccult.items.ItemMagickCore;
+import testmod.seccult.items.ItemMagickable;
 import testmod.seccult.items.ItemSoulStone;
+import testmod.seccult.magick.active.DefenceMagic;
 import testmod.seccult.magick.active.Magick;
 import testmod.seccult.magick.implementation.ImplementationFocused;
+import testmod.seccult.potions.ModPotions;
 
 public class EntitySpiritDummy extends EntityBase{
 	public ItemStack SoulStone = ItemStack.EMPTY;
@@ -74,13 +79,6 @@ public class EntitySpiritDummy extends EntityBase{
 	public EntitySpiritDummy(World worldIn) {
 		super(worldIn);
 		this.setSize(0.6F, 1.5F);
-		
-		this.addMagickData(8);
-		this.addMagickData(9);
-		this.addMagickData(10);
-		this.addMagickData(22);
-		this.addMagickData(25);
-		this.addMagickData(26);
 	}
 	
 	public Magick getLeftHandMagick()
@@ -218,6 +216,8 @@ public class EntitySpiritDummy extends EntityBase{
 					this.setCanSwim(true);
 				else
 					this.setCanSwim(false);
+				
+				
 			}
 			return true;
 		}
@@ -301,6 +301,9 @@ public class EntitySpiritDummy extends EntityBase{
 			return EnumActionResult.SUCCESS;
 		}
 
+		if(putMagickCore(player.getHeldItemMainhand()))
+			return EnumActionResult.SUCCESS;
+		
 		if(player.getHeldItemMainhand().getItem() == new ItemStack(Blocks.AIR).getItem() && player.isSneaking())
 		{
 			if(!this.world.isRemote)
@@ -323,6 +326,17 @@ public class EntitySpiritDummy extends EntityBase{
 		}
 		
 		return EnumActionResult.PASS;
+	}
+	
+	public boolean putMagickCore(ItemStack core)
+	{
+		if(core.getItem() instanceof ItemMagickCore && ItemMagickCore.getMagickString(core) != null)
+		{
+			this.addMagickData(ModMagicks.GetMagickIDByString(ItemMagickCore.getMagickString(core)));
+			core.shrink(1);
+			return true;
+		}
+		return false;
 	}
 	
 	@Override
@@ -596,8 +610,8 @@ public class EntitySpiritDummy extends EntityBase{
 				lostTime = 0;
 			}
 		}
-
-		if(this.leftHandMagick == null || this.rand.nextInt(10) == 0)
+		
+		if(this.leftHandMagick == null && this.rand.nextInt(10) == 0)
 		{
 			this.getControlMagic(DoYouGotMagickHand.LeftHand);
 		}
@@ -627,6 +641,7 @@ public class EntitySpiritDummy extends EntityBase{
 
 		if(this.defenceColdDown <= 5)
 		{
+			
 			this.getAttackingMagic(DoYouGotMagickHand.RightHand);
 
 			if(this.rightHandMagick != null && this.ColdDown_Right <= 1 && this.canSeeTarget(entity) && ManaValue > 20)
@@ -643,12 +658,29 @@ public class EntitySpiritDummy extends EntityBase{
 		else
 		{
 			this.getDefenceMagic(DoYouGotMagickHand.RightHand);
-			
-			if(this.rightHandMagick != null && this.ticksExisted % 5 == 0)
+			if(this.rightHandMagick != null && this.rightHandMagick instanceof DefenceMagic)
+			{
+			if(this.ticksExisted % 5 == 0 && !this.isPotionActive(ModPotions.shield))
 			{
 				if(doProtectMagick(getAttackDamage(), getAttackSpeed()) && ManaValue > 1)
 				{
 					this.ManaValue -= 2;
+				}
+			}
+			}
+			else
+			{
+				this.getAttackingMagic(DoYouGotMagickHand.RightHand);
+
+				if(this.rightHandMagick != null && this.ColdDown_Right <= 1 && this.canSeeTarget(entity) && ManaValue > 20)
+				{
+					if(doFocusMagick(DoYouGotMagickHand.RightHand, entity, getAttackDamage(), getAttackDamage()))
+					{
+						this.ColdDown_Right = 35 - this.getAttackSpeed();
+						if(ColdDown_Left < 0)
+							this.ColdDown_Right = 0;
+						this.ManaValue -= 20;
+					}
 				}
 			}
 		}
@@ -789,6 +821,11 @@ public class EntitySpiritDummy extends EntityBase{
 		}
 		else
 			nbt.setBoolean("canSwim", false);
+		
+		if(this.magickData != null)
+		{
+			nbt.setIntArray("magickData", this.magickData);
+		}
 	}
 	
 	@Override
@@ -826,6 +863,11 @@ public class EntitySpiritDummy extends EntityBase{
 		if(nbt.hasKey("canSwim"))
 		{
 			this.setCanFly(nbt.getBoolean("canSwim"));
+		}
+		
+		if(nbt.hasKey("magickData"))
+		{
+			this.magickData = nbt.getIntArray("magickData");
 		}
 	}
 }

@@ -8,6 +8,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import testmod.seccult.events.ModEventHandler;
 import testmod.seccult.events.PlayerDataUpdateEvent;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
@@ -33,7 +34,7 @@ public class MagickTeleporter {
 		
 		if(this.world == null || this.entity == null)
 		{
-			PlayerDataUpdateEvent.Teleporter.remove(this);
+			ModEventHandler.playerData.getTeleporter().remove(this);
 			 return;
 		}
 		
@@ -81,7 +82,7 @@ public class MagickTeleporter {
 	
 	public void setTeleport()
 	{
-		PlayerDataUpdateEvent.Teleporter.add(this);
+		ModEventHandler.playerData.getTeleporter().add(this);
 	}
 	
 	public void preTeleport()

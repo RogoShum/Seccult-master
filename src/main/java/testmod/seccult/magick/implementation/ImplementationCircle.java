@@ -14,9 +14,13 @@ public class ImplementationCircle extends ImplementationStoreable{
 
 	@Override
 	public void getTarget() {
-		if(this.doEntity && getEntity() != null) 
+		if(this.doEntity)
 		{
+			
+			if(getEntity() != null && !getEntity().isEmpty() && !getEntity().equals(this.emptyEntity)) 
+			{
 			List<Entity> eList = getEntity();
+			//boolean hasEntity = false;
 			for(int i = 0; i < eList.size(); i++)
 			{	
 				if(eList.get(i) != null) {
@@ -25,11 +29,17 @@ public class ImplementationCircle extends ImplementationStoreable{
 					projec.setData(LoadMagick, LoadSelect, doEntity, doBlock);
 					projec.setColor(this.color[0], this.color[1], this.color[2]);
 					player.world.spawnEntity(projec);
+					//hasEntity = true;
 				}
 			}
+			System.out.println(eList);
+			System.out.println(this.emptyEntity);
 			setEntity(null);
+			//if(hasEntity)
+			return;
+			}
 		}
-		else
+		
 		if(this.doBlock && getBlock() != null)
 		{
 			List<BlockPos> bList = getBlock();

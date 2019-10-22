@@ -4,12 +4,15 @@ import java.util.Random;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import testmod.seccult.api.PlayerDataHandler;
 import testmod.seccult.api.PlayerDataHandler.PlayerData;
 import testmod.seccult.blocks.tileEntity.tileEnchantingStaff;
 import testmod.seccult.init.ModMagicks;
+import testmod.seccult.magick.ImplementationHandler;
+import testmod.seccult.magick.MagickCompilerForEntity;
 
 public abstract class Magick implements Cloneable, doMagickNeedAtrribute{
 	private final String nbtName;
@@ -120,7 +123,6 @@ public abstract class Magick implements Cloneable, doMagickNeedAtrribute{
 	{
 		doExplosion(s);
 		createFailedFX();
-		reduceMana();
 	}
 	
 	private void createFailedFX() {
@@ -139,7 +141,8 @@ public abstract class Magick implements Cloneable, doMagickNeedAtrribute{
 		if(block != null)
 		{
 			toBlock();
-
+			if(this.player.world.getTileEntity(block) instanceof tileEnchantingStaff)
+			{
 			tileEnchantingStaff staff = (tileEnchantingStaff) this.player.world.getTileEntity(block);
 			if(staff != null && staff.getClass() == tileEnchantingStaff.class)
 			{
@@ -148,12 +151,13 @@ public abstract class Magick implements Cloneable, doMagickNeedAtrribute{
 				else
 					staff.trandMagick(this.clone(), (int)(this.strenghCost));
 			}
+			}
 		}
 
 		
 		if(data == null)
 			return;
-		reduceMana();
+
 		if(!data.player.isCreative())
 		data.addCoolDown((float)Math.sqrt(strengh) * 10);
 	}
@@ -171,11 +175,6 @@ public abstract class Magick implements Cloneable, doMagickNeedAtrribute{
 		return RGB;
 	}
 	
-	protected void reduceMana()
-	{
-		data.reduceMana(cost);
-	}
-	
     @Override  
     public Magick clone() {  
         Magick magick = null;  
@@ -186,4 +185,67 @@ public abstract class Magick implements Cloneable, doMagickNeedAtrribute{
         }  
         return magick;  
     }  
+
+    public static NBTTagCompound getMagickTag(int MagickId, int MagickPower, int MagickAttribute, int[] Imple_1)
+    {
+    	return getMagickTag(MagickId, MagickPower, MagickAttribute, Imple_1, true, true);
+    }
+    
+    public static NBTTagCompound getMagickTag(int MagickId, int MagickPower, int MagickAttribute, int[] Imple_1, boolean entity, boolean block)
+    {
+    	if(Imple_1.length != 3) return null;
+    	
+		int[] imple = {Imple_1[0]};
+		int[] imple_strength = {Imple_1[1]};
+		int[] imple_attribute = {Imple_1[2]};
+		
+		MagickCompilerForEntity compiler = new MagickCompilerForEntity(null, MagickId, MagickPower, MagickAttribute, imple, imple_strength, imple_attribute);
+		if(!block)
+			compiler.DontBlock();
+		if(!entity)
+			compiler.DontEntity();
+		return compiler.Compile(1);
+    }
+    
+    public static NBTTagCompound getMagickTag(int MagickId, int MagickPower, int MagickAttribute, int[] Imple_1, int[] Imple_2)
+    {
+    	return getMagickTag(MagickId, MagickPower, MagickAttribute, Imple_1, Imple_2, true, true);
+    }
+    
+    public static NBTTagCompound getMagickTag(int MagickId, int MagickPower, int MagickAttribute, int[] Imple_1, int[] Imple_2, boolean entity, boolean block)
+    {
+    	if(Imple_1.length != 3 || Imple_2.length != 3) return null;
+    	
+		int[] imple = {Imple_1[0], Imple_2[0]};
+		int[] imple_strength = {Imple_1[1], Imple_2[1]};
+		int[] imple_attribute = {Imple_1[2], Imple_2[2]};
+		
+		MagickCompilerForEntity compiler = new MagickCompilerForEntity(null, MagickId, MagickPower, MagickAttribute, imple, imple_strength, imple_attribute);
+		if(!block)
+			compiler.DontBlock();
+		if(!entity)
+			compiler.DontEntity();
+		return compiler.Compile(1);
+    }
+    
+    public static NBTTagCompound getMagickTag(int MagickId, int MagickPower, int MagickAttribute, int[] Imple_1, int[] Imple_2, int[] Imple_3)
+    {
+    	return getMagickTag(MagickId, MagickPower, MagickAttribute, Imple_1, Imple_2, Imple_3, true, true);
+    }
+    
+    public static NBTTagCompound getMagickTag(int MagickId, int MagickPower, int MagickAttribute, int[] Imple_1, int[] Imple_2, int[] Imple_3, boolean entity, boolean block)
+    {
+    	if(Imple_1.length != 3 || Imple_2.length != 3 || Imple_3.length != 3) return null;
+    	
+		int[] imple = {Imple_1[0], Imple_2[0], Imple_3[0]};
+		int[] imple_strength = {Imple_1[1], Imple_2[1], Imple_3[1]};
+		int[] imple_attribute = {Imple_1[2], Imple_2[2], Imple_3[2]};
+
+		MagickCompilerForEntity compiler = new MagickCompilerForEntity(null, MagickId, MagickPower, MagickAttribute, imple, imple_strength, imple_attribute);
+		if(!block)
+			compiler.DontBlock();
+		if(!entity)
+			compiler.DontEntity();
+		return compiler.Compile(1);
+    }
 }

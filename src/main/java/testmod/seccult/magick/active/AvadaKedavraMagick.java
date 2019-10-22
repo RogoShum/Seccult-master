@@ -13,7 +13,7 @@ import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
 import testmod.seccult.network.NetworkMutekiGamer;
 
-public class AvadaKedavraMagick extends Magick implements SlayMagic{
+public class AvadaKedavraMagick extends Magick implements SlayMagic, AttackingMagic{
 	protected DamageSource damage;
 	
 	public AvadaKedavraMagick(String nbtName, boolean hasDetailedText, float cost1, float cost2) 
@@ -47,8 +47,6 @@ public class AvadaKedavraMagick extends Magick implements SlayMagic{
 			damage(player);
 			EntityLivingBase living = (EntityLivingBase) entity;
 			living.hurtResistantTime = -1;
-			if(!living.attackEntityFrom(damage, strengh * 300))
-			{
 				if(living.getHealth() > strengh * 300)
 					living.setHealth(living.getHealth() - strengh * 300);
 				else
@@ -63,7 +61,6 @@ public class AvadaKedavraMagick extends Magick implements SlayMagic{
 					living.setDead();
 					living.isDead = true;
 				}
-			}
 			
 			living.hurtResistantTime = -1;
 		}

@@ -575,8 +575,9 @@ public class EntityBase extends EntityLiving implements EntityUsingMagicHelper{
 		{
 			int order = this.rand.nextInt(this.magickData.length);
 			int id = this.magickData[order];
+
 			Magick magick = ModMagicks.getMagickFromName(ModMagicks.GetMagickStringByID(id));
-			
+
 			if(type == EnumType.Attacking && magick instanceof AttackingMagic)
 			{
 				return magick;

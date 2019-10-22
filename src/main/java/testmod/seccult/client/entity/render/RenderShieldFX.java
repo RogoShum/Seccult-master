@@ -1,7 +1,5 @@
 package testmod.seccult.client.entity.render;
 
-import org.lwjgl.util.glu.Sphere;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -33,7 +31,7 @@ public class RenderShieldFX extends Render<EntityShieldFX>
          GlStateManager.translate(x, y, z);
          float scale = entity.getScale();
          float blend = entity.getBlend();
-         renderShield(scale * 2.2F, blend);
+         renderShield(scale * 2.5F, blend);
          GlStateManager.popMatrix();
     }
     

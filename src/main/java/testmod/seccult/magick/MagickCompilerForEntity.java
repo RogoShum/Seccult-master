@@ -14,6 +14,8 @@ public class MagickCompilerForEntity {
 	private int[] imple;
 	private int[] imple_strength;
 	private int[] imple_attribute;
+	private boolean doEntity;
+	private boolean doBlock;
 	private Entity entity;
 	
 	private boolean dontCost;
@@ -27,6 +29,8 @@ public class MagickCompilerForEntity {
 		this.imple_attribute = imple_attribute;
 		this.strength = strength;
 		this.attribute = attribute;
+		doEntity = true;
+		doBlock = true;
 	}
 	
 	public void DontCost()
@@ -34,11 +38,23 @@ public class MagickCompilerForEntity {
 		this.dontCost = true;
 	}
 	
+	public void DontEntity()
+	{
+		this.doEntity = false;
+	}
+	
+	public void DontBlock()
+	{
+		this.doBlock = false;
+	}
+	
 	public boolean Compile()
 	{
-		boolean doEntity = true;
-    	boolean doBlock = true;
-    	
+		return pushMagick(Compile(1));
+	}
+	
+	public NBTTagCompound Compile(int g)
+	{
     	int[][] MagickThing = new int[4][];
 
 		List<int[]> ListMagick = new ArrayList<>();
@@ -67,7 +83,7 @@ public class MagickCompilerForEntity {
     			if(imple[i] == 6)
     				doBlock = false;
     		}
-    	
+
 		MagickThing[0] = new int[1];
 		MagickThing[1] = new int[1];
 		MagickThing[2] = new int[1];
@@ -96,20 +112,19 @@ public class MagickCompilerForEntity {
 				SelectorAttributeList[i][z] = ListSelectorAttribute.get(i)[z];
 			}
 		}
-		
-		return pushMagick(MagickThing, SelectorList, SelectorPowerList, SelectorAttributeList, 1, doEntity, doBlock);
+		NBTTagCompound MagickTag = MagickCompiler.compileMagick(MagickThing, SelectorList, SelectorPowerList, SelectorAttributeList, 1, doEntity, doBlock);
+		return MagickTag;
 	}
 	
-	public boolean pushMagick(int[][] MagickData, int[][] Selector, int[][] SelectorPower, int[][] SelectorAttribute, int amount, boolean doEntity, boolean doBlock)
+	public boolean pushMagick(NBTTagCompound MagickTag)
 	{
 		try {
-		NBTTagCompound tag = MagickCompiler.compileMagick(MagickData, Selector, SelectorPower, SelectorAttribute, amount, doEntity, doBlock);
 		MagickCompiler compiler = new MagickCompiler();
 		if(this.entity != null)
 		{
 			if(dontCost)
 			compiler.dontCost = true;
-			compiler.pushMagickData(tag, this.entity);
+			compiler.pushMagickData(MagickTag, this.entity);
 			return true;
 		}
 		}

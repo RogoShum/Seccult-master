@@ -12,9 +12,10 @@ public class SorcererArmor extends MagickArmor {
 	}
 
 	public static boolean hasArmorSetItem(EntityPlayer player) {
-		return hasArmorSetItem(player, 0, ModItems.SORCERER_HELMET) && 
+		return false;
+		/*return hasArmorSetItem(player, 0, ModItems.SORCERER_HELMET) && 
 				hasArmorSetItem(player, 1, ModItems.SORCERER_CHEST) && 
 				hasArmorSetItem(player, 2, ModItems.SORCERER_LEGGINGS) && 
-				hasArmorSetItem(player, 3, ModItems.SORCERER_BOOTS);
+				hasArmorSetItem(player, 3, ModItems.SORCERER_BOOTS);*/
 	}
 }

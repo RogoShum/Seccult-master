@@ -98,6 +98,56 @@ public class Seccult
 					return ItemMagickCore.getMagickColorInt(stack);
 			}
 		}, ModItems.MagickCore);
+		
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor()
+		{
+			@SideOnly(Side.CLIENT)
+			@Override
+			public int colorMultiplier(ItemStack stack, int tintIndex) {
+
+					return ItemMagickCore.getMagickColorInt(stack);
+			}
+		}, ModItems.CHLOROPHYTE_SWORD);
+		
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor()
+		{
+			@SideOnly(Side.CLIENT)
+			@Override
+			public int colorMultiplier(ItemStack stack, int tintIndex) {
+
+					return ItemMagickCore.getMagickColorInt(stack);
+			}
+		}, ModItems.OCEAN_SWORD);
+		
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor()
+		{
+			@SideOnly(Side.CLIENT)
+			@Override
+			public int colorMultiplier(ItemStack stack, int tintIndex) {
+
+					return ItemMagickCore.getMagickColorInt(stack);
+			}
+		}, ModItems.SHADOW_SWORD);
+		
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor()
+		{
+			@SideOnly(Side.CLIENT)
+			@Override
+			public int colorMultiplier(ItemStack stack, int tintIndex) {
+
+					return ItemMagickCore.getMagickColorInt(stack);
+			}
+		}, ModItems.SILK_SWORD);
+		
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor()
+		{
+			@SideOnly(Side.CLIENT)
+			@Override
+			public int colorMultiplier(ItemStack stack, int tintIndex) {
+
+					return ItemMagickCore.getMagickColorInt(stack);
+			}
+		}, ModItems.SORCERER_SWORD);
 	}
 }
 

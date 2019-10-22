@@ -5,7 +5,7 @@ import net.minecraft.util.DamageSource;
 import testmod.seccult.entity.EntityBlackVelvetHell;
 import testmod.seccult.init.ModMagicks;
 
-public class BlackVelvetHellMagick extends Magick implements SlayMagic{
+public class BlackVelvetHellMagick extends Magick implements SlayMagic, AttackingMagic{
 	protected DamageSource damage;
 	
 	public BlackVelvetHellMagick(String nbtName, boolean hasDetailedText, float cost1, float cost2) 

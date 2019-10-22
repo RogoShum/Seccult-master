@@ -81,6 +81,7 @@ public class PlayerDataHandler {
 	
 	public static class PlayerData{
 		static Random rand = new Random();
+		private static final String TAG_BASE_MANA_TALENT_VALUE = "BaseManaTalentValue";
 		private static final String TAG_MANA_TALENT_VALUE = "ManaTalentValue";
 		private static final String TAG_COMTROL_ABILITY = "ControlAbility";
 		private static final String TAG_MANA_STRENGH = "ManaStrengh";
@@ -94,6 +95,7 @@ public class PlayerDataHandler {
 		private NBTTagList MagickList;
 		
 		private float ManaTalentValue;
+		private float BaseManaTalentValue;
 		private float ControlAbility;
 		private float ManaStrengh;
 		private float GrowthAbility;
@@ -138,6 +140,7 @@ public class PlayerDataHandler {
 		
 		public void readFromNBT(NBTTagCompound cmp) {
 			ManaTalentValue = cmp.getFloat(TAG_MANA_TALENT_VALUE);
+			BaseManaTalentValue = cmp.getFloat(TAG_BASE_MANA_TALENT_VALUE);
 			MaxManaValue = cmp.getFloat(TAG_MAX_MANA_VALUE);
 			ControlAbility = cmp.getFloat(TAG_COMTROL_ABILITY);
 			ManaStrengh = cmp.getFloat(TAG_MANA_STRENGH);
@@ -163,7 +166,7 @@ public class PlayerDataHandler {
 				color4 = cmp.getInteger("Color4");
 			}
 			
-			if(ManaTalentValue == 0)
+			if(BaseManaTalentValue == 0)
 			{
 				ArrayList<Float> list = new ArrayList<Float>();
 				for(int i = 0; i < 155; i++) 
@@ -184,11 +187,12 @@ public class PlayerDataHandler {
 				float y = rand.nextFloat() * list.get(rand.nextInt(155));
 				if(y < 1)
 					y = 1;
-				ManaTalentValue = y;
+				BaseManaTalentValue = y;
+				ManaTalentValue = BaseManaTalentValue;
 			}
 			
-			if(MaxManaValue < 100)
-				MaxManaValue = 100;
+			if(MaxManaValue < 20)
+				MaxManaValue = 20;
 			
 			if(ControlAbility == 0)
 				ControlAbility = ManaTalentValue / 1+rand.nextFloat();
@@ -234,6 +238,7 @@ public class PlayerDataHandler {
 
 		public void writeToNBT(NBTTagCompound cmp) {
 			try{
+				cmp.setFloat(TAG_BASE_MANA_TALENT_VALUE, BaseManaTalentValue);
 				cmp.setFloat(TAG_MANA_TALENT_VALUE, ManaTalentValue);
 				cmp.setFloat(TAG_COMTROL_ABILITY, ControlAbility);
 				cmp.setFloat(TAG_MANA_STRENGH, ManaStrengh);
@@ -435,16 +440,27 @@ public class PlayerDataHandler {
 		}
 		
 		public float getManaTalent() {
-			return ManaTalentValue;
+			return BaseManaTalentValue;
 		}
+		
 		public float getManaStrengh() {
 			return ManaStrengh + ManaStrengh * getPlayerArmorAttribute(0);
 		}
+		
+		public float getTrueManaStrengh() {
+			return ManaStrengh;
+		}
+		
 		public float getGrowth() {
 			return GrowthAbility;
 		}
+		
 		public float getControlAbility() {
 			return ControlAbility + ControlAbility * getPlayerArmorAttribute(0);
+		}
+		
+		public float getTrueControlAbility() {
+			return ControlAbility;
 		}
 		
 		public float getPlayerArmorAttribute(int type)
@@ -652,6 +668,18 @@ public class PlayerDataHandler {
 		{
 			System.out.println(client + " " + bool);
 			this.mutekiGamer = bool;
+		}
+		
+		public void setControl(float c)
+		{
+			if(!client) return;
+			this.ControlAbility = c;
+		}
+		
+		public void setStrengh(float s)
+		{
+			if(!client) return;
+			this.ManaStrengh = s;
 		}
 	}
 }

@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,6 +16,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -22,6 +24,7 @@ import testmod.seccult.Seccult;
 import testmod.seccult.client.FX.LightFX;
 import testmod.seccult.client.FX.PentagonFX;
 import testmod.seccult.client.FX.StarFX;
+import testmod.seccult.init.ModSounds;
 import testmod.seccult.items.ItemMagickable;
 import testmod.seccult.magick.active.Magick;
 import testmod.seccult.magick.magickState.StateManager;
@@ -67,7 +70,6 @@ public class tileEnchantingStaff extends TileEntity implements ITickable {
 		
 		if(this.stack != null && !this.stack.getTagCompound().equals(this.prveTag))
 		{
-			System.out.println("QAQ");
 			if(this.entityItem != null)
 				this.entityItem.setDead();
 			this.entityItem = null;
@@ -127,6 +129,13 @@ public class tileEnchantingStaff extends TileEntity implements ITickable {
         	Minecraft.getMinecraft().effectRenderer.addEffect(me);
         	Minecraft.getMinecraft().effectRenderer.addEffect(smoke);
 			}
+		
+		doRingSound();
+	}
+	
+	public void doRingSound()
+	{
+		this.world.playSound(null, pos, SoundEvents.BLOCK_ANVIL_PLACE, SoundCategory.VOICE, 1F, this.world.rand.nextFloat() / 2);
 	}
 	
 	public boolean putMagickableIn(ItemStack stack)

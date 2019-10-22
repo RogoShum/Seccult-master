@@ -26,8 +26,9 @@ public class ProtectionMagick extends Magick implements DefenceMagic{
 			EntityProtectionShieldFX fx = new EntityProtectionShieldFX(entity.world);
 			double lookX = entity.getLookVec().x;
 			double lookZ = entity.getLookVec().z;
-			fx.setPositionAndRotation(entity.posX + lookX * this.strengh / 4, entity.posY + entity.height / 4, entity.posZ + lookZ * this.strengh / 4, entity.rotationYaw, entity.rotationPitch);
-			fx.setOwner((EntityLivingBase)entity, (int)this.strengh);
+
+			fx.setPositionAndRotation(entity.posX + lookX * this.strengh / 4 , entity.posY + entity.height / 4, entity.posZ + lookZ * this.strengh / 4 , entity.rotationYaw, entity.rotationPitch);
+			fx.setOwner((EntityLivingBase)entity, this.strengh);
 			if(!entity.world.isRemote)
 				entity.world.spawnEntity(fx); 
 		}

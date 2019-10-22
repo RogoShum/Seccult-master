@@ -8,6 +8,7 @@ public class SilkFeatherHelmet extends SilkFeatherArmor{
 	public SilkFeatherHelmet(String name, ArmorMaterial materialIn, int renderIndexIn,
 			EntityEquipmentSlot equipmentSlotIn) {
 		super(name, materialIn, renderIndexIn, equipmentSlotIn);
+		setMagickAttribute(0.1F, 1F, 1F);
 	}
 
 }

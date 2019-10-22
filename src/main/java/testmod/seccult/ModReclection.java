@@ -4,6 +4,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import net.minecraft.client.gui.inventory.GuiChest;
+import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -57,5 +59,19 @@ public class ModReclection {
 		CombatTracker tracker = new CombatTracker(null);
 		tracker.reset();
 		combat.set(living, tracker);
+	}
+	
+	public static Object Controller_Connection(PlayerControllerMP data) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
+	{
+		Field ManaValue = PlayerControllerMP.class.getDeclaredField("connection");
+		ManaValue.setAccessible(true);
+		return ManaValue.get(data);
+	}
+	
+	public static Object GuiChest(GuiChest data) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
+	{
+		Field ManaValue = GuiChest.class.getDeclaredField("lowerChestInventory");
+		ManaValue.setAccessible(true);
+		return ManaValue.get(data);
 	}
 }

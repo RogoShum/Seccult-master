@@ -45,21 +45,31 @@ public class ModItems
 	
 	public static final ArmorMaterial ARMOR_MATERIAL_OCEAN = EnumHelper.addArmorMaterial("armor_material_ocean", "seccult:ocean", 30,
 			new int[] {5, 7, 7, 5}, 200, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 18.0F);
-	
+	 
 	//Items
 	public static final Item SPA = new ItemBase("spa");
 	public static final Item TimeStopper = new ItemTimeStopper("timestopper");
 	public static final Item BlackVelvetHell = new ItemBlackVelvetHell("blackvelvethell");
 	public static final Item YesYourHighness = new ItemYesYourHighness("yesyourhighness");
 	public static final Item EVENT_THING = new ItemTerrariaEventThing("eow");
-	public static final Item SCP173 = new ItemSCP173("scp173");
+	//public static final Item SCP173 = new ItemSCP173("scp173");
 	public static final Item Wand = new ItemWand("wand");
 	public static final Item SoulStone = new ItemSoulStone("soul_stone");
 	public static final Item DummySystem = new ItemDummySystem("dummy_system");
 	public static final Item MagickCore = new ItemMagickCore("magick_core");
+	public static final Item DamageStaff = new ItemStaff("damage_staff");
+	public static final Item DefenceStaff = new ItemStaff("defence_staff");
+	public static final Item AlterationStaff = new ItemStaff("alteration_staff");
+	public static final Item KnowledgeScroll = new ItemKnowledgeScroll("knowledge_scroll");
 	
 	//Tools
-	public static final Item SPA_SOWRD = new SwordTool("spa_sword");
+	public static final Item SILK_SWORD = new SwordTool("silk_sword", -1, 130, 1.0F, 2, 60);
+	public static final Item SPA_SWORD = new SwordTool("spa_sword", 1, 233, 0.5F, 5, 20);
+	public static final Item SORCERER_SWORD = new SwordTool("sorcerer_sword", 2, 450, 0.8F, 7, 60);
+	public static final Item CHLOROPHYTE_SWORD = new SwordTool("chlorophyte_sword", 3, 360, 1.2F, 8, 80);
+	public static final Item OCEAN_SWORD = new SwordTool("ocean_sword", 3, 682, 1.4F, 9, 90);
+	public static final Item SHADOW_SWORD = new SwordTool("shadow_sword", 5, 1444, 30F, 12, 120);
+	public static final Item Thunder_SWORD = new ThunderSword("thunder_sword");
 	public static final ItemPickaxe SPA_PICKAXE = new PickaxeTool("spa_pickaxe", MATERIAL_SPA);
 	
 	//TRWeapon
@@ -110,10 +120,10 @@ public class ModItems
 	public static final Item SPA_LEGGINGS = new MagickLegs("spa_leggings", ARMOR_MATERIAL_SPA, 1, EntityEquipmentSlot.LEGS);
 	public static final Item SPA_BOOTS = new MagickBoots("spa_boots", ARMOR_MATERIAL_SPA, 1, EntityEquipmentSlot.FEET);
 	
-	public static final Item SORCERER_HELMET = new SorcererHelmet("sorcerer_helmet", ARMOR_MATERIAL_SORCERER, 1, EntityEquipmentSlot.HEAD);
-	public static final Item SORCERER_CHEST = new SorcererChest("sorcerer_chest", ARMOR_MATERIAL_SORCERER, 1, EntityEquipmentSlot.CHEST);
-	public static final Item SORCERER_LEGGINGS = new SorcererLegs("sorcerer_leggings", ARMOR_MATERIAL_SORCERER, 1, EntityEquipmentSlot.LEGS);
-	public static final Item SORCERER_BOOTS = new SorcererBoot("sorcerer_boots", ARMOR_MATERIAL_SORCERER, 1, EntityEquipmentSlot.FEET);
+	//public static final Item SORCERER_HELMET = new SorcererHelmet("sorcerer_helmet", ARMOR_MATERIAL_SORCERER, 1, EntityEquipmentSlot.HEAD);
+	//public static final Item SORCERER_CHEST = new SorcererChest("sorcerer_chest", ARMOR_MATERIAL_SORCERER, 1, EntityEquipmentSlot.CHEST);
+	//public static final Item SORCERER_LEGGINGS = new SorcererLegs("sorcerer_leggings", ARMOR_MATERIAL_SORCERER, 1, EntityEquipmentSlot.LEGS);
+	//public static final Item SORCERER_BOOTS = new SorcererBoot("sorcerer_boots", ARMOR_MATERIAL_SORCERER, 1, EntityEquipmentSlot.FEET);
 	
 	public static final Item CHLOROPHYTE_HELMET = new ChlorophyteHelmet("chlorophyte_helmet", ARMOR_MATERIAL_CHLOROPHYTE, 1, EntityEquipmentSlot.HEAD);
 	public static final Item CHLOROPHYTE_CHEST = new ChlorophyteChest("chlorophyte_chest", ARMOR_MATERIAL_CHLOROPHYTE, 1, EntityEquipmentSlot.CHEST);
@@ -133,6 +143,12 @@ public class ModItems
 	//Accessories
 	public static final Item A_LAST_STRUGGLE = new ALastStruggle("last_struggle");
 	public static final Item A_MADE_IN_HEAVEN = new AMadeInHeaven("made_in_heaven");
-	public static final Item RECOVERY_THING = new AMagicCaster("item_recovery");
-	public static final Item VirtulBody = new AVirtulBody("virtul_body");
+	public static final Item A_MAGICK_CASTER = new AMagicCaster("magick_caster");
+	//public static final Item RECOVERY_THING = new ARecoveryCore("item_recovery");
+	//public static final Item VirtulBody = new AVirtulBody("virtul_body");
+	public static final Item CANDY_RING = new ACandyRing("candy_ring");
+	public static final Item Attack_REFRACT = new AAttackRefract("attack_refract");
+	public static final Item EFFECT_REFRACT = new AEffectRefract("effect_refract");
+	public static final Item FRIENDSHIP_RING = new AFriendshipRing("friendship_ring");
+	public static final Item Medusa_Head = new AMedusaHead("medusa_head");
 }

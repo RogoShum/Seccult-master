@@ -7,10 +7,14 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
+import testmod.seccult.api.PlayerDataHandler;
+import testmod.seccult.api.PlayerDataHandler.PlayerData;
+import testmod.seccult.events.ModEventHandler;
 import testmod.seccult.events.PlayerDataUpdateEvent;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.magick.active.ElectroMagick;
@@ -41,6 +45,7 @@ public class MagickCompiler {
 	private boolean toDo;
 	private boolean cycle;
 	public float[] color = {0, 0, 0};
+	private float cost;
 	
 	List<Entity> entity = new ArrayList<>();
 	List<BlockPos> block = new ArrayList<>();
@@ -94,7 +99,6 @@ public class MagickCompiler {
 		{
 			LoadMagick = magickNbt.getTagList("Magick", 10);
 			LoadSelect = magickNbt.getTagList("Selector", 10);
-			
 			NBTTagCompound MagickNBT = LoadMagick.getCompoundTagAt(i);
 			int slot = MagickNBT.getInteger("Slot");
 			
@@ -118,17 +122,48 @@ public class MagickCompiler {
 			newMagick.toDo = true;
 			newMagick.doEntity = MagickAttribute.getBoolean("doEntity");
 			newMagick.doBlock = MagickAttribute.getBoolean("doBlock");
-    		if(magick == null && !MagickNBT.hasNoTags()) {
-    			magick = ModMagicks.getMagickFromName(
+    		if(newMagick.magick == null && !MagickNBT.hasNoTags()) {
+    			newMagick.magick = ModMagicks.getMagickFromName(
 				ModMagicks.GetMagickStringByID(
 				MagickNBT.getInteger("Magick")));
-			if(magick != null)
-			{
-				color = magick.getRGB();
-			}
+
+    			if(newMagick.magick == null)
+    				return;
+    			
+    			newMagick.magickpower = MagickNBT.getInteger("MagickPower");
+    			newMagick.magickattribute = MagickNBT.getInteger("MagickAttribute");
+    			newMagick.color = newMagick.magick.getRGB();
+    			newMagick.entity.add(newMagick.getEntityHit());
+    			newMagick.block.add(newMagick.getBlockHit());
+    			
+    			if(e instanceof EntityPlayer) {
+    				EntityPlayer player = (EntityPlayer) e;
+    				
+    				PlayerData data = PlayerDataHandler.get(player);
+    				
+        			cost = newMagick.magick.strenghCost * newMagick.magickpower;
+        			cost = cost * newMagick.magick.attributeCost + cost * newMagick.magick.attributeCost * newMagick.magickattribute;
+
+        			if(dontCost)
+        				cost = 0;
+    				
+    				if(data.getMana() > cost || player.isCreative())
+    				{
+    					if(!player.isCreative())
+    					this.reduceMana(data);
+    					ModEventHandler.playerData.getCompiler().add(newMagick);
+    				}
+
+        			color = newMagick.magick.getRGB();
+    				
+    			}
+    			else
+    			{
+        			color = newMagick.magick.getRGB();
+        			ModEventHandler.playerData.getCompiler().add(newMagick);
+    			}
+    			
     		}
-			
-			PlayerDataUpdateEvent.compiler.add(newMagick);
 		}
 	}
 	
@@ -148,7 +183,22 @@ public class MagickCompiler {
 			newMagick.toDo = true;
 			newMagick.doEntity = doEntity;
 			newMagick.doBlock = doBlock;
-			PlayerDataUpdateEvent.compiler.add(newMagick);
+			
+			if(newMagick.magick == null && !newMagick.MagickNBT.hasNoTags()) {
+    			newMagick.magick = ModMagicks.getMagickFromName(
+				ModMagicks.GetMagickStringByID(
+						newMagick.MagickNBT.getInteger("Magick")));
+
+    			if(newMagick.magick == null)
+    				return;
+    			
+    			newMagick.magickpower = newMagick.MagickNBT.getInteger("MagickPower");
+    			newMagick.magickattribute = newMagick.MagickNBT.getInteger("MagickAttribute");
+    			newMagick.color = newMagick.magick.getRGB();
+    			newMagick.entity.add(newMagick.getEntityHit());
+    			newMagick.block.add(newMagick.getBlockHit());
+			}
+			ModEventHandler.playerData.getCompiler().add(newMagick);
 	}
 	
 	public void onUpdate()
@@ -188,21 +238,6 @@ public class MagickCompiler {
 				cycle = true;
 			}
 			
-			
-    		if(magick == null && !MagickNBT.hasNoTags()) {
-    			magick = ModMagicks.getMagickFromName(
-				ModMagicks.GetMagickStringByID(
-				MagickNBT.getInteger("Magick")));
-			if(magick == null)
-				return;
-			
-			magickpower = MagickNBT.getInteger("MagickPower");
-			magickattribute = MagickNBT.getInteger("MagickAttribute");
-			color = magick.getRGB();
-			entity.add(getEntityHit());
-			block.add(getBlockHit());
-    		}
-    		
     		if(!cycle) {
 			NBTTagCompound SelectNBT = Select.getCompoundTagAt(order);
 			Implementation imples = (ImplementationHandler.getImplementationFromName(
@@ -268,12 +303,8 @@ public class MagickCompiler {
 				cycle = true;
 			}
     		}
-    		
+
     		if(magick != null && cycle && tick > 5) {
-    			float cost = magick.strenghCost * magickpower;
-    			cost = cost * magick.attributeCost + cost * magick.attributeCost * magickattribute;
-    			if(dontCost)
-    				cost = 0;
     			if(block != null)
 				{
 					for(int x = 0; x < block.size(); x++)
@@ -288,6 +319,11 @@ public class MagickCompiler {
 					done = true;
 				}
     		}
+	}
+	
+	protected void reduceMana(PlayerData data)
+	{
+		data.reduceMana(cost);
 	}
 	
 	public Entity getEntityHit()

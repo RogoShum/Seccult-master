@@ -275,14 +275,14 @@ public class StateManager {
 	{
 		double[] pos = {0, 0, 0};
 		double[] move = {movex, movey, movez};
-		NetworkHandler.getNetwork().sendToAllAround(new NetworkEntityMoving(e.getUniqueID(), pos, move, type), new TargetPoint(e.dimension, e.posX, e.posY, e.posZ, 3));
+		NetworkHandler.getNetwork().sendToAllAround(new NetworkEntityMoving(e.getUniqueID(), pos, move, 1), new TargetPoint(e.dimension, e.posX, e.posY, e.posZ, 3));
 	}
 	
 	public static void setPlayerTP(Entity e, double movex, double movey, double movez, int type)
 	{
 		double[] move = {0, 0, 0};
 		double[] pos = {movex, movey, movez};
-		NetworkHandler.getNetwork().sendToAllAround(new NetworkEntityMoving(e.getUniqueID(), pos, move, type), new TargetPoint(e.dimension, e.posX, e.posY, e.posZ, 3));
+		NetworkHandler.getNetwork().sendToAllAround(new NetworkEntityMoving(e.getUniqueID(), pos, move, 0), new TargetPoint(e.dimension, e.posX, e.posY, e.posZ, 3));
 	}
 	
 	public static void setState(Entity entity, String s, int time, int level)

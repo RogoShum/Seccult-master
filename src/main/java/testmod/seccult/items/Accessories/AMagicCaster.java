@@ -4,11 +4,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import testmod.seccult.events.ModEventHandler;
 import testmod.seccult.events.PlayerDataUpdateEvent;
+import testmod.seccult.init.ModMagicks;
+import testmod.seccult.magick.ImplementationHandler;
 import testmod.seccult.magick.MagickCompiler;
+import testmod.seccult.magick.active.Magick;
 
 public class AMagicCaster extends ItemAccessories{
-	private NBTTagCompound MAGICK;
+
 	public AMagicCaster(String name) {
 		super(name);
 	}
@@ -16,25 +20,51 @@ public class AMagicCaster extends ItemAccessories{
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
 		super.onArmorTick(world, player, itemStack);
+		
+		if(this.getMagickData(itemStack) == null)
+		{
+			int[] Imple_1 = {ModMagicks.GetMagickIDByString(ImplementationHandler.SelfI), 0, 0};
+			int[] Imple_2 = {ModMagicks.GetMagickIDByString(ImplementationHandler.FocuseI), 30, 0};
+			
+			this.pushMagick(itemStack, Magick.getMagickTag(ModMagicks.GetMagickIDByString(ModMagicks.LifeAbsorptionMagick), 1, 4, Imple_1, Imple_2, true, false));
+		}
+		
 		if(!hasAccessories(player, itemStack)) return;
-		if(MAGICK != null)
-			TickMagick(player);
+		if(getMagickData(itemStack) != null)
+			TickMagick(getMagickData(itemStack), player);
 	}
 	
-	private void TickMagick(EntityPlayer player)
+	private void TickMagick(NBTTagCompound itemStack, EntityPlayer player)
 	{
 		MagickCompiler compiler = new MagickCompiler();
-		compiler.pushMagickData(MAGICK, player);
-		PlayerDataUpdateEvent.compiler.add(compiler);
+		compiler.pushMagickData(itemStack, player);
+		ModEventHandler.playerData.getCompiler().add(compiler);
 	}
 	
-	public void pushMagick(NBTTagCompound magick)
+	public NBTTagCompound getMagickData(ItemStack stack)
 	{
-		this.MAGICK = magick;
+		if(stack.hasTagCompound() && stack.getTagCompound().hasKey("Magick_Data"))
+		{
+			return stack.getTagCompound().getCompoundTag("Magick_Data");
+		}
+
+		return null;
 	}
 	
-	public void clearMagick()
+	public void pushMagick(ItemStack stack, NBTTagCompound magick)
 	{
-		this.MAGICK = null;
+		if(!stack.hasTagCompound())
+			stack.setTagCompound(new NBTTagCompound());
+		
+		stack.getTagCompound().setTag("Magick_Data", magick);
+	}
+	
+	public void clearMagick(ItemStack stack)
+	{
+		if(!stack.hasTagCompound())
+			return;
+		
+		if(stack.getTagCompound().hasKey("Magick_Data"))
+			stack.getTagCompound().removeTag("Magick_Data");
 	}
 }
