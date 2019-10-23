@@ -159,40 +159,6 @@ public abstract class EntityFlyable extends EntityBase implements IAnimals
         compound.setByte("BatFlags", ((Byte)this.dataManager.get(HANGING)).byteValue());
     }
 
-    /**
-     * Checks if the entity's current position is a valid location to spawn this entity.
-     */
-    public boolean getCanSpawnHere()
-    {
-        BlockPos blockpos = new BlockPos(this.posX, this.getEntityBoundingBox().minY, this.posZ);
-
-        if (blockpos.getY() >= this.world.getSeaLevel())
-        {
-            return false;
-        }
-        else
-        {
-            int i = this.world.getLightFromNeighbors(blockpos);
-            int j = 4;
-
-            if (this.isDateAroundHalloween(this.world.getCurrentDate()))
-            {
-                j = 7;
-            }
-            else if (this.rand.nextBoolean())
-            {
-                return false;
-            }
-
-            return i > this.rand.nextInt(j) ? false : super.getCanSpawnHere();
-        }
-    }
-
-    private boolean isDateAroundHalloween(Calendar p_175569_1_)
-    {
-        return p_175569_1_.get(2) + 1 == 10 && p_175569_1_.get(5) >= 20 || p_175569_1_.get(2) + 1 == 11 && p_175569_1_.get(5) <= 3;
-    }
-
     public float getEyeHeight()
     {
         return this.height / 2.0F;

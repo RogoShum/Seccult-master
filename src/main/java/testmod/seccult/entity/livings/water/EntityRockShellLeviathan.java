@@ -10,24 +10,33 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.BossInfo.Color;
+import net.minecraft.world.BossInfo.Overlay;
 import net.minecraft.world.World;
 import testmod.seccult.entity.EntityAdvanceLaser;
 import testmod.seccult.entity.EntityLaserBeamBase;
 import testmod.seccult.entity.EntityLightingThing;
 import testmod.seccult.entity.EntityMagickBubble;
+import testmod.seccult.entity.livings.EntityBase;
+import testmod.seccult.entity.livings.IBossBase;
+import testmod.seccult.events.BossEventHandler;
 import testmod.seccult.init.ModDamage;
+import testmod.seccult.init.ModItems;
+import testmod.seccult.init.ModSounds;
 import testmod.seccult.magick.active.CopyMagick;
 import testmod.seccult.magick.active.TeleportMagick;
 import testmod.seccult.network.NetworkEntityMoving;
 import testmod.seccult.network.NetworkHandler;
 
-public class EntityRockShellLeviathan extends EntityWaterCreature{
+public class EntityRockShellLeviathan extends EntityWaterCreature implements IBossBase{
 	private EntityLivingBase huntingTarget; 
 	private EntityLivingBase attackTarget; 
 	
@@ -50,6 +59,8 @@ public class EntityRockShellLeviathan extends EntityWaterCreature{
 	protected final int iceBeamCDLimit = 200;
 	protected int iceBeamCD = 0;
 	
+	private BossEventHandler BGM;
+	
 	public EntityRockShellLeviathan(World worldIn) {
 		super(worldIn);		
 		this.setSize(10F, 7.5F);
@@ -60,6 +71,11 @@ public class EntityRockShellLeviathan extends EntityWaterCreature{
 	@Override
 	public void setDead() {
 		super.setDead();
+	}
+	
+	@Override
+	public boolean isNonBoss() {
+		return false;
 	}
 	
 	@Override
@@ -352,6 +368,13 @@ public class EntityRockShellLeviathan extends EntityWaterCreature{
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) 
 	{
+		if(this.BGM == null && source.getTrueSource() instanceof EntityPlayer)
+		{
+			ArrayList<EntityBase> boss = new ArrayList<>();
+			boss.add(this);
+			this.BGM = new BossEventHandler(boss);
+		}
+		
 		boolean hasDamage = false;
 		for(DamageReduce re : damageList)
 		{
@@ -627,6 +650,11 @@ public class EntityRockShellLeviathan extends EntityWaterCreature{
 	}
 	
 	@Override
+	protected Item getDropItem() {
+		return ModItems.Ocean_Enssence;
+	}
+	
+	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
 		
@@ -777,5 +805,25 @@ public class EntityRockShellLeviathan extends EntityWaterCreature{
 			}
 			bubbleGunCD = bubbleGunCDLimit;
 		}
+	}
+
+	@Override
+	public Color getBarColor() {
+		return Color.BLUE;
+	}
+
+	@Override
+	public Overlay getOverlay() {
+		return Overlay.PROGRESS;
+	}
+
+	@Override
+	public boolean DarkenSky() {
+		return false;
+	}
+
+	@Override
+	public SoundEvent getBGM() {
+		return ModSounds.A184;
 	}
 }

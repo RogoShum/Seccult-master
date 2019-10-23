@@ -8,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -30,6 +31,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import testmod.seccult.Seccult;
 import testmod.seccult.entity.RogoEntityGetData;
@@ -340,5 +342,12 @@ public class EntityChangeling extends EntityCreature implements RogoEntityGetDat
         }
         
         this.getEntityData().setTag(Seccult.Data, newlist);
+	}
+	
+	@Override
+	protected SoundEvent getAmbientSound() {
+		//if(this.Entity != null && this.Entity instanceof EntityLiving)
+
+		return super.getAmbientSound();
 	}
 }

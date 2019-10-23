@@ -1,3 +1,17 @@
 {
-	"ring": { "sounds":["seccult:ring"], "subtitle": "seccult.subtitle.ring" }
+	"ring": { "sounds":["seccult:ring"], "subtitle": "seccult.subtitle.ring" },
+	"a184": { "sounds":[{"name": "seccult:184", "stream": true}]},
+	"slit": { "sounds":[{"name": "seccult:slit", "stream": true}]},
+	"afterglow": { "sounds":[{"name": "seccult:afterglow", "stream": true}]},
+	"imprinting": { "sounds":[{"name": "seccult:imprinting", "stream": true}]},
+	"light": { "sounds":[{"name": "seccult:light", "stream": true}]},
+	"saika": { "sounds":[{"name": "seccult:saika", "stream": true}]},
+	"summer": { "sounds":[{"name": "seccult:summer", "stream": true}]},
+	"dadada": { "sounds":[{"name": "seccult:dadada", "stream": true}]},
+	"gatorix": { "sounds":[{"name": "seccult:gatorix", "stream": true}]},
+	"twentyone": { "sounds":[{"name": "seccult:twentyone", "stream": true}]},
+	"storia": { "sounds":[{"name": "seccult:storia", "stream": true}]},
+	"zero": { "sounds":[{"name": "seccult:zero", "stream": true}]},
+	"got": { "sounds":[{"name": "seccult:got", "stream": true}]},
+	"qualia": { "sounds":[{"name": "seccult:qualia", "stream": true}]}
 }

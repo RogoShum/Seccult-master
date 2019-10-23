@@ -10,6 +10,7 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
@@ -17,6 +18,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import testmod.seccult.entity.livings.water.EntityRockShellLeviathan.DamageReduce;
+import testmod.seccult.init.ModItems;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.magick.active.Magick;
 import testmod.seccult.magick.active.TeleportMagick;
@@ -306,6 +308,35 @@ public class EntityWaterTentacle extends EntityWaterCreature{
 			}
 		}
 		}
+	}
+	
+	@Override
+	protected Item getDropItem() {
+		return ModItems.WaterRes;
+	}
+	
+	@Override
+	protected void dropFewItems(boolean wasRecentlyHit, int lootingModifier) 
+	{
+        Item item = this.getDropItem();
+
+        if (item != null)
+        {
+            int i = this.rand.nextInt(3);
+
+            if (lootingModifier > 0)
+            {
+                i += this.rand.nextInt(lootingModifier + 1);
+            }
+
+            for (int j = 0; j < i; ++j)
+            {
+                this.dropItem(item, 1);
+            }
+        }
+        
+        if(this.rand.nextInt(10) == 0)
+        	this.dropItem(ModItems.PEARL, 1);
 	}
 	
 	@Override

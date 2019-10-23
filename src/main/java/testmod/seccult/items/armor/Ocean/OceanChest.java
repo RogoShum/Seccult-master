@@ -17,6 +17,5 @@ public class OceanChest extends OceanArmor{
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
 		super.onArmorTick(world, player, itemStack);
-		addMagickCore(itemStack, CoreType.FlyingCore);
 	}
 }

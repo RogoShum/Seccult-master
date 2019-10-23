@@ -18,6 +18,9 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.blocks.BlockPlant;
+import testmod.seccult.entity.livings.EntityCarne;
+import testmod.seccult.entity.livings.EntityLight;
+import testmod.seccult.entity.livings.flying.EntityAirTentacle;
 import testmod.seccult.entity.livings.flying.EntityBird;
 import testmod.seccult.entity.livings.insect.EntityButterfly;
 import testmod.seccult.entity.livings.water.EntityFish;
@@ -90,23 +93,22 @@ public class BiomeManaForest extends Biome {
         {
         	this.manaFlowersPerChunk = 10;
             this.decorator.treesPerChunk = -999;
-            this.spawnableCreatureList.add(new Biome.SpawnListEntry(EntityRabbit.class, 4, 2, 3));
-        	this.spawnableCreatureList.add(new Biome.SpawnListEntry(EntityButterfly.class, 50, 4, 4));
+            this.spawnableCreatureList.add(new Biome.SpawnListEntry(EntityRabbit.class, 4, 2, 13));
+        	this.spawnableCreatureList.add(new Biome.SpawnListEntry(EntityButterfly.class, 50, 5, 14));
         }
-
+        this.spawnableMonsterList.add(new Biome.SpawnListEntry(EntityLight.class, 5, 1, 2));
+        this.spawnableMonsterList.add(new Biome.SpawnListEntry(EntityAirTentacle.class, 5, 1, 2));
         if (this.type == BiomeManaForest.Type.NORMAL)
         {
-            this.spawnableCreatureList.add(new Biome.SpawnListEntry(EntityWolf.class, 5, 4, 4));
-        	this.spawnableCreatureList.add(new Biome.SpawnListEntry(EntityBird.class, 40, 4, 4));
-        	this.spawnableCreatureList.add(new Biome.SpawnListEntry(EntityButterfly.class, 50, 4, 4));
-        	this.spawnableWaterCreatureList.add(new Biome.SpawnListEntry(EntityFish.class, 50, 4, 4));
+            this.spawnableCreatureList.add(new Biome.SpawnListEntry(EntityWolf.class, 5, 4, 14));
+        	this.spawnableCreatureList.add(new Biome.SpawnListEntry(EntityBird.class, 40, 4, 14));
+        	this.spawnableCreatureList.add(new Biome.SpawnListEntry(EntityButterfly.class, 50, 4, 14));
         }
 
         if (this.type == BiomeManaForest.Type.ROOFED)
         {
-        	this.spawnableCreatureList.add(new Biome.SpawnListEntry(EntityBird.class, 40, 4, 4));
-        	this.spawnableCreatureList.add(new Biome.SpawnListEntry(EntityButterfly.class, 50, 4, 4));
-        	this.spawnableWaterCreatureList.add(new Biome.SpawnListEntry(EntityFish.class, 50, 4, 4));
+        	this.spawnableCreatureList.add(new Biome.SpawnListEntry(EntityBird.class, 40, 4, 14));
+        	this.spawnableCreatureList.add(new Biome.SpawnListEntry(EntityButterfly.class, 50, 4, 14));
         	this.manaFlowersPerChunk = 3;
         }
 
@@ -114,9 +116,8 @@ public class BiomeManaForest extends Biome {
         {
         	this.manaFlowersPerChunk = 4;
         	this.spawnableCreatureList.add(new Biome.SpawnListEntry(EntityOcelot.class, 5, 4, 4));
-        	this.spawnableCreatureList.add(new Biome.SpawnListEntry(EntityBird.class, 40, 4, 4));
-        	this.spawnableCreatureList.add(new Biome.SpawnListEntry(EntityButterfly.class, 50, 4, 4));
-        	this.spawnableWaterCreatureList.add(new Biome.SpawnListEntry(EntityFish.class, 50, 4, 4));
+        	this.spawnableCreatureList.add(new Biome.SpawnListEntry(EntityBird.class, 40, 14, 24));
+        	this.spawnableCreatureList.add(new Biome.SpawnListEntry(EntityButterfly.class, 50, 14, 24));
         }
         
         if (this.type == BiomeManaForest.Type.FLOWER) //Needs to be done here so we have access to this.type

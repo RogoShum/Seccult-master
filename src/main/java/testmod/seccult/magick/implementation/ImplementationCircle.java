@@ -32,8 +32,7 @@ public class ImplementationCircle extends ImplementationStoreable{
 					//hasEntity = true;
 				}
 			}
-			System.out.println(eList);
-			System.out.println(this.emptyEntity);
+
 			setEntity(null);
 			//if(hasEntity)
 			return;

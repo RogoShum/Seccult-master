@@ -1,8 +1,18 @@
 package testmod.seccult.entity.livings.water;
 
+import java.util.Random;
+
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.passive.EntitySquid;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -22,6 +32,21 @@ public class EntityJellyfish extends EntitySquid{
 		super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
         this.getEntityAttribute(SWIM_SPEED).setBaseValue(1);
+	}
+	
+	@Override
+	protected Item getDropItem() {
+		return Items.SLIME_BALL;
+	}
+	
+	@Override
+	protected void dropLoot(boolean wasRecentlyHit, int lootingModifier, DamageSource source) {
+
+        if (getDropItem() != null)
+        {
+            this.dropFewItems(wasRecentlyHit, lootingModifier);
+        }
+
 	}
 	
 	@Override

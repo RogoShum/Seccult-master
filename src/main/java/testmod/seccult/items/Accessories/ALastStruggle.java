@@ -33,7 +33,7 @@ public class ALastStruggle extends ItemAccessories{
 	
 	private void protectItem(ItemStack item, ItemStack me)
 	{
-		item.setItemDamage(item.getItemDamage() - 1);
-		me.setItemDamage(me.getItemDamage() + 1);
+		item.setItemDamage(item.getItemDamage() - 2);
+		me.setItemDamage(me.getItemDamage() + 2);
 	}
 }

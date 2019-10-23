@@ -6,15 +6,22 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.entity.monster.EntityCaveSpider;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.entity.projectile.EntityFireball;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import testmod.seccult.Seccult;
 import testmod.seccult.api.PlayerDataHandler;
 import testmod.seccult.api.PlayerDataHandler.PlayerData;
 import testmod.seccult.client.FX.ATFX;
@@ -24,6 +31,10 @@ import testmod.seccult.entity.livings.EntityBase;
 import testmod.seccult.entity.livings.EntityLight;
 import testmod.seccult.entity.livings.EntityNotoriousBIG;
 import testmod.seccult.init.ModItems;
+import testmod.seccult.init.ModMagicks;
+import testmod.seccult.items.ItemKnowledgeScroll;
+import testmod.seccult.items.ItemMagickable;
+import testmod.seccult.magick.ImplementationHandler;
 import testmod.seccult.util.RogoDamage;
 
 public class MobUnhurtableEvent {
@@ -152,6 +163,60 @@ public class MobUnhurtableEvent {
 		        event.setCanceled(true);
 			}
 		}
+	}
+	
+	@SubscribeEvent
+	public void dropScroll(LivingDeathEvent event) {
+		EntityLivingBase e = event.getEntityLiving();
+		if(!e.isNonBoss() && !(e instanceof EntityBase)) {
+			if(!e.world.isRemote)
+			e.dropItem(ModItems.AlterScroll, 1);
+		}
+	}
+	
+	@SubscribeEvent
+	public void dropScroll(LivingHurtEvent event) {
+		EntityLivingBase e = event.getEntityLiving();
+		Entity Tsource = event.getSource().getTrueSource();
+		Entity Isource = event.getSource().getImmediateSource();
+		if(e instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer) e;
+			if(Tsource instanceof EntityCaveSpider && Seccult.rand.nextInt(20) == 0) {
+				ItemStack s = new ItemStack(ModItems.KnowledgeScroll);
+				ItemMagickable.storeMagickString(s, ModMagicks.PosionMagick);
+				if(!player.world.isRemote)
+				player.dropItem(s, true);
+			}
+			
+			if(Tsource instanceof EntityLight && Seccult.rand.nextInt(20) == 0) {
+				ItemStack s = new ItemStack(ModItems.KnowledgeScroll);
+				ItemMagickable.storeMagickString(s,ImplementationHandler.FocuseI);
+				if(!player.world.isRemote)
+				player.dropItem(s, true);
+			}
+			
+			if(Isource instanceof EntityFireball && Seccult.rand.nextInt(20) == 0) {
+				ItemStack s = new ItemStack(ModItems.KnowledgeScroll);
+				ItemMagickable.storeMagickString(s, ModMagicks.FlameMagick);
+				if(!player.world.isRemote)
+				player.dropItem(s, true);
+			}
+			
+			if(Isource instanceof EntityArrow && Seccult.rand.nextInt(70) == 0) {
+				ItemStack s = new ItemStack(ModItems.KnowledgeScroll);
+				ItemMagickable.storeMagickString(s, ModMagicks.ArrowMagick);
+				if(!player.world.isRemote)
+				player.dropItem(s, true);
+			}
+			
+			if((event.getSource().getDamageType() == "lightningBolt" || event.getSource().getDamageType() == "seccult-frozen" ) && Seccult.rand.nextInt(7) == 0) {
+				ItemStack s = new ItemStack(ModItems.KnowledgeScroll);
+				ItemMagickable.storeMagickString(s,ModMagicks.ElectroMagick);
+				if(!player.world.isRemote)
+				player.dropItem(s, true);
+			}
+		}
+		
 	}
 	
 	@SideOnly(Side.CLIENT)

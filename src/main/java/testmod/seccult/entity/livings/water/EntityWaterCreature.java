@@ -1,11 +1,9 @@
 package testmod.seccult.entity.livings.water;
 
-import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import testmod.seccult.Seccult;
@@ -47,7 +45,7 @@ public abstract class EntityWaterCreature extends EntityBase implements IAnimals
 		}
 	}
 	
-	public static void inWaterWalk(EntityBase water, float height, int frequency, float distance)
+	public static void inWaterWalk(EntityLiving water, float height, int frequency, float distance)
 	{
 		if(water.ticksExisted % frequency == 0)
 		{
@@ -62,9 +60,9 @@ public abstract class EntityWaterCreature extends EntityBase implements IAnimals
 			{
 				randRotation = (0.25 - Seccult.rand.nextDouble() * 0.5);
 			}
-			water.motionX += (water.LookX() + randRotation) / 10 * distance;
+			water.motionX += (water.getLookVec().x + randRotation) / 10 * distance;
 			water.motionY += (Seccult.rand.nextFloat()*4 - 2)/3 * height;
-			water.motionZ += (water.LookZ() + randRotation) / 10 * distance;
+			water.motionZ += (water.getLookVec().z + randRotation) / 10 * distance;
 			
 			float f = (float)(MathHelper.atan2(water.motionZ, water.motionX) * (180D / Math.PI)) - 90.0F;
 			float f1 = MathHelper.wrapDegrees(f - water.rotationYaw);
@@ -91,11 +89,7 @@ public abstract class EntityWaterCreature extends EntityBase implements IAnimals
     
     @Override
     public boolean getCanSpawnHere() {
-        IBlockState iblockstate = this.world.getBlockState((new BlockPos(this)).down());
-        if(iblockstate.getBlock() instanceof BlockLiquid)
-        	return iblockstate.canEntitySpawn(this);
-        else
-        	return false;
+        return super.getCanSpawnHere();
     }
     
     public void onEntityUpdate()

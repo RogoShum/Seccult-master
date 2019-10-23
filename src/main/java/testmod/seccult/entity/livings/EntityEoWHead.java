@@ -1,20 +1,24 @@
 package testmod.seccult.entity.livings;
+import java.util.ArrayList;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import testmod.seccult.events.BossEventHandler;
 
 public class EntityEoWHead extends EntityEoW{
 		private boolean notFirst;
-		
+		private ArrayList<EntityBase> eows = new ArrayList<>();
 		EntityEoW A = this;
 		EntityEoW B = null;
 		public EntityEoWHead(World worldIn) {
 			super(worldIn);
-			this.SpawnAmount = 49;
+			this.SpawnAmount = 98;
 			this.setSize(1.6F, 1.6F);
+			eows.add(this);
 		}
 		
 		@Override
@@ -48,16 +52,13 @@ public class EntityEoWHead extends EntityEoW{
 		}
 		
 	    private void onBody() {
-	    	while(SpawnAmount > 0) {
-	    	if(this.SpawnAmount > 1) 
+	    	for(int i = 0; i < this.SpawnAmount; i++)
 	    	{
-	    		spawnCreature();
+	    		eows.add(spawnCreature());
 	    	}
-	 	   	else if(this.SpawnAmount == 1)
-	 	   	{
-	 	   		spawnCreature();
-	 	   		}
-	    	}
+	    	SpawnAmount = 0;
+	    	new BossEventHandler(eows);
+	    	notFirst = true;
 	    }
 	    
 	    protected EntityEoW spawnCreature() {

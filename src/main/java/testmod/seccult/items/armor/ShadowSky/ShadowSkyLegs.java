@@ -19,6 +19,5 @@ public class ShadowSkyLegs extends  ShadowSkyArmor{
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
 		super.onArmorTick(world, player, itemStack);
-		addMagickCore(itemStack, CoreType.SpeedCore);
 	}
 }

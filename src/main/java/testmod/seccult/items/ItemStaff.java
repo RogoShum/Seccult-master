@@ -7,8 +7,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -24,6 +26,7 @@ import testmod.seccult.init.ModMagicks;
 import testmod.seccult.magick.ImplementationHandler;
 import testmod.seccult.magick.MagickCompiler;
 import testmod.seccult.magick.active.Magick;
+import testmod.seccult.world.gen.SeccultBiomeRegistries;
 
 public class ItemStaff extends ItemBase{
 	public List<Magick> DamageMagick = new ArrayList<Magick>();
@@ -108,7 +111,6 @@ public class ItemStaff extends ItemBase{
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		player.setActiveHand(hand);
-		
 		//if(this == ModItems.DefenceStaff && this.getMagickData(player.getHeldItem(hand)) != null)
 			//this.TickMagick(this.getMagickData(player.getHeldItem(hand)), player);
 		
@@ -165,7 +167,15 @@ public class ItemStaff extends ItemBase{
 	@Override
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
 		if(this.getMagickData(stack) != null)
+		{
 			this.TickMagick(this.getMagickData(stack), entityLiving);
+			if(entityLiving instanceof EntityPlayer)
+			{
+				if(!((EntityPlayer) entityLiving).isCreative())
+				stack.attemptDamageItem(1, Item.itemRand, null);
+			}
+			
+		}
 		return super.onItemUseFinish(stack, worldIn, entityLiving);
 	}
 	

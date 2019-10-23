@@ -18,7 +18,6 @@ public class ChlorophyteChest extends ChlorophyteArmor{
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
 		super.onArmorTick(world, player, itemStack);
-		addMagickCore(itemStack, CoreType.FlyingCore);
 		if(!hasArmorSetItem(player))
 			return;
 

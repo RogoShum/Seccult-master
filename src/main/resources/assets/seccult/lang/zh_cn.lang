@@ -44,6 +44,36 @@ item.friendship_ring.name=友谊戒指
 item.medusa_head.name=美杜莎头颅
 item.knowledge_scroll.name=知识卷轴
 
+item.dark_m.name=黑暗碎片
+item.blood_m.name=血腥碎片
+item.wing.name=翅膀
+item.airres.name=大气物质
+item.water_gem.name=水宝石
+item.ocean_enssence.name=深海精华
+item.pearl.name=珍珠
+item.silk.name=丝绸
+item.dark_silk.name=黑暗丝绸
+item.s_plant.name=奇异植物
+item.shadow_res.name=暗影物质
+item.eoc.name=可疑的眼球
+item.alter_scroll.name=变换卷轴
+item.allknow_scroll.name=全知卷轴
+
+item.a184.name=唱片 - A184
+item.qualia.name=唱片 - 感质
+item.zero.name=唱片 - 代号0
+item.afterglow.name=唱片 - 余辉
+item.dadada.name=唱片 - 打打打
+item.gatorix.name=唱片 - 导弹
+item.imprinting.name=唱片 - 銘印
+item.light_r.name=唱片 - エイリアンエイリアン
+item.slit.name=唱片 - 空集
+item.saika.name=唱片 - 彩华
+item.storia.name=唱片 - 历史
+item.twentyone.name=唱片 - 21
+item.summer.name=唱片 - 夏
+item.got.name=唱片 - U Got That
+
 item.ocean_helmet.name=深海头护
 item.ocean_chest.name=深海胸甲
 item.ocean_leggings.name=深海腿护
@@ -78,6 +108,25 @@ item.chlorophyte_chest.name=叶绿胸甲
 item.chlorophyte_leggings.name=叶绿腿护
 item.chlorophyte_boots.name=叶绿轻靴
 item.chlorophyte_sword.name=叶绿剑
+
+item.record.seccult:twentyone.desc=Qrabit - Twenty One
+item.record.seccult:imprinting.desc=削除 - Imprinting
+item.record.seccult:storia.desc=削除 vs. xi - STORIA
+item.record.seccult:light.desc=符白牙 - エイリアンエイリアン(remix)
+
+item.record.seccult:a184.desc=Persona - AREA184 -Platinum Mix-
+item.record.seccult:qualia.desc=KIVΛ - Qualia
+item.record.seccult:zero.desc=NeLiME - CODE NAME： ZERO
+item.record.seccult:afterglow.desc=Jioyi - Afterglow
+
+item.record.seccult:dadada.desc=ヒゲドライバー join. SELEN - 打打打打打打打打打打 (Long Version)
+item.record.seccult:gatorix.desc=NeLiME,PRESTi - GATORIX
+item.record.seccult:slit.desc=Jioyi - Ø （SLIT） I
+item.record.seccult:saika.desc=Rabpit - Saika
+item.record.seccult:summer.desc=Christian Levitan - G小调第二协奏曲, Op. 8, RV 315, ＂L'estate＂ (夏)： I. Allegro Non Molto
+
+item.record.seccult:got.desc=Halogen - U Got That
+
 
 //blocks
 tile.ore_overworld_unterra.name=反大地之源矿
@@ -119,10 +168,10 @@ tile.flower_c.name=青花
 tile.flower_m.name=品红花
 tile.flower_y.name=黄花
 tile.flower_grass.name=艹
-tile.blue_mushroom.name=品红花
-tile.magenta_mushroom.name=黄花
-tile.blue_magick_mushroom.name=品红花
-tile.magenta_magick_mushroom.name=黄花
+tile.blue_mushroom.name=蓝色蘑菇
+tile.magenta_mushroom.name=品红蘑菇
+tile.blue_magick_mushroom.name=蓝色蘑菇块
+tile.magenta_magick_mushroom.name=品红蘑菇块
 tile.enchanting_staff.name=附魔权杖
 tile.killer_queen.name=杀手皇后
 

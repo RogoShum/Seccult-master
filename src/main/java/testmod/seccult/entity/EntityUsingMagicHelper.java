@@ -1,6 +1,5 @@
 package testmod.seccult.entity;
 
-import testmod.seccult.entity.livings.EntityBase.DoYouGotMagickHand;
 import testmod.seccult.magick.active.Magick;
 
 public interface EntityUsingMagicHelper {
@@ -18,5 +17,11 @@ public interface EntityUsingMagicHelper {
 		Attacking,
 		Defence,
 		Control
+	}
+	
+	public static enum DoYouGotMagickHand
+	{
+		LeftHand,
+		RightHand
 	}
 }

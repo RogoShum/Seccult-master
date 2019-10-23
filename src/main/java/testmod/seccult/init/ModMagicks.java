@@ -25,7 +25,7 @@ public class ModMagicks {
 	public static final String TheWorldMagick = "theworld";
 	public static final String KraftWorkMagick = "kraftwork";
 	public static final String FloatingMagick = "floating";
-	public static final String InScaleMagick = "inscale";
+	//public static final String InScaleMagick = "inscale";
 	public static final String ArrowMagick = "arrow";
 	public static final String AllSeeMagick = "allsee";
 	public static final String ShieldMagick = "shield";
@@ -51,7 +51,7 @@ public class ModMagicks {
 	public static final int TheWorldMagickColor = 0xFFF5EE;
 	public static final int KraftWorkMagickColor = 0xDEB887;
 	public static final int FloatingMagickColor = 0xF08080;
-	public static final int InScaleMagickColor = 0xFFFACD;
+	//public static final int InScaleMagickColor = 0xFFFACD;
 	public static final int ArrowMagickColor = 0x48D1CC;
 	public static final int AllSeeMagickColor = 0xBA55D3;
 	public static final int ShieldMagickColor = 0x7FFFAA;
@@ -90,8 +90,8 @@ public class ModMagicks {
 	private static Magick KraftWork;
 	@SuppressWarnings("unused")
 	private static Magick Floating;
-	@SuppressWarnings("unused")
-	private static Magick InScale;
+	//@SuppressWarnings("unused")
+	//private static Magick InScale;
 	@SuppressWarnings("unused")
 	private static Magick Arrow;
 	@SuppressWarnings("unused")

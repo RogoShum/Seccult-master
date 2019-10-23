@@ -32,6 +32,7 @@ import testmod.seccult.entity.EntityLightingThing;
 import testmod.seccult.entity.EntityShieldFX;
 import testmod.seccult.entity.SpiritManager;
 import testmod.seccult.entity.livings.EntityEoW;
+import testmod.seccult.entity.livings.EntityEoWHead;
 import testmod.seccult.entity.livings.EntitySpirit;
 import testmod.seccult.init.ModBlocks;
 import testmod.seccult.init.ModMagicks;
@@ -53,12 +54,11 @@ public class ItemTerrariaEventThing extends ItemBase{
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, @Nonnull EnumHand hand) {
 		ItemStack stack = player.getHeldItem(hand);
 			player.setActiveHand(hand);
-			
+
 			//protection(player);
 			//if(player.dimension != DimensionMagic.SPIRIT_ID)
 				//player.changeDimension(DimensionMagic.SPIRIT_ID);
-			clearMagick(player);
-			addMagick(player);
+			
 			/*Entity entity = ImplementationFocused.getEntityLookedAt(player, 120);
 			if(entity != null && world.isRemote)
 			{
@@ -72,25 +72,12 @@ public class ItemTerrariaEventThing extends ItemBase{
 			//restoreSpirits(world, player);
 			//iceBeam(player);
 			//spawnLight(player);
-			//spawnEOW(player);
+			spawnEOW(player);
+			player.getHeldItem(hand).shrink(1);
 			//spawnGen(world, player);
 			//spawnGenBlock(world, player);
 			return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
 	} 
-
-	public void clearMagick(EntityPlayer player)
-	{
-		PlayerData data = PlayerDataHandler.get(player);
-		int[] i = {0};
-		data.setMagickData(i);
-	}
-	
-	public void addMagick(EntityPlayer player)
-	{
-		ArrayList<String> list = ModMagicks.GetAllMagickID();
-		for(int  i = 0; i < list.size(); i++)
-		PlayerDataHandler.get(player).addMagickData(i);
-	}
 	
 	public void protection(EntityPlayer player)
 	{
@@ -164,9 +151,8 @@ public class ItemTerrariaEventThing extends ItemBase{
 		double z = player.posZ + 40;
 		
 		Entity entity = null;
-		 entity = EntityList.createEntityByIDFromName(EOWres, player.getEntityWorld());
-	        EntityEoW EOW = (EntityEoW) entity;
-        	EOW.setSpawnAmount(10);
+		 entity = EntityList.createEntityByIDFromName(TEOWres, player.getEntityWorld());
+	        EntityEoWHead EOW = (EntityEoWHead) entity;
             entity.setLocationAndAngles(x, y, z, -player.rotationYaw, -player.rotationPitch);
             EOW.rotationYawHead = EOW.rotationYaw;
             EOW.renderYawOffset = EOW.rotationYaw;

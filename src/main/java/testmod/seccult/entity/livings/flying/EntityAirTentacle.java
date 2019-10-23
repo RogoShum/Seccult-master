@@ -3,18 +3,25 @@ package testmod.seccult.entity.livings.flying;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import testmod.seccult.entity.livings.water.EntityWaterCreature;
+import testmod.seccult.init.ModItems;
+import testmod.seccult.init.ModMagicks;
+import testmod.seccult.items.ItemMagickable;
 import testmod.seccult.entity.livings.water.EntityRockShellLeviathan.DamageReduce;
 
 public class EntityAirTentacle extends EntityFlyable{
@@ -64,6 +71,15 @@ public class EntityAirTentacle extends EntityFlyable{
 		
 		if(this.rand.nextInt(200) == 0)
 			this.rotationYaw += this.rand.nextInt(360) - 180;
+	}
+	
+	@Override
+	public boolean getCanSpawnHere() {
+		 int i = this.world.getLightFromNeighbors(this.getPosition());
+		 if( i < 7)
+			 return true;
+		 else
+			 return false;
 	}
 	
 	@Override
@@ -230,6 +246,22 @@ public class EntityAirTentacle extends EntityFlyable{
 			}
 			compound.setTag("SC_DamageReduce", list);
 		}
+	}
+	
+	@Override
+	protected Item getDropItem() {
+		return ModItems.AirRes;
+	}
+	
+	@Override
+	protected void dropFewItems(boolean wasRecentlyHit, int lootingModifier) {
+		if(this.rand.nextInt(10) == 0)
+		{
+			ItemStack s = new ItemStack(ModItems.KnowledgeScroll);
+			ItemMagickable.storeMagickString(s, ModMagicks.DamageMagick);
+			this.entityDropItem(s, 0);
+		}
+		super.dropFewItems(wasRecentlyHit, lootingModifier);
 	}
 	
 	public class DamageReduce

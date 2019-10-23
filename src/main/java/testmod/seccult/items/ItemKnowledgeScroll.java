@@ -22,7 +22,7 @@ public class ItemKnowledgeScroll extends ItemMagickable{
 	
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-		if(playerIn.getHeldItem(handIn).getItem() == this && ItemMagickable.getMagick(playerIn.getHeldItem(handIn)) != null)
+		if(playerIn.getHeldItem(handIn).getItem() == this && ItemMagickable.getMagickString(playerIn.getHeldItem(handIn)) != null)
 		{
 			PlayerData data = PlayerDataHandler.get(playerIn);
 			data.addMagickData(ModMagicks.GetMagickIDByString(ItemMagickable.getMagickString(playerIn.getHeldItem(handIn))));

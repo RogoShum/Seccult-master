@@ -18,10 +18,6 @@ public class MagickHelmet extends MagickArmor{
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
 		super.onArmorTick(world, player, itemStack);
-		if(!player.capabilities.isCreativeMode && !hasArmorSetItem(player))
-			player.capabilities.allowFlying = false;
-		if(hasArmorSetItem(player))
-			player.capabilities.allowFlying = true;
 	}
 	
 }

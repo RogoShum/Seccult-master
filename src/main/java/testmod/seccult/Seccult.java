@@ -76,10 +76,14 @@ public class Seccult
 	public static void PostInit(FMLPostInitializationEvent event)
 	{
 		ModEventHandler.RegisterEvents();
-		
+		ItemColoerRegister();
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public static void ItemColoerRegister()
+	{
 		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor()
 		{
-			@SideOnly(Side.CLIENT)
 			@Override
 			public int colorMultiplier(ItemStack stack, int tintIndex) {
 				if(tintIndex == 1)
@@ -91,7 +95,6 @@ public class Seccult
 		
 		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor()
 		{
-			@SideOnly(Side.CLIENT)
 			@Override
 			public int colorMultiplier(ItemStack stack, int tintIndex) {
 
@@ -101,7 +104,6 @@ public class Seccult
 		
 		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor()
 		{
-			@SideOnly(Side.CLIENT)
 			@Override
 			public int colorMultiplier(ItemStack stack, int tintIndex) {
 
@@ -111,7 +113,6 @@ public class Seccult
 		
 		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor()
 		{
-			@SideOnly(Side.CLIENT)
 			@Override
 			public int colorMultiplier(ItemStack stack, int tintIndex) {
 
@@ -121,7 +122,6 @@ public class Seccult
 		
 		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor()
 		{
-			@SideOnly(Side.CLIENT)
 			@Override
 			public int colorMultiplier(ItemStack stack, int tintIndex) {
 
@@ -131,7 +131,6 @@ public class Seccult
 		
 		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor()
 		{
-			@SideOnly(Side.CLIENT)
 			@Override
 			public int colorMultiplier(ItemStack stack, int tintIndex) {
 
@@ -141,7 +140,6 @@ public class Seccult
 		
 		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor()
 		{
-			@SideOnly(Side.CLIENT)
 			@Override
 			public int colorMultiplier(ItemStack stack, int tintIndex) {
 

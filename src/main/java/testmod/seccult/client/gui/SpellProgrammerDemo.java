@@ -5,6 +5,8 @@ import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import testmod.seccult.api.PlayerDataHandler;
 import testmod.seccult.blocks.SpellProgrammer;
+import testmod.seccult.init.ModMagicks;
+import testmod.seccult.magick.ImplementationHandler;
 import testmod.seccult.network.NetworkHandler;
 import testmod.seccult.network.NetworkPlayerMagickData;
 
@@ -17,6 +19,10 @@ public class SpellProgrammerDemo extends Container
     {
         super();
         this.programmer = programmer;
+        PlayerDataHandler.get(player).addMagickData(ModMagicks.GetMagickIDByString(ImplementationHandler.ProjectileI));
+        PlayerDataHandler.get(player).addMagickData(ModMagicks.GetMagickIDByString(ImplementationHandler.SelfI));
+        PlayerDataHandler.get(player).addMagickData(ModMagicks.GetMagickIDByString(ImplementationHandler.SelectBlockI));
+        PlayerDataHandler.get(player).addMagickData(ModMagicks.GetMagickIDByString(ImplementationHandler.SelectEntityI));
         NetworkHandler.getNetwork().sendToAll(new NetworkPlayerMagickData(PlayerDataHandler.get(player).getAllMagickData(), player.getUniqueID(), 
         		PlayerDataHandler.get(player).getTrueControlAbility(), PlayerDataHandler.get(player).getTrueManaStrengh()));
     }

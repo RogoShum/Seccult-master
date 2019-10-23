@@ -1,13 +1,17 @@
 package testmod.seccult.world.gen.biome;
 
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeOcean;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
+import testmod.seccult.entity.livings.flying.EntityAirTentacle;
 import testmod.seccult.entity.livings.water.EntityBoneShark;
 import testmod.seccult.entity.livings.water.EntityFish;
 import testmod.seccult.entity.livings.water.EntityJellyfish;
 import testmod.seccult.entity.livings.water.EntityRockShellLeviathan;
 import testmod.seccult.entity.livings.water.EntityWaterTentacle;
+import testmod.seccult.world.gen.SeccultBiomeRegistries;
 
 public class BiomeManaOcean extends BiomeOcean{
 
@@ -23,15 +27,8 @@ public class BiomeManaOcean extends BiomeOcean{
 				{
 			
 				};*/
-		this.spawnableWaterCreatureList.add(new Biome.SpawnListEntry(EntityFish.class, 50, 4, 10));
-		this.spawnableWaterCreatureList.add(new Biome.SpawnListEntry(EntityJellyfish.class, 30, 4, 10));
-		if(this.type == BiomeManaOcean.Type.NORMAL)
-			this.spawnableWaterCreatureList.add(new Biome.SpawnListEntry(EntityBoneShark.class, 40, 1, 4));
-		if(this.type == BiomeManaOcean.Type.DEEP)
-		{
-			this.spawnableWaterCreatureList.add(new Biome.SpawnListEntry(EntityWaterTentacle.class, 20, 1, 2));
-			this.spawnableWaterCreatureList.add(new Biome.SpawnListEntry(EntityRockShellLeviathan.class, 20, 1, 1));
-		}
+
+		this.spawnableMonsterList.add(new Biome.SpawnListEntry(EntityAirTentacle.class, 10, 2, 3));
 	}
 	
 	@Override

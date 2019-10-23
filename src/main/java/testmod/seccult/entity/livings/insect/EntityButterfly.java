@@ -4,11 +4,14 @@ import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import testmod.seccult.entity.livings.flying.EntityFlyable;
+import testmod.seccult.init.ModItems;
 
 public class EntityButterfly extends EntityFlyable implements IEntityInsect{
 	
@@ -104,6 +107,11 @@ public class EntityButterfly extends EntityFlyable implements IEntityInsect{
         }
 	}
 
+	@Override
+	protected Item getDropItem() {
+		return ModItems.Wing;
+	}
+	
 	@Override
 	public void hangingMode() {
 		 BlockPos blockpos = new BlockPos(this);

@@ -5,7 +5,10 @@ import java.util.List;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -28,6 +31,11 @@ public class EntityFish extends EntityWaterCreature{
 		this.swingLimit = 15;
 	}
 
+	@Override
+	public boolean getCanSpawnHere() {
+		return super.getCanSpawnHere();
+	}
+	
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
@@ -148,6 +156,22 @@ public class EntityFish extends EntityWaterCreature{
 		}
 	}
 
+	@Override
+	protected Item getDropItem() {
+		return Items.FISH;
+	}
+	
+	@Override
+	protected void dropFewItems(boolean wasRecentlyHit, int lootingModifier) {
+        Item item = this.getDropItem();
+
+        if (item != null)
+        {
+            if(this.rand.nextInt(3) != 0)
+            this.dropItem(item, 1);
+        }
+	}
+	
 	@Override
 	public void GroundThing() 
 	{

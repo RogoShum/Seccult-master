@@ -29,7 +29,7 @@ public class IncreaseScaleMagick extends Magick{
 
 	@Override
 	public int getColor() {
-		return ModMagicks.InScaleMagickColor;
+		return 0;
 	}
 
 	@Override

@@ -48,10 +48,22 @@ public class ModItems
 	 
 	//Items
 	public static final Item SPA = new ItemBase("spa");
+	public static final Item Dark_M = new ItemBase("dark_m");
+	public static final Item Blood_M = new ItemBase("blood_m");
+	public static final Item Wing = new ItemBase("wing");
+	public static final Item AirRes = new ItemBase("airres");
+	public static final Item WaterRes = new ItemBase("water_gem");
+	public static final Item Ocean_Enssence = new ItemBase("ocean_enssence");
+	public static final Item PEARL = new ItemBase("pearl");
+	public static final Item SILK = new ItemBase("silk");
+	public static final Item Dark_Silk = new ItemBase("dark_silk");
+	public static final Item S_PLANT = new ItemBase("s_plant");
+	public static final Item SHADOW_RES = new ItemBase("shadow_res");
 	public static final Item TimeStopper = new ItemTimeStopper("timestopper");
 	public static final Item BlackVelvetHell = new ItemBlackVelvetHell("blackvelvethell");
 	public static final Item YesYourHighness = new ItemYesYourHighness("yesyourhighness");
 	public static final Item EVENT_THING = new ItemTerrariaEventThing("eow");
+	public static final Item EVENT_THING_C = new ItemTerrariaEventThing_C("eoc");
 	//public static final Item SCP173 = new ItemSCP173("scp173");
 	public static final Item Wand = new ItemWand("wand");
 	public static final Item SoulStone = new ItemSoulStone("soul_stone");
@@ -61,6 +73,22 @@ public class ModItems
 	public static final Item DefenceStaff = new ItemStaff("defence_staff");
 	public static final Item AlterationStaff = new ItemStaff("alteration_staff");
 	public static final Item KnowledgeScroll = new ItemKnowledgeScroll("knowledge_scroll");
+	public static final Item AlterScroll = new ItemAlterScroll("alter_scroll");
+	public static final Item ALLKnowScroll = new ItemALLKnowScroll("allknow_scroll");
+	public static final Item RecordA = new ItemModRecord("a184", ModSounds.A184, "a184");
+	public static final Item RecordQ = new ItemModRecord("qualia", ModSounds.qualia, "qualia");
+	public static final Item RecordZ = new ItemModRecord("zero", ModSounds.zero, "zero");
+	public static final Item RecordAF = new ItemModRecord("afterglow", ModSounds.afterglow, "afterglow");
+	public static final Item RecordD = new ItemModRecord("dadada", ModSounds.dadada, "dadada");
+	public static final Item RecordG = new ItemModRecord("gatorix", ModSounds.gatorix, "gatorix");
+	public static final Item RecordI = new ItemModRecord("imprinting", ModSounds.imprinting, "imprinting");
+	public static final Item RecordL = new ItemModRecord("light", ModSounds.light, "light_r");
+	public static final Item RecordS = new ItemModRecord("slit", ModSounds.slit, "slit");
+	public static final Item RecordSA = new ItemModRecord("saika", ModSounds.saika, "saika");
+	public static final Item RecordST = new ItemModRecord("storia", ModSounds.storia, "storia");
+	public static final Item RecordT = new ItemModRecord("twentyone", ModSounds.twentyone, "twentyone");
+	public static final Item RecordSU = new ItemModRecord("summer", ModSounds.summer, "summer");
+	public static final Item RecordGO = new ItemModRecord("got", ModSounds.got, "got");
 	
 	//Tools
 	public static final Item SILK_SWORD = new SwordTool("silk_sword", -1, 130, 1.0F, 2, 60);

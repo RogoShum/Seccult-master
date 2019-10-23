@@ -10,6 +10,8 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
@@ -17,6 +19,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import testmod.seccult.init.ModItems;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.magick.active.Magick;
 import testmod.seccult.magick.active.TeleportMagick;
@@ -337,6 +340,31 @@ public class EntityBoneShark extends EntityWaterCreature{
 				}
 			}
 		}
+	}
+	
+	@Override
+	protected Item getDropItem() {
+		return Items.BONE;
+	}
+	
+	@Override
+	protected void dropFewItems(boolean wasRecentlyHit, int lootingModifier) {
+        Item item = this.getDropItem();
+
+        if (item != null)
+        {
+            int i = this.rand.nextInt(14);
+
+            if (lootingModifier > 0)
+            {
+                i += this.rand.nextInt(lootingModifier + 1);
+            }
+
+            for (int j = 0; j < i; ++j)
+            {
+                this.dropItem(item, 1);
+            }
+        }
 	}
 	
 	@Override

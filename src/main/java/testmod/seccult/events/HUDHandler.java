@@ -53,7 +53,7 @@ public class HUDHandler {
 		data = PlayerDataHandler.get(this.mc.player);
         float i = (int) data.getMaxMana();
         float k = (int)(data.getMana());
-        if(mc.player.getHeldItemMainhand().getItem() == ModItems.Wand && i > 0)
+        if((mc.player.getHeldItemMainhand().getItem() == ModItems.Wand || k < i) && i > 0)
         {
         	GlStateManager.pushMatrix();
         	GlStateManager.color(0, 1, 1);

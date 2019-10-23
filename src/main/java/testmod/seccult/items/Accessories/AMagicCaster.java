@@ -21,13 +21,13 @@ public class AMagicCaster extends ItemAccessories{
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
 		super.onArmorTick(world, player, itemStack);
 		
-		if(this.getMagickData(itemStack) == null)
+		/*if(this.getMagickData(itemStack) == null)
 		{
 			int[] Imple_1 = {ModMagicks.GetMagickIDByString(ImplementationHandler.SelfI), 0, 0};
 			int[] Imple_2 = {ModMagicks.GetMagickIDByString(ImplementationHandler.FocuseI), 30, 0};
 			
 			this.pushMagick(itemStack, Magick.getMagickTag(ModMagicks.GetMagickIDByString(ModMagicks.LifeAbsorptionMagick), 1, 4, Imple_1, Imple_2, true, false));
-		}
+		}*/
 		
 		if(!hasAccessories(player, itemStack)) return;
 		if(getMagickData(itemStack) != null)

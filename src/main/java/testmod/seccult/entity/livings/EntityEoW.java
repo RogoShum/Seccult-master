@@ -18,15 +18,19 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.BossInfo.Color;
+import net.minecraft.world.BossInfo.Overlay;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import testmod.seccult.init.ModSounds;
 import testmod.seccult.magick.magickState.StateManager;
 import testmod.seccult.util.ChunkCoordinates;
 import testmod.seccult.util.MathHelper.MathHelper;
 
-public class EntityEoW extends EntityBase{
+public class EntityEoW extends EntityBase implements IBossBase{
 	private static final DataParameter<Integer> EOW_VARIANT = EntityDataManager.<Integer>createKey(EntityEoW.class, DataSerializers.VARINT);
 	ResourceLocation EOWres = new ResourceLocation("seccult:eaterofworlds");
 	
@@ -55,7 +59,6 @@ public class EntityEoW extends EntityBase{
 	protected long followerleast = 0;
     protected EntityEoW follower;
 	
-	
 	protected ChunkCoordinates currentFlightTarget = null;
 	protected EntityLivingBase findtoattack = null;
 	protected boolean hasAttacked;
@@ -82,6 +85,11 @@ public class EntityEoW extends EntityBase{
 	public void setSpawnAmount(int i)
 	{
 		this.SpawnAmount = i;
+	}
+	
+	@Override
+	public boolean isNonBoss() {
+		return false;
 	}
 	
 	@Override
@@ -125,12 +133,6 @@ public class EntityEoW extends EntityBase{
     }
 	
 	@Override
-    public boolean isNonBoss()
-    {
-        return true;
-    }
-	
-	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		
 		if(this.SpawnAmount > 0)
@@ -161,7 +163,7 @@ public class EntityEoW extends EntityBase{
     protected void applyEntityAttributes()
     {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(220.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40.0D);
         this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
     }
 	
@@ -171,7 +173,7 @@ public class EntityEoW extends EntityBase{
 	   super.onUpdate();
 	   
 		if(SpawnAmount > 0 && this.isHead) {
-			onBody();
+			//onBody();
 		}
 	   
 	   if(this.ticksExisted < 30) {
@@ -597,4 +599,24 @@ public class EntityEoW extends EntityBase{
 
       return true;
     }
+
+	@Override
+	public Color getBarColor() {
+		return Color.PURPLE;
+	}
+
+	@Override
+	public boolean DarkenSky() {
+		return false;
+	}
+
+	@Override
+	public Overlay getOverlay() {
+		return Overlay.NOTCHED_20;
+	}
+
+	@Override
+	public SoundEvent getBGM() {
+		return ModSounds.zero;
+	}
 }

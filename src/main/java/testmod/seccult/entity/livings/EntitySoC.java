@@ -23,11 +23,11 @@ public class EntitySoC extends EntityBase{
 		CoolDown--;
 			player = findPlayerToAttack(this);
 		if(player != null && CoolDown <= 0) {
-			Moveto(player.posX, player.posY, player.posZ, 0.1f);
+			Moveto(player.posX, player.posY, player.posZ, 0.05f);
 			this.faceEntity(player, 360, 360);
 		}
 		else if(player != null) {
-			Moveto(player.posX, player.posY, player.posZ, 0.03f);
+			Moveto(player.posX, player.posY, player.posZ, 0.015f);
 			this.faceEntity(player, 180, 180);
 		}
 		

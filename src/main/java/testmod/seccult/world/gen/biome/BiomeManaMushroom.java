@@ -17,6 +17,9 @@ import net.minecraft.world.gen.feature.WorldGenLiquids;
 import net.minecraft.world.gen.feature.WorldGenPumpkin;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import testmod.seccult.entity.livings.EntityCarne;
+import testmod.seccult.entity.livings.EntityChangeling;
+import testmod.seccult.entity.livings.flying.EntityBird;
 import testmod.seccult.entity.livings.water.EntityFish;
 import testmod.seccult.init.ModBlocks;
 import testmod.seccult.world.gen.WorldGenSeccultMushroom;
@@ -319,7 +322,8 @@ public class BiomeManaMushroom extends Biome{
         this.spawnableCreatureList.clear();
         this.spawnableWaterCreatureList.clear();
         this.spawnableCreatureList.add(new Biome.SpawnListEntry(EntityMooshroom.class, 8, 4, 8));
-        this.spawnableWaterCreatureList.add(new Biome.SpawnListEntry(EntityFish.class, 20, 4, 4));
+        this.spawnableCreatureList.add(new Biome.SpawnListEntry(EntityChangeling.class, 4, 4, 8));
+        this.spawnableCreatureList.add(new Biome.SpawnListEntry(EntityCarne.class, 1, 1, 1));
     }
     
     @Override

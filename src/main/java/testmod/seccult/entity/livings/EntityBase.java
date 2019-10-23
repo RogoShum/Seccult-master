@@ -596,10 +596,4 @@ public class EntityBase extends EntityLiving implements EntityUsingMagicHelper{
 		
 		return null;
 	}
-	
-	public static enum DoYouGotMagickHand
-	{
-		LeftHand,
-		RightHand
-	}
 }

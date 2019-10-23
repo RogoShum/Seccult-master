@@ -14,6 +14,7 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -26,6 +27,8 @@ import testmod.seccult.client.FX.ATFX;
 import testmod.seccult.client.FX.SuperLaserBeamFX;
 import testmod.seccult.entity.EntityLmr;
 import testmod.seccult.init.ModItems;
+import testmod.seccult.items.ItemMagickable;
+import testmod.seccult.magick.ImplementationHandler;
 import testmod.seccult.util.ChunkCoordinates;
 import testmod.seccult.util.MathHelper.MathHelper;
 
@@ -73,9 +76,13 @@ public class EntityLight extends EntityMob
 	  {
 	      this.dataManager.set(Light_VARIANT, Integer.valueOf(speed));
 	  }
-	    
+	  
 	protected void dropFewItems(boolean arg1, int arg2)
 	    {
+		ItemStack s = new ItemStack(ModItems.KnowledgeScroll);
+		ItemMagickable.storeMagickString(s,ImplementationHandler.FocuseI);
+		if(!this.world.isRemote)
+		this.entityDropItem(s, 0);
 	        if (this.rand.nextInt(1) == 0)
 	        {
 	            this.dropItem(ModItems.SPA, 1);

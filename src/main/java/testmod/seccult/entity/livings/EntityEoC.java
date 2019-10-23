@@ -1,5 +1,7 @@
 package testmod.seccult.entity.livings;
 
+import java.util.ArrayList;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
@@ -10,17 +12,21 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.BossInfo.Color;
+import net.minecraft.world.BossInfo.Overlay;
 import net.minecraft.world.World;
+import testmod.seccult.events.BossEventHandler;
+import testmod.seccult.events.ModEventHandler;
+import testmod.seccult.init.ModSounds;
 
-public class EntityEoC extends EntityBase {
+public class EntityEoC extends EntityBase implements IBossBase{
 	protected EntityLivingBase ene;
 	protected double eneX;
 	protected double eneY;
 	protected double eneZ;
-	protected float Yaw;
-	protected float Pitch;
 	protected int state;
 	private int Times;
 	private int cooldown;
@@ -38,12 +44,20 @@ public class EntityEoC extends EntityBase {
 		this.Times = 0;
 		this.noClip = true;
 		this.isTRboss = true;
+		ArrayList<EntityBase> boss = new ArrayList<>();
+		boss.add(this);
+		new BossEventHandler(boss);
+	}
+	
+	@Override
+	public boolean isNonBoss() {
+		return false;
 	}
 	
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(2800.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(2000.0D);
         this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
         if(this.getHealth() > this.getMaxHealth() / 2)
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(12.0D);
@@ -56,7 +70,8 @@ public class EntityEoC extends EntityBase {
 		super.onUpdate();
 		SearchEnermy();
 		PreAttack();
-		CoolDown--;
+		if(CoolDown > 0)
+			CoolDown--;
 		if(ene != null && this.getDistanceSq(ene) < 3) {
 			if(this.getHealth() > this.getMaxHealth() / 2)
 			ene.attackEntityFrom(DamageSource.causeMobDamage(this), 15);
@@ -115,8 +130,6 @@ public class EntityEoC extends EntityBase {
 
 	protected void Sprint() {
 		if(this.getHealth() > this.getMaxHealth() / 2) {
-		this.rotationYaw = this.Yaw;
-		this.rotationPitch = this.Pitch;
 		Moveto(eneX, eneY, eneZ, 0.1F);
 		cooldown++;
 		if(cooldown > 70) {
@@ -126,8 +139,6 @@ public class EntityEoC extends EntityBase {
 		}
 		else 
 		{
-			this.rotationYaw = this.Yaw;
-			this.rotationPitch = this.Pitch;
 			Moveto(eneX, eneY, eneZ, 0.4F);
 			cooldown++;
 			if(cooldown > 50) {
@@ -171,9 +182,9 @@ public class EntityEoC extends EntityBase {
 	}
 	
 	protected void AttackMode2() {	
+		setRender(2);
 		if(Times < 3)
 		{	
-			setRender(2);
 			prepare();
 		}
 		else {
@@ -183,9 +194,7 @@ public class EntityEoC extends EntityBase {
 	}
 	
 	protected void prepare() {
-		this.faceEntity(ene, 180, 180);
-		this.Yaw = this.rotationYaw;
-		this.Pitch = this.rotationPitch;
+		this.faceEntity(ene, 360, 360);
 		Vec3d QAQ = onLook(this.getLookVec(), this.getPositionVector(), ene.getPositionVector(), 19);
 		this.eneX = (int)QAQ.x;
 		this.eneY = (int)QAQ.y;
@@ -204,5 +213,25 @@ public class EntityEoC extends EntityBase {
 	protected void rotate() {
 		this.CoolDown = 80;
 		this.setRender(3);
+	}
+
+	@Override
+	public Color getBarColor() {
+		return Color.RED;
+	}
+
+	@Override
+	public boolean DarkenSky() {
+		return true;
+	}
+
+	@Override
+	public Overlay getOverlay() {
+		return Overlay.PROGRESS;
+	}
+	
+	@Override
+	public SoundEvent getBGM() {
+		return ModSounds.qualia;
 	}
 }
