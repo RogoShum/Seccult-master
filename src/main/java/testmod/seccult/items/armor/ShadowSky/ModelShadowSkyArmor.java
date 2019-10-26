@@ -4,6 +4,8 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 
@@ -11,6 +13,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
  * Modeltest - Either Mojang or a mod author
  * Created using Tabula 7.0.1
  */
+@SideOnly(Side.CLIENT)
 public class ModelShadowSkyArmor extends ModelBiped {
     public ModelRenderer bodyMain;
     public ModelRenderer rightarm;

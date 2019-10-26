@@ -369,9 +369,9 @@ public class MagickCompiler {
     @Nullable
     public Entity getEntityByUUID(UUID uuid)
     {
-        for (int j2 = 0; j2 < e.world.getLoadedEntityList().size(); ++j2)
+        for (int j2 = 0; j2 < e.world.loadedEntityList.size(); ++j2)
         {
-            Entity entity = e.world.getLoadedEntityList().get(j2);
+            Entity entity = e.world.loadedEntityList.get(j2);
 
             if (uuid.equals(entity.getUniqueID()))
             {

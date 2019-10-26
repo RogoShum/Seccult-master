@@ -28,7 +28,7 @@ public class WorldGenCave extends WorldGenerator
     	if(worldIn.isRemote)
     		return false;
     	
-    	int distance = Minecraft.getMinecraft().gameSettings.renderDistanceChunks * 16;
+    	int distance = 160;
         int scale = (int)(distance / 1.5);
         System.out.println(scale);
         if(scale < 80)

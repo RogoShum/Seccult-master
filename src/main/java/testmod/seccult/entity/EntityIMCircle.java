@@ -11,6 +11,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import testmod.seccult.magick.MagickCompiler;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
@@ -78,7 +79,8 @@ public class EntityIMCircle extends Entity{
 		double[] vec = {0, scale / 100 * this.rand.nextDouble(), 0};
 		float[] color = {particleRedIn, particleGreenIn, particleBlueIn};
 		if(this.ticksExisted % 10 == 0)
-		NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, scale, 104));
+        NetworkHandler.getNetwork().sendToAllAround(new NetworkEffectData(pos, vec, color, scale, 104),
+        		new TargetPoint(dimension, pos[0], pos[1], pos[2], 32));
 		setRender(scale);
 		setRenderColor(particleRedIn, particleGreenIn, particleBlueIn);
 		if(this.ticksExisted > 10)

@@ -24,7 +24,7 @@ public class ModSounds {
 	public static final SoundEvent gatorix = Sound("gatorix");
 	public static final SoundEvent twentyone = Sound("twentyone");
 	public static final SoundEvent storia = Sound("storia");
-	public static final SoundEvent got = Sound("got");
+	public static final SoundEvent np = Sound("np");
 	
 	
 	private static SoundEvent Sound(String name) {
@@ -50,6 +50,6 @@ public class ModSounds {
 		r.register(gatorix);
 		r.register(twentyone);
 		r.register(storia);
-		r.register(got);
+		r.register(np);
 	}
 }

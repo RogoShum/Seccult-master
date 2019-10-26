@@ -12,6 +12,6 @@
 	"twentyone": { "sounds":[{"name": "seccult:twentyone", "stream": true}]},
 	"storia": { "sounds":[{"name": "seccult:storia", "stream": true}]},
 	"zero": { "sounds":[{"name": "seccult:zero", "stream": true}]},
-	"got": { "sounds":[{"name": "seccult:got", "stream": true}]},
+	"np": { "sounds":[{"name": "seccult:np", "stream": true}]},
 	"qualia": { "sounds":[{"name": "seccult:qualia", "stream": true}]}
 }

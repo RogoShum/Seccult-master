@@ -11,7 +11,7 @@ import testmod.seccult.events.BossEventHandler;
 
 public class EntityEoWHead extends EntityEoW{
 		private boolean notFirst;
-		private ArrayList<EntityBase> eows = new ArrayList<>();
+		private ArrayList<Entity> eows = new ArrayList<>();
 		EntityEoW A = this;
 		EntityEoW B = null;
 		public EntityEoWHead(World worldIn) {

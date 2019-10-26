@@ -15,9 +15,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.client.FX.LightFX;
 import testmod.seccult.entity.livings.water.EntityRockShellLeviathan;
 import testmod.seccult.magick.active.TeleportMagick;
+import testmod.seccult.network.NetworkEffectData;
+import testmod.seccult.network.NetworkHandler;
 
 public class EntityLightingThing extends Entity{
 	
@@ -189,9 +193,12 @@ public class EntityLightingThing extends Entity{
     {
     	return (this.world.rayTraceBlocks(new Vec3d(this.posX, this.posY + 0.55D, this.posZ), new Vec3d(pX, pY, pZ), false) == null);
     }
-	
+
 	private void onParticle() {
-		Minecraft.getMinecraft().effectRenderer.addEffect(new LightFX(this.world, this.posX, this.posY, this.posZ, 0, 0, 0, 1));
+    	double[] vec = {0, 0, 0};
+		double[] pos = {this.posX, this.posY, this.posZ};
+		float[] color = {1F, 0.9F, 0.5F};
+		NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, 1, 2));
 	}
 	
 	protected void Moveto(double x, double y, double z, float speed) {

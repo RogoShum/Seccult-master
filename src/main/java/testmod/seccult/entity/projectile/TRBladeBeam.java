@@ -10,12 +10,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.Seccult;
 import testmod.seccult.client.FX.PropraFX;
 import testmod.seccult.client.FX.RainbowFX;
 import testmod.seccult.items.TRprojectile.TRprojectileID;
+import testmod.seccult.network.NetworkEffectData;
+import testmod.seccult.network.NetworkHandler;
 
 public class TRBladeBeam extends TRprojectileBase{
 	private int SEn;
@@ -190,42 +193,40 @@ public class TRBladeBeam extends TRprojectileBase{
 		double X = getVec().x;
 		double Y = getVec().y;
 		double Z = getVec().z;
+		double[] vec = {0, 0, 0};
+		double[] pos = {X, Y, Z};
 		if(this.getRenderSkin() == 0)
-		{	
-			Particle a = new PropraFX(this.world, X , Y, Z, 0, 0, 0);
+		{
 			switch(this.ticksExisted % 3) {
 			case 0:			
-				a.setRBGColorF(1, 0.1F + randlight, 0.5F + randlight);
-				Minecraft.getMinecraft().effectRenderer.addEffect(a);
+				float[] color = {1, 0.1F + randlight, 0.5F + randlight};
+				NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, this.rand.nextFloat() * 0.5F + 0.5F, 2));
 			break;
 			case 1:
-				a.setRBGColorF(0.2F + randlight, 0.4F + randlight, 1.0F);
-				Minecraft.getMinecraft().effectRenderer.addEffect(a);
+				float[] color1 = {0.2F + randlight, 0.4F + randlight, 1.0F};
+				NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color1, this.rand.nextFloat() * 0.5F + 0.5F, 2));
 			break;
 			case 2:
-				a.setRBGColorF(1, 0.9F + randlight, 0.1F + randlight);
-				Minecraft.getMinecraft().effectRenderer.addEffect(a);
+				float[] color2 = {1, 0.9F + randlight, 0.1F + randlight};
+				NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color2, this.rand.nextFloat() * 0.5F + 0.5F, 2));
 			}
 			
 			if(this.isStick) {
 	        	
+				double[] vec1 = {this.getLookVec().x / 3, this.getLookVec().y / 3, this.getLookVec().z / 3};
 				for(int ae = 0; ae < 6; ae++) {
-					Particle b = new PropraFX(this.world, getVec().x, getVec().y, getVec().z, this.getLookVec().x / 3, this.getLookVec().y / 3, this.getLookVec().z / 3);
-					b.setRBGColorF(1, 0.1F + randlight, 0.5F + randlight);
-					Minecraft.getMinecraft().effectRenderer.addEffect(b);
-					b.setRBGColorF(0.2F + randlight, 0.4F + randlight, 1.0F);
+					float[] color = {1, 0.1F + randlight, 0.5F + randlight};
+					NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec1, color, this.rand.nextFloat() * 0.5F + 0.5F, 2));
 				}
 				
 				for(int ae = 0; ae < 6; ae++) {
-					Particle b = new PropraFX(this.world, getVec().x, getVec().y, getVec().z, this.getLookVec().x / 3, this.getLookVec().y / 3, this.getLookVec().z / 3);
-					b.setRBGColorF(0.2F + randlight, 0.4F + randlight, 1.0F);
-					Minecraft.getMinecraft().effectRenderer.addEffect(b);
+					float[] color1 = {0.2F + randlight, 0.4F + randlight, 1.0F};
+					NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec1, color1, this.rand.nextFloat() * 0.5F + 0.5F, 2));
 				}
 				
 				for(int ae = 0; ae < 6; ae++) {
-					Particle b = new PropraFX(this.world, getVec().x, getVec().y, getVec().z, this.getLookVec().x / 3, this.getLookVec().y / 3, this.getLookVec().z / 3);
-					b.setRBGColorF(1, 0.9F + randlight, 0.1F + randlight);
-					Minecraft.getMinecraft().effectRenderer.addEffect(b);
+					float[] color2 = {1, 0.9F + randlight, 0.1F + randlight};
+					NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec1, color2, this.rand.nextFloat() * 0.5F + 0.5F, 2));
 				}
 				
 				this.setDead();
@@ -233,65 +234,41 @@ public class TRBladeBeam extends TRprojectileBase{
 		}
 		else
 		if(this.getRenderSkin() == 1)
-		{	
+		{
+			float[] color = {0.3F + randlight, 1F, 0.17F + randlight};
 			for(int ae = 0; ae < 3; ae++) {
-			Particle a = new PropraFX(this.world, getVec().x, getVec().y, getVec().z, 0, 0, 0);
-			a.setRBGColorF(0.3F + randlight, 1F, 0.17F + randlight);
-			Minecraft.getMinecraft().effectRenderer.addEffect(a);
+				NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, this.rand.nextFloat() * 0.5F + 0.5F, 2));
 			}
 			
 			if(this.isStick) {
 				for(int ae = 0; ae < 6; ae++) {
-				Particle b = new PropraFX(this.world, getVec().x, getVec().y, getVec().z, this.getLookVec().x / 3, this.getLookVec().y / 3, this.getLookVec().z / 3);
-				b.setRBGColorF(0.3F + randlight, 1F, 0.17F + randlight);
-				Minecraft.getMinecraft().effectRenderer.addEffect(b);
+					double[] vec1 = {this.getLookVec().x / 3, this.getLookVec().y / 3, this.getLookVec().z / 3};
+					NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec1, color, this.rand.nextFloat() * 0.5F + 0.5F, 2));
 				}
 				this.setDead();
 			}
 		}
 		else
 		if(this.getRenderSkin() == 12) {
+			float[] color = {1F, 0.85F + randlight, 0.17F  + randlight};
 			if(this.ticksExisted % 7 == 0) {
-				Particle a = new PropraFX(this.world, X , Y, Z, 0, 0, 0, 12);
-				a.setRBGColorF(1F, 0.85F + randlight, 0.17F  + randlight);
-				Minecraft.getMinecraft().effectRenderer.addEffect(a);
+				NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, this.rand.nextFloat() * 0.5F + 0.5F, 2));
 			}
 				
 				if(this.isStick) {
-		        	
 					for(int ae = 0; ae < 10; ae++) {
-						Particle b = new PropraFX(this.world, getVec().x, getVec().y, getVec().z, this.getLookVec().x / 3, this.getLookVec().y / 3, this.getLookVec().z / 3);
-						b.setRBGColorF(1F, randlight, randlight);
-						Minecraft.getMinecraft().effectRenderer.addEffect(b);
+						double[] vec1 = {this.getLookVec().x / 3, this.getLookVec().y / 3, this.getLookVec().z / 3};
+						NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec1, color, this.rand.nextFloat() * 0.5F + 0.5F, 2));
 					}
-					
 					this.setDead();
 				}
 		}
 		else
 		if(this.getRenderSkin() == 10) {
-			
-			Particle a = new RainbowFX(this.world, this.prevPosX, this.prevPosY + (this.height / 2), this.prevPosZ);
-			switch(this.ticksExisted % 7) {
-			case 0:			
-				Minecraft.getMinecraft().effectRenderer.addEffect(a);
-			break;
-			case 1:
-				Minecraft.getMinecraft().effectRenderer.addEffect(a);
-			break;
-			case 2:
-				Minecraft.getMinecraft().effectRenderer.addEffect(a);
-			break;
-			case 4:			
-				Minecraft.getMinecraft().effectRenderer.addEffect(a);
-			break;
-			case 5:
-				Minecraft.getMinecraft().effectRenderer.addEffect(a);
-			break;
-			case 6:
-				Minecraft.getMinecraft().effectRenderer.addEffect(a);
-			}
-			
+			double[] vec3 = {0, 0, 0};
+			double[] pos3 = {this.prevPosX, this.prevPosY + (this.height / 2), this.prevPosZ};
+			float[] color = {1F, 0.85F + randlight, 0.17F  + randlight};
+			NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos3, vec3, color, this.rand.nextFloat() * 0.5F + 0.5F, 8));
 			if(this.isStick && this.collisionTimes >= 5)  {
 					this.setDead();
 			}

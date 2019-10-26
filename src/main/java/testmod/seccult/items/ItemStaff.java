@@ -18,6 +18,9 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.Seccult;
 import testmod.seccult.client.FX.PentagonFX;
 import testmod.seccult.events.ModEventHandler;
@@ -26,6 +29,8 @@ import testmod.seccult.init.ModMagicks;
 import testmod.seccult.magick.ImplementationHandler;
 import testmod.seccult.magick.MagickCompiler;
 import testmod.seccult.magick.active.Magick;
+import testmod.seccult.network.NetworkEffectData;
+import testmod.seccult.network.NetworkHandler;
 import testmod.seccult.world.gen.SeccultBiomeRegistries;
 
 public class ItemStaff extends ItemBase{
@@ -36,7 +41,11 @@ public class ItemStaff extends ItemBase{
 	
 	public ItemStaff(String name) {
 		super(name);
-		this.setMaxDamage(Seccult.rand.nextInt(100) + 20);
+		
+		if(name == "defence_staff")
+			this.setMaxDamage(Seccult.rand.nextInt(900) + 300);
+		else
+			this.setMaxDamage(Seccult.rand.nextInt(100) + 20);
 		
 		DamageMagick.add(ModMagicks.getMagickFromName(ModMagicks.DamageMagick));
 		DamageMagick.add(ModMagicks.getMagickFromName(ModMagicks.ElectroMagick));
@@ -113,16 +122,21 @@ public class ItemStaff extends ItemBase{
 		player.setActiveHand(hand);
 		//if(this == ModItems.DefenceStaff && this.getMagickData(player.getHeldItem(hand)) != null)
 			//this.TickMagick(this.getMagickData(player.getHeldItem(hand)), player);
-		
+		particle(world, player);
 		return super.onItemRightClick(world, player, hand);
 	}
 	
 	@Override
 	public void onUsingTick(ItemStack stack, EntityLivingBase player, int count) {
+		super.onUsingTick(stack, player, count);
+	}
+
+	public void particle(World world, EntityPlayer player)
+	{
 		if(this.getMagickData(player.getHeldItemMainhand()) != null)
 		{
 			float[] color = ItemStaff.getMagickColor(player.getHeldItemMainhand());
-			if(color != null)
+			if(color != null && !player.world.isRemote)
 			{
 				for (int i = 0; i < 5; i++) {
 					double tx = player.posX + (player.world.rand.nextFloat() * 0.1F);
@@ -134,9 +148,10 @@ public class ItemStaff extends ItemBase{
 
 					Vec3d handVec = player.getLookVec().rotateYaw(-0.65F);
 					Vec3d right = new Vec3d(tx, ty, tz).addVector(handVec.x, handVec.y, handVec.z);
-					Particle ChlorophyteCrystal = new PentagonFX(player.world, right.x, right.y, right.z, motionX / 50, motionY / 50, motionZ / 50, player.world.rand.nextFloat() * 1.5F);
-					ChlorophyteCrystal.setRBGColorF(color[0], color[1], color[2]);
-			    	Minecraft.getMinecraft().effectRenderer.addEffect(ChlorophyteCrystal);
+
+			    	double[] vec = {motionX / 50, motionY / 50, motionZ / 50};
+					double[] pos = {right.x, right.y, right.z};
+					NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, player.world.rand.nextFloat() * 1.5F, 2));
 				}
 			}
 		}
@@ -145,7 +160,7 @@ public class ItemStaff extends ItemBase{
 		{
 			float[] color = ItemStaff.getMagickColor(player.getHeldItemOffhand());
 
-			if(color != null)
+			if(color != null && !player.world.isRemote)
 				for (int i = 0; i < 5; i++) {
 					double tx = player.posX + (player.world.rand.nextFloat() * 0.1F);
 					double ty = player.posY + (player.world.rand.nextFloat() * 0.1F) + player.height;
@@ -156,12 +171,12 @@ public class ItemStaff extends ItemBase{
 
 					Vec3d handVec = player.getLookVec().rotateYaw(0.65F);
 					Vec3d right = new Vec3d(tx, ty, tz).addVector(handVec.x, handVec.y, handVec.z);
-					Particle ChlorophyteCrystal = new PentagonFX(player.world, right.x, right.y, right.z, motionX / 50, motionY / 50, motionZ / 50, player.world.rand.nextFloat() * 1.5F);
-					ChlorophyteCrystal.setRBGColorF(color[0], color[1], color[2]);
-			    	Minecraft.getMinecraft().effectRenderer.addEffect(ChlorophyteCrystal);
+					
+			    	double[] vec = {motionX / 50, motionY / 50, motionZ / 50};
+					double[] pos = {right.x, right.y, right.z};
+					NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, player.world.rand.nextFloat() * 1.5F, 2));
 				}
 		}
-		super.onUsingTick(stack, player, count);
 	}
 	
 	@Override
@@ -173,6 +188,9 @@ public class ItemStaff extends ItemBase{
 			{
 				if(!((EntityPlayer) entityLiving).isCreative())
 				stack.attemptDamageItem(1, Item.itemRand, null);
+
+				if(stack.getItemDamage() > stack.getMaxDamage())
+					stack.shrink(1);
 			}
 			
 		}

@@ -17,6 +17,7 @@ public class NetworkHandler {
 		network.registerMessage(NetworPlayerMagickData.PacketMessageHandler.class, NetworPlayerMagickData.class, 5, Side.CLIENT);
 		network.registerMessage(NetworkMutekiGamer.PacketMessageHandler.class, NetworkMutekiGamer.class, 6, Side.CLIENT);
 		network.registerMessage(NetworkPlayerAddMagick.PacketMessageHandler.class, NetworkPlayerAddMagick.class, 7, Side.SERVER);
+		network.registerMessage(NetworkTransFloat.MessageHandler.class, NetworkTransFloat.class, 8, Side.SERVER);
 	}
 	
 	public static SimpleNetworkWrapper getNetwork()

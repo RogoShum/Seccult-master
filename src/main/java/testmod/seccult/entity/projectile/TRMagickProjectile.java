@@ -65,6 +65,7 @@ public class TRMagickProjectile extends TRprojectileBase{
         return 5.0F;
     }
 	
+    @SideOnly(Side.CLIENT)
 	private void particles() {
 		float ran = this.rand.nextFloat() - 0.5F;
 		if(ran > 0.3)

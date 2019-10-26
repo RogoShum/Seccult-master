@@ -133,12 +133,6 @@ public class PlayerAccessorieHandler {
 
 		public void tick()
 		{	
-			KeyBinding[] keyBindings = ClientProxy.keyBindings;
-				if(!player.world.isRemote && keyBindings[2].isKeyDown())
-				{
-					player.openGui(Seccult.instance, GuiElementLoader.GUI_Accessories, player.world, (int)player.posX, (int)player.posY, (int)player.posZ);
-				}
-
 			for(int i = 0; i < itemList.length; i++)
 			{
 				if(itemList[i]!=null)

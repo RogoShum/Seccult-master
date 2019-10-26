@@ -52,6 +52,9 @@ public class SpiritRenderBase extends RenderLivingBase<EntityLivingBase>
     		Ospirit.motionY = entity.motionY;
     		Ospirit.motionZ = entity.motionZ;
 
+    		entity.width = Ospirit.width;
+    		entity.height = Ospirit.height;
+    		
         	if(Ospirit instanceof EntityLivingBase) 
         	{
         		EntityLivingBase living = (EntityLivingBase) Ospirit;

@@ -13,10 +13,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.client.FX.LightFX;
 import testmod.seccult.entity.livings.EntityStand;
+import testmod.seccult.network.NetworkEffectData;
+import testmod.seccult.network.NetworkHandler;
 
 public class EntityLmr extends Entity
 {
@@ -134,9 +137,10 @@ public class EntityLmr extends Entity
 		
 	}
 
-	/**
-     * Return the motion factor for this projectile. The factor is multiplied by the original motion.
-     */
+	protected void water_bubble()
+	{
+		 this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
+	}
 
     /**
      * Called when this EntityFireball hits a block or entity.
@@ -158,7 +162,7 @@ public class EntityLmr extends Entity
             {
                 for (int i = 0; i < 4; ++i)
                 {
-                    this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
+                	water_bubble();
                 }
             }
 
@@ -193,10 +197,17 @@ public class EntityLmr extends Entity
             this.setDead();
         }
     }
-    
+
     protected void pret() {
-        	Minecraft.getMinecraft().effectRenderer.addEffect(new LightFX(this.world, this.posX, this.posY, this.posZ, this.accelerationX, this.accelerationY, this.accelerationZ));
-        	Minecraft.getMinecraft().effectRenderer.addEffect(new LightFX(this.world, this.lastTickPosX, this.lastTickPosY, this.lastTickPosZ, this.accelerationX, this.accelerationY, this.accelerationZ));
+    	double[] pos2 = {this.lastTickPosX, this.lastTickPosY, this.lastTickPosZ};
+    	
+    	double[] vec = {this.accelerationX, this.accelerationY, this.accelerationZ};
+		double[] pos = {this.posX, this.posY, this.posZ};
+		float[] color = {1, 0.9F, 0.5F};
+        NetworkHandler.getNetwork().sendToAllAround(new NetworkEffectData(pos, vec, color, this.rand.nextFloat() * 0.2F + 0.7F, 0),
+        		new TargetPoint(dimension, pos[0], pos[1], pos[2], 32));
+        NetworkHandler.getNetwork().sendToAllAround(new NetworkEffectData(pos2, vec, color, this.rand.nextFloat() * 0.2F + 0.7F, 0),
+        		new TargetPoint(dimension, pos[0], pos[1], pos[2], 32));
     }
     
     protected void Ref(Entity hitEntity)

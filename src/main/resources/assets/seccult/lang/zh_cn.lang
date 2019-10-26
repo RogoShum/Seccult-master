@@ -72,7 +72,7 @@ item.saika.name=唱片 - 彩华
 item.storia.name=唱片 - 历史
 item.twentyone.name=唱片 - 21
 item.summer.name=唱片 - 夏
-item.got.name=唱片 - U Got That
+item.np.name=唱片 - No Problem
 
 item.ocean_helmet.name=深海头护
 item.ocean_chest.name=深海胸甲
@@ -125,7 +125,7 @@ item.record.seccult:slit.desc=Jioyi - Ø （SLIT） I
 item.record.seccult:saika.desc=Rabpit - Saika
 item.record.seccult:summer.desc=Christian Levitan - G小调第二协奏曲, Op. 8, RV 315, ＂L'estate＂ (夏)： I. Allegro Non Molto
 
-item.record.seccult:got.desc=Halogen - U Got That
+item.record.seccult:np.desc=Hdeadmau5 - No Problem
 
 
 //blocks

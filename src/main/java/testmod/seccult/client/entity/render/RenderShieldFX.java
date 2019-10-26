@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.ClientProxy;
@@ -35,9 +36,9 @@ public class RenderShieldFX extends Render<EntityShieldFX>
          GlStateManager.popMatrix();
     }
     
-    @SideOnly(Side.CLIENT)
     public static void renderShield(float scale, float blend)
     {
+    	if(FMLCommonHandler.instance().getSide().equals(Side.SERVER)) return; 
     	GlStateManager.enableBlend();
     	GlStateManager.depthMask(false);
     	GlStateManager.enableNormalize();

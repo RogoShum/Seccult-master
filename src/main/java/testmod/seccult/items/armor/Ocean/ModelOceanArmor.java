@@ -6,11 +6,14 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * ModelPlayer - Either Mojang or a mod author
  * Created using Tabula 7.0.1
  */
+@SideOnly(Side.CLIENT)
 public class ModelOceanArmor extends ModelBiped {
     public ModelRenderer Left_arm;
     public ModelRenderer Right_leg;

@@ -19,7 +19,7 @@ public class ACandyRing extends ItemAccessories{
 				player.getFoodStats().setFoodLevel(20);
 			
 			if(player.getFoodStats().getSaturationLevel() < 20)
-				player.getFoodStats().setFoodSaturationLevel(20);
+				player.getFoodStats().addStats(0, 20);
 		}
 	}
 	

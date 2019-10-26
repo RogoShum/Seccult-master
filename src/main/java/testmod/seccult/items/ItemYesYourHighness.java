@@ -35,16 +35,15 @@ public class ItemYesYourHighness extends ItemBase{
 			player.getEntityData().setInteger("YesYourHighness", 1);*/
 			
 			PlayerData data = PlayerDataHandler.get(player);
-			
-			System.out.println(data.isMutekiGamer());
+
 			if(!player.world.isRemote && data.isMutekiGamer())
 			{
-				NetworkHandler.getNetwork().sendToAll(new NetworkMutekiGamer(false, player, 1));
+				NetworkHandler.getNetwork().sendToAll(new NetworkMutekiGamer(0, player, 1));
 				data.setMutekiGamer(false);
 			}
 			else if(!player.world.isRemote && !data.isMutekiGamer())
 			{
-				NetworkHandler.getNetwork().sendToAll(new NetworkMutekiGamer(true, player, 1));
+				NetworkHandler.getNetwork().sendToAll(new NetworkMutekiGamer(1, player, 1));
 				data.setMutekiGamer(true);
 			}
 

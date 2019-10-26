@@ -77,6 +77,7 @@ public class AFriendshipRing extends ItemAccessories{
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		super.addInformation(stack, worldIn, tooltip, flagIn);
 		if(getEntity(stack, worldIn) != null)

@@ -125,8 +125,9 @@ public class SeccultBiomeRegistries {
 			BiomeManager.addBiome(BiomeType.WARM, new BiomeManager.BiomeEntry(mana_Mushroom_Cave, 5));
 			BiomeManager.addBiome(BiomeType.WARM, new BiomeManager.BiomeEntry(mana_Mushroom_Island, 5));
 			BiomeManager.addBiome(BiomeType.WARM, new BiomeManager.BiomeEntry(mana_Mushroom_Normal, 5));
-			BiomeManager.addBiome(BiomeType.COOL, new BiomeManager.BiomeEntry(mana_OceanSide, 30));
-			BiomeManager.addBiome(BiomeType.ICY, new BiomeManager.BiomeEntry(mana_Ocean, 30));
+			
+			BiomeManager.addBiome(BiomeType.COOL, new BiomeManager.BiomeEntry(mana_OceanSide, 50));
+			BiomeManager.addBiome(BiomeType.ICY, new BiomeManager.BiomeEntry(mana_Ocean, 40));
 			BiomeManager.addBiome(BiomeType.ICY, new BiomeManager.BiomeEntry(mana_DeepOcean, 30));
 			//BiomeManager.addBiome(BiomeType.WARM, new BiomeManager.BiomeEntry(Oblivion, 50));
 			//BiomeManager.addBiome(BiomeType.WARM, new BiomeManager.BiomeEntry(Oblivion_Skyrim, 50));

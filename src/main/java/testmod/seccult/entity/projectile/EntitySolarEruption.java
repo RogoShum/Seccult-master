@@ -6,11 +6,14 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.client.FX.PropraFX;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.items.TRprojectile.TRprojectileID;
+import testmod.seccult.network.NetworkEffectData;
+import testmod.seccult.network.NetworkHandler;
 
 public class EntitySolarEruption extends TRprojectileBase{
 	
@@ -69,20 +72,27 @@ public class EntitySolarEruption extends TRprojectileBase{
     {
         return 5.0F;
     }
+
+    protected void partecle()
+    {
+    	double X = getVec().x;
+		double Y = getVec().y;
+		double Z = getVec().z;
+
+    	double[] vec = {0, 0, 0};
+		double[] pos = {X, Y, Z};
+		float[] color = {0.8F + randlight, 0.4F + randlight, randlight};
+
+        NetworkHandler.getNetwork().sendToAllAround(new NetworkEffectData(pos, vec, color, this.rand.nextFloat() * 0.5F + 0.5F, 2),
+        		new TargetPoint(dimension, pos[0], pos[1], pos[2], 32));
+    }
     
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
 		
 		if(this.ticksExisted % 2 == 0) {
-		double X = getVec().x;
-		double Y = getVec().y;
-		double Z = getVec().z;
-		
-		Particle a = new PropraFX(this.world, X, Y, Z, 0, 0, 0);
-
-		a.setRBGColorF(0.8F + randlight, 0.4F + randlight, randlight);
-		Minecraft.getMinecraft().effectRenderer.addEffect(a);
+			partecle();
 		}
 		
 		if(this.world.isRemote)

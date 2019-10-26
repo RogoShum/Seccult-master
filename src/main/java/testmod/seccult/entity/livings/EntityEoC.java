@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.item.Item;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -19,7 +20,7 @@ import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.BossInfo.Overlay;
 import net.minecraft.world.World;
 import testmod.seccult.events.BossEventHandler;
-import testmod.seccult.events.ModEventHandler;
+import testmod.seccult.init.ModItems;
 import testmod.seccult.init.ModSounds;
 
 public class EntityEoC extends EntityBase implements IBossBase{
@@ -39,12 +40,12 @@ public class EntityEoC extends EntityBase implements IBossBase{
 		super(worldIn);
 		this.setSize(5F, 5F);
 		this.setNoGravity(true);
-		this.CoolDown = 60;
+		this.CoolDown = 150;
 		this.state = 0;
 		this.Times = 0;
 		this.noClip = true;
 		this.isTRboss = true;
-		ArrayList<EntityBase> boss = new ArrayList<>();
+		ArrayList<Entity> boss = new ArrayList<>();
 		boss.add(this);
 		new BossEventHandler(boss);
 	}
@@ -139,7 +140,8 @@ public class EntityEoC extends EntityBase implements IBossBase{
 		}
 		else 
 		{
-			Moveto(eneX, eneY, eneZ, 0.4F);
+			Moveto(eneX, eneY, eneZ, 0.5F);
+			Moveto(ene.posX, ene.posY, ene.posZ, 0.2F);
 			cooldown++;
 			if(cooldown > 50) {
 				state = 1;
@@ -188,7 +190,7 @@ public class EntityEoC extends EntityBase implements IBossBase{
 			prepare();
 		}
 		else {
-			CoolDown = 70;
+			CoolDown = 50;
 			Times = 0;
 		}
 	}
@@ -208,6 +210,31 @@ public class EntityEoC extends EntityBase implements IBossBase{
 		double distance = AP.distanceTo(LP);
 		double dis = distance + dist;
 		return AP.addVector(look.x * dis, look.y * dis, look.z * dis);
+	}
+	
+	@Override
+	protected Item getDropItem() {
+		return ModItems.Blood_M;
+	}
+	
+	@Override
+	protected void dropFewItems(boolean wasRecentlyHit, int lootingModifier) {
+        Item item = this.getDropItem();
+
+        if (item != null)
+        {
+            int i = this.rand.nextInt(20);
+
+            if (lootingModifier > 0)
+            {
+                i += this.rand.nextInt(lootingModifier + 1);
+            }
+
+            for (int j = 0; j < i; ++j)
+            {
+                this.dropItem(item, 1);
+            }
+        }
 	}
 	
 	protected void rotate() {

@@ -1,22 +1,60 @@
 package testmod.seccult;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Sphere;
 
+import com.google.common.collect.AbstractIterator;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.MovingSound;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import testmod.seccult.client.FX.ATFX;
+import testmod.seccult.client.FX.FrozenBlockFX;
+import testmod.seccult.client.FX.LightFX;
+import testmod.seccult.client.FX.PentagonFX;
+import testmod.seccult.client.FX.RainbowFX;
+import testmod.seccult.client.FX.StarFX;
+import testmod.seccult.client.FX.ThunderFX;
+import testmod.seccult.client.entity.render.RenderHandler;
+import testmod.seccult.entity.EntitySound;
+import testmod.seccult.entity.livings.EntityBase;
+import testmod.seccult.entity.livings.IBossBase;
+import testmod.seccult.events.EntityRenderHandler;
+import testmod.seccult.events.HUDHandler;
+import testmod.seccult.init.ModItems;
+import testmod.seccult.items.ItemMagickCore;
+import testmod.seccult.items.ItemWand;
+import testmod.seccult.magick.MagickCompiler;
+import testmod.seccult.magick.magickState.StateManager;
+import testmod.seccult.network.NetworkEffectData;
+import testmod.seccult.network.NetworkHandler;
 
 public class ClientProxy extends CommonProxy
 {
@@ -35,10 +73,180 @@ public class ClientProxy extends CommonProxy
 		ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(new ResourceLocation(Seccult.MODID, filename), id));
 	}
 	
+	@SideOnly(Side.CLIENT)
 	public static void callSphere()
 	{
 	    GlStateManager.callList(ClientProxy.sphereIdOutside);
 	    GlStateManager.callList(ClientProxy.sphereIdInside);
+	}
+
+	public void entityRender()
+	{
+		RenderHandler.registerEntityRenders();
+	}
+	
+	public void BossSound(ArrayList<Entity> bosses)
+	{
+		Entity entity = bosses.get(0);
+
+		if(bosses.size() <= 1)
+		{
+			if(!entity.world.isRemote) return;
+			Minecraft.getMinecraft().getSoundHandler().playSound(new BossMusic(entity));
+		}
+		else
+		{
+			if(!entity.world.isRemote) return;
+			Minecraft.getMinecraft().getSoundHandler().playSound(new BossMusic(entity));
+		}
+	}
+	
+	public void renderEvent()
+	{
+		MinecraftForge.EVENT_BUS.register(new HUDHandler());
+		MinecraftForge.EVENT_BUS.register(new EntityRenderHandler());
+		ItemColoerRegister();
+	}
+
+	
+	@SideOnly(Side.CLIENT)
+	private static class BossMusic extends MovingSound {
+	
+		private final Entity guardian;
+
+		public BossMusic(Entity guardian) {
+			super(((IBossBase)guardian).getBGM(), SoundCategory.RECORDS);
+			this.guardian = guardian;
+			this.repeat = true;
+			this.volume = 5;
+		}
+
+		@Override
+		public void update() {
+			if (!guardian.isEntityAlive() || guardian.isDead) {
+				this.volume = 0;
+				donePlaying = true;
+			}
+			else
+			{
+				this.xPosF = (float) guardian.posX;
+				this.yPosF = (float) guardian.posY;
+				this.zPosF = (float) guardian.posZ;
+			}
+		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	private static class BossMusicMult extends MovingSound {
+		private ArrayList<EntityBase> bosses;
+		private BlockPos pos = null;
+		
+		public BossMusicMult(ArrayList<EntityBase> guardian) {
+			super(((IBossBase)guardian.get(0)).getBGM(), SoundCategory.RECORDS);
+			this.bosses = guardian;
+			this.repeat = true;
+			this.volume = 5;
+		}
+
+		@Override
+		public void update() {
+			boolean stillAlive = false;
+			for(int i = 0; i < bosses.size(); ++i)
+			{
+				EntityBase boss = bosses.get(i);
+				if(boss.isEntityAlive() && !boss.isDead)
+				{
+					if(pos == null)
+						pos = boss.getPosition();
+					
+					BlockPos newPos = new BlockPos((boss.posX + pos.getX()) / 2,(
+							boss.posY + pos.getY()) / 2,
+							(boss.posZ + pos.getZ()) / 2);
+					
+					pos = newPos;
+					stillAlive = true;
+				}
+			}
+			
+			if(!stillAlive)
+			{
+				this.volume = 0;
+				donePlaying = true;
+			}
+
+			this.xPosF = (float) pos.getX();
+			this.yPosF = (float) pos.getY();
+			this.zPosF = (float) pos.getZ();
+		}
+	}
+	
+	 @SideOnly(Side.CLIENT)
+	public void ItemColoerRegister()
+	{
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor()
+		{
+			@Override
+			public int colorMultiplier(ItemStack stack, int tintIndex) {
+				if(tintIndex == 1)
+					return ItemWand.getMagickColor(stack);
+
+					return ItemWand.getWandStyle(stack, tintIndex);
+			}
+		}, ModItems.Wand);
+		
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor()
+		{
+			@Override
+			public int colorMultiplier(ItemStack stack, int tintIndex) {
+
+					return ItemMagickCore.getMagickColorInt(stack);
+			}
+		}, ModItems.MagickCore);
+		
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor()
+		{
+			@Override
+			public int colorMultiplier(ItemStack stack, int tintIndex) {
+
+					return ItemMagickCore.getMagickColorInt(stack);
+			}
+		}, ModItems.CHLOROPHYTE_SWORD);
+		
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor()
+		{
+			@Override
+			public int colorMultiplier(ItemStack stack, int tintIndex) {
+
+					return ItemMagickCore.getMagickColorInt(stack);
+			}
+		}, ModItems.OCEAN_SWORD);
+		
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor()
+		{
+			@Override
+			public int colorMultiplier(ItemStack stack, int tintIndex) {
+
+					return ItemMagickCore.getMagickColorInt(stack);
+			}
+		}, ModItems.SHADOW_SWORD);
+		
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor()
+		{
+			@Override
+			public int colorMultiplier(ItemStack stack, int tintIndex) {
+
+					return ItemMagickCore.getMagickColorInt(stack);
+			}
+		}, ModItems.SILK_SWORD);
+		
+		Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor()
+		{
+			@Override
+			public int colorMultiplier(ItemStack stack, int tintIndex) {
+
+					return ItemMagickCore.getMagickColorInt(stack);
+			}
+		}, ModItems.SORCERER_SWORD);
 	}
 	
 	public void init()
@@ -125,4 +333,245 @@ public class ClientProxy extends CommonProxy
 		sphere.draw(0.5F, 64, 64);
 		GlStateManager.glEndList();
 	}
+	
+	@SideOnly(Side.CLIENT)
+	public void SeccultFX(double[] pos, double[] vec, float[] color, float scale, int type)
+	{
+		Minecraft mc = Minecraft.getMinecraft();
+    	Particle par = null;
+    	
+    	double x = pos[0];
+    	double y = pos[1];
+    	double z = pos[2];
+
+    	double xx = vec[0];
+    	double yy = vec[1];
+    	double zz = vec[2];
+    	
+    	float r = color[0];
+    	float g = color[1];
+    	float b = color[2];
+    	
+		switch(type)
+    	{
+    		case 0:
+    			par = new LightFX(mc.world,x,y,z, xx, yy, zz, scale);
+    			par.setRBGColorF(r, g, b);
+    			break;
+    		case 1:
+    			par = new StarFX(mc.world,x,y,z, xx, yy, zz, scale);
+    			par.setRBGColorF(r, g, b);
+    			break;
+    		case 2:
+    			par = new PentagonFX(mc.world,x,y,z, xx, yy, zz, scale);
+    			par.setRBGColorF(r, g, b);
+    			break;
+    		case 3:
+    		    for (int sn = 0; sn < 4; ++sn)
+    		    {
+    			double d0 = x + 3 - mc.world.rand.nextInt(6);
+    			double d1 = y + 3 - mc.world.rand.nextInt(6);
+    			double d2 = z + 3 - mc.world.rand.nextInt(6);
+    			mc.world.spawnParticle(EnumParticleTypes.SNOW_SHOVEL, d0, d1, d2, 0, 0, 0);
+    		    }
+    			break;
+    		case 4:
+    			par = new ThunderFX(mc.world,x,y,z, xx, yy, zz, r, g, scale);
+    			break;
+    		case 5:
+    			int distancec = (int) scale;
+
+    			for (int i = 0; i < distancec; i++) {
+    				double trailFactor = i / (distancec - 1.0D);
+    				double tx = x + (xx - x) * trailFactor + mc.world.rand.nextGaussian() * 0.005;
+    				double ty = y + (yy - y) * trailFactor + mc.world.rand.nextGaussian() * 0.005;
+    				double tz = z + (zz - z) * trailFactor + mc.world.rand.nextGaussian() * 0.005;
+    				double motionX = 1 - 2*mc.world.rand.nextFloat();
+    				double motionY = 1 - 2*mc.world.rand.nextFloat();
+    				double motionZ = 1 - 2*mc.world.rand.nextFloat();
+    				
+    				mc.world.spawnParticle(EnumParticleTypes.SNOW_SHOVEL, tx, ty, tz, motionX / 25, motionY / 25, motionZ / 25);
+    			}
+    			break;
+    		case 6:
+    			int distanceee = (int) scale;
+    			for (int i = 0; i < distanceee; i++) {
+    				double trailFactor = i / (distanceee - 1.0D);
+    				double tx = x + (xx - x) * trailFactor + mc.world.rand.nextGaussian() * 0.005;
+    				double ty = y + (yy - y) * trailFactor + mc.world.rand.nextGaussian() * 0.005;
+    				double tz = z + (zz - z) * trailFactor + mc.world.rand.nextGaussian() * 0.005;
+    				double motionX = 0.25F - 0.5 * mc.world.rand.nextFloat();
+    				double motionY = 1.8F - 2*mc.world.rand.nextFloat();
+    				double motionZ = 0.25F - 0.5 * mc.world.rand.nextFloat();
+    				
+    				Particle big = new LightFX(mc.world, tx, ty, tz, motionX / 50, motionY / 50, motionZ / 50, 1.0F + mc.world.rand.nextFloat());
+    		    	big.setRBGColorF(r, g, b);
+    		    	Minecraft.getMinecraft().effectRenderer.addEffect(big);
+    			}
+
+    			for (int i = 0; i < distanceee; i++) {
+    				double trailFactor = i / (distanceee - 1.0D);
+    				double tx = x + (xx - x) * trailFactor + mc.world.rand.nextGaussian() * 0.005;
+    				double ty = y + (yy - y) * trailFactor + mc.world.rand.nextGaussian() * 0.005;
+    				double tz = z + (zz - z) * trailFactor + mc.world.rand.nextGaussian() * 0.005;
+    				double motionX = 0.5F - mc.world.rand.nextFloat();
+    				double motionY = 0.8F - mc.world.rand.nextFloat();
+    				double motionZ = 0.5F - mc.world.rand.nextFloat();
+    				
+    				Particle big = new LightFX(mc.world, tx, ty, tz, motionX / 50, motionY / 50, motionZ / 50, 0.5F);
+    		    	big.setRBGColorF(1, 1, 1);
+    		    	
+    		    	Particle bigW = new LightFX(mc.world, tx, ty, tz, motionX / 100, motionY / 50, motionZ / 100, 0.8F);
+    		    	bigW.setRBGColorF(0.8F, 0.7F, 0.1F);
+    		    	
+    		    	//Particle aa = new LightFX(mc.world, tx, ty, tz, motionX / 50, motionY / 50, motionZ / 50, 0.6F + mc.world.rand.nextFloat());
+    		    	//aa.setRBGColorF(r, g, b);
+    		    	//Minecraft.getMinecraft().effectRenderer.addEffect(aa);
+    		    	Minecraft.getMinecraft().effectRenderer.addEffect(bigW);
+    		    	Minecraft.getMinecraft().effectRenderer.addEffect(big);
+    			}
+    			
+    			break;
+    		case 7:
+    			Minecraft.getMinecraft().effectRenderer.addEffect(new ATFX(mc.world, x, y, z));
+    			break;
+    		case 8:
+    			Minecraft.getMinecraft().effectRenderer.addEffect(new RainbowFX(mc.world, x, y, z));
+    			break;
+    		case 100:
+    			for(int i = 0; i < 20 ; i++) {
+    	            double d0 = (double)((float)pos[0] + mc.world.rand.nextFloat());
+    	            double d1 = (double)((float)pos[1] + mc.world.rand.nextFloat());
+    	            double d2 = (double)((float)pos[2] + mc.world.rand.nextFloat());
+    	            double d3 = (1 - 2*StateManager.rand.nextFloat()) / 2;
+    	            double d4 = (1 - 2*StateManager.rand.nextFloat()) / 2;
+    	            double d5 = (1 - 2*StateManager.rand.nextFloat()) / 2;
+    	        	Particle me = new LightFX(mc.world, (d0 +x) / 2.0D, (d1 +y) / 2.0D, (d2 +z) / 2.0D, d3/6, d4/6, d5/6, scale);
+    	        	me.setRBGColorF(r, g, b);
+    	        	Particle smoke = new StarFX(mc.world, d0, d1, d2, d3 / 5, d4 / 5, d5 / 5, scale / 3);
+    	        	Minecraft.getMinecraft().effectRenderer.addEffect(me);
+    	        	Minecraft.getMinecraft().effectRenderer.addEffect(smoke);
+    			}
+
+    			break;
+    		case 101:
+    			int distance = (int) scale;
+    			for (int i = 0; i < distance; i++) {
+    				double trailFactor = i / (distance - 1.0D);
+    				double tx = x + (xx - x) * trailFactor + mc.world.rand.nextGaussian() * 0.005;
+    				double ty = y + (yy - y) * trailFactor + mc.world.rand.nextGaussian() * 0.005;
+    				double tz = z + (zz - z) * trailFactor + mc.world.rand.nextGaussian() * 0.005;
+    				double motionX = 1 - 2*mc.world.rand.nextFloat();
+    				double motionY = 1 - 2*mc.world.rand.nextFloat();
+    				double motionZ = 1 - 2*mc.world.rand.nextFloat();
+    				
+    				Particle big = new PentagonFX(mc.world, tx, ty, tz, motionX / 25, motionY / 25, motionZ / 25, 0.4F);
+    		    	big.setRBGColorF(r, g, b);
+    		    	Minecraft.getMinecraft().effectRenderer.addEffect(big);
+    			}
+    			break;
+    		case 102:
+    			for(int i = 0; i < (scale * 2); i++) {
+    			       double d0 = (double)((float)x + mc.world.rand.nextFloat());
+    			       double d1 = (double)((float)y + mc.world.rand.nextFloat());
+    			       double d2 = (double)((float)z + mc.world.rand.nextFloat());
+    			       double d3 = (1 - 2*StateManager.rand.nextFloat()) / 2;
+    			       double d4 = (1 - 2*StateManager.rand.nextFloat()) / 2;
+    			       double d5 = (1 - 2*StateManager.rand.nextFloat()) / 2;
+    			    	Particle big = new LightFX(mc.world, d0, d1, d2, -d3 / 20, -d4 / 20, -d5 / 20, scale / 2);
+    			    	big.setRBGColorF(r, g, b);
+    			    	big.setMaxAge(60);
+    			    	Minecraft.getMinecraft().effectRenderer.addEffect(big);
+    				}
+    			break;
+    		case 103:
+    			for (int i = 0; i < scale * 30; i++) {
+    				double motionX = 1 - 2*mc.world.rand.nextFloat();
+    				double motionY = 1 - 2*mc.world.rand.nextFloat();
+    				double motionZ = 1 - 2*mc.world.rand.nextFloat();
+    				motionX = motionX * scale / 4;
+    				motionY = motionY * scale / 4;
+    				motionZ = motionZ * scale / 4;
+    				Particle big = new LightFX(mc.world, x, y, z, motionX / 4, motionY / 4, motionZ / 4, scale * 5);
+    		    	big.setRBGColorF(r, g, b);
+    				big.setMaxAge(10);
+    		    	Minecraft.getMinecraft().effectRenderer.addEffect(big);
+    			}
+    			break;
+    		case 104:
+    			int scale2 = (int)(scale / 2);
+    				Iterable<BlockPos> Blocks = getAllInBox((int)x - scale2, (int)y, (int)z - scale2, (int)x + scale2, (int)y, (int)z + scale2);
+    				for(BlockPos pos2: Blocks)
+    				{
+    						float randF = mc.world.rand.nextFloat()*2;
+    						if(randF > 1.85 || randF < 0.15)
+    						{
+    						Particle cc = new LightFX(mc.world, pos2.getX(), pos2.getY(), pos2.getZ(), xx, yy, zz, (scale2) / 6  * randF);
+    						cc.setRBGColorF(r, g, b);
+        					Minecraft.getMinecraft().effectRenderer.addEffect(cc);
+    						}
+    				}
+    			break;
+    		case 105:
+    				Particle cc = new FrozenBlockFX(mc.world, x, y, z, r, g, 3);
+        			Minecraft.getMinecraft().effectRenderer.addEffect(cc);
+    				
+    			break;	
+    }
+
+    	if(par != null)
+		mc.effectRenderer.addEffect(par);
+	}
+	
+	public static Iterable<BlockPos> getAllInBox(final double x1, final double y1, final double z1, final double x2, final double y2, final double z2)
+    {
+        return new Iterable<BlockPos>()
+        {
+            public Iterator<BlockPos> iterator()
+            {
+                return new AbstractIterator<BlockPos>()
+                {
+                    private boolean first = true;
+                    private double lastPosX;
+                    private double lastPosY;
+                    private double lastPosZ;
+                    protected BlockPos computeNext()
+                    {
+                        if (this.first)
+                        {
+                            this.first = false;
+                            this.lastPosX = x1;
+                            this.lastPosY = y1;
+                            this.lastPosZ = z1;
+                            return new BlockPos(x1, y1, z1);
+                        }
+                        else if (this.lastPosX == x2 && this.lastPosY == y2 && this.lastPosZ == z2)
+                        {
+                            return (BlockPos)this.endOfData();
+                        }
+                        else
+                        {
+                            if (this.lastPosX < x2)
+                            {
+                                ++this.lastPosX;
+                            }
+                            else if (this.lastPosY < y2)
+                            {
+                                this.lastPosX = x1;
+                                ++this.lastPosY;
+                            }
+                            else if (this.lastPosZ < z2)
+                            {
+                                this.lastPosX = x1;
+                                this.lastPosY = y1;
+                                ++this.lastPosZ;
+                            }
+
+                            return new BlockPos(this.lastPosX, this.lastPosY, this.lastPosZ);
+                        }
+                    }
+                };
+            }
+        };
+    }
 }

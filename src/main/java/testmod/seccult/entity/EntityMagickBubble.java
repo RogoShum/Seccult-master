@@ -9,6 +9,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.entity.livings.water.EntityRockShellLeviathan;
 import testmod.seccult.init.ModDamage;
 
@@ -83,7 +85,7 @@ public class EntityMagickBubble extends Entity{
 		
 
     }
-    
+
 	private void onParticle() {
 		this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX, this.posY + 0.2, this.posZ, 0, 0, 0);
 	}

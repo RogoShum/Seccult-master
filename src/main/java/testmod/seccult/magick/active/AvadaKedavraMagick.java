@@ -36,7 +36,7 @@ public class AvadaKedavraMagick extends Magick implements SlayMagic, AttackingMa
 		
 		if(entity instanceof EntitySpirit)
 		{
-			NetworkHandler.getNetwork().sendToAll(new NetworkMutekiGamer(true, entity, 2));
+			NetworkHandler.getNetwork().sendToAll(new NetworkMutekiGamer(1, entity, 2));
 			((EntitySpirit) entity).setRelease();
 			return;
 		}

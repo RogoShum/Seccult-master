@@ -26,14 +26,6 @@ public class AEffectRefract extends ItemAccessories{
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
 		super.onArmorTick(world, player, itemStack);
-		if(!hasAccessories(player, itemStack)) return;
-		{
-			if(player.getFoodStats().getFoodLevel() < 20)
-				player.getFoodStats().setFoodLevel(20);
-			
-			if(player.getFoodStats().getSaturationLevel() < 20)
-				player.getFoodStats().setFoodSaturationLevel(20);
-		}
 	}
 	
 	@SubscribeEvent

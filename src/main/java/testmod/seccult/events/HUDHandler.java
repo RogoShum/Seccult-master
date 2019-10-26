@@ -1,30 +1,48 @@
 package testmod.seccult.events;
 
+import java.util.List;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.ClientProxy;
 import testmod.seccult.Seccult;
 import testmod.seccult.api.PlayerDataHandler;
 import testmod.seccult.api.PlayerDataHandler.PlayerData;
-import testmod.seccult.client.FX.OceanHelmetFX;
+import testmod.seccult.client.FX.FogFX;
+import testmod.seccult.client.FX.LightFX;
+import testmod.seccult.client.FX.StarFX;
 import testmod.seccult.client.gui.GuiElementLoader;
 import testmod.seccult.init.ModItems;
+import testmod.seccult.items.ItemWand;
 import testmod.seccult.items.armor.OceanArmor;
+import testmod.seccult.items.armor.ShadowSkyArmor;
 import testmod.seccult.items.armor.Ocean.OceanHelmet;
+import testmod.seccult.magick.MagickCompiler;
+import testmod.seccult.magick.magickState.StateManager;
+import testmod.seccult.network.NetworkEffectData;
+import testmod.seccult.network.NetworkHandler;
+import testmod.seccult.network.NetworkMutekiGamer;
+import testmod.seccult.network.NetworkPlayerAddMagick;
+import testmod.seccult.network.NetworkTransFloat;
 
 public class HUDHandler {
     int xSize, ySize, offsetX, offsetY;
@@ -44,6 +62,108 @@ public class HUDHandler {
 			if(event.getType() == ElementType.ALL)
 		{
 			renderMagickBar(resolution, partialTicks);
+		}
+	}
+	
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void onKeyInput(ClientTickEvent event) 
+	{
+		
+		if(Minecraft.getMinecraft().world == null)  return;
+		List<EntityPlayer> players = Minecraft.getMinecraft().world.playerEntities;
+		
+		for(int i = 0; i < players.size(); ++i)
+		{
+			EntityPlayer player = players.get(i);
+			KeyBinding[] keyBindings = ClientProxy.keyBindings;
+
+			if(keyBindings[2].isKeyDown())
+			{
+				NetworkHandler.getNetwork().sendToServer(new NetworkTransFloat(0, player, 2));
+			}
+			
+			if(keyBindings[1].isKeyDown())
+			{
+				NetworkHandler.getNetwork().sendToServer(new NetworkTransFloat(0, player, 3));
+			}
+			
+			KeyBinding[] keyNumber = {keyBindings[3], keyBindings[4], keyBindings[5], keyBindings[6], keyBindings[7], keyBindings[8]
+					,keyBindings[9], keyBindings[10], keyBindings[11]};
+			
+			for(int k = 0; k < keyNumber.length; k++)
+        	{
+        		if(keyNumber[k].isPressed() && player.getHeldItemMainhand().getItem() == ModItems.Wand)
+        		{
+        			ItemWand wand = (ItemWand) player.getHeldItemMainhand().getItem();
+        			NetworkHandler.getNetwork().sendToAll(new NetworkTransFloat(0, player, 4));
+        			if (wand.MagickList != null)
+        			{
+        		        int limit = wand.MagickList.tagCount();
+        		        if(limit > 9)
+        		        	limit = 9;
+        		        
+        		        if(limit >= k)
+        		        {
+        		        	NetworkHandler.getNetwork().sendToServer(new NetworkTransFloat(k, player, 1));
+
+                			wand.doCircle = 0;
+                			
+                			{
+                    			for(int c = 0; c < 20 ; c++) {
+                    	            double d0 = (double)((float)player.posX + mc.world.rand.nextFloat());
+                    	            double d1 = (double)((float)player.posY + player.height / 2 + mc.world.rand.nextFloat());
+                    	            double d2 = (double)((float)player.posZ + mc.world.rand.nextFloat());
+                    	            double d3 = (1 - 2*StateManager.rand.nextFloat()) / 2;
+                    	            double d4 = (1 - 2*StateManager.rand.nextFloat()) / 2;
+                    	            double d5 = (1 - 2*StateManager.rand.nextFloat()) / 2;
+                    	        	Particle me = new LightFX(mc.world, (d0 + player.posX) / 2.0D, (d1 + player.posY + player.height / 2) / 2.0D, (d2 + player.posZ) / 2.0D, d3/6, d4/6, d5/6, 0.3F);
+                    	        	me.setRBGColorF(wand.staffColor[0], wand.staffColor[1], wand.staffColor[2]);
+                    	        	Particle smoke = new StarFX(mc.world, d0, d1, d2, d3 / 5, d4 / 5, d5 / 5, 0.1F);
+                    	        	Minecraft.getMinecraft().effectRenderer.addEffect(me);
+                    	        	Minecraft.getMinecraft().effectRenderer.addEffect(smoke);
+                    			}
+                			}
+        		        }
+        		    }
+        		}
+        	}
+			
+			if(ShadowSkyArmor.hasArmorSetItem(player) && player.isSneaking())
+			{
+				for (int c = 0; c < 10; c++) {
+					double tx = player.posX + player.world.rand.nextFloat() - player.width / 2;
+					double ty = player.posY + player.world.rand.nextFloat() + player.height / 2;
+					double tz = player.posZ + player.world.rand.nextFloat() - player.width / 2;
+					double motionX = 0.25F - 0.5 * player.world.rand.nextFloat();
+					double motionY = 0.25F - 0.5 * player.world.rand.nextFloat();
+					double motionZ = 0.25F - 0.5 * player.world.rand.nextFloat();
+
+					Particle blackFog = new FogFX(player.world, tx, ty, tz, motionX / 50, motionY / 50, motionZ / 50, player.world.rand.nextFloat() * 5);
+					blackFog.setRBGColorF(0, 0, 0);
+		    		Minecraft.getMinecraft().effectRenderer.addEffect(blackFog);
+				}
+			
+				if(Minecraft.getMinecraft().gameSettings.keyBindForward.isKeyDown())
+				{
+					Vec3d look = player.getLookVec();
+					player.motionX = look.x * player.getAIMoveSpeed() * 3;
+					player.motionY = look.y * player.getAIMoveSpeed() * 3;
+					player.motionZ = look.z * player.getAIMoveSpeed() * 3;
+				
+					player.noClip = true;
+				}
+			
+				if(Minecraft.getMinecraft().gameSettings.keyBindBack.isKeyDown())
+				{
+					Vec3d look = player.getLookVec();
+					player.motionX = -look.x * player.getAIMoveSpeed() * 3;
+					player.motionY = -look.y * player.getAIMoveSpeed() * 3;
+					player.motionZ = -look.z * player.getAIMoveSpeed() * 3;
+				
+					player.noClip = true;
+				}
+			}
 		}
 	}
 	
@@ -134,11 +254,13 @@ public class HUDHandler {
 		}
 	}*/
 	
+	@SideOnly(Side.CLIENT)
     public FontRenderer getFontRenderer()
     {
         return this.mc.fontRenderer;
     }
     
+	@SideOnly(Side.CLIENT)
     public class HUDScreen extends GuiScreen{
     	
     }

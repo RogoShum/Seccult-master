@@ -49,6 +49,8 @@ public class OceanHelmet extends OceanArmor{
 			air = 300;
 			return;
 		}
+		if(player.world.isRemote)
+		{
 		try {
 			if(player.world.handleMaterialAcceleration(player.getEntityBoundingBox().grow(0.0D, -0.4000000059604645D, 0.0D).shrink(0.001D), Material.WATER, player))
 			ModReclection.Entity_inWater(player, false);
@@ -57,7 +59,7 @@ public class OceanHelmet extends OceanArmor{
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
-		
+		}
 		if(player.world.handleMaterialAcceleration(player.getEntityBoundingBox().grow(0.0D, -1.0D, 0.0D).offset(0, 1, 0).shrink(0.001D), Material.WATER, player))
 		player.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 201));
 		

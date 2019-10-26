@@ -20,6 +20,10 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.items.ItemSoulStone;
 import testmod.seccult.network.NetworkEffectData;
@@ -73,7 +77,8 @@ public class EntitySpirit extends EntityBase{
 		
 		double[] vec = {0.5 - this.rand.nextFloat(), 0.5 - this.rand.nextFloat(), 0.5 - this.rand.nextFloat()};
 		float[] color = {0, 0.7F, 1};
-        NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, (this.height + this.width) / 2, 100));
+        NetworkHandler.getNetwork().sendToAllAround(new NetworkEffectData(pos, vec, color, (this.height + this.width) / 2, 100),
+        		new TargetPoint(dimension, pos[0], pos[1], pos[2], 32));
 		this.isDead = true;
 	}
 	
@@ -304,14 +309,6 @@ public class EntitySpirit extends EntityBase{
 	  else
 	  {
 		  living.hurtTime = this.hurtTime;
-		  EntityPlayer player = Minecraft.getMinecraft().player;
-		  
-		  if(player != null && PotionAllSeeEye.hasAllSee(player))
-		  {
-			 this.setSize(living.width, living.height);
-		  }
-		  else
-			  this.setSize(0, 0);
 	  }
 	}
 	

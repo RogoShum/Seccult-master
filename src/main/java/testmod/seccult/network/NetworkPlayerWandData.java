@@ -6,9 +6,12 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.api.PlayerDataHandler;
 import testmod.seccult.api.PlayerDataHandler.PlayerData;
 
@@ -48,6 +51,7 @@ public class NetworkPlayerWandData implements IMessage {
     public static class PacketMessageHandler implements IMessageHandler<NetworkPlayerWandData, IMessage> {
 
         @Override
+        @SideOnly(Side.CLIENT)
         public IMessage onMessage(NetworkPlayerWandData message, MessageContext ctx) {
         	Minecraft mc = Minecraft.getMinecraft();
         	int color2 = message.color2;

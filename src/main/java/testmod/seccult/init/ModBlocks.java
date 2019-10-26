@@ -8,7 +8,12 @@ import net.minecraft.block.BlockBush;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import testmod.seccult.Seccult;
 import testmod.seccult.blocks.*;
+import testmod.seccult.blocks.tileEntity.tileEnchantingStaff;
+import testmod.seccult.blocks.tileEntity.tileGenerator;
+import testmod.seccult.blocks.tileEntity.tileKillerQueen;
 
 public class ModBlocks 
 {
@@ -44,4 +49,11 @@ public class ModBlocks
 	//tile
 	public static final Block KILLER_QUEEN = new BlockKillerQueen("killer_queen");
 	public static final Block Enchanting_Staff = new BlockEnchantingStaff("enchanting_staff");
+
+	@SuppressWarnings("deprecation")
+	public static void tile()
+	{
+		GameRegistry.registerTileEntity(tileKillerQueen.class, Seccult.MODID + ":killer_queen");
+		GameRegistry.registerTileEntity(tileEnchantingStaff.class, Seccult.MODID + ":enchanting_staff");
+	}
 }

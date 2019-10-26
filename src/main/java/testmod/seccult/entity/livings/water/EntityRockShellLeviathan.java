@@ -63,7 +63,7 @@ public class EntityRockShellLeviathan extends EntityWaterCreature implements IBo
 	
 	public EntityRockShellLeviathan(World worldIn) {
 		super(worldIn);		
-		this.setSize(10F, 7.5F);
+		this.setSize(9.5F, 7.5F);
 		this.swimingTime += 35;
 		this.swingLimit = 5;
 	}
@@ -370,7 +370,7 @@ public class EntityRockShellLeviathan extends EntityWaterCreature implements IBo
 	{
 		if(this.BGM == null && source.getTrueSource() instanceof EntityPlayer)
 		{
-			ArrayList<EntityBase> boss = new ArrayList<>();
+			ArrayList<Entity> boss = new ArrayList<>();
 			boss.add(this);
 			this.BGM = new BossEventHandler(boss);
 		}

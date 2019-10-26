@@ -6,6 +6,7 @@ import com.google.common.collect.Multimap;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -21,6 +22,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -30,14 +32,9 @@ import testmod.seccult.entity.livings.EntitySpirit;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.magick.magickState.StateManager;
 
-@Mod.EventBusSubscriber(modid = Seccult.MODID)
 public class MagickArmor extends ArmorBase{
 	
-	public static final String NONE_CORE = I18n.format("seccult.none.core");
-	
-	public static final String Magick_Enhance = I18n.format("seccult.armor.enhance");
-	public static final String Magick_Relife = I18n.format("seccult.armor.relief");
-	public static final String Magick_Limit = I18n.format("seccult.armor.limit");
+
 	
 	public MagickArmor(String name, ArmorMaterial materialIn, int renderIndexIn,
 			EntityEquipmentSlot equipmentSlotIn) {
@@ -117,7 +114,7 @@ public class MagickArmor extends ArmorBase{
 	
 	public static boolean addMagickCore(ItemStack stack, String coreType)
 	{
-		if(getCore(stack).equals(NONE_CORE))
+		if(getCore(stack).equals(I18n_String.NONE_CORE))
 		{
 			stack.getTagCompound().setString("MagickCore", coreType);
 			return true;
@@ -128,98 +125,56 @@ public class MagickArmor extends ArmorBase{
 	
 	public static boolean hasFlyingCore(EntityPlayer player)
 	{
-		String coreType0 = getCore(player.inventory.armorItemInSlot(0));
-		String coreType1 = getCore(player.inventory.armorItemInSlot(1));
-		String coreType2 = getCore(player.inventory.armorItemInSlot(2));
-		String coreType3 = getCore(player.inventory.armorItemInSlot(3));
+		String coreType0 = getCore(player.getItemStackFromSlot(EntityEquipmentSlot.HEAD));
+		String coreType1 = getCore(player.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
+		String coreType2 = getCore(player.getItemStackFromSlot(EntityEquipmentSlot.LEGS));
+		String coreType3 = getCore(player.getItemStackFromSlot(EntityEquipmentSlot.FEET));
 		return coreType0.equals(CoreType.FlyingCore) || coreType1.equals(CoreType.FlyingCore) || coreType2.equals(CoreType.FlyingCore) || coreType3.equals(CoreType.FlyingCore);
 	}
 	
 	public static boolean hasJumpCore(EntityPlayer player)
 	{
-		String coreType0 = getCore(player.inventory.armorItemInSlot(0));
-		String coreType1 = getCore(player.inventory.armorItemInSlot(1));
-		String coreType2 = getCore(player.inventory.armorItemInSlot(2));
-		String coreType3 = getCore(player.inventory.armorItemInSlot(3));
+		String coreType0 = getCore(player.getItemStackFromSlot(EntityEquipmentSlot.HEAD));
+		String coreType1 = getCore(player.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
+		String coreType2 = getCore(player.getItemStackFromSlot(EntityEquipmentSlot.LEGS));
+		String coreType3 = getCore(player.getItemStackFromSlot(EntityEquipmentSlot.FEET));
 		return coreType0.equals(CoreType.JumpCore) || coreType1.equals(CoreType.JumpCore) || coreType2.equals(CoreType.JumpCore) || coreType3.equals(CoreType.JumpCore);
 	}
 	
 	public static boolean hasAttackCore(EntityPlayer player)
 	{
-		String coreType0 = getCore(player.inventory.armorItemInSlot(0));
-		String coreType1 = getCore(player.inventory.armorItemInSlot(1));
-		String coreType2 = getCore(player.inventory.armorItemInSlot(2));
-		String coreType3 = getCore(player.inventory.armorItemInSlot(3));
+		String coreType0 = getCore(player.getItemStackFromSlot(EntityEquipmentSlot.HEAD));
+		String coreType1 = getCore(player.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
+		String coreType2 = getCore(player.getItemStackFromSlot(EntityEquipmentSlot.LEGS));
+		String coreType3 = getCore(player.getItemStackFromSlot(EntityEquipmentSlot.FEET));
 		return coreType0.equals(CoreType.AttackCore) || coreType1.equals(CoreType.AttackCore) || coreType2.equals(CoreType.AttackCore) || coreType3.equals(CoreType.AttackCore);
-	}
-	
-	@SubscribeEvent
-	public static void jumpCore(LivingJumpEvent event)
-	{
-		if(!(event.getEntityLiving() instanceof EntityPlayer))
-			return;
-
-		EntityPlayer player = (EntityPlayer) event.getEntityLiving();
-		if(hasJumpCore(player))
-		{
-			player.motionY += 0.2F;
-			StateManager.setPlayerMove(player, player.motionX, player.motionY += 0.2F, player.motionZ, 1);
-		}
-		
-	}
-	
-	@SubscribeEvent
-	public static void attackCore(LivingAttackEvent event)
-	{
-		if(!(event.getSource().getTrueSource() instanceof EntityPlayer))
-			return;
-		
-		EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
-		if(hasAttackCore(player))
-		{
-			if(event.getEntityLiving() != null)
-				event.getEntityLiving().hurtTime = -1;
-		}
-	}
-	
-	@SubscribeEvent
-	public static void attackCore(LivingHurtEvent event)
-	{
-		if(!(event.getSource().getTrueSource() instanceof EntityPlayer))
-			return;
-		
-		EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
-		if(hasAttackCore(player))
-		{
-			if(event.getEntityLiving() != null)
-				event.getEntityLiving().hurtTime = -1;
-		}
 	}
 	
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		super.addInformation(stack, worldIn, tooltip, flagIn);
-		addStringToTooltip("&b" + getCore(stack), tooltip);
+		addStringToTooltip("&b" + I18n.format(getCore(stack)), tooltip);
 		if(GuiScreen.isShiftKeyDown())
 		{
-			addStringToTooltip("&5" + Magick_Enhance + " " + this.getMagicEnhance(), tooltip);
-			addStringToTooltip("&5" + Magick_Relife + " " + this.getMagicRelief(), tooltip);
-			addStringToTooltip("&5" + Magick_Limit + " " + this.getMagicUpperlimit(), tooltip);
+			addStringToTooltip("&5" + I18n.format(I18n_String.Magick_Enhance) + " " + this.getMagicEnhance(), tooltip);
+			addStringToTooltip("&5" + I18n.format(I18n_String.Magick_Relife) + " " + this.getMagicRelief(), tooltip);
+			addStringToTooltip("&5" + I18n.format(I18n_String.Magick_Limit) + " " + this.getMagicUpperlimit(), tooltip);
 		}
 	}
 	
+	@SideOnly(Side.CLIENT)
 	public static void addStringToTooltip(String s, List<String> tooltip) {
 		tooltip.add(s.replaceAll("&", "\u00a7"));
 	}
-	
+
 	public static String getCore(ItemStack stack)
 	{
 		boolean hasCore = stack.hasTagCompound() && stack.getTagCompound().hasKey("MagickCore");
-		String coreType = NONE_CORE;
+		String coreType = I18n_String.NONE_CORE;
 		if(hasCore)
 			coreType = stack.getTagCompound().getString("MagickCore");
-		return I18n.format(coreType);
+		return coreType;
 	}
 	
 	@Override
@@ -253,15 +208,24 @@ public class MagickArmor extends ArmorBase{
 		}
 		return attrib;
 	}
-	
+
 	public static class CoreType
 	{
-		public static final String FlyingCore = I18n.format("seccult.flying.core");
-		public static final String PeaceCore = I18n.format("seccult.peace.core");
-		public static final String SpeedCore = I18n.format("seccult.speed.core");
-		public static final String JumpCore = I18n.format("seccult.jump.core");
-		public static final String DefenceCore = I18n.format("seccult.defence.core");
-		public static final String LifeCore = I18n.format("seccult.life.core");
-		public static final String AttackCore = I18n.format("seccult.attack.core");
+		public static final String FlyingCore = ("seccult.flying.core");
+		public static final String PeaceCore = ("seccult.peace.core");
+		public static final String SpeedCore = ("seccult.speed.core");
+		public static final String JumpCore = ("seccult.jump.core");
+		public static final String DefenceCore = ("seccult.defence.core");
+		public static final String LifeCore = ("seccult.life.core");
+		public static final String AttackCore = ("seccult.attack.core");
+	}
+
+	public static class I18n_String
+	{
+		public static final String NONE_CORE = ("seccult.none.core");
+		
+		public static final String Magick_Enhance = ("seccult.armor.enhance");
+		public static final String Magick_Relife = ("seccult.armor.relief");
+		public static final String Magick_Limit = ("seccult.armor.limit");
 	}
 }

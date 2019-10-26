@@ -283,7 +283,7 @@ public class EntitySpiritContainer extends EntityBase{
 		if(rightSpirit != null)
 		{
 			this.setSoul(rightSpirit.living);
-			NetworkHandler.getNetwork().sendToAll(new NetworkMutekiGamer(true, rightSpirit, 2));
+			NetworkHandler.getNetwork().sendToAll(new NetworkMutekiGamer(1, rightSpirit, 2));
 			rightSpirit.setRelease();
 		}
 	}

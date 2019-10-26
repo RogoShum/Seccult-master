@@ -1,19 +1,12 @@
 package testmod.seccult.blocks;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
@@ -31,7 +24,6 @@ import testmod.seccult.creativetab.CreativeTabsLoader;
 import testmod.seccult.init.ModBlocks;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.items.IMagickable;
-import testmod.seccult.items.ItemMagickable;
 import testmod.seccult.util.registerModel;
 
 public class BlockEnchantingStaff extends BlockContainer implements registerModel{

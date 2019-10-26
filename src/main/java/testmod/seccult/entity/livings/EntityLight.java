@@ -23,6 +23,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.client.FX.ATFX;
 import testmod.seccult.client.FX.SuperLaserBeamFX;
 import testmod.seccult.entity.EntityLmr;
@@ -263,7 +265,7 @@ public class EntityLight extends EntityMob
         }
         return 40;
     }
-    
+
     private void onPrcticle() {
     	double x,y,z;
 		x = this.posX - 1;
@@ -280,14 +282,14 @@ public class EntityLight extends EntityMob
 	    //createLaser(world, posX, posY, posZ, this, 20);
     }
     
-	public void createLaser(World worldIn, double posXIn, double posYIn, double posZIn, Entity player, float height)
+	/*public void createLaser(World worldIn, double posXIn, double posYIn, double posZIn, Entity player, float height)
 	{
 			SuperLaserBeamFX laser =  new SuperLaserBeamFX(worldIn, posXIn, posYIn, posZIn, player, height);
 			laser.setRBGColorF(1, 0.5F, 0);
 			laser.setAlphaF(1F);
 			laser.setMaxAge(2);
 			Minecraft.getMinecraft().effectRenderer.addEffect(laser);
-	}
+	}*/
     
     @Override
     public void fall(float distance, float damageMultiplier) {
@@ -325,13 +327,18 @@ public class EntityLight extends EntityMob
 	      z = hitEntity.motionZ;
 	      hitEntity.rotationYaw = -hitEntity.prevRotationYaw;
 	      hitEntity.rotationPitch = -hitEntity.prevRotationPitch;
-	      Minecraft.getMinecraft().effectRenderer.addEffect(new ATFX(this.world, hitEntity.posX, hitEntity.posY, hitEntity.posZ));
+	      ref_fx(hitEntity);
 	      hitEntity.motionX = -x * 10;
 	      hitEntity.motionY = -y * 10;
 	      hitEntity.motionZ = -z * 10;
      }
     }
     
+    @SideOnly(Side.CLIENT)
+    protected void ref_fx(Entity hitEntity)
+    {
+    	Minecraft.getMinecraft().effectRenderer.addEffect(new ATFX(this.world, hitEntity.posX, hitEntity.posY, hitEntity.posZ));
+    }
        private boolean isSuitableTarget(EntityLivingBase par1EntityLiving)
        {
          if (this.world.getDifficulty() == EnumDifficulty.PEACEFUL) return false;

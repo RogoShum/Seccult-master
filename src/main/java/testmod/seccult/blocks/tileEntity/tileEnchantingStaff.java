@@ -1,8 +1,6 @@
 package testmod.seccult.blocks.tileEntity;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
@@ -19,15 +17,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import testmod.seccult.Seccult;
-import testmod.seccult.client.FX.LightFX;
-import testmod.seccult.client.FX.PentagonFX;
-import testmod.seccult.client.FX.StarFX;
-import testmod.seccult.init.ModSounds;
 import testmod.seccult.items.ItemMagickable;
 import testmod.seccult.magick.active.Magick;
 import testmod.seccult.magick.magickState.StateManager;
+import testmod.seccult.network.NetworkEffectData;
+import testmod.seccult.network.NetworkHandler;
 
 public class tileEnchantingStaff extends TileEntity implements ITickable {
 	private ItemStack stack = null;
@@ -39,11 +36,8 @@ public class tileEnchantingStaff extends TileEntity implements ITickable {
 	private int magickCost;
 	private float[] magickColor;
 	private String MagickType;
-	
-	@SuppressWarnings("deprecation")
-	public tileEnchantingStaff() {
-		GameRegistry.registerTileEntity(this.getClass(), Seccult.MODID + ":enchanting_staff");
-	}
+
+	public tileEnchantingStaff() {}
 	
 	@Override
 	public void update() 
@@ -96,39 +90,43 @@ public class tileEnchantingStaff extends TileEntity implements ITickable {
 					makeParticleTo(getPos());
 			}
 	}
-
+	
 	public void makeParticle(BlockPos bPos)
 	{
-			Minecraft mc = Minecraft.getMinecraft();
-        	Particle par = new PentagonFX(mc.world, bPos.getX() + 0.5, bPos.getY() + 0.36F, bPos.getZ() + 0.5, 0, 0, 0, (float)this.magickPower/(float)5000);
-			par.setRBGColorF(this.magickColor[0], this.magickColor[1], this.magickColor[2]);
-			mc.effectRenderer.addEffect(par);
+			double[] vec = {0, 0, 0};
+			double[] pos = {bPos.getX() + 0.5, bPos.getY() + 0.36F, bPos.getZ() + 0.5};
+			float[] color = {this.magickColor[0], this.magickColor[1], this.magickColor[2]};
+			NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, (float)this.magickPower/(float)5000, 2));
 	}
 	
 	public void makeParticleTo(BlockPos bPos)
 	{
-		Minecraft mc = Minecraft.getMinecraft();
-    	Particle par = new LightFX(mc.world, bPos.getX() + 0.5, bPos.getY() + 0.36F, bPos.getZ() + 0.5, 0, 0.1, 0, 0.3F);
-		par.setRBGColorF(this.magickColor[0], this.magickColor[1], this.magickColor[2]);
-		mc.effectRenderer.addEffect(par);
+		double[] vec = {0, 0.1, 0};
+		double[] pos = {bPos.getX() + 0.5, bPos.getY() + 0.36F, bPos.getZ() + 0.5};
+		float[] color = {this.magickColor[0], this.magickColor[1], this.magickColor[2]};
+		NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, 0.3F, 2));
 	}
 	
 	public void makeSuccessP(BlockPos bPos)
 	{
-		Minecraft mc = Minecraft.getMinecraft();
 		for(int i = 0; i < 20 ; i++) {
-            double d0 = (double)((float)bPos.getX() + 0.5 + mc.world.rand.nextFloat());
-            double d1 = (double)((float)bPos.getY() + 0.6 + mc.world.rand.nextFloat());
-            double d2 = (double)((float)bPos.getZ() + 0.5 + mc.world.rand.nextFloat());
+            double d0 = (double)((float)bPos.getX() + 0.5 + this.world.rand.nextFloat());
+            double d1 = (double)((float)bPos.getY() + 0.6 + this.world.rand.nextFloat());
+            double d2 = (double)((float)bPos.getZ() + 0.5 + this.world.rand.nextFloat());
             double d3 = (1 - 2*StateManager.rand.nextFloat()) / 2;
             double d4 = (1 - 2*StateManager.rand.nextFloat()) / 2;
             double d5 = (1 - 2*StateManager.rand.nextFloat()) / 2;
-        	Particle me = new LightFX(mc.world, (d0 + bPos.getX() + 0.5) / 2.0D, (d1 + bPos.getY() + 0.6F) / 2.0D, (d2 + bPos.getZ() + 0.5) / 2.0D, d3/6, d4/6, d5/6, 2F);
-        	me.setRBGColorF(this.magickColor[0], this.magickColor[1], this.magickColor[2]);
-        	Particle smoke = new StarFX(mc.world, d0, d1, d2, d3 / 5, d4 / 5, d5 / 5, 0.5F);
-        	Minecraft.getMinecraft().effectRenderer.addEffect(me);
-        	Minecraft.getMinecraft().effectRenderer.addEffect(smoke);
-			}
+            
+    		double[] vec = {d3/6, d4/6, d5/6};
+    		double[] pos = {(d0 + bPos.getX() + 0.5) / 2.0D, (d1 + bPos.getY() + 0.6F) / 2.0D, (d2 + bPos.getZ() + 0.5) / 2.0D};
+    		float[] color = {this.magickColor[0], this.magickColor[1], this.magickColor[2]};
+    		NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, 2F, 0));
+    		
+    		double[] vec1 = {d3 / 5, d4 / 5, d5 / 5};
+    		double[] pos1 = {d0, d1, d2};
+    		float[] color1 = {this.magickColor[0], this.magickColor[1], this.magickColor[2]};
+    		NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos1, vec1, color1, 0.5F, 2));
+		}
 		
 		doRingSound();
 	}

@@ -10,6 +10,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.items.armor.MagickArmor.CoreType;
 import testmod.seccult.items.armor.Ocean.ModelOceanArmor;
@@ -61,6 +63,7 @@ public class OceanArmor extends MagickArmor{
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot,
 			ModelBiped _default) {
 		

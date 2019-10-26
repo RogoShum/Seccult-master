@@ -12,6 +12,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -25,6 +26,7 @@ import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.BossInfo.Overlay;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import testmod.seccult.init.ModItems;
 import testmod.seccult.init.ModSounds;
 import testmod.seccult.magick.magickState.StateManager;
 import testmod.seccult.util.ChunkCoordinates;
@@ -133,6 +135,11 @@ public class EntityEoW extends EntityBase implements IBossBase{
     }
 	
 	@Override
+	protected Item getDropItem() {
+		return ModItems.Dark_M;
+	}
+	
+	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		
 		if(this.SpawnAmount > 0)
@@ -163,7 +170,7 @@ public class EntityEoW extends EntityBase implements IBossBase{
     protected void applyEntityAttributes()
     {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(60.0D);
         this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
     }
 	
@@ -269,7 +276,7 @@ public class EntityEoW extends EntityBase implements IBossBase{
             	   this.thisPitch = this.rotationPitch;
             	   Vec3d QAQ = onLook(this.getLookVec(), this.getPositionVector(), e.getPositionVector());
             	   this.eneX = QAQ.x; this.eneY = QAQ.y; this.eneZ = QAQ.z;
-            	   CooldownTime = 150;
+            	   CooldownTime = 200;
             	   hasAttacked = true;
                }
                else {
@@ -302,7 +309,7 @@ public class EntityEoW extends EntityBase implements IBossBase{
 	}
 
 	protected Vec3d onLook(Vec3d look, Vec3d AP, Vec3d LP) {
-		int rand = this.rand.nextInt(20) + 20;
+		int rand = this.rand.nextInt(30) + 30;
 		AP.addVector(0, this.height / 2, 0);
 		double distance = AP.distanceTo(LP);
 		double dis = distance + rand;
@@ -361,8 +368,6 @@ public class EntityEoW extends EntityBase implements IBossBase{
     		this.isBody = true;
     		this.isHead = false;
     		this.isTail = false;
-    		if(this.getHealth() > 150)
-    			this.setHealth(150);
     		this.setRender(2);
     		break;
     	
@@ -371,8 +376,8 @@ public class EntityEoW extends EntityBase implements IBossBase{
     		this.isHead = true;
     		this.isBody = false;
     		this.isTail = false;
-    		if(this.getHealth() > 65)
-    			this.setHealth(65);
+    		if(this.getHealth() > 20)
+    			this.setHealth(20);
     		this.setRender(1);
     		break;
     	
@@ -380,6 +385,8 @@ public class EntityEoW extends EntityBase implements IBossBase{
     		this.isTail = true;
     		this.isHead = false;
     		this.isBody = false;
+    		if(this.getHealth() > 30)
+    			this.setHealth(30);
     		this.setRender(3);
     		break;
     	
@@ -544,7 +551,7 @@ public class EntityEoW extends EntityBase implements IBossBase{
             this.motionY += (Math.signum(upper.posY - this.posY) - this.motionY) * space;
             this.motionZ += (Math.signum(upper.posZ - this.posZ) - this.motionZ) * space;
             StateManager.setPlayerMove(this, (Math.signum(upper.posX - this.posX) - this.motionX) * space, (Math.signum(upper.posY - this.posY) - this.motionY) * space, (Math.signum(upper.posZ - this.posZ) - this.motionZ) * space, 1);
-    		//this.moveHelper.setMoveTo(upper.posX, upper.posY, upper.posZ, 1);
+
     		double segmentDistance = space;
     		Vec3d pos;
     		if(this.upper instanceof EntityEoW)

@@ -8,9 +8,12 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class NetworkEntityMoving implements IMessage {
 	private double[] pos;
@@ -64,7 +67,9 @@ public class NetworkEntityMoving implements IMessage {
     }
     
     public static class PacketMessageHandler implements IMessageHandler<NetworkEntityMoving, IMessage> {
+    	
         @Override
+        @SideOnly(Side.CLIENT)
         public IMessage onMessage(NetworkEntityMoving message, MessageContext ctx) {
 			World world = Minecraft.getMinecraft().world;
 			if(message.PUUID == null)
@@ -75,7 +80,7 @@ public class NetworkEntityMoving implements IMessage {
         		switch(message.type)
         		{
         			case 0:
-        				player.setPosition(message.pos[0], message.pos[1], message.pos[2]);
+        				player.setPositionAndUpdate(message.pos[0], message.pos[1], message.pos[2]);
         				break;
         			case 1:
         				player.motionX = message.move[0];

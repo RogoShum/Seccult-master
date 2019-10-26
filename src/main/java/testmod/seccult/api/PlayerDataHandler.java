@@ -580,7 +580,8 @@ public class PlayerDataHandler {
 			string[1] = "unknow";
 			if(magick.hasKey("DELETE"))
 			{
-				getMagickList().removeTag(magick.getInteger("DELETE"));
+				if(getMagickList().tagCount() >= magick.getInteger("DELETE"))
+					getMagickList().removeTag(magick.getInteger("DELETE"));
 				return string;
 			}
 			for(int i = 0; i < getMagickList().tagCount(); i++)

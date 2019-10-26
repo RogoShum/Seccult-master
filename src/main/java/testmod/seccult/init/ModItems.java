@@ -88,7 +88,7 @@ public class ModItems
 	public static final Item RecordST = new ItemModRecord("storia", ModSounds.storia, "storia");
 	public static final Item RecordT = new ItemModRecord("twentyone", ModSounds.twentyone, "twentyone");
 	public static final Item RecordSU = new ItemModRecord("summer", ModSounds.summer, "summer");
-	public static final Item RecordGO = new ItemModRecord("got", ModSounds.got, "got");
+	public static final Item RecordGO = new ItemModRecord("np", ModSounds.np, "np");
 	
 	//Tools
 	public static final Item SILK_SWORD = new SwordTool("silk_sword", -1, 130, 1.0F, 2, 60);

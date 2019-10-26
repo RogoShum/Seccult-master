@@ -32,7 +32,7 @@ public class EntitySoC extends EntityBase{
 		}
 		
 		if(player != null && this.getDistanceSq(player) < 1) {
-			if(player.attackEntityFrom(DamageSource.causeMobDamage(this), 12))
+			if(player.attackEntityFrom(DamageSource.causeMobDamage(this), 1))
 				CoolDown = 80;
 		}
 	}

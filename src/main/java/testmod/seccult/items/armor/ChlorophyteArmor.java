@@ -18,12 +18,13 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.Seccult;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.items.armor.Chlorophyte.ModelChlorophyteArmor;
 import testmod.seccult.items.armor.Ocean.ModelOceanArmor;
 
-@Mod.EventBusSubscriber(modid = Seccult.MODID)
 public class ChlorophyteArmor extends MagickArmor{
 	
 	public ChlorophyteArmor(String name, ArmorMaterial materialIn, int renderIndexIn,
@@ -75,27 +76,6 @@ public class ChlorophyteArmor extends MagickArmor{
 				hasArmorSetItem(player, 3, ModItems.CHLOROPHYTE_BOOTS);
 	}
 	
-	@SubscribeEvent
-	public static void shadowDodge(LivingHurtEvent event)
-	{
-		if(!(event.getEntityLiving() instanceof EntityPlayer) || !event.getSource().isFireDamage())
-			return;
-		
-		EntityPlayer player = (EntityPlayer)event.getEntityLiving();
-		
-		if(hasArmorSetItem(player, 0, ModItems.CHLOROPHYTE_HELMET))
-			ChlorophyteArmor.damageArmorSetItem(player, 0, 2);
-		
-		if(hasArmorSetItem(player, 1, ModItems.CHLOROPHYTE_CHEST))
-			ChlorophyteArmor.damageArmorSetItem(player, 1, 2);
-		
-		if(hasArmorSetItem(player, 2, ModItems.CHLOROPHYTE_LEGGINGS))
-			ChlorophyteArmor.damageArmorSetItem(player, 2, 2);
-		
-		if(hasArmorSetItem(player, 3, ModItems.CHLOROPHYTE_BOOTS))
-			ChlorophyteArmor.damageArmorSetItem(player, 3, 2);
-	}
-	
 	@Override
 	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
 		Multimap<String, AttributeModifier> attrib = super.getAttributeModifiers(slot, stack);
@@ -115,6 +95,7 @@ public class ChlorophyteArmor extends MagickArmor{
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot,
 			ModelBiped _default) {
 		

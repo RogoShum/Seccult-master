@@ -147,7 +147,7 @@ public class ItemTerrariaEventThing extends ItemBase{
 	
 	private void spawnEOW(EntityPlayer player) {
 		double x = player.posX + 40;
-		double y = player.posY - 20;
+		double y = player.posY - 40;
 		double z = player.posZ + 40;
 		
 		Entity entity = null;

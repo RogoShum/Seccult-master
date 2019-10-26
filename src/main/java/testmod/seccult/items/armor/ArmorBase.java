@@ -7,6 +7,8 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.Seccult;
 import testmod.seccult.creativetab.CreativeTabsLoader;
 import testmod.seccult.init.ModItems;
@@ -86,6 +88,7 @@ public class ArmorBase extends ItemArmor implements registerModel
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot,
 			ModelBiped _default) {
 		return super.getArmorModel(entityLiving, itemStack, armorSlot, _default);

@@ -7,6 +7,9 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.resources.I18n;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.magick.ImplementationHandler;
 import testmod.seccult.magick.active.*;
 import testmod.seccult.magick.implementation.Implementation;
@@ -172,9 +175,10 @@ public class ModMagicks {
 			
 			return null;
 	}
-	
+
 	public static String getI18nIntroductionByID(int id)
 	{
+		if(FMLCommonHandler.instance().getSide().equals(Side.SERVER)) return null;
 		String magick = MagickList.get(id);
 		if(magick != null)
 		{
@@ -187,6 +191,7 @@ public class ModMagicks {
 	
 	public static String getI18nNameByID(int id)
 	{
+		if(FMLCommonHandler.instance().getSide().equals(Side.SERVER)) return null;
 		String magick = MagickList.get(id);
 		if(magick != null)
 		{

@@ -26,9 +26,10 @@ public class tileKillerQueen extends TileEntity implements ITickable {
 	private ArrayList<String> trueNameList = new ArrayList<String>();
 	private ArrayList<KillerTime> killerList = new ArrayList<KillerTime>();
 	private int killerRange = 64;
+	
 	@SuppressWarnings("deprecation")
 	public tileKillerQueen() {
-		GameRegistry.registerTileEntity(this.getClass(), Seccult.MODID + ":killer_queen");
+		
 	}
 	
 	@Override

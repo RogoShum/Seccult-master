@@ -7,12 +7,13 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.Seccult;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.items.armor.MagickArmor.CoreType;
 import testmod.seccult.items.armor.ShadowSky.ModelShadowSkyArmor;
 
-@Mod.EventBusSubscriber(modid = Seccult.MODID)
 public class ShadowSkyArmor extends MagickArmor {
 
 	public ShadowSkyArmor(String name, ArmorMaterial materialIn, int renderIndexIn,
@@ -30,10 +31,12 @@ public class ShadowSkyArmor extends MagickArmor {
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
 		super.onArmorTick(world, player, itemStack);
-		
+		if(hasArmorSetItem(player) && player.isSneaking())
+			player.noClip = true;
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot,
 			ModelBiped _default) {
 		

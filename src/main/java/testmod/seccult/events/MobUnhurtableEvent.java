@@ -3,38 +3,41 @@ package testmod.seccult.events;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.monster.EntityCaveSpider;
+import net.minecraft.entity.monster.EntityWitch;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.Seccult;
 import testmod.seccult.api.PlayerDataHandler;
 import testmod.seccult.api.PlayerDataHandler.PlayerData;
-import testmod.seccult.client.FX.ATFX;
-import testmod.seccult.client.FX.LightFX;
 import testmod.seccult.entity.EntityBloodBeam;
 import testmod.seccult.entity.livings.EntityBase;
 import testmod.seccult.entity.livings.EntityLight;
 import testmod.seccult.entity.livings.EntityNotoriousBIG;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.init.ModMagicks;
-import testmod.seccult.items.ItemKnowledgeScroll;
 import testmod.seccult.items.ItemMagickable;
+import testmod.seccult.items.armor.ChlorophyteArmor;
+import testmod.seccult.items.armor.MagickArmor;
+import testmod.seccult.items.armor.Chlorophyte.ChlorophyteHelmet;
+import testmod.seccult.items.armor.ShadowSky.ShadowSkyChest;
 import testmod.seccult.magick.ImplementationHandler;
+import testmod.seccult.magick.magickState.StateManager;
+import testmod.seccult.network.NetworkEffectData;
+import testmod.seccult.network.NetworkHandler;
 import testmod.seccult.util.RogoDamage;
 
 public class MobUnhurtableEvent {
@@ -62,6 +65,15 @@ public class MobUnhurtableEvent {
 			event.setCanceled(true);
 		}
 	}
+
+	public void ATFX(World world, Vec3d QAQ)
+	{
+		double[] vec = {0, 0, 0};
+		double[] pos = {QAQ.x, QAQ.y, QAQ.z};
+		float[] color = {1F, 0.9F, 0.5F};
+		NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, 1, 7));
+		
+	}
 	
 	@SubscribeEvent
 	public void OnHurt(LivingAttackEvent event) {
@@ -77,12 +89,12 @@ public class MobUnhurtableEvent {
 			
 			if(!light.world.isRemote && shield > 0 && attacker != null){
 				Vec3d QAQ = onLook(attacker.getLookVec(), attacker.getPositionVector(), light.getPositionVector(), light);
-				Minecraft.getMinecraft().effectRenderer.addEffect(new ATFX(light.world, QAQ.x, QAQ.y, QAQ.z));
+				ATFX(light.world, QAQ);
 				light.ShieldDecrease();
 				event.setCanceled(true);
 			}else
 				if(!light.world.isRemote && shield > 0){
-					Minecraft.getMinecraft().effectRenderer.addEffect(new ATFX(light.world, light.posX, light.posY, light.posZ));
+					ATFX(light.world, light.getPositionVector());
 					light.ShieldDecrease();
 					event.setCanceled(true);
 				}
@@ -172,6 +184,17 @@ public class MobUnhurtableEvent {
 			if(!e.world.isRemote)
 			e.dropItem(ModItems.AlterScroll, 1);
 		}
+		
+		if(e instanceof EntityWitch && event.getSource().isMagicDamage() && Seccult.rand.nextInt(5) == 0)
+		{
+			int i = Seccult.rand.nextInt(50);
+			if(i >= 35 && i < 40)
+				e.dropItem(ModItems.DefenceStaff, 1);
+			if(i >= 40)
+				e.dropItem(ModItems.AlterationStaff, 1);
+			else
+				e.dropItem(ModItems.DamageStaff, 1);
+		}
 	}
 	
 	@SubscribeEvent
@@ -219,15 +242,162 @@ public class MobUnhurtableEvent {
 		
 	}
 	
-	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public static void jumpCore(LivingJumpEvent event)
+	{
+		if(!(event.getEntityLiving() instanceof EntityPlayer))
+			return;
+
+		EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+		if(MagickArmor.hasJumpCore(player))
+		{
+			player.motionY += 0.2F;
+			StateManager.setPlayerMove(player, player.motionX, player.motionY += 0.2F, player.motionZ, 1);
+		}
+		
+	}
+	
+	@SubscribeEvent
+	public static void attackCore(LivingAttackEvent event)
+	{
+		if(!(event.getSource().getTrueSource() instanceof EntityPlayer))
+			return;
+		
+		EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
+		if(MagickArmor.hasAttackCore(player))
+		{
+			if(event.getEntityLiving() != null)
+				event.getEntityLiving().hurtTime = -1;
+		}
+	}
+	
+	@SubscribeEvent
+	public static void attackCore(LivingHurtEvent event)
+	{
+		if(!(event.getSource().getTrueSource() instanceof EntityPlayer))
+			return;
+		
+		EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
+		if(MagickArmor.hasAttackCore(player))
+		{
+			if(event.getEntityLiving() != null)
+				event.getEntityLiving().hurtTime = -1;
+		}
+	}
+	
+	@SubscribeEvent
+	public static void shadowDodge(LivingAttackEvent event)
+	{
+		if(!(event.getEntityLiving() instanceof EntityPlayer))
+			return;
+		
+		EntityPlayer player = (EntityPlayer)event.getEntityLiving();
+		
+		int chance = 7;
+		
+		if(ShadowSkyChest.hasShadowHelmet(player))
+			chance--;
+		
+		if(ShadowSkyChest.hasArmorSetItem(player, 1, ModItems.SHADOW_SKY_CHEST))
+			chance--;
+		
+		if(ShadowSkyChest.hasArmorSetItem(player, 2, ModItems.SHADOW_SKY_LEGGINGS))
+			chance--;
+		
+		if(ShadowSkyChest.hasArmorSetItem(player, 3, ModItems.SHADOW_SKY_BOOTS))
+			chance--;
+		
+		if(player.isSneaking())
+			chance--;
+		
+		if(!player.world.isDaytime())
+			chance--;
+		
+		 if(Seccult.rand.nextInt(chance) == 0)
+			 event.setCanceled(true);
+			 
+		if(ShadowSkyChest.hasArmorSetItem(player) && event.getSource().damageType.equals(DamageSource.FALL.damageType))
+			event.setCanceled(true);
+		
+		if(ShadowSkyChest.hasArmorSetItem(player) && event.getSource().damageType.equals(DamageSource.IN_WALL.damageType))
+			event.setCanceled(true);
+		
+		if(ShadowSkyChest.hasArmorSetItem(player) && event.getSource().damageType.equals(DamageSource.FLY_INTO_WALL.damageType))
+			event.setCanceled(true);
+			
+	}
+
 	public void ParticleA(double x, double y, double z, EntityLivingBase e) {
 	    for (int i = 0; i < 8; ++i)
 	    {
-		double d0 = x + e.world.rand.nextInt(2);
-		double d1 = y + e.world.rand.nextInt(2);
-		double d2 = z + e.world.rand.nextInt(2);
-		Minecraft.getMinecraft().effectRenderer.addEffect(new LightFX(e.world, d0, d1, d2, 0, 0, 0));
+	    	double d0 = x + e.world.rand.nextInt(2);
+	    	double d1 = y + e.world.rand.nextInt(2);
+	    	double d2 = z + e.world.rand.nextInt(2);
+
+	    	double[] vec = {0, 0, 0};
+	    	double[] pos = {d0, d1, d2};
+	    	float[] color = {1F, 0.9F, 0.5F};
+	    	NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, Seccult.rand.nextFloat() * 0.2F + 0.7F, 2));
 	    }
+	}
+	
+	@SubscribeEvent
+	public static void ChlorophyteHalo(LivingHurtEvent event)
+	{
+		if(!(event.getEntityLiving() instanceof EntityPlayer) || event.getSource().getTrueSource() == null)
+		{
+			if(event.getSource().getTrueSource() instanceof EntityPlayer)
+			{
+				EntityPlayer player = (EntityPlayer)event.getSource().getTrueSource();
+				if(ChlorophyteHelmet.hasArmorSetItem(player))
+				{
+					EntityBase base = new EntityBase(player.world);
+					base.setPosition(player.posX, player.posY + player.height + 0.4F, player.posZ);
+					base.faceEntity(event.getEntityLiving(), 360, 360);
+					
+					if(base.doPoisionMagick(10, 20))
+						base.setDead();
+
+				}
+			}
+			
+			return;
+		}
+		
+		EntityPlayer player = (EntityPlayer)event.getEntityLiving();
+		
+		Entity source = event.getSource().getTrueSource();
+		
+		if(ChlorophyteHelmet.hasArmorSetItem(player))
+		{
+			EntityBase base = new EntityBase(player.world);
+			base.setPosition(player.posX, player.posY + player.height + 0.4F, player.posZ);
+			base.faceEntity(source, 360, 360);
+			
+			if(base.doPoisionMagick(10, 20))
+				base.setDead();
+		}
+	}
+	
+	@SubscribeEvent
+	public static void ChlorophyteArmor(LivingHurtEvent event)
+	{
+		if(!(event.getEntityLiving() instanceof EntityPlayer) || !event.getSource().isFireDamage())
+			return;
+		
+		EntityPlayer player = (EntityPlayer)event.getEntityLiving();
+		
+		if(ChlorophyteArmor.hasArmorSetItem(player, 0, ModItems.CHLOROPHYTE_HELMET))
+			ChlorophyteArmor.damageArmorSetItem(player, 0, 2);
+		
+		if(ChlorophyteArmor.hasArmorSetItem(player, 1, ModItems.CHLOROPHYTE_CHEST))
+			ChlorophyteArmor.damageArmorSetItem(player, 1, 2);
+		
+		if(ChlorophyteArmor.hasArmorSetItem(player, 2, ModItems.CHLOROPHYTE_LEGGINGS))
+			ChlorophyteArmor.damageArmorSetItem(player, 2, 2);
+		
+		if(ChlorophyteArmor.hasArmorSetItem(player, 3, ModItems.CHLOROPHYTE_BOOTS))
+			ChlorophyteArmor.damageArmorSetItem(player, 3, 2);
 	}
 	
 	public Vec3d onLook(Vec3d look, Vec3d AP, Vec3d LP, Entity e) {

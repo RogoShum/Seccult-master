@@ -111,14 +111,20 @@ public class Leaf extends BlockLeaves implements registerModel, WaNP
 		
         	if(state.getValue(VARIANT).toString().equals(TreeHandler.EnumType.MANA_TREE_MAGIC.toString()) && rand.nextInt(5) == 0)
         	{
-        		Particle par = new ParticleEnchantment(worldIn, pos.getX(), pos.getY() - 1, pos.getZ(), 0, -rand.nextFloat() / 3, 0);
-        		Minecraft.getMinecraft().effectRenderer.addEffect(par);
-        		double[] Bpos = {pos.getX(), pos.getY() - 1, pos.getZ()};
-        		double[] vec = {(1 - rand.nextFloat() * 2)/10, -rand.nextFloat() / 3, (1 - rand.nextFloat() * 2)/10};
-    			float[] color = {0.2F, 0.7F, 0.7F};
-        		NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(Bpos, vec, color, rand.nextFloat() * 2, 0));
+        		particle(worldIn, pos, state, rand);
         	}
     }
+	
+	@SideOnly(Side.CLIENT)
+	public void particle(World worldIn, BlockPos pos, IBlockState state, Random rand)
+	{
+		Particle par = new ParticleEnchantment(worldIn, pos.getX(), pos.getY() - 1, pos.getZ(), 0, -rand.nextFloat() / 3, 0);
+		Minecraft.getMinecraft().effectRenderer.addEffect(par);
+		double[] Bpos = {pos.getX(), pos.getY() - 1, pos.getZ()};
+		double[] vec = {(1 - rand.nextFloat() * 2)/10, -rand.nextFloat() / 3, (1 - rand.nextFloat() * 2)/10};
+		float[] color = {0.2F, 0.7F, 0.7F};
+		NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(Bpos, vec, color, rand.nextFloat() * 2, 0));
+	}
 	
 	@Override
 	protected void dropApple(World worldIn, BlockPos pos, IBlockState state, int chance) {return;}
@@ -141,6 +147,7 @@ public class Leaf extends BlockLeaves implements registerModel, WaNP
 		return new BlockStateContainer(this, new IProperty[] {VARIANT,DECAYABLE,CHECK_DECAY});
 	}
 	
+	@SideOnly(Side.CLIENT)
     public boolean isOpaqueCube(IBlockState state)
     {
         return !Minecraft.getMinecraft().gameSettings.fancyGraphics;

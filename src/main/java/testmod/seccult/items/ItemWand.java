@@ -33,6 +33,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.ClientProxy;
@@ -52,10 +53,10 @@ import testmod.seccult.network.NetworkPlayerWandData;
 public class ItemWand extends ItemBase{
 	public static final ResourceLocation wand_prefix = new ResourceLocation(Seccult.MODID, "wandstyle");
 	
-	private NBTTagList MagickList;
-	private int doCircle;
+	public NBTTagList MagickList;
+	public int doCircle;
 	private float scale;
-	private float[] staffColor = {1,1,1};
+	public float[] staffColor = {1,1,1};
 	private static ResourceLocation sphere = new ResourceLocation("seccult:textures/spell/sphere.png");
 	private static ResourceLocation circle = new ResourceLocation("seccult:textures/spell/circle.png");
 	private static ResourceLocation moon = new ResourceLocation("seccult:textures/spell/moon.png");
@@ -124,23 +125,21 @@ public class ItemWand extends ItemBase{
 		super.onUsingTick(stack, player, count);
 		 doCircle++;
 		 
-		 EntityPlayer pl = (EntityPlayer) player;
-		 
-		 if(Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown() && doCircle > 20 && pl.ticksExisted % 2 == 0)
+		 if(!player.world.isRemote && doCircle > 20 && player.ticksExisted % 2 == 0)
 		 {
-	        if (!player.world.isRemote && MagickList != null)
-	        {
-	        	int slot = stack.getTagCompound().getInteger("Slot");
-	            	MagickCompiler ma = new MagickCompiler();
-	            	ma.pushMagickData(MagickList.getCompoundTagAt(slot), player);
-	            	this.staffColor = ma.getColor();
-	        }
-	        
-			double[] pos = new double[3], vec = new double[3];
-			pos[0] = player.posX - player.width / 2;
-			pos[1] = player.posY + player.height / 2;
-			pos[2] = player.posZ - player.width / 2;
-			NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, this.staffColor, 0.3F, 100));
+			 if (this.MagickList != null)
+		     {
+				 int slot = player.getHeldItemMainhand().getTagCompound().getInteger("Slot");
+				 MagickCompiler ma = new MagickCompiler();
+				 ma.pushMagickData(this.MagickList.getCompoundTagAt(slot), player);
+				 this.staffColor = ma.getColor();
+		     }
+		        
+			 double[] pos = new double[3], vec = new double[3];
+			 pos[0] = player.posX - player.width / 2;
+			 pos[1] = player.posY + player.height / 2;
+			 pos[2] = player.posZ - player.width / 2;
+			 NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, this.staffColor, 0.3F, 100));
 		 }
 	}
 	
@@ -250,50 +249,19 @@ public class ItemWand extends ItemBase{
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
-		KeyBinding[] keyBindings = ClientProxy.keyBindings;
-
-		KeyBinding[] keyNumber = {keyBindings[3], keyBindings[4], keyBindings[5], keyBindings[6], keyBindings[7], keyBindings[8]
-				,keyBindings[9], keyBindings[10], keyBindings[11]};
 		
-        if (!worldIn.isRemote && MagickList != null)
-        {
-            if (entityIn instanceof EntityPlayer && isSelected)
-            {
-            	int limit = MagickList.tagCount();
-            	if(limit > 9)
-            		limit = 9;
-            	for(int k = 0; k < limit; k++)
-            	{
-            		if(keyNumber[k].isPressed())
-            		{
-            			stack.getTagCompound().setInteger("Slot", k);
-                        double[] pos = new double[3], vec = new double[3];
-            			pos[0] = entityIn.posX;
-            			pos[1] = entityIn.posY + entityIn.height / 2;
-            			pos[2] = entityIn.posZ;
-            			doCircle = 0;
-                        NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, this.staffColor, 0.3F, 100));
-            		}
-            	}
-            }
-        }
 		if(!stack.hasTagCompound())
 			stack.setTagCompound(new NBTTagCompound());
+		
 		boolean hasUUID = stack.getTagCompound().hasKey("UUIDLeast") && stack.getTagCompound().hasKey("UUIDMost");
 		UUID id = null;
 		if(hasUUID)
 		{
 			id = new UUID(stack.getTagCompound().getLong("UUIDMost"), stack.getTagCompound().getLong("UUIDLeast"));
 		}
+		
 		if(!worldIn.isRemote && entityIn instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entityIn;
-			
-			ItemStack stackhold = player.getHeldItem(EnumHand.MAIN_HAND);
-			if(entityIn instanceof EntityPlayer && stackhold.getItem() == ModItems.Wand && keyBindings[1].isPressed())
-			{
-	            int GUIid = GuiElementLoader.GUI_SpellSelect;
-	            ((EntityPlayer) entityIn).openGui(Seccult.instance, GUIid, worldIn, (int)entityIn.posX, (int)entityIn.posY, (int)entityIn.posZ);
-			}
 			
 			PlayerData data = PlayerDataHandler.get(player);
 			MagickList = data.getAllMagick();

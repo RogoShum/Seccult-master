@@ -10,9 +10,15 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.client.FX.LightFX;
 import testmod.seccult.client.FX.PentagonFX;
 import testmod.seccult.magick.MagickCompiler;
+import testmod.seccult.network.NetworkEffectData;
+import testmod.seccult.network.NetworkHandler;
 
 public class EntityIMProjectile extends EntityThrowable{
 	private  NBTTagCompound LoadMagick = new NBTTagCompound();
@@ -68,20 +74,10 @@ public class EntityIMProjectile extends EntityThrowable{
 		if(!this.world.isRemote) {
 			for(int c = 0; c < 5; ++c)
 			{
-			double x = 0.5 - world.rand.nextFloat();
-			double y = 0.5 - world.rand.nextFloat();
-			double z = 0.5 - world.rand.nextFloat();
-
-			Particle fx2 = new LightFX(this.world, this.posX, this.posY, this.posZ, x / 25, y / 25, z / 25, scale / 2);
-			fx2.setRBGColorF(particleRedIn, particleGreenIn, particleBlueIn);
-			Minecraft.getMinecraft().effectRenderer.addEffect(fx2);
+				parctle();
 			}
 			if(core == null) {
-			PentagonFX fx = new PentagonFX(this.world, this.posX, this.posY, this.posZ, 0, 0, 0, scale);
-			fx.setRBGColorF(particleRedIn, particleGreenIn, particleBlueIn);
-			fx.setTest(true);
-			this.core = fx;
-			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+				parctle_2();
 			}
 			if(this.core != null)
 			{
@@ -89,7 +85,31 @@ public class EntityIMProjectile extends EntityThrowable{
 			}
 			}
 	}
-	
+
+	 protected void parctle()
+	 {
+		 double x = 0.5 - world.rand.nextFloat();
+		 double y = 0.5 - world.rand.nextFloat();
+		 double z = 0.5 - world.rand.nextFloat();
+
+			double[] vec = {x / 25, y / 25, z / 25};
+			double[] pos = {x, y, z};
+			float[] color = {particleRedIn, particleGreenIn, particleBlueIn};
+
+	        NetworkHandler.getNetwork().sendToAllAround(new NetworkEffectData(pos, vec, color, scale / 2, 0),
+	        		new TargetPoint(dimension, pos[0], pos[1], pos[2], 32));
+	 }
+	 
+	 protected void parctle_2()
+	 {
+		double[] vec = {0, 0, 0};
+		double[] pos = {this.posX, this.posY, this.posZ};
+		float[] color = {particleRedIn, particleGreenIn, particleBlueIn};
+
+        NetworkHandler.getNetwork().sendToAllAround(new NetworkEffectData(pos, vec, color, scale, 0),
+        		new TargetPoint(dimension, pos[0], pos[1], pos[2], 32));
+	 }
+	 
 	@Override
 	public boolean isEntityAlive() {
 		if(this.isDead && !this.world.isRemote && core != null)

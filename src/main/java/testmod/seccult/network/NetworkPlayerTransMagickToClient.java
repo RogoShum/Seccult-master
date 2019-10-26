@@ -8,6 +8,8 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.api.PlayerDataHandler;
 import testmod.seccult.api.PlayerDataHandler.PlayerData;
 
@@ -34,6 +36,7 @@ public class NetworkPlayerTransMagickToClient implements IMessage {
 	public static class PacketMessageHandler implements IMessageHandler<NetworkPlayerTransMagickToClient, IMessage> {
 
 		@Override
+		@SideOnly(Side.CLIENT)
 		public IMessage onMessage(NetworkPlayerTransMagickToClient message, MessageContext ctx) {
 			PlayerData data = PlayerDataHandler.get(Minecraft.getMinecraft().player);
 			NBTTagList list = message.NBT.getTagList("M", 10);
