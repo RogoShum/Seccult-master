@@ -91,12 +91,12 @@ public class ModItems
 	public static final Item RecordGO = new ItemModRecord("np", ModSounds.np, "np");
 	
 	//Tools
-	public static final Item SILK_SWORD = new SwordTool("silk_sword", -1, 130, 1.0F, 2, 60);
-	public static final Item SPA_SWORD = new SwordTool("spa_sword", 1, 233, 0.5F, 5, 20);
-	public static final Item SORCERER_SWORD = new SwordTool("sorcerer_sword", 2, 450, 0.8F, 7, 60);
-	public static final Item CHLOROPHYTE_SWORD = new SwordTool("chlorophyte_sword", 3, 360, 1.2F, 8, 80);
-	public static final Item OCEAN_SWORD = new SwordTool("ocean_sword", 3, 682, 1.4F, 9, 90);
-	public static final Item SHADOW_SWORD = new SwordTool("shadow_sword", 5, 1444, 30F, 12, 120);
+	public static final Item SILK_SWORD = new SwordTool("silk_sword", -1, 130, 1.0F, 3, 60);
+	public static final Item SPA_SWORD = new SwordTool("spa_sword", 1, 233, 0.5F, 7, 20);
+	public static final Item SORCERER_SWORD = new SwordTool("sorcerer_sword", 2, 450, 0.8F, 10, 60);
+	public static final Item CHLOROPHYTE_SWORD = new SwordTool("chlorophyte_sword", 3, 360, 1.2F, 14, 80);
+	public static final Item OCEAN_SWORD = new SwordTool("ocean_sword", 3, 682, 1.4F, 18, 90);
+	public static final Item SHADOW_SWORD = new SwordTool("shadow_sword", 5, 1444, 30F, 24, 120);
 	public static final Item Thunder_SWORD = new ThunderSword("thunder_sword");
 	public static final ItemPickaxe SPA_PICKAXE = new PickaxeTool("spa_pickaxe", MATERIAL_SPA);
 	

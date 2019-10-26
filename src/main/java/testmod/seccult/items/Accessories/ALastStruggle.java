@@ -16,6 +16,8 @@ public class ALastStruggle extends ItemAccessories{
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
 		super.onArmorTick(world, player, itemStack);
 		if(!hasAccessories(player, itemStack)) return;
+		if(itemStack.getItemDamage() < itemStack.getMaxDamage())
+		{
 		for(int i = 0; i < player.inventory.mainInventory.size(); i++)
 		{
 			ItemStack item = player.inventory.mainInventory.get(i);
@@ -28,6 +30,7 @@ public class ALastStruggle extends ItemAccessories{
 			ItemStack item = player.inventory.armorInventory.get(i);
 			if(item.isItemStackDamageable() && item.getMaxDamage() - item.getItemDamage() == 0)
 				protectItem(item, itemStack);
+		}
 		}
 	}
 	

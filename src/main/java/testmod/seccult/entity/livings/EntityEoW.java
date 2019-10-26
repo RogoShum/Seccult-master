@@ -268,7 +268,7 @@ public class EntityEoW extends EntityBase implements IBossBase{
     	     
         if ((this.rand.nextInt(7) == 2) && (this.world.getDifficulty() != EnumDifficulty.PEACEFUL))
         {
-               e = findPlayerToAttack(this);
+               e = SearchEnermy();
                if (e != null && isSuitableTarget(e) && CooldownTime <= 0 && !hasAttacked)
                {
             	   this.faceEntity(e, 3600, 3600);
@@ -308,6 +308,26 @@ public class EntityEoW extends EntityBase implements IBossBase{
         }
 	}
 
+	protected EntityPlayer SearchEnermy() {
+		EntityPlayer player = null;
+		EntityPlayer attackTarget = null;
+		float distance = 120;
+	    List<EntityPlayer> list = this.world.playerEntities;
+
+	    for (int j1 = 0; j1 < list.size(); ++j1)
+	    {
+	    	player = (EntityPlayer)list.get(j1);
+		        
+		    if(player.dimension == this.dimension && player.getDistance(this) < distance)
+		    {
+		    	distance = player.getDistance(this);
+		    	attackTarget = player;
+		    }
+		}
+	    
+	    return attackTarget;
+	}
+    
 	protected Vec3d onLook(Vec3d look, Vec3d AP, Vec3d LP) {
 		int rand = this.rand.nextInt(30) + 30;
 		AP.addVector(0, this.height / 2, 0);

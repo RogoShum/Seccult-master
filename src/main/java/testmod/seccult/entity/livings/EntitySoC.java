@@ -1,7 +1,10 @@
 package testmod.seccult.entity.livings;
 
+import java.util.List;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
@@ -21,7 +24,7 @@ public class EntitySoC extends EntityBase{
 	public void onUpdate() {
 		super.onUpdate();
 		CoolDown--;
-			player = findPlayerToAttack(this);
+			player = SearchEnermy();
 		if(player != null && CoolDown <= 0) {
 			Moveto(player.posX, player.posY, player.posZ, 0.05f);
 			this.faceEntity(player, 360, 360);
@@ -35,6 +38,26 @@ public class EntitySoC extends EntityBase{
 			if(player.attackEntityFrom(DamageSource.causeMobDamage(this), 1))
 				CoolDown = 80;
 		}
+	}
+	
+	protected EntityPlayer SearchEnermy() {
+		EntityPlayer player = null;
+		EntityPlayer attackTarget = null;
+		float distance = 120;
+	    List<EntityPlayer> list = this.world.playerEntities;
+
+	    for (int j1 = 0; j1 < list.size(); ++j1)
+	    {
+	    	player = (EntityPlayer)list.get(j1);
+		        
+		    if(player.dimension == this.dimension && player.getDistance(this) < distance)
+		    {
+		    	distance = player.getDistance(this);
+		    	attackTarget = player;
+		    }
+		}
+	    
+	    return attackTarget;
 	}
 	
 	@Override

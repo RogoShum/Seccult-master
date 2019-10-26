@@ -1,12 +1,16 @@
 package testmod.seccult.entity.livings;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.entity.item.EntityPainting;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -98,7 +102,23 @@ public class EntityEoC extends EntityBase implements IBossBase{
     }
 	
 	protected void SearchEnermy() {
-		ene = findPlayerToAttack(this);
+		EntityPlayer player = null;
+		EntityPlayer attackTarget = null;
+		float distance = 120;
+	    List<EntityPlayer> list = this.world.playerEntities;
+
+	    for (int j1 = 0; j1 < list.size(); ++j1)
+	    {
+	    	player = (EntityPlayer)list.get(j1);
+		        
+		    if(player.dimension == this.dimension && player.getDistance(this) < distance)
+		    {
+		    	distance = player.getDistance(this);
+		    	attackTarget = player;
+		    }
+		}
+	    
+	    this.ene = attackTarget;
 	}
 
 	protected void Wait() {

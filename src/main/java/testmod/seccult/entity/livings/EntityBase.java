@@ -57,32 +57,6 @@ public class EntityBase extends EntityLiving implements EntityUsingMagicHelper{
 		super(worldIn);
 	}
 
-	protected EntityPlayer findPlayerToAttack(Entity myentity) 
-	{
-	       Entity entity = null;
-	       double effectiveBoundary = 128.0D;
-	       List<Entity> list = myentity.world.getEntitiesWithinAABBExcludingEntity(myentity, myentity.getEntityBoundingBox().grow(effectiveBoundary, effectiveBoundary, effectiveBoundary));
-	     
-	       if ((list != null) && (list.size() > 0))
-		    {
-	    	   for (int j1 = 0; j1 < list.size(); ++j1)
-	    	   {
-	    		   entity = (Entity)list.get(j1);
-		        
-		       		if (entity != null)
-		       		{
-		       			if ((myentity.world.isRemote) || (entity instanceof EntityItemFrame) || (entity instanceof EntityPainting)) {
-				          continue;
-				        }
-				        
-				        EntityPlayer player = Aura(entity);
-				        if(player != null)
-				        	return player;
-				   }    
-		       }
-	       }
-		return null;
-	}
 	
     protected void entityInit()
     {
@@ -202,6 +176,8 @@ public class EntityBase extends EntityLiving implements EntityUsingMagicHelper{
 	protected EntityPlayer Aura(Entity hitEntity) {
        if(hitEntity instanceof EntityPlayer) {
     	   EntityPlayer player = (EntityPlayer) hitEntity;
+    	   if(this.ticksExisted % 20 == 0)
+  				System.out.println("it's player");
     	   return player;
        }
 	return null;
