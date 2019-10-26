@@ -1,6 +1,7 @@
 package testmod.seccult.network;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -34,10 +35,8 @@ public class NetworkHandler {
 		for(int i = 0; i < world.playerEntities.size(); ++i)
 		{
 			EntityPlayer player = world.playerEntities.get(i);
-			if(player.dimension == point.dimension && player.getDistance(point.x, point.y, point.z) < point.range)
-				network.sendToAllTracking(message, player);
-			else if(player.getDistance(point.x, point.y, point.z) < point.range)
-				network.sendToAllTracking(message, player);
+			if(player instanceof EntityPlayerMP && player.getDistance(point.x, point.y, point.z) < point.range)
+				network.sendTo(message, (EntityPlayerMP) player);
 		}
 	}
 }

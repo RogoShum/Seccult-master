@@ -19,6 +19,7 @@ import testmod.seccult.client.FX.RainbowFX;
 import testmod.seccult.items.TRprojectile.TRprojectileID;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
+import testmod.seccult.network.TransPoint;
 
 public class TRBladeBeam extends TRprojectileBase{
 	private int SEn;
@@ -200,15 +201,18 @@ public class TRBladeBeam extends TRprojectileBase{
 			switch(this.ticksExisted % 3) {
 			case 0:			
 				float[] color = {1, 0.1F + randlight, 0.5F + randlight};
-				NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, this.rand.nextFloat() * 0.5F + 0.5F, 2));
+				NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, this.rand.nextFloat() * 0.5F + 0.5F, 2), 
+	    				new TransPoint(-12450, pos[0], pos[1], pos[2], 32), world);
 			break;
 			case 1:
 				float[] color1 = {0.2F + randlight, 0.4F + randlight, 1.0F};
-				NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color1, this.rand.nextFloat() * 0.5F + 0.5F, 2));
+				NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color1, this.rand.nextFloat() * 0.5F + 0.5F, 2), 
+	    				new TransPoint(-12450, pos[0], pos[1], pos[2], 32), world);
 			break;
 			case 2:
 				float[] color2 = {1, 0.9F + randlight, 0.1F + randlight};
-				NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color2, this.rand.nextFloat() * 0.5F + 0.5F, 2));
+				NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color2, this.rand.nextFloat() * 0.5F + 0.5F, 2), 
+	    				new TransPoint(-12450, pos[0], pos[1], pos[2], 32), world);
 			}
 			
 			if(this.isStick) {
@@ -216,17 +220,20 @@ public class TRBladeBeam extends TRprojectileBase{
 				double[] vec1 = {this.getLookVec().x / 3, this.getLookVec().y / 3, this.getLookVec().z / 3};
 				for(int ae = 0; ae < 6; ae++) {
 					float[] color = {1, 0.1F + randlight, 0.5F + randlight};
-					NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec1, color, this.rand.nextFloat() * 0.5F + 0.5F, 2));
+					NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, this.rand.nextFloat() * 0.5F + 0.5F, 2), 
+		    				new TransPoint(-12450, pos[0], pos[1], pos[2], 32), world);
 				}
 				
 				for(int ae = 0; ae < 6; ae++) {
 					float[] color1 = {0.2F + randlight, 0.4F + randlight, 1.0F};
-					NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec1, color1, this.rand.nextFloat() * 0.5F + 0.5F, 2));
+					NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color1, this.rand.nextFloat() * 0.5F + 0.5F, 2), 
+		    				new TransPoint(-12450, pos[0], pos[1], pos[2], 32), world);
 				}
 				
 				for(int ae = 0; ae < 6; ae++) {
 					float[] color2 = {1, 0.9F + randlight, 0.1F + randlight};
-					NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec1, color2, this.rand.nextFloat() * 0.5F + 0.5F, 2));
+					NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color2, this.rand.nextFloat() * 0.5F + 0.5F, 2), 
+		    				new TransPoint(-12450, pos[0], pos[1], pos[2], 32), world);
 				}
 				
 				this.setDead();
@@ -237,13 +244,15 @@ public class TRBladeBeam extends TRprojectileBase{
 		{
 			float[] color = {0.3F + randlight, 1F, 0.17F + randlight};
 			for(int ae = 0; ae < 3; ae++) {
-				NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, this.rand.nextFloat() * 0.5F + 0.5F, 2));
+				NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, this.rand.nextFloat() * 0.5F + 0.5F, 2), 
+	    				new TransPoint(-12450, pos[0], pos[1], pos[2], 32), world);
 			}
 			
 			if(this.isStick) {
 				for(int ae = 0; ae < 6; ae++) {
 					double[] vec1 = {this.getLookVec().x / 3, this.getLookVec().y / 3, this.getLookVec().z / 3};
-					NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec1, color, this.rand.nextFloat() * 0.5F + 0.5F, 2));
+					NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec1, color, this.rand.nextFloat() * 0.5F + 0.5F, 2), 
+		    				new TransPoint(-12450, pos[0], pos[1], pos[2], 32), world);
 				}
 				this.setDead();
 			}
@@ -252,13 +261,15 @@ public class TRBladeBeam extends TRprojectileBase{
 		if(this.getRenderSkin() == 12) {
 			float[] color = {1F, 0.85F + randlight, 0.17F  + randlight};
 			if(this.ticksExisted % 7 == 0) {
-				NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, this.rand.nextFloat() * 0.5F + 0.5F, 2));
+				NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, this.rand.nextFloat() * 0.5F + 0.5F, 2), 
+	    				new TransPoint(-12450, pos[0], pos[1], pos[2], 32), world);
 			}
 				
 				if(this.isStick) {
 					for(int ae = 0; ae < 10; ae++) {
 						double[] vec1 = {this.getLookVec().x / 3, this.getLookVec().y / 3, this.getLookVec().z / 3};
-						NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec1, color, this.rand.nextFloat() * 0.5F + 0.5F, 2));
+						NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec1, color, this.rand.nextFloat() * 0.5F + 0.5F, 2), 
+			    				new TransPoint(-12450, pos[0], pos[1], pos[2], 32), world);
 					}
 					this.setDead();
 				}
@@ -268,7 +279,8 @@ public class TRBladeBeam extends TRprojectileBase{
 			double[] vec3 = {0, 0, 0};
 			double[] pos3 = {this.prevPosX, this.prevPosY + (this.height / 2), this.prevPosZ};
 			float[] color = {1F, 0.85F + randlight, 0.17F  + randlight};
-			NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos3, vec3, color, this.rand.nextFloat() * 0.5F + 0.5F, 8));
+			NetworkHandler.sendToAllAround(new NetworkEffectData(pos3, vec3, color, this.rand.nextFloat() * 0.5F + 0.5F, 8), 
+    				new TransPoint(-12450, pos[0], pos[1], pos[2], 32), world);
 			if(this.isStick && this.collisionTimes >= 5)  {
 					this.setDead();
 			}

@@ -35,6 +35,10 @@ public class ChlorophyteArmor extends MagickArmor{
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
 		super.onArmorTick(world, player, itemStack);
+		
+		if(!itemStack.hasTagCompound())
+			itemStack.setTagCompound(new NBTTagCompound());
+		
 		if(world.getLight(player.getPosition()) >= 7 && player.ticksExisted % 50 == 0)
 		{
 			itemStack.getTagCompound().setBoolean("BrightEnough", true);

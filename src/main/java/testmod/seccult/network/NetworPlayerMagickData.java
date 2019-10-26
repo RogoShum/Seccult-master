@@ -42,8 +42,10 @@ public class NetworPlayerMagickData implements IMessage {
 		@SideOnly(Side.CLIENT)
 		public IMessage onMessage(NetworPlayerMagickData message, MessageContext ctx) {
 			int type = (int) message.vaule[0];
-			
+			if(Minecraft.getMinecraft().player != null)
+			{
 			try {
+				
 				PlayerData data = PlayerDataHandler.get(Minecraft.getMinecraft().player);
 			switch(type)
 			{
@@ -58,6 +60,7 @@ public class NetworPlayerMagickData implements IMessage {
 			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException| IllegalAccessException e) {
 				
 				System.out.println("error at type: " + type);
+			}
 			}
 			return null;
 		}

@@ -124,6 +124,7 @@ public class PlayerDataHandler {
 		
 		public PlayerData(EntityPlayer player) {
 			this.player = player;
+
 			client = player.getEntityWorld().isRemote;
 
 			load();
@@ -552,8 +553,8 @@ public class PlayerDataHandler {
 			float[] vaule = {0, this.getMaxMana()};
 			float[] vaule1 = {1, this.getMana()};
 			if(!client) {
-			NetworkHandler.getNetwork().sendTo(new NetworPlayerMagickData(vaule), (EntityPlayerMP)player);
-			NetworkHandler.getNetwork().sendTo(new NetworPlayerMagickData(vaule1), (EntityPlayerMP)player);
+				NetworkHandler.getNetwork().sendTo(new NetworPlayerMagickData(vaule), (EntityPlayerMP)player);
+				NetworkHandler.getNetwork().sendTo(new NetworPlayerMagickData(vaule1), (EntityPlayerMP)player);
 			}
 		}
 

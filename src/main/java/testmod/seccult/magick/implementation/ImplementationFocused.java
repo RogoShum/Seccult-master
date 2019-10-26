@@ -103,7 +103,7 @@ public class ImplementationFocused extends Implementation{
 			vec[1] = destY;
 			vec[2] = destZ;
 			float[] color = {this.color[0], this.color[1], this.color[2]};
-    		NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, LightingScale, 5), 
+    		NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, particles, 5), 
     				new TransPoint(-12450, pos[0], pos[1], pos[2], 32), world);
 	        world.playSound(null, new BlockPos(this.player.getPositionVector()), SoundEvents.ENTITY_PARROT_FLY, SoundCategory.PLAYERS, 4.0F, 2);
 		}
@@ -117,7 +117,7 @@ public class ImplementationFocused extends Implementation{
 			vec[1] = destY;
 			vec[2] = destZ;
 			float[] color = {this.color[0], this.color[1], this.color[2]};
-    		NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, LightingScale, 6), 
+    		NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, particles, 6), 
     				new TransPoint(-12450, pos[0], pos[1], pos[2], 32), world);
 	        world.playSound(null, new BlockPos(this.player.getPositionVector()), SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.PLAYERS, 2.0F, 2);
 	        world.playSound(null, new BlockPos(this.player.getPositionVector()), SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.PLAYERS, 2.0F, 1);
@@ -132,8 +132,8 @@ public class ImplementationFocused extends Implementation{
 		vec[1] = destY;
 		vec[2] = destZ;
 		float[] color = {this.color[0], this.color[1], this.color[2]};
-		NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, LightingScale, 101), 
-				new TransPoint(-12450, pos[0], pos[1], pos[2], 32), world);
+		NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, particles, 101), 
+				new TransPoint(-12450, pos[0], pos[1], pos[2], 128), world);
         
         world.playSound(null, new BlockPos(this.player.getPositionVector()), SoundEvents.ENTITY_FIREWORK_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.6F + player.world.rand.nextFloat() * 0.4F);
         world.playSound(null, new BlockPos(this.player.getPositionVector()), SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, SoundCategory.PLAYERS, 1.0F, player.world.rand.nextFloat());
