@@ -20,6 +20,7 @@ import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import testmod.seccult.Seccult;
 import testmod.seccult.api.PlayerDataHandler;
 import testmod.seccult.api.PlayerDataHandler.PlayerData;
@@ -38,6 +39,7 @@ import testmod.seccult.magick.ImplementationHandler;
 import testmod.seccult.magick.magickState.StateManager;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
+import testmod.seccult.network.TransPoint;
 import testmod.seccult.util.RogoDamage;
 
 public class MobUnhurtableEvent {
@@ -66,12 +68,13 @@ public class MobUnhurtableEvent {
 		}
 	}
 
-	public void ATFX(World world, Vec3d QAQ)
+	public void ATFX(Entity entity, Vec3d QAQ)
 	{
 		double[] vec = {0, 0, 0};
 		double[] pos = {QAQ.x, QAQ.y, QAQ.z};
 		float[] color = {1F, 0.9F, 0.5F};
-		NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, 1, 7));
+		NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, 1, 7)
+				, new TransPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 32), entity.world);
 		
 	}
 	
@@ -89,12 +92,12 @@ public class MobUnhurtableEvent {
 			
 			if(!light.world.isRemote && shield > 0 && attacker != null){
 				Vec3d QAQ = onLook(attacker.getLookVec(), attacker.getPositionVector(), light.getPositionVector(), light);
-				ATFX(light.world, QAQ);
+				ATFX(light, QAQ);
 				light.ShieldDecrease();
 				event.setCanceled(true);
 			}else
 				if(!light.world.isRemote && shield > 0){
-					ATFX(light.world, light.getPositionVector());
+					ATFX(light, light.getPositionVector());
 					light.ShieldDecrease();
 					event.setCanceled(true);
 				}
@@ -337,7 +340,8 @@ public class MobUnhurtableEvent {
 	    	double[] vec = {0, 0, 0};
 	    	double[] pos = {d0, d1, d2};
 	    	float[] color = {1F, 0.9F, 0.5F};
-	    	NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, Seccult.rand.nextFloat() * 0.2F + 0.7F, 2));
+	    	NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, Seccult.rand.nextFloat() * 0.2F + 0.7F, 2)
+	    			, new TransPoint(e.dimension, e.posX, e.posY, e.posZ, 32), e.world);
 	    }
 	}
 	

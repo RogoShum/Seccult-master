@@ -19,6 +19,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.Seccult;
@@ -31,6 +32,7 @@ import testmod.seccult.magick.MagickCompiler;
 import testmod.seccult.magick.active.Magick;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
+import testmod.seccult.network.TransPoint;
 import testmod.seccult.world.gen.SeccultBiomeRegistries;
 
 public class ItemStaff extends ItemBase{
@@ -151,7 +153,8 @@ public class ItemStaff extends ItemBase{
 
 			    	double[] vec = {motionX / 50, motionY / 50, motionZ / 50};
 					double[] pos = {right.x, right.y, right.z};
-					NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, player.world.rand.nextFloat() * 1.5F, 2));
+					NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, player.world.rand.nextFloat() * 1.5F, 2),
+							new TransPoint(player.dimension, right.x, right.y, right.z, 32), player.world);
 				}
 			}
 		}

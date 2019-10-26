@@ -19,6 +19,7 @@ import testmod.seccult.client.FX.PentagonFX;
 import testmod.seccult.magick.MagickCompiler;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
+import testmod.seccult.network.TransPoint;
 
 public class EntityIMProjectile extends EntityThrowable{
 	private  NBTTagCompound LoadMagick = new NBTTagCompound();
@@ -96,8 +97,8 @@ public class EntityIMProjectile extends EntityThrowable{
 			double[] pos = {x, y, z};
 			float[] color = {particleRedIn, particleGreenIn, particleBlueIn};
 
-	        NetworkHandler.getNetwork().sendToAllAround(new NetworkEffectData(pos, vec, color, scale / 2, 0),
-	        		new TargetPoint(dimension, pos[0], pos[1], pos[2], 32));
+	        NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, scale / 2, 0),
+	        		new TransPoint(dimension, pos[0], pos[1], pos[2], 32), this.world);
 	 }
 	 
 	 protected void parctle_2()
@@ -106,8 +107,8 @@ public class EntityIMProjectile extends EntityThrowable{
 		double[] pos = {this.posX, this.posY, this.posZ};
 		float[] color = {particleRedIn, particleGreenIn, particleBlueIn};
 
-        NetworkHandler.getNetwork().sendToAllAround(new NetworkEffectData(pos, vec, color, scale, 0),
-        		new TargetPoint(dimension, pos[0], pos[1], pos[2], 32));
+        NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, scale, 0),
+        		new TransPoint(dimension, pos[0], pos[1], pos[2], 32), this.world);
 	 }
 	 
 	@Override

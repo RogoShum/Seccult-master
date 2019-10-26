@@ -4,10 +4,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import testmod.seccult.init.ModDamage;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
+import testmod.seccult.network.TransPoint;
 
 public class DamageMagick extends Magick implements AttackingMagic{
 	protected DamageSource damage;
@@ -90,7 +92,8 @@ public class DamageMagick extends Magick implements AttackingMagic{
 		}
 		
 		float[] color = {RGB[0], RGB[1], RGB[2]};
-		NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, strengh / 5, 0));
+		NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, strengh / 5, 0), 
+				new TransPoint(player.dimension, pos[0], pos[1], pos[2], 32), player.world);
 		}
 	}
 

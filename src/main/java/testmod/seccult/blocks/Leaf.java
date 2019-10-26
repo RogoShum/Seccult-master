@@ -35,6 +35,7 @@ import testmod.seccult.init.ModBlocks;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
+import testmod.seccult.network.TransPoint;
 import testmod.seccult.util.registerModel;
 import testmod.seccult.util.WaNP;
 import testmod.seccult.util.handlers.TreeHandler;
@@ -123,7 +124,9 @@ public class Leaf extends BlockLeaves implements registerModel, WaNP
 		double[] Bpos = {pos.getX(), pos.getY() - 1, pos.getZ()};
 		double[] vec = {(1 - rand.nextFloat() * 2)/10, -rand.nextFloat() / 3, (1 - rand.nextFloat() * 2)/10};
 		float[] color = {0.2F, 0.7F, 0.7F};
-		NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(Bpos, vec, color, rand.nextFloat() * 2, 0));
+
+		NetworkHandler.sendToAllAround(new NetworkEffectData(Bpos, vec, color, rand.nextFloat() * 2, 0), 
+				new TransPoint(-12450, Bpos[0], Bpos[1], Bpos[2], 32), worldIn);
 	}
 	
 	@Override

@@ -21,6 +21,7 @@ import testmod.seccult.entity.livings.EntitySpiritDummy;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkEntityMoving;
 import testmod.seccult.network.NetworkHandler;
+import testmod.seccult.network.TransPoint;
 import testmod.seccult.potions.ModPotions;
 
 public class StateManager {
@@ -90,7 +91,8 @@ public class StateManager {
 			float[] color = {0,0,0};
 			double[] pos = {entity.posX,entity.posY,entity.posZ};
 			if(entity.ticksExisted % 2 == 0)
-			NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, 0F, 3));
+			NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, 0F, 3), 
+					new TransPoint(entity.dimension, pos[0], pos[1], pos[2], 32), entity.world);
 		    
 			setPlayerMove(entity, entity.motionX *= motion, entity.motionY *= motion, entity.motionZ *= motion, 1);
 			entity.ticksExisted -= 1;

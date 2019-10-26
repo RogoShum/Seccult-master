@@ -1,28 +1,10 @@
 package testmod.seccult.network;
 
-import java.util.Iterator;
-
-import com.google.common.collect.AbstractIterator;
-
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.entity.effect.EntityLightningBolt;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.Seccult;
-import testmod.seccult.client.FX.*;
-import testmod.seccult.magick.magickState.StateManager;
 
 public class NetworkEffectData implements IMessage {
 	private double[] pos, vec = new double[3];
@@ -74,6 +56,5 @@ public class NetworkEffectData implements IMessage {
 				Seccult.proxy.SeccultFX(message.pos, message.vec, message.color, message.scale, message.type);
             return null;
         }
-
 	}
 }

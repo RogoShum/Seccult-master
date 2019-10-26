@@ -28,6 +28,7 @@ import testmod.seccult.init.ModItems;
 import testmod.seccult.items.ItemSoulStone;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
+import testmod.seccult.network.TransPoint;
 import testmod.seccult.potions.PotionAllSeeEye;
 import testmod.seccult.world.gen.DimensionMagic;
 
@@ -77,8 +78,8 @@ public class EntitySpirit extends EntityBase{
 		
 		double[] vec = {0.5 - this.rand.nextFloat(), 0.5 - this.rand.nextFloat(), 0.5 - this.rand.nextFloat()};
 		float[] color = {0, 0.7F, 1};
-        NetworkHandler.getNetwork().sendToAllAround(new NetworkEffectData(pos, vec, color, (this.height + this.width) / 2, 100),
-        		new TargetPoint(dimension, pos[0], pos[1], pos[2], 32));
+        NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, (this.height + this.width) / 2, 100),
+        		new TransPoint(dimension, pos[0], pos[1], pos[2], 32), this.world);
 		this.isDead = true;
 	}
 	

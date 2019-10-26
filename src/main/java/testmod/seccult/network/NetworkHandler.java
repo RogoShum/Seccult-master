@@ -1,5 +1,9 @@
 package testmod.seccult.network;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import testmod.seccult.Seccult;
@@ -23,5 +27,17 @@ public class NetworkHandler {
 	public static SimpleNetworkWrapper getNetwork()
 	{
 		return network;
+	}
+	
+	public static void sendToAllAround(IMessage message, TransPoint point, World world)
+	{
+		for(int i = 0; i < world.playerEntities.size(); ++i)
+		{
+			EntityPlayer player = world.playerEntities.get(i);
+			if(player.dimension == point.dimension && player.getDistance(point.x, point.y, point.z) < point.range)
+				network.sendToAllTracking(message, player);
+			else if(player.getDistance(point.x, point.y, point.z) < point.range)
+				network.sendToAllTracking(message, player);
+		}
 	}
 }

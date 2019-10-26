@@ -25,6 +25,7 @@ import testmod.seccult.magick.active.Magick;
 import testmod.seccult.magick.magickState.StateManager;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
+import testmod.seccult.network.TransPoint;
 
 public class tileEnchantingStaff extends TileEntity implements ITickable {
 	private ItemStack stack = null;
@@ -96,7 +97,8 @@ public class tileEnchantingStaff extends TileEntity implements ITickable {
 			double[] vec = {0, 0, 0};
 			double[] pos = {bPos.getX() + 0.5, bPos.getY() + 0.36F, bPos.getZ() + 0.5};
 			float[] color = {this.magickColor[0], this.magickColor[1], this.magickColor[2]};
-			NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, (float)this.magickPower/(float)5000, 2));
+			NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, (float)this.magickPower/(float)5000, 2), 
+					new TransPoint(-12450, pos[0], pos[1], pos[2], 32), world);
 	}
 	
 	public void makeParticleTo(BlockPos bPos)
@@ -104,7 +106,8 @@ public class tileEnchantingStaff extends TileEntity implements ITickable {
 		double[] vec = {0, 0.1, 0};
 		double[] pos = {bPos.getX() + 0.5, bPos.getY() + 0.36F, bPos.getZ() + 0.5};
 		float[] color = {this.magickColor[0], this.magickColor[1], this.magickColor[2]};
-		NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, 0.3F, 2));
+		NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, 0.3F, 2), 
+				new TransPoint(-12450, pos[0], pos[1], pos[2], 32), world);
 	}
 	
 	public void makeSuccessP(BlockPos bPos)
@@ -120,12 +123,16 @@ public class tileEnchantingStaff extends TileEntity implements ITickable {
     		double[] vec = {d3/6, d4/6, d5/6};
     		double[] pos = {(d0 + bPos.getX() + 0.5) / 2.0D, (d1 + bPos.getY() + 0.6F) / 2.0D, (d2 + bPos.getZ() + 0.5) / 2.0D};
     		float[] color = {this.magickColor[0], this.magickColor[1], this.magickColor[2]};
-    		NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, 2F, 0));
+
+    		NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, 2F, 0), 
+    				new TransPoint(-12450, pos[0], pos[1], pos[2], 32), world);
     		
     		double[] vec1 = {d3 / 5, d4 / 5, d5 / 5};
     		double[] pos1 = {d0, d1, d2};
     		float[] color1 = {this.magickColor[0], this.magickColor[1], this.magickColor[2]};
-    		NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos1, vec1, color1, 0.5F, 2));
+
+    		NetworkHandler.sendToAllAround(new NetworkEffectData(pos1, vec1, color1, 0.5F, 2), 
+    				new TransPoint(-12450, pos[0], pos[1], pos[2], 32), world);
 		}
 		
 		doRingSound();

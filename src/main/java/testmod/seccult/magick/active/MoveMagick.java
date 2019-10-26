@@ -3,11 +3,13 @@ package testmod.seccult.magick.active;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import testmod.seccult.Seccult;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.magick.magickState.StateManager;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
+import testmod.seccult.network.TransPoint;
 
 @Mod.EventBusSubscriber(modid = Seccult.MODID)
 public class MoveMagick extends Magick{
@@ -70,7 +72,8 @@ public class MoveMagick extends Magick{
 		}
 		
 		float[] color = {RGB[0], RGB[1], RGB[2]};
-		NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, strengh / 10, 0));
+		NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, strengh / 10, 0), 
+				new TransPoint(player.dimension, pos[0], pos[1], pos[2], 32), player.world);
 		}
 	}
 

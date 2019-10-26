@@ -119,6 +119,7 @@ public class ClientProxy extends CommonProxy
 			this.guardian = guardian;
 			this.repeat = true;
 			this.volume = 5;
+			System.out.println(guardian.getUniqueID());
 		}
 
 		@Override

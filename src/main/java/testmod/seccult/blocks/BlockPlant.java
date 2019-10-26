@@ -33,6 +33,7 @@ import testmod.seccult.init.ModBlocks;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
+import testmod.seccult.network.TransPoint;
 import testmod.seccult.util.WaNP;
 import testmod.seccult.util.registerModel;
 import testmod.seccult.util.handlers.PlantsHandler;
@@ -140,7 +141,8 @@ public class BlockPlant extends BlockBush implements IPlantable, registerModel, 
 				this.color = color_Grass;
 				break;
 			}
-    		NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(Bpos, vec, color, rand.nextFloat(), 0));
+    		NetworkHandler.sendToAllAround(new NetworkEffectData(Bpos, vec, color, rand.nextFloat(), 0), 
+    				new TransPoint(-12450, Bpos[0], Bpos[1], Bpos[2], 32), worldIn);
     	}
     	}
     }

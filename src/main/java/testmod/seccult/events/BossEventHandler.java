@@ -36,12 +36,6 @@ public class BossEventHandler {
 		
 		if(one instanceof EntityEoW)
 		{
-			EntitySound sound = new EntitySound(one.world, bosses);
-			sound.setPosition(one.posX, one.posY, one.posZ);
-			one.world.spawnEntity(sound);
-			ArrayList<Entity> sounds = new ArrayList<>();
-			sounds.add(sound);
-			Seccult.proxy.BossSound(sounds);
 		}
 		else
 		Seccult.proxy.BossSound(bosses);

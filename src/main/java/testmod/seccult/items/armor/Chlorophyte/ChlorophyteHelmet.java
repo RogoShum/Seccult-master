@@ -19,6 +19,7 @@ import testmod.seccult.entity.livings.EntityBase;
 import testmod.seccult.items.armor.ChlorophyteArmor;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
+import testmod.seccult.network.TransPoint;
 
 public class ChlorophyteHelmet extends ChlorophyteArmor{
 
@@ -49,8 +50,8 @@ public class ChlorophyteHelmet extends ChlorophyteArmor{
 			double[] pos = {tx, ty, tz};
 			float[] color = {0.2F, 1.0f, 0.0f};
 			
-	        NetworkHandler.getNetwork().sendToAllAround(new NetworkEffectData(pos, vec, color, player.world.rand.nextFloat() * 1.2F, 2),
-	        		new TargetPoint(player.dimension, pos[0], pos[1], pos[2], 32));
+	        NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, player.world.rand.nextFloat() * 1.2F, 2),
+	        		new TransPoint(player.dimension, pos[0], pos[1], pos[2], 32), player.world);
 		}
 	}
 }

@@ -12,12 +12,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.BossInfo.Overlay;
 import net.minecraft.world.World;
+import testmod.seccult.Seccult;
 import testmod.seccult.entity.livings.IBossBase;
 import testmod.seccult.init.ModSounds;
 
 public class EntitySound extends Entity implements IBossBase{
 	private ArrayList<Entity> ownerEntity;
 	private BlockPos pos = null;
+	private boolean hasBGM;
 	private static final DataParameter<BlockPos> blockPos = EntityDataManager.<BlockPos>createKey(EntitySound.class, DataSerializers.BLOCK_POS);
 	public EntitySound(World worldIn) {
 		super(worldIn);
@@ -26,6 +28,11 @@ public class EntitySound extends Entity implements IBossBase{
 
 	public EntitySound(World world, ArrayList<Entity> owner) {
 		super(world);
+		this.ownerEntity = owner;
+	}
+	
+	public void  setOwner(ArrayList<Entity> owner)
+	{
 		this.ownerEntity = owner;
 	}
 	
@@ -58,44 +65,59 @@ public class EntitySound extends Entity implements IBossBase{
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		
-		if(this.ownerEntity == null) return;
-		
-		boolean stillAlive = false;
-		for(int i = 0; i < ownerEntity.size(); ++i)
+		if(this.ownerEntity != null) 
 		{
-			Entity boss = ownerEntity.get(i);
-			if(boss.isEntityAlive() && !boss.isDead)
+			boolean stillAlive = false;
+			for(int i = 0; i < ownerEntity.size(); ++i)
 			{
-				if(pos == null)
-					pos = boss.getPosition();
-				
-				BlockPos newPos = new BlockPos((boss.posX + pos.getX()) / 2,(
-						boss.posY + pos.getY()) / 2,
-						(boss.posZ + pos.getZ()) / 2);
-				
-				pos = newPos;
-				stillAlive = true;
+				Entity boss = ownerEntity.get(i);
+				if(boss.isEntityAlive() && !boss.isDead)
+				{
+					
+					if(pos == null)
+						pos = boss.getPosition();
+					
+					BlockPos newPos = new BlockPos((boss.posX + pos.getX()) / 2,(
+							boss.posY + pos.getY()) / 2,
+							(boss.posZ + pos.getZ()) / 2);
+					
+					pos = newPos;
+					stillAlive = true;
+				}
+			}
+			
+			this.setPositionAndRotation(pos.getX(), pos.getY(), pos.getZ(), this.prevRotationYaw, this.prevRotationPitch);
+			this.updatePos();
+			if(!stillAlive)
+			{
+				this.setDead();
 			}
 		}
+		else
+			this.setPosition(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
 		
-		System.out.println(this.getPositionVector());
-		
-		if(!this.world.isRemote && this.ticksExisted % 20 == 0)
+		if(this.world.isRemote && !this.hasBGM)
 		{
-			this.setPositionAndRotation(pos.getX(), pos.getY(), pos.getZ(), this.prevRotationYaw, this.prevRotationPitch);
-			updatePos();
+			ArrayList<Entity> sounds = new ArrayList<>();
+			sounds.add(this);
+			Seccult.proxy.BossSound(sounds);
+			hasBGM = true;
+			System.out.println(this.getUniqueID());
+		}
+		//System.out.println(this.getUniqueID());
+		//if(!this.world.isRemote && this.ticksExisted % 20 == 0)
+		//{
+			
+			
+			//System.out.println(this.getPos());
+		//}
+		
+		//if(this.world.isRemote && this.ticksExisted > 10)
+		{	
+			//System.out.println(this.ownerEntity);
 		}
 		
-		if(this.world.isRemote && this.ticksExisted > 10)
-		{
-			System.out.println(this.getPos());
-		}
 		
-		if(!stillAlive)
-		{
-			this.setDead();
-		}
 	}
 	
 	@Override

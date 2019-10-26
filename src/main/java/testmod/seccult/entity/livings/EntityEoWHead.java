@@ -5,8 +5,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import testmod.seccult.Seccult;
+import testmod.seccult.entity.EntityLightingThing;
+import testmod.seccult.entity.EntitySound;
 import testmod.seccult.events.BossEventHandler;
 
 public class EntityEoWHead extends EntityEoW{
@@ -57,7 +61,17 @@ public class EntityEoWHead extends EntityEoW{
 	    		eows.add(spawnCreature());
 	    	}
 	    	SpawnAmount = 0;
+	    	
 	    	new BossEventHandler(eows);
+	    	{
+	    		Entity entity = null;
+	    		entity = EntityList.createEntityByIDFromName(new ResourceLocation("seccult:sound"), this.getEntityWorld());
+		    	EntitySound sound = (EntitySound) entity;
+		    	sound.setOwner(eows);
+				sound.setPosition(this.posX, this.posY, this.posZ);
+				if(!this.world.isRemote)
+				this.world.spawnEntity(entity);
+	    	}
 	    	notFirst = true;
 	    }
 	    

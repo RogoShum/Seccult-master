@@ -8,10 +8,12 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import testmod.seccult.events.ModEventHandler;
 import testmod.seccult.events.PlayerDataUpdateEvent;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
+import testmod.seccult.network.TransPoint;
 
 public class MagickTeleporter {
 	
@@ -104,7 +106,8 @@ public class MagickTeleporter {
 		pos[1] = entity.posY;
 		pos[2] = entity.posZ;
 		float[] color = {0, 1, 0.55F};
-        NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, 0, 100));
+		NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, 0, 100), 
+				new TransPoint(entity.dimension, pos[0], pos[1], pos[2], 32), entity.world);
 	}
 	
 	void preMagickFX() {
@@ -122,7 +125,8 @@ public class MagickTeleporter {
 		vec[2] = (this.rand.nextDouble()*0.5D - 0.25D);
 		
 		float[] color = {0, 1, 0.55F};
-        NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, 1, 0));
+		NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, 1, 0), 
+				new TransPoint(entity.dimension, pos[0], pos[1], pos[2], 32), entity.world);
 		}
 	}
 }

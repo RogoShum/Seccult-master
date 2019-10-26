@@ -16,6 +16,7 @@ import testmod.seccult.entity.EntityProtectionShieldFX;
 import testmod.seccult.entity.EntityShieldFX;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
+import testmod.seccult.network.TransPoint;
 import testmod.seccult.util.MathHelper.Vector3;
 
 public class ImplementationFocused extends Implementation{
@@ -84,7 +85,9 @@ public class ImplementationFocused extends Implementation{
 				float[] color = {this.player.rotationYaw, this.player.rotationPitch, 0};
 				if(LightingScale < 0.8F)
 					LightingScale = 0.8F;
-				NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, LightingScale, 4));
+
+	    		NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, LightingScale, 4), 
+	    				new TransPoint(-12450, pos[0], pos[1], pos[2], 32), world);
 			}
 			
 			world.playSound(null, new BlockPos(this.player.getPositionVector()), SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.PLAYERS, 1.0F, 2);
@@ -100,7 +103,8 @@ public class ImplementationFocused extends Implementation{
 			vec[1] = destY;
 			vec[2] = destZ;
 			float[] color = {this.color[0], this.color[1], this.color[2]};
-	        NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, particles, 5));
+    		NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, LightingScale, 5), 
+    				new TransPoint(-12450, pos[0], pos[1], pos[2], 32), world);
 	        world.playSound(null, new BlockPos(this.player.getPositionVector()), SoundEvents.ENTITY_PARROT_FLY, SoundCategory.PLAYERS, 4.0F, 2);
 		}
 		else if(this.FXType == 3)
@@ -113,7 +117,8 @@ public class ImplementationFocused extends Implementation{
 			vec[1] = destY;
 			vec[2] = destZ;
 			float[] color = {this.color[0], this.color[1], this.color[2]};
-	        NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, particles, 6));
+    		NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, LightingScale, 6), 
+    				new TransPoint(-12450, pos[0], pos[1], pos[2], 32), world);
 	        world.playSound(null, new BlockPos(this.player.getPositionVector()), SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.PLAYERS, 2.0F, 2);
 	        world.playSound(null, new BlockPos(this.player.getPositionVector()), SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.PLAYERS, 2.0F, 1);
 		}
@@ -127,7 +132,8 @@ public class ImplementationFocused extends Implementation{
 		vec[1] = destY;
 		vec[2] = destZ;
 		float[] color = {this.color[0], this.color[1], this.color[2]};
-        NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, particles, 101));
+		NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, LightingScale, 101), 
+				new TransPoint(-12450, pos[0], pos[1], pos[2], 32), world);
         
         world.playSound(null, new BlockPos(this.player.getPositionVector()), SoundEvents.ENTITY_FIREWORK_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.6F + player.world.rand.nextFloat() * 0.4F);
         world.playSound(null, new BlockPos(this.player.getPositionVector()), SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, SoundCategory.PLAYERS, 1.0F, player.world.rand.nextFloat());

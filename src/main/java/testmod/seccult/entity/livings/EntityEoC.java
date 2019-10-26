@@ -223,7 +223,7 @@ public class EntityEoC extends EntityBase implements IBossBase{
 
         if (item != null)
         {
-            int i = this.rand.nextInt(20);
+            int i = this.rand.nextInt(10) + 10;
 
             if (lootingModifier > 0)
             {

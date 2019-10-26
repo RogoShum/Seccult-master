@@ -15,6 +15,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import testmod.seccult.magick.MagickCompiler;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
+import testmod.seccult.network.TransPoint;
 
 public class EntityIMCircle extends Entity{
 	private static final DataParameter<Float> Size = EntityDataManager.<Float>createKey(EntityIMCircle.class, DataSerializers.FLOAT);
@@ -79,8 +80,8 @@ public class EntityIMCircle extends Entity{
 		double[] vec = {0, scale / 100 * this.rand.nextDouble(), 0};
 		float[] color = {particleRedIn, particleGreenIn, particleBlueIn};
 		if(this.ticksExisted % 10 == 0)
-        NetworkHandler.getNetwork().sendToAllAround(new NetworkEffectData(pos, vec, color, scale, 104),
-        		new TargetPoint(dimension, pos[0], pos[1], pos[2], 32));
+        NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, scale, 104),
+        		new TransPoint(dimension, pos[0], pos[1], pos[2], 32), this.world);
 		setRender(scale);
 		setRenderColor(particleRedIn, particleGreenIn, particleBlueIn);
 		if(this.ticksExisted > 10)

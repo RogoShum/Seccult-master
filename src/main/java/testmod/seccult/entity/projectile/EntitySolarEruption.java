@@ -14,6 +14,7 @@ import testmod.seccult.init.ModItems;
 import testmod.seccult.items.TRprojectile.TRprojectileID;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
+import testmod.seccult.network.TransPoint;
 
 public class EntitySolarEruption extends TRprojectileBase{
 	
@@ -83,8 +84,8 @@ public class EntitySolarEruption extends TRprojectileBase{
 		double[] pos = {X, Y, Z};
 		float[] color = {0.8F + randlight, 0.4F + randlight, randlight};
 
-        NetworkHandler.getNetwork().sendToAllAround(new NetworkEffectData(pos, vec, color, this.rand.nextFloat() * 0.5F + 0.5F, 2),
-        		new TargetPoint(dimension, pos[0], pos[1], pos[2], 32));
+        NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, this.rand.nextFloat() * 0.5F + 0.5F, 2),
+        		new TransPoint(dimension, pos[0], pos[1], pos[2], 32), this.world);
     }
     
 	@Override

@@ -34,6 +34,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.ClientProxy;
@@ -49,6 +50,7 @@ import testmod.seccult.magick.active.Magick;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
 import testmod.seccult.network.NetworkPlayerWandData;
+import testmod.seccult.network.TransPoint;
 
 public class ItemWand extends ItemBase{
 	public static final ResourceLocation wand_prefix = new ResourceLocation(Seccult.MODID, "wandstyle");
@@ -102,7 +104,8 @@ public class ItemWand extends ItemBase{
 				pos[1] = player.posY + player.height / 2;
 				pos[2] = player.posZ - player.width / 2;
 				doCircle = 0;
-	            NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, this.staffColor, 0.3F, 100));
+	            NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, this.staffColor, 0.3F, 100), 
+	            		new TransPoint(player.dimension, pos[0], pos[1], pos[2], 32), world);
 	            
 	            return ActionResult.newResult(EnumActionResult.PASS, player.getHeldItem(hand));
 	        }

@@ -5,10 +5,12 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import testmod.seccult.init.ModDamage;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
+import testmod.seccult.network.TransPoint;
 
 public class FlameMagick extends Magick implements AttackingMagic{
 
@@ -86,7 +88,8 @@ public class FlameMagick extends Magick implements AttackingMagic{
 			pos[2] = block.getZ();
 		}
 		float[] color = {RGB[0], RGB[1], RGB[2]};
-		NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, strengh, 102));
+		NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, strengh, 102), 
+				new TransPoint(player.dimension, pos[0], pos[1], pos[2], 32), player.world);
 	}
 
 	@Override

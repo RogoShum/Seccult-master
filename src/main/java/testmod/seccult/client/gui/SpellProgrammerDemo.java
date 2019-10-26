@@ -1,6 +1,7 @@
 package testmod.seccult.client.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import testmod.seccult.api.PlayerDataHandler;
@@ -23,8 +24,9 @@ public class SpellProgrammerDemo extends Container
         PlayerDataHandler.get(player).addMagickData(ModMagicks.GetMagickIDByString(ImplementationHandler.SelfI));
         PlayerDataHandler.get(player).addMagickData(ModMagicks.GetMagickIDByString(ImplementationHandler.SelectBlockI));
         PlayerDataHandler.get(player).addMagickData(ModMagicks.GetMagickIDByString(ImplementationHandler.SelectEntityI));
-        NetworkHandler.getNetwork().sendToAll(new NetworkPlayerMagickData(PlayerDataHandler.get(player).getAllMagickData(), player.getUniqueID(), 
-        		PlayerDataHandler.get(player).getTrueControlAbility(), PlayerDataHandler.get(player).getTrueManaStrengh()));
+        if(player instanceof EntityPlayerMP)
+        NetworkHandler.getNetwork().sendTo(new NetworkPlayerMagickData(PlayerDataHandler.get(player).getAllMagickData(), player.getUniqueID(), 
+        		PlayerDataHandler.get(player).getTrueControlAbility(), PlayerDataHandler.get(player).getTrueManaStrengh()), (EntityPlayerMP)player);
     }
     
     @Override

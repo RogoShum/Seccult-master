@@ -20,6 +20,7 @@ import testmod.seccult.client.FX.LightFX;
 import testmod.seccult.entity.livings.EntityStand;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
+import testmod.seccult.network.TransPoint;
 
 public class EntityLmr extends Entity
 {
@@ -204,10 +205,10 @@ public class EntityLmr extends Entity
     	double[] vec = {this.accelerationX, this.accelerationY, this.accelerationZ};
 		double[] pos = {this.posX, this.posY, this.posZ};
 		float[] color = {1, 0.9F, 0.5F};
-        NetworkHandler.getNetwork().sendToAllAround(new NetworkEffectData(pos, vec, color, this.rand.nextFloat() * 0.2F + 0.7F, 0),
-        		new TargetPoint(dimension, pos[0], pos[1], pos[2], 32));
-        NetworkHandler.getNetwork().sendToAllAround(new NetworkEffectData(pos2, vec, color, this.rand.nextFloat() * 0.2F + 0.7F, 0),
-        		new TargetPoint(dimension, pos[0], pos[1], pos[2], 32));
+        NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, this.rand.nextFloat() * 0.2F + 0.7F, 0),
+        		new TransPoint(dimension, pos[0], pos[1], pos[2], 32), this.world);
+        NetworkHandler.sendToAllAround(new NetworkEffectData(pos2, vec, color, this.rand.nextFloat() * 0.2F + 0.7F, 0),
+        		new TransPoint(dimension, pos[0], pos[1], pos[2], 32), this.world);
     }
     
     protected void Ref(Entity hitEntity)

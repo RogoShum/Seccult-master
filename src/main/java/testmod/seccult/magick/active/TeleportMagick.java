@@ -5,11 +5,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.magick.implementation.ImplementationFocused;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkEntityMoving;
 import testmod.seccult.network.NetworkHandler;
+import testmod.seccult.network.TransPoint;
 
 public class TeleportMagick extends Magick{
 	
@@ -118,7 +120,8 @@ public class TeleportMagick extends Magick{
 		vec[2] = (this.rand.nextDouble()*0.5D - 0.25D);
 		
 		float[] color = {0, 1, 0.55F};
-        NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, 0.2F, 0));
+		NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, 0.2F, 0), 
+				new TransPoint(player.dimension, pos[0], pos[1], pos[2], 32), player.world);
 		}
 	}
 	
@@ -129,7 +132,8 @@ public class TeleportMagick extends Magick{
 		pos[1] = entity.posY;
 		pos[2] = entity.posZ;
 		float[] color = {0, 1, 0.55F};
-        NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, 0, 100));
+		NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, 0, 100), 
+				new TransPoint(player.dimension, pos[0], pos[1], pos[2], 32), player.world);
 	}
 	
 	@Override

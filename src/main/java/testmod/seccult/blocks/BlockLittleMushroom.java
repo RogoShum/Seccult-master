@@ -18,6 +18,7 @@ import testmod.seccult.init.ModBlocks;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
+import testmod.seccult.network.TransPoint;
 import testmod.seccult.util.registerModel;
 import testmod.seccult.world.gen.WorldGenSeccultMushroom;
 
@@ -50,7 +51,8 @@ public class BlockLittleMushroom extends BlockMushroom implements registerModel{
     		double[] Bpos = {pos.getX(), pos.getY() + 0.5, pos.getZ()};
     		double[] vec = {0, 0, 0};
 			float[] color = {0.2F, 0.7F, 0.7F};
-    		NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(Bpos, vec, color, 5, 0));
+    		NetworkHandler.sendToAllAround(new NetworkEffectData(Bpos, vec, color, 5, 0), 
+    				new TransPoint(-12450, Bpos[0], Bpos[1], Bpos[2], 32), worldIn);
     		
     	}
 	}

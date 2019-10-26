@@ -1,11 +1,13 @@
 package testmod.seccult.magick.active;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import testmod.seccult.entity.EntityTimeManager;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.magick.magickState.StateManager;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
+import testmod.seccult.network.TransPoint;
 
 public class TheWorldMagick extends Magick implements ControllerMagic{
 
@@ -46,7 +48,9 @@ public class TheWorldMagick extends Magick implements ControllerMagic{
 		vec[1] = player.world.rand.nextFloat() / 10 *  strengh;
 		vec[2] = player.world.rand.nextFloat() / 10 *  strengh;
 		float[] color = {RGB[0], RGB[1], RGB[2]};
-		NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, color, strengh / 5, 0));
+
+		NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, strengh / 5, 0), 
+				new TransPoint(player.dimension, pos[0], pos[1], pos[2], 32), player.world);
 	}
 
 	@Override
