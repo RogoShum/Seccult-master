@@ -69,6 +69,14 @@ public class EntityRockShellLeviathan extends EntityWaterCreature implements IBo
 	}
 	
 	@Override
+	public boolean getCanSpawnHere() {
+		if(this.posY < 40)
+			return super.getCanSpawnHere();
+
+		return false;
+	}
+	
+	@Override
 	public void setDead() {
 		super.setDead();
 	}
@@ -264,6 +272,12 @@ public class EntityRockShellLeviathan extends EntityWaterCreature implements IBo
 	{
 		this.faceEntity(living, 30F, 30F);
 		boolean attack = living.attackEntityFrom(ModDamage.causeNormalEntityDamage(this), 7.5f);
+		
+		if(living instanceof EntityWaterMob && !(living instanceof EntityRockShellLeviathan))
+		{
+			living.setHealth(living.getHealth() - (5 / living.getMaxHealth()));
+		}
+		
 		if(attack && (living instanceof EntityWaterCreature || living instanceof EntityWaterMob) && !(living instanceof EntityRockShellLeviathan))
 		{
 			if(this.getHealth() < this.getMaxHealth())
@@ -275,7 +289,7 @@ public class EntityRockShellLeviathan extends EntityWaterCreature implements IBo
 				this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.getMaxHealth() + 2);
 			}
 		}
-		else
+		else if(attack)
 		{
 			if(this.getHealth() < this.getMaxHealth())
 			{
@@ -513,7 +527,7 @@ public class EntityRockShellLeviathan extends EntityWaterCreature implements IBo
 				if(living instanceof EntityPlayer)
 				{
 					EntityPlayer p = (EntityPlayer) living;
-					if(p.capabilities.isCreativeMode)
+					if(p.isCreative())
 						creat = true;
 				}
 				

@@ -11,6 +11,7 @@ import org.lwjgl.util.glu.Sphere;
 
 import com.google.common.collect.AbstractIterator;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.client.particle.Particle;
@@ -101,6 +102,18 @@ public class ClientProxy extends CommonProxy
 		}
 	}
 	
+	public void setOutOfWater(EntityPlayer player)
+	{
+		try {
+			if(player.world.handleMaterialAcceleration(player.getEntityBoundingBox().grow(0.0D, -0.4000000059604645D, 0.0D).shrink(0.001D), Material.WATER, player))
+				ModReclection.Entity_inWater(player, false);
+			else
+				ModReclection.Entity_inWater(player, true);
+		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void renderEvent()
 	{
 		MinecraftForge.EVENT_BUS.register(new HUDHandler());
@@ -119,7 +132,6 @@ public class ClientProxy extends CommonProxy
 			this.guardian = guardian;
 			this.repeat = true;
 			this.volume = 5;
-			System.out.println(guardian.getUniqueID());
 		}
 
 		@Override

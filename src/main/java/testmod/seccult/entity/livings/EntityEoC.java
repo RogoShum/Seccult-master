@@ -62,6 +62,7 @@ public class EntityEoC extends EntityBase implements IBossBase{
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
+		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(15);;
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(2000.0D);
         this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
         if(this.getHealth() > this.getMaxHealth() / 2)
@@ -77,11 +78,12 @@ public class EntityEoC extends EntityBase implements IBossBase{
 		PreAttack();
 		if(CoolDown > 0)
 			CoolDown--;
-		if(ene != null && this.getDistanceSq(ene) < 3) {
-			if(this.getHealth() > this.getMaxHealth() / 2)
-			ene.attackEntityFrom(DamageSource.causeMobDamage(this), 15);
-			else
-			ene.attackEntityFrom(DamageSource.causeMobDamage(this), 23);
+		if(ene != null && this.getDistanceSq(ene) < 4) {
+			
+			if(this.getHealth() < this.getMaxHealth() / 2)
+				this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(25);
+				
+			ene.attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
 		}
 	}
 	

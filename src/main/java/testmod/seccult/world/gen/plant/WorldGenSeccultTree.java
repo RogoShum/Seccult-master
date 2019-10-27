@@ -108,9 +108,9 @@ public class WorldGenSeccultTree extends WorldGenHugeTrees{
                 {
                     this.setBlockAndNotifyAdequately(worldIn, blockpos, this.woodMetadata);
 
-                    if (i2 > 0 && rand.nextInt(20) == 0)
+                    if (i2 > 0 && rand.nextInt(10) == 0)
                     {
-                    	//generateLanternFruit(worldIn, blockpos, rand);
+                    	generateLanternFruit(worldIn, blockpos, rand);
                     }
                 }
 
@@ -177,8 +177,8 @@ public class WorldGenSeccultTree extends WorldGenHugeTrees{
 
                     if (state.getBlock().isAir(state, worldIn, blockpos) || state.getBlock().isLeaves(state, worldIn, blockpos) || state.getBlock() == ModBlocks.LANTERN_VINE)
                     {
-                    	//if(!state.getBlock().isAir(state, worldIn, blockpos.up()) && Seccult.rand.nextInt(20) == 0)
-	            		//putLantern(worldIn, blockpos);
+                    	if(Seccult.rand.nextInt(20) == 0)
+                    		putLantern(worldIn, blockpos);
 	            		this.setBlockAndNotifyAdequately(worldIn, blockpos, this.leavesMetadata);
                     }
                 }
@@ -221,8 +221,8 @@ public class WorldGenSeccultTree extends WorldGenHugeTrees{
 
                     if (state.getBlock().isAir(state, worldIn, blockpos) || state.getBlock().isLeaves(state, worldIn, blockpos) || state.getBlock() == ModBlocks.LANTERN_VINE)
                     {
-                    	//if(!state.getBlock().isAir(state, worldIn, blockpos.up()) && Seccult.rand.nextInt(20) == 0)
-	            		//putLantern(worldIn, blockpos);
+                    	if(Seccult.rand.nextInt(20) == 0)
+                    		putLantern(worldIn, blockpos);
 	            		this.setBlockAndNotifyAdequately(worldIn, blockpos, this.leavesMetadata);
                     }
                 }

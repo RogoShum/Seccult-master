@@ -57,7 +57,7 @@ public class HUDHandler {
 		ScaledResolution resolution = event.getResolution();
 		float partialTicks = event.getPartialTicks();
 		if (event.getType() == ElementType.AIR) {
-			renderAir(resolution, partialTicks);
+			//renderAir(resolution, partialTicks);
 		}else 
 			if(event.getType() == ElementType.ALL)
 		{
@@ -71,11 +71,7 @@ public class HUDHandler {
 	{
 		
 		if(Minecraft.getMinecraft().world == null)  return;
-		List<EntityPlayer> players = Minecraft.getMinecraft().world.playerEntities;
-		
-		for(int i = 0; i < players.size(); ++i)
-		{
-			EntityPlayer player = players.get(i);
+			EntityPlayer player = Minecraft.getMinecraft().player;
 			KeyBinding[] keyBindings = ClientProxy.keyBindings;
 
 			if(keyBindings[2].isKeyDown())
@@ -147,9 +143,9 @@ public class HUDHandler {
 				if(Minecraft.getMinecraft().gameSettings.keyBindForward.isKeyDown())
 				{
 					Vec3d look = player.getLookVec();
-					player.motionX = look.x * player.getAIMoveSpeed() * 3;
-					player.motionY = look.y * player.getAIMoveSpeed() * 3;
-					player.motionZ = look.z * player.getAIMoveSpeed() * 3;
+					player.motionX = look.x * player.getAIMoveSpeed() * 4;
+					player.motionY = look.y * player.getAIMoveSpeed() * 4;
+					player.motionZ = look.z * player.getAIMoveSpeed() * 4;
 				
 					player.noClip = true;
 				}
@@ -157,14 +153,36 @@ public class HUDHandler {
 				if(Minecraft.getMinecraft().gameSettings.keyBindBack.isKeyDown())
 				{
 					Vec3d look = player.getLookVec();
-					player.motionX = -look.x * player.getAIMoveSpeed() * 3;
-					player.motionY = -look.y * player.getAIMoveSpeed() * 3;
-					player.motionZ = -look.z * player.getAIMoveSpeed() * 3;
+					player.motionX = -look.x * player.getAIMoveSpeed() * 4;
+					player.motionY = -look.y * player.getAIMoveSpeed() * 4;
+					player.motionZ = -look.z * player.getAIMoveSpeed() * 4;
 				
 					player.noClip = true;
 				}
 			}
-		}
+			
+			if(OceanArmor.hasArmorSetItem(player) && player.isOverWater())
+			{
+				if(Minecraft.getMinecraft().gameSettings.keyBindForward.isKeyDown())
+				{
+					Vec3d look = player.getLookVec();
+					player.motionX = look.x * player.getAIMoveSpeed() * 4;
+					player.motionY = look.y * player.getAIMoveSpeed() * 4;
+					player.motionZ = look.z * player.getAIMoveSpeed() * 4;
+				
+					player.noClip = true;
+				}
+			
+				if(Minecraft.getMinecraft().gameSettings.keyBindBack.isKeyDown())
+				{
+					Vec3d look = player.getLookVec();
+					player.motionX = -look.x * player.getAIMoveSpeed() * 4;
+					player.motionY = -look.y * player.getAIMoveSpeed() * 4;
+					player.motionZ = -look.z * player.getAIMoveSpeed() * 4;
+				
+					player.noClip = true;
+				}
+			}
 	}
 	
 	@SideOnly(Side.CLIENT)

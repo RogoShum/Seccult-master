@@ -73,7 +73,7 @@ public class NetworkTransFloat implements IMessage {
 		        	break;
 				case 3:
 					player.openGui(Seccult.instance, GuiElementLoader.GUI_SpellSelect, world, (int)player.posX, (int)player.posY, (int)player.posZ);
-		        	break;
+					break;
 				case 4:
 					PlayerData data = PlayerDataHandler.get(player);
 			        NBTTagList magick = data.getAllMagick();

@@ -1,6 +1,7 @@
 package testmod.seccult.items.armor.Ocean;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,10 +13,12 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
+import net.minecraftforge.event.world.WorldEvent;
 import testmod.seccult.ModReclection;
 import testmod.seccult.Seccult;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.items.armor.OceanArmor;
+import testmod.seccult.items.armor.MagickArmor;
 import testmod.seccult.items.armor.MagickArmor.CoreType;
 
 public class OceanHelmet extends OceanArmor{
@@ -33,13 +36,15 @@ public class OceanHelmet extends OceanArmor{
 		
 		if(!(entityIn instanceof EntityPlayer))
 			return;
-		EntityPlayer player = (EntityPlayer)entityIn;
 		
+		
+		EntityPlayer player = (EntityPlayer)entityIn;
+
 		ItemStack itemStack = stack;
 		
 		if(itemStack.getItem() == ModItems.OCEAN_HELMET)
 		{
-			if (hasArmorSetItem(player) && EnchantmentHelper.getEnchantmentLevel(Enchantments.RESPIRATION, itemStack) < 3) {
+			if (EnchantmentHelper.getEnchantmentLevel(Enchantments.RESPIRATION, itemStack) < 3) {
 	        	itemStack.addEnchantment(Enchantments.RESPIRATION, 3);
 	        }
 		}
@@ -49,21 +54,26 @@ public class OceanHelmet extends OceanArmor{
 			air = 300;
 			return;
 		}
-		if(player.world.isRemote)
+
+		player.setAir(0);
+		
+		Seccult.proxy.setOutOfWater(player);
+		
+		/*if(player.isOverWater())
 		{
-		try {
-			if(player.world.handleMaterialAcceleration(player.getEntityBoundingBox().grow(0.0D, -0.4000000059604645D, 0.0D).shrink(0.001D), Material.WATER, player))
-			ModReclection.Entity_inWater(player, false);
-			else
-				ModReclection.Entity_inWater(player, true);
-		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-			e.printStackTrace();
+			player.capabilities.allowFlying = true;
+			player.capabilities.isFlying = true;
 		}
-		}
+		else if(!MagickArmor.hasFlyingCore(player) || !player.isCreative())
+		{
+			player.capabilities.allowFlying = false;
+			player.capabilities.isFlying = false;
+		}*/
+		
 		if(player.world.handleMaterialAcceleration(player.getEntityBoundingBox().grow(0.0D, -1.0D, 0.0D).offset(0, 1, 0).shrink(0.001D), Material.WATER, player))
 		player.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 201));
 		
-		if(player.capabilities.isCreativeMode)
+		/*if(player.capabilities.isCreativeMode)
 			return;
 
         if (air <= -20)
@@ -79,6 +89,7 @@ public class OceanHelmet extends OceanArmor{
             player.attackEntityFrom(DamageSource.DROWN, 2.0F);
             air = 1;
         }
+		*/
 		
 		if(!player.isInWater())
 		{

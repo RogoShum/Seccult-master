@@ -1,6 +1,7 @@
 package testmod.seccult.entity.livings.water;
 
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
@@ -9,7 +10,7 @@ import net.minecraft.world.World;
 import testmod.seccult.Seccult;
 import testmod.seccult.entity.livings.EntityBase;
 
-public abstract class EntityWaterCreature extends EntityBase implements IAnimals {
+public abstract class EntityWaterCreature extends WaterEntityBase implements IAnimals {
 
 	public EntityWaterCreature(World worldIn) {
 		super(worldIn);
@@ -23,6 +24,12 @@ public abstract class EntityWaterCreature extends EntityBase implements IAnimals
 			waterMoving();
 		else
 			GroundThing();
+	}
+	
+	@Override
+	protected void applyEntityAttributes() {
+		super.applyEntityAttributes();
+		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 	}
 	
 	public abstract void GroundThing();

@@ -20,6 +20,8 @@ public class CommonProxy
 	
 	public void SeccultFX(double[] pos, double[] vec, float[] color, float scale, int type) {}
 	
+	public void setOutOfWater(EntityPlayer player) {}
+	
 	public void renderEvent() {}
 	
 	public void sphereRender() {}

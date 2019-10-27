@@ -41,9 +41,19 @@ public class EntityBoneShark extends EntityWaterCreature{
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
+		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(5.0D);
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(25.0D);
         this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.5D);
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(5.0D);
+	}
+	
+	
+	@Override
+	public boolean getCanSpawnHere() {
+		if(this.posY < 80)
+			return super.getCanSpawnHere();
+
+		return false;
 	}
 	
 	@Override
@@ -135,6 +145,10 @@ public class EntityBoneShark extends EntityWaterCreature{
 			target.posX = this.posX + look.x * 1.5F;
 			target.posY = this.posY + look.y;
 			target.posZ = this.posZ + look.z * 1.5F;
+			
+			boolean attack = this.target.attackEntityFrom(DamageSource.MAGIC, (float)this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+			if(attack && (this.target instanceof EntityWaterCreature || this.target instanceof EntityWaterMob))
+				this.heal(2.5f);
 			}
 			else
 			{
@@ -142,10 +156,6 @@ public class EntityBoneShark extends EntityWaterCreature{
 				this.target.motionY = this.LookY() * 2;
 				this.target.motionZ = this.LookZ() * 2;
 			}
-			
-			boolean attack = this.target.attackEntityFrom(DamageSource.MAGIC, 5f);
-			if(attack && (this.target instanceof EntityWaterCreature || this.target instanceof EntityWaterMob))
-				this.heal(2.5f);
 		}
 		else
 			this.setIsSleeping(false);
@@ -247,14 +257,15 @@ public class EntityBoneShark extends EntityWaterCreature{
 		for(int i = 0; i < list.size(); i++)
 		{
 			Entity e = list.get(i);
-			if(e instanceof EntityLivingBase && !(e instanceof EntityBoneShark)  && !(e instanceof EntityVillager) && this.canSeeTarget(e))
+			if(e instanceof EntityLivingBase && !(e instanceof EntityBoneShark)  && !(e instanceof EntityVillager) && !(e instanceof EntityWaterTentacle) && !(e instanceof EntityRockShellLeviathan)
+					&& e.isNonBoss() && this.canSeeTarget(e))
 			{
 				boolean creat = false;
 				EntityLivingBase living = (EntityLivingBase) e;
 				if(living instanceof EntityPlayer)
 				{
 					EntityPlayer p = (EntityPlayer) living;
-					if(p.capabilities.isCreativeMode)
+					if(p.isCreative())
 						creat = true;
 				}
 				

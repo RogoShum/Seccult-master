@@ -8,6 +8,7 @@ import net.minecraft.entity.Entity;
 import testmod.seccult.entity.livings.EntityBase;
 import testmod.seccult.entity.livings.flying.EntityAirTentacle;
 import testmod.seccult.entity.livings.water.EntityWaterTentacle;
+import testmod.seccult.entity.livings.water.WaterEntityBase;
 import net.minecraft.client.renderer.GlStateManager;
 
 /**
@@ -212,12 +213,33 @@ public class ModelAirTentacle extends ModelBase {
         GlStateManager.translate(-this.body.rotationPointX * f5, -this.body.rotationPointY * f5, -this.body.rotationPointZ * f5);
         this.body.render(f5);
         GlStateManager.popMatrix();
-        EntityBase at = (EntityBase) entity;
-        if(at instanceof EntityWaterTentacle)
-        	this.body.rotateAngleX = (entity.rotationPitch - 90) * 0.017453292F;
         
-        float swing = at.getSwing();
-        if(at.getIsSleeping())
+        if(entity instanceof EntityAirTentacle)
+        {
+        	this.body.rotateAngleX = 0;
+        	EntityAirTentacle at = (EntityAirTentacle) entity;
+        	float swing = at.getSwing();
+        	isSleeping(at.getIsSleeping(), swing);
+        }
+        
+        if(entity instanceof EntityWaterTentacle)
+        {
+        	this.body.rotateAngleX = (entity.rotationPitch - 90) * 0.017453292F;
+        	EntityWaterTentacle at = (EntityWaterTentacle) entity;
+        	float swing = at.getSwing();
+        	isSleeping(at.getIsSleeping(), swing);
+        }
+        
+       
+       
+        
+        
+        
+    }
+
+    public void isSleeping(boolean sleeping, float swing)
+    {
+    	if(sleeping)
         {
             for(int i = 0; i < 4; ++i)
             {
@@ -298,7 +320,7 @@ public class ModelAirTentacle extends ModelBase {
             }
         }
     }
-
+    
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
         modelRenderer.rotateAngleX = x;
         modelRenderer.rotateAngleY = y;

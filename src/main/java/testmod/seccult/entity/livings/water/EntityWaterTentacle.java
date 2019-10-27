@@ -18,6 +18,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import testmod.seccult.entity.livings.water.EntityRockShellLeviathan.DamageReduce;
+import testmod.seccult.init.ModDamage;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.magick.active.Magick;
@@ -40,11 +41,20 @@ public class EntityWaterTentacle extends EntityWaterCreature{
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
+		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(7.0D);
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40.0D);
         this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.7D);
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(5.0D);
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).setBaseValue(10.0D);
         this.getEntityAttribute(SWIM_SPEED).setBaseValue(4);
+	}
+	
+	@Override
+	public boolean getCanSpawnHere() {
+		if(this.posY < 60)
+			return super.getCanSpawnHere();
+
+		return false;
 	}
 	
 	@Override
@@ -127,7 +137,7 @@ public class EntityWaterTentacle extends EntityWaterCreature{
 			target.posY = this.posY + this.LookY() - this.target.height;
 			target.posZ = this.posZ + this.LookZ();
 			
-			boolean attack = this.target.attackEntityFrom(DamageSource.OUT_OF_WORLD, 5f);
+			boolean attack = this.target.attackEntityFrom(ModDamage.pureMagic, (float)this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
 			if(attack && (this.target instanceof EntityWaterCreature || this.target instanceof EntityWaterMob))
 				this.heal(2.5f);
 		}
@@ -234,14 +244,15 @@ public class EntityWaterTentacle extends EntityWaterCreature{
 		for(int i = 0; i < list.size(); i++)
 		{
 			Entity e = list.get(i);
-			if(e instanceof EntityLivingBase && !(e instanceof EntityWaterTentacle)  && !(e instanceof EntityVillager) && this.canSeeTarget(e))
+			if(e instanceof EntityLivingBase && !(e instanceof EntityWaterTentacle)  && !(e instanceof EntityVillager) 
+					&& e.isNonBoss()  && this.canSeeTarget(e) && !(e instanceof EntityRockShellLeviathan))
 			{
 				boolean creat = false;
 				EntityLivingBase living = (EntityLivingBase) e;
 				if(living instanceof EntityPlayer)
 				{
 					EntityPlayer p = (EntityPlayer) living;
-					if(p.capabilities.isCreativeMode)
+					if(p.isCreative())
 						creat = true;
 				}
 				

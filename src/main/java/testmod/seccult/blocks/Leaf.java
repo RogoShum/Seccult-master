@@ -115,12 +115,9 @@ public class Leaf extends BlockLeaves implements registerModel, WaNP
         		particle(worldIn, pos, state, rand);
         	}
     }
-	
-	@SideOnly(Side.CLIENT)
+
 	public void particle(World worldIn, BlockPos pos, IBlockState state, Random rand)
 	{
-		Particle par = new ParticleEnchantment(worldIn, pos.getX(), pos.getY() - 1, pos.getZ(), 0, -rand.nextFloat() / 3, 0);
-		Minecraft.getMinecraft().effectRenderer.addEffect(par);
 		double[] Bpos = {pos.getX(), pos.getY() - 1, pos.getZ()};
 		double[] vec = {(1 - rand.nextFloat() * 2)/10, -rand.nextFloat() / 3, (1 - rand.nextFloat() * 2)/10};
 		float[] color = {0.2F, 0.7F, 0.7F};

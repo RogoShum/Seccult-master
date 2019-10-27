@@ -6,6 +6,7 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MovingSound;
+import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,6 +27,7 @@ import testmod.seccult.init.ModItems;
 public class BossEventHandler {
 	private ArrayList<Entity> bosses;
 	private BossInfoServer bossInfo;
+	public ArrayList<EntityPlayerMP> playerList = new ArrayList<>();
 	
 	public BossEventHandler(ArrayList<Entity> bosses) {
 		this.bosses = bosses;
@@ -34,17 +36,12 @@ public class BossEventHandler {
 		bossInfo = (BossInfoServer)(new BossInfoServer(one.getDisplayName(), ((IBossBase)one).getBarColor(), ((IBossBase)one).getOverlay())).setDarkenSky(((IBossBase)one).DarkenSky());
 		ModEventHandler.bossEvent.getBossHandler().add(this);
 		
-		if(one instanceof EntityEoW)
-		{
-		}
-		else
 		Seccult.proxy.BossSound(bosses);
 	}
 	
 	public void onUpdate()
 	{
 		boolean stillAlive = false;
-		boolean cloesE = false;
 		float health = 0;
 		float maxHealth = 0;
 		for(int i = 0; i < bosses.size(); ++i)
@@ -71,36 +68,52 @@ public class BossEventHandler {
 			if(player instanceof EntityPlayerMP)
 			{
 				
+				boolean cloesE = false;
+				
 				EntityPlayerMP plMP = (EntityPlayerMP) player;
 				
 				for(int i = 0; i < bosses.size(); ++i)
 				{
 					Entity boss = bosses.get(i);
-					if(plMP.dimension == boss.dimension && plMP.getDistance(boss) < 72)
+					if(plMP.dimension == boss.dimension && plMP.getDistance(boss) < 64)
 						cloesE = true;
 				}
 				
-				if(cloesE && !bossInfo.getPlayers().contains(plMP))
+				
+				
+				if(cloesE && !this.playerList.contains(plMP))
 				{
+					this.playerList.add(plMP);
 					bossInfo.addPlayer(plMP);
 				}
-				else if(!cloesE)
+				else if(!cloesE && this.playerList.contains(plMP))
+				{
+					this.playerList.remove(plMP);
 					bossInfo.removePlayer(plMP);
+				}
+			}
+		}
+		
+		for(int c = 0; c < playerList.size(); ++c)
+		{
+			EntityPlayerMP player = playerList.get(c);
+			
+			if(!players.contains(player))
+			{
+				this.playerList.remove(player);
+				bossInfo.removePlayer(player);
 			}
 		}
 		
 		bossInfo.setPercent(health / maxHealth);
 		if(!stillAlive || health <= 0)
 		{
-			for(int i = 0; i < bossInfo.getPlayers().size(); ++i)
+			for(int i = 0; i < this.playerList.size(); ++i)
 			{
-				Iterator<EntityPlayerMP> it = bossInfo.getPlayers().iterator();
-				while (it.hasNext()) {
-					EntityPlayerMP MP = it.next();
+					EntityPlayerMP MP = this.playerList.get(i);
 					if(!MP.world.isRemote)
 						MP.dropItem(ModItems.AlterScroll, 1);
 					bossInfo.removePlayer(MP);
-				}
 			}
 
 			bossInfo = null;
