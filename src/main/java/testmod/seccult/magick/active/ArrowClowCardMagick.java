@@ -13,7 +13,7 @@ public class ArrowClowCardMagick extends Magick implements AttackingMagic{
 	@Override
 	void toEntity() {
 		EntityClowCardArrow newArrow = new EntityClowCardArrow(entity.world, entity, (int)strengh, strengh / 2, (int)attribute);
-		newArrow.setPositionAndRotation(entity.posX, entity.posY + (entity.height * 0.7), entity.posZ, entity.rotationYaw, entity.rotationPitch);
+		newArrow.setPositionAndRotation(entity.posX, entity.posY + (entity.height * 0.65), entity.posZ, entity.rotationYaw, entity.rotationPitch);
 		entity.world.spawnEntity(newArrow);
 	}
 

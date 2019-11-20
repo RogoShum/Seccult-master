@@ -4,15 +4,27 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MoverType;
+import net.minecraft.entity.ai.EntityFlyHelper;
+import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import testmod.seccult.client.FX.LightFX;
+import testmod.seccult.network.NetworkEffectData;
+import testmod.seccult.network.NetworkHandler;
+import testmod.seccult.network.TransPoint;
 
 public class EntityBloodBeam extends Entity{
-	
+	private static final DataParameter<Integer> ID = EntityDataManager.<Integer>createKey(EntityBloodBeam.class, DataSerializers.VARINT);
 	protected UUID upperUUID = null;
 	protected long uppermost = 0;
 	protected long upperleast = 0;
@@ -25,6 +37,7 @@ public class EntityBloodBeam extends Entity{
 		this.setNoGravity(true);
 		this.noClip = true;
 		this.collided = false;
+		this.setNoGravity(true);
 		this.isImmuneToFire = true;
 		this.setEntityInvulnerable(true);
 	}
@@ -43,11 +56,25 @@ public class EntityBloodBeam extends Entity{
 	public void onUpdate() {
 		super.onUpdate();
 		if(this.owner != null) {
-			Moveto(this.owner.posX, this.owner.posY + (this.owner.height / 2), this.owner.posZ, 0.2F);
+			setOwnerID(this.owner.getEntityId());
+			Moveto(this.owner.posX, this.owner.posY + (this.owner.height / 2), this.owner.posZ, 0.1D);
 			onChargeBlood();
 		}
 		else
 			loadUUID();
+
+		if(this.world.isRemote && this.owner == null)
+		{
+			if(this.getOwnerID() != 0)
+			{
+			Entity living = this.world.getEntityByID(this.getOwnerID());
+			
+			if(living != null && living instanceof EntityLivingBase)
+			{
+				this.owner = (EntityLivingBase) living;
+			}
+			}
+		}
 		
 		if(!this.world.isRemote && this.ticksExisted > 20 && this.owner == null)
 		{
@@ -73,7 +100,7 @@ public class EntityBloodBeam extends Entity{
 	      }
 	}
 	
-	protected void Moveto(double x, double y, double z, float speed) {
+	protected void Moveto(double x, double y, double z, double speed) {
        this.motionX += (Math.signum(x - this.posX) - this.motionX) * speed;
        this.motionY += (Math.signum(y - this.posY) - this.motionY) * speed;
        this.motionZ += (Math.signum(z - this.posZ) - this.motionZ) * speed;
@@ -82,9 +109,15 @@ public class EntityBloodBeam extends Entity{
        this.posY += this.motionY;
        this.posZ += this.motionZ;
 
-       this.motionX *= (double)0.8;
-       this.motionY *= (double)0.8;
-       this.motionZ *= (double)0.8;
+       /*if(!this.world.isRemote)
+       {
+    	   double[] Bpos = {this.posX, this.posY, this.posZ};
+   			double[] vec = {0, 0, 0};
+			float[] color = {1F, 0.0F, 0.0F};
+    	   NetworkHandler.sendToAllAround(new NetworkEffectData(Bpos, vec, color, 1, 0), 
+   				new TransPoint(-12450, Bpos[0], Bpos[1], Bpos[2], 32), this.world);
+
+       }*/
        
        this.setPosition(this.posX, this.posY, this.posZ);
 	}
@@ -120,11 +153,23 @@ public class EntityBloodBeam extends Entity{
         return 5.0F;
     }
 	
-	@Override
-	protected void entityInit() {}
+    @Override
+	protected void entityInit() {
+        this.dataManager.register(ID, Integer.valueOf(0));
+	}
+	
+    public int getOwnerID()
+    {
+        return this.dataManager.get(ID).intValue();
+    }
+    
+    private void setOwnerID(int size)
+    {
+        this.dataManager.set(ID, Integer.valueOf(size));
+    }
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbt) {
+	public void readEntityFromNBT(NBTTagCompound nbt) {
 		if(nbt.hasKey("MyBlood")) {
 			this.Myblood = nbt.getFloat("MyBlood");
 		}
@@ -137,7 +182,7 @@ public class EntityBloodBeam extends Entity{
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbt) {
+	public void writeEntityToNBT(NBTTagCompound nbt) {
 		if(!nbt.hasKey("MyBlood")) {
 			nbt.setFloat("MyBlood", this.Myblood);
 		}
@@ -148,5 +193,4 @@ public class EntityBloodBeam extends Entity{
         }
 		
 	}
-
 }

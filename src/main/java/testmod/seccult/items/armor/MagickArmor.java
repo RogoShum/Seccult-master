@@ -107,9 +107,8 @@ public class MagickArmor extends ArmorBase{
 			}
 		}
 		
-		if(coreType.equals(CoreType.LifeCore) || player.ticksExisted % 30 == 0)
-			player.heal(0.5F);
-			
+		if(coreType.equals(CoreType.LifeCore) || player.ticksExisted % 20 == 0)
+			player.heal(0.75F);
 	}
 	
 	public static boolean addMagickCore(ItemStack stack, String coreType)
@@ -125,29 +124,26 @@ public class MagickArmor extends ArmorBase{
 	
 	public static boolean hasFlyingCore(EntityPlayer player)
 	{
-		String coreType0 = getCore(player.getItemStackFromSlot(EntityEquipmentSlot.HEAD));
-		String coreType1 = getCore(player.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
-		String coreType2 = getCore(player.getItemStackFromSlot(EntityEquipmentSlot.LEGS));
-		String coreType3 = getCore(player.getItemStackFromSlot(EntityEquipmentSlot.FEET));
-		return coreType0.equals(CoreType.FlyingCore) || coreType1.equals(CoreType.FlyingCore) || coreType2.equals(CoreType.FlyingCore) || coreType3.equals(CoreType.FlyingCore);
+		return hasCore(player, CoreType.FlyingCore);
 	}
 	
 	public static boolean hasJumpCore(EntityPlayer player)
 	{
-		String coreType0 = getCore(player.getItemStackFromSlot(EntityEquipmentSlot.HEAD));
-		String coreType1 = getCore(player.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
-		String coreType2 = getCore(player.getItemStackFromSlot(EntityEquipmentSlot.LEGS));
-		String coreType3 = getCore(player.getItemStackFromSlot(EntityEquipmentSlot.FEET));
-		return coreType0.equals(CoreType.JumpCore) || coreType1.equals(CoreType.JumpCore) || coreType2.equals(CoreType.JumpCore) || coreType3.equals(CoreType.JumpCore);
+		return hasCore(player, CoreType.JumpCore);
 	}
 	
 	public static boolean hasAttackCore(EntityPlayer player)
+	{
+		return hasCore(player, CoreType.AttackCore);
+	}
+	
+	public static boolean hasCore(EntityPlayer player, String type)
 	{
 		String coreType0 = getCore(player.getItemStackFromSlot(EntityEquipmentSlot.HEAD));
 		String coreType1 = getCore(player.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
 		String coreType2 = getCore(player.getItemStackFromSlot(EntityEquipmentSlot.LEGS));
 		String coreType3 = getCore(player.getItemStackFromSlot(EntityEquipmentSlot.FEET));
-		return coreType0.equals(CoreType.AttackCore) || coreType1.equals(CoreType.AttackCore) || coreType2.equals(CoreType.AttackCore) || coreType3.equals(CoreType.AttackCore);
+		return coreType0.equals(type) || coreType1.equals(type) || coreType2.equals(type) || coreType3.equals(type);
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -190,9 +186,9 @@ public class MagickArmor extends ArmorBase{
 		if (slot == armorType) {
 			if(coreType.equals(CoreType.DefenceCore))
 			{
-				attrib.put(SharedMonsterAttributes.ARMOR.getName(), new AttributeModifier(uuid, "Magick modifier", 0.5F,  1));
-				attrib.put(SharedMonsterAttributes.ARMOR_TOUGHNESS.getName(), new AttributeModifier(uuid, "Magick modifier", 0.5F,  1));
-				attrib.put(SharedMonsterAttributes.KNOCKBACK_RESISTANCE.getName(), new AttributeModifier(uuid, "Magick modifier", 0.5F,  1));
+				attrib.put(SharedMonsterAttributes.ARMOR.getName(), new AttributeModifier(uuid, "Magick modifier", 1F,  1));
+				attrib.put(SharedMonsterAttributes.ARMOR_TOUGHNESS.getName(), new AttributeModifier(uuid, "Magick modifier", 1F,  1));
+				attrib.put(SharedMonsterAttributes.KNOCKBACK_RESISTANCE.getName(), new AttributeModifier(uuid, "Magick modifier", 1F,  1));
 			}
 			if(coreType.equals(CoreType.SpeedCore))
 			{
@@ -201,7 +197,7 @@ public class MagickArmor extends ArmorBase{
 				attrib.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(uuid, "Magick modifier", 0.5F,  1));
 			}
 			if(coreType.equals(CoreType.LifeCore))
-			attrib.put(SharedMonsterAttributes.MAX_HEALTH.getName(), new AttributeModifier(uuid, "Magick modifier", 1F, 1));
+				attrib.put(SharedMonsterAttributes.MAX_HEALTH.getName(), new AttributeModifier(uuid, "Magick modifier", 1F, 1));
 			
 			if(coreType.equals(CoreType.AttackCore))
 				attrib.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(uuid, "Magick modifier", 3F, 1));

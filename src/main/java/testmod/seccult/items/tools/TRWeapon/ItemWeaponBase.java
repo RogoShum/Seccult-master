@@ -64,6 +64,7 @@ public class ItemWeaponBase extends ItemBase{
 		
 		if(project != null && !player.world.isRemote && this.isOK()) {
 			SpawnProjectile(player);
+			return true;
 		}
 		}
 		}
@@ -75,7 +76,10 @@ public class ItemWeaponBase extends ItemBase{
 		// TODO Auto-generated method stub
 		super.onPlayerStoppedUsing(stack, worldIn, entityLiving, timeLeft);
 		if(laser != null)
+		{
 			laser.setDead();
+			laser = null;
+		}
 	}
 	
 	@Override
@@ -121,6 +125,16 @@ public class ItemWeaponBase extends ItemBase{
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
     	super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
     	this.myColdTime++;
+
+		if(entityIn instanceof EntityPlayer)
+		{
+			EntityPlayer player = (EntityPlayer) entityIn;
+			if(player.getHeldItemMainhand() != stack && laser != null)
+			{
+				laser.setDead();
+				laser = null;
+			}
+		}
     } 
     
 	@Override

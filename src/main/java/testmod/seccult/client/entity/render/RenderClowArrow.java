@@ -29,6 +29,9 @@ public class RenderClowArrow extends Render<EntityClowCardArrow>
      */
     public void doRender(EntityClowCardArrow entity, double x, double y, double z, float entityYaw, float partialTicks)
     {
+    	entity.height = 1;
+    	entity.width = 1;
+    	y -= 0.9F;
     	super.doRender(entity, x, y, z, entityYaw, partialTicks);
     	int zz = 15728880;
         int cc = zz % 65536;

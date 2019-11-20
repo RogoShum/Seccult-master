@@ -2,9 +2,18 @@ package testmod.seccult.entity;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import testmod.seccult.init.ModDamage;
 
@@ -17,13 +26,14 @@ public class EntityClowCardArrow extends Entity{
 	public EntityClowCardArrow(World worldIn) {
 		super(worldIn);
 		this.noClip = false;
-		this.setSize(1.0F, 0.3F);
+		this.setSize(0.3F, 0.3F);
 	}
 
 	public EntityClowCardArrow(World worldIn, Entity entity, int Damage, float speed, int split) {
 		super(worldIn);
 		this.owner = entity;
 		this.setPositionAndRotation(owner.posX, owner.posY, owner.posZ, owner.rotationYaw, owner.rotationPitch);
+		this.world.playSound((EntityPlayer)null, new BlockPos(this.posX, this.posY, this.posZ), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1F, 2F);
 		this.damage = Damage;
 		this.speed = speed;
 		this.Split = split;
@@ -40,12 +50,14 @@ public class EntityClowCardArrow extends Entity{
 		Move();
 		collideWithNearbyEntities();
 		Split();
+		if(this.ticksExisted % 40 == 0)
+			this.world.playSound((EntityPlayer)null, new BlockPos(this.posX, this.posY, this.posZ), SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.PLAYERS, 1F, 2F);
 		if(this.ticksExisted > 200)
 			this.setDead();
 	}
 	
 	private void Split() {
-		if(this.Split > 1 && this.ticksExisted > 5)
+		if(this.Split > 0 && this.ticksExisted > 3)
 		{
 			int times = this.rand.nextInt(2) + 1;
 			for(int i = 0; i < times; times--)
@@ -68,8 +80,9 @@ public class EntityClowCardArrow extends Entity{
 	}
 
 	private void Move() {
-		if(!this.world.isAirBlock(getPosition()) && !(this.world.getBlockState(getPosition()).getBlock() instanceof BlockLiquid))
+		if(stick(getEntityBoundingBox()))
 		{
+			this.world.playSound((EntityPlayer)null, new BlockPos(this.posX, this.posY, this.posZ), SoundEvents.ENTITY_ENDEREYE_DEATH, SoundCategory.PLAYERS, 1F, 1F + this.rand.nextFloat());
 			this.setDead();
 			return;
 		}
@@ -88,6 +101,40 @@ public class EntityClowCardArrow extends Entity{
 		
 		this.setPosition(posX, posY, posZ);
 	}
+	
+	protected boolean stick(AxisAlignedBB p_70972_1_)
+    {
+        int i = MathHelper.floor(p_70972_1_.minX);
+        int j = MathHelper.floor(p_70972_1_.minY);
+        int k = MathHelper.floor(p_70972_1_.minZ);
+        int l = MathHelper.floor(p_70972_1_.maxX);
+        int i1 = MathHelper.floor(p_70972_1_.maxY);
+        int j1 = MathHelper.floor(p_70972_1_.maxZ);
+        boolean flag = false;
+        
+        for (int k1 = i; k1 <= l; ++k1)
+        {
+            for (int l1 = j; l1 <= i1; ++l1)
+            {
+                for (int i2 = k; i2 <= j1; ++i2)
+                {
+                    BlockPos blockpos = new BlockPos(k1, l1, i2);
+                    IBlockState iblockstate = this.world.getBlockState(blockpos);
+                    Block block = iblockstate.getBlock();
+
+                    if (!block.isAir(iblockstate, this.world, blockpos) && iblockstate.getMaterial() != Material.FIRE && iblockstate.getMaterial() != Material.VINE
+                    		 && iblockstate.getMaterial() != Material.SNOW  && iblockstate.getMaterial() != Material.PLANTS)
+                    {
+                        {
+                            flag = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return flag;
+    }
 	
     protected void collideWithNearbyEntities()
     {
@@ -121,6 +168,7 @@ public class EntityClowCardArrow extends Entity{
 			entityIn.attackEntityFrom(ModDamage.causePureEntityDamage(this), this.damage);
 			entityIn.hurtResistantTime = -1;
 		}
+		this.world.playSound((EntityPlayer)null, new BlockPos(this.posX, this.posY, this.posZ), SoundEvents.ENTITY_ENDEREYE_DEATH, SoundCategory.PLAYERS, 1F, 1F + this.rand.nextFloat());
 	}
 	
 	@Override

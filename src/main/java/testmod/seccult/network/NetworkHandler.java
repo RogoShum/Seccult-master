@@ -14,15 +14,18 @@ public class NetworkHandler {
 	
 	public static void init() 
 	{
-		network.registerMessage(NetworkPlayerWandData.PacketMessageHandler.class, NetworkPlayerWandData.class, 0, Side.CLIENT);
-		network.registerMessage(NetworkPlayerMagickData.PacketMessageHandler.class, NetworkPlayerMagickData.class, 1, Side.CLIENT);
-		network.registerMessage(NetworkEffectData.PacketMessageHandler.class, NetworkEffectData.class, 2, Side.CLIENT);
-		network.registerMessage(NetworkEntityMoving.PacketMessageHandler.class, NetworkEntityMoving.class, 3, Side.CLIENT);
-		network.registerMessage(NetworkPlayerTransMagickToClient.PacketMessageHandler.class, NetworkPlayerTransMagickToClient.class, 4, Side.CLIENT);
-		network.registerMessage(NetworPlayerMagickData.PacketMessageHandler.class, NetworPlayerMagickData.class, 5, Side.CLIENT);
-		network.registerMessage(NetworkMutekiGamer.PacketMessageHandler.class, NetworkMutekiGamer.class, 6, Side.CLIENT);
-		network.registerMessage(NetworkPlayerAddMagick.PacketMessageHandler.class, NetworkPlayerAddMagick.class, 7, Side.SERVER);
-		network.registerMessage(NetworkTransFloat.MessageHandler.class, NetworkTransFloat.class, 8, Side.SERVER);
+		int i = 0;
+		network.registerMessage(NetworkPlayerWandData.PacketMessageHandler.class, NetworkPlayerWandData.class, i++, Side.CLIENT);
+		network.registerMessage(NetworkPlayerMagickData.PacketMessageHandler.class, NetworkPlayerMagickData.class, i++, Side.CLIENT);
+		network.registerMessage(NetworkEffectData.PacketMessageHandler.class, NetworkEffectData.class, i++, Side.CLIENT);
+		network.registerMessage(NetworkEntityMoving.PacketMessageHandler.class, NetworkEntityMoving.class, i++, Side.CLIENT);
+		network.registerMessage(NetworkPlayerTransMagickToClient.PacketMessageHandler.class, NetworkPlayerTransMagickToClient.class, i++, Side.CLIENT);
+		network.registerMessage(NetworPlayerMagickData.PacketMessageHandler.class, NetworPlayerMagickData.class, i++, Side.CLIENT);
+		network.registerMessage(NetworkMutekiGamer.PacketMessageHandler.class, NetworkMutekiGamer.class, i++, Side.CLIENT);
+		network.registerMessage(CNetworkTransFloat.PacketMessageHandler.class, CNetworkTransFloat.class, i++, Side.CLIENT);
+		network.registerMessage(NetworkPlayerAddMagick.PacketMessageHandler.class, NetworkPlayerAddMagick.class, i++, Side.SERVER);
+		network.registerMessage(NetworkTransFloat.MessageHandler.class, NetworkTransFloat.class, i++, Side.SERVER);
+		network.registerMessage(NetworkTransString.MessageHandler.class, NetworkTransString.class, i++, Side.SERVER);
 	}
 	
 	public static SimpleNetworkWrapper getNetwork()

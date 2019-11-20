@@ -47,8 +47,6 @@ public class SpellProgrammerGui extends GuiScreen
     private static final int BUTTON_DOWN_B = 95;
     private static final int BUTTON_FORK = 94;
     
-    private ArrayList<Integer> PanelButton = new ArrayList<Integer>();
-    
     private SpellButton clicked;
     private SpellButton selected;
     private SpellButton chooseToLink;
@@ -68,18 +66,12 @@ public class SpellProgrammerGui extends GuiScreen
         Strength = data.getManaStrengh();
         Control = data.getManaStrengh();
         canProgeammer = true;
-    } 
+    }
     
     @Override
     public void initGui() {
     	super.initGui();
     	//this.buttonList.clear();
-
-    	PanelButton.add(BUTTON_UP_A);
-    	PanelButton.add(BUTTON_UP_B);
-    	PanelButton.add(BUTTON_DOWN_A);
-    	PanelButton.add(BUTTON_DOWN_B);
-    	PanelButton.add(BUTTON_FORK);
 
     	xSize = 172;
     	ySize = 172;
@@ -339,6 +331,7 @@ public class SpellProgrammerGui extends GuiScreen
             if(!onPaper)
             	unloadSelectedButton();
     	}
+    	
     	GlStateManager.pushMatrix();
 		drawDefaultBackground();
 

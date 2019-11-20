@@ -80,7 +80,7 @@ public class EntitySpiritContainer extends EntityBase{
 		    	this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(living.getMaxHealth());
 		    	this.setHealth(living.getHealth());
 		    	living.world.removeEntityDangerously(living);
-		    	List<Entity> list = this.world.getLoadedEntityList();
+		    	List<Entity> list = this.world.loadedEntityList;
 				if(list.contains(living))
 					list.remove(living);
 		    }

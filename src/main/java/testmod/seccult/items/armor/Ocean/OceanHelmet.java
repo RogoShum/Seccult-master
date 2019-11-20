@@ -57,7 +57,7 @@ public class OceanHelmet extends OceanArmor{
 
 		player.setAir(0);
 		
-		Seccult.proxy.setOutOfWater(player);
+		//Seccult.proxy.setOutOfWater(player);
 		
 		/*if(player.isOverWater())
 		{

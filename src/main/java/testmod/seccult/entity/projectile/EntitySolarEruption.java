@@ -301,7 +301,7 @@ public class EntitySolarEruption extends TRprojectileBase{
 	}
 
 	@Override
-	protected void MoveingAttribute() {
+	protected void updateMoveingAttribute() {
 		if(!parent)
 			return;
 		Vec3d handVec = this.getPlayer().getLookVec().rotateYaw(hand == EnumHand.MAIN_HAND ? -0.4F : 0.4F);

@@ -2,7 +2,10 @@ package testmod.seccult.entity.projectile;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,6 +15,8 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -40,12 +45,12 @@ public class TRprojectileBase extends Entity{
 	
 	public TRprojectileBase(World worldIn) {
 		super(worldIn);
-		this.setSize(1.0F, 1.0F);
+		this.setSize(0.4F, 0.4F);
 	}
 
 	public TRprojectileBase(World worldIn, int Damage, int speed, EntityPlayer player, int id) {
 		super(worldIn);
-		this.setSize(1.0F, 1.0F);
+		this.setSize(0.4F, 0.4F);
 		this.Speed = speed;
 		this.Damage = Damage;
 		this.player = player;
@@ -79,23 +84,13 @@ public class TRprojectileBase extends Entity{
 		super.onUpdate();
 		if(!this.world.isRemote)
 		setRender(this.id);
-		Vec3d QAQ = this.getLookVec();
-		this.x = QAQ.x;
-		this.y = QAQ.y;
-		this.z = QAQ.z;
 		DamageThings();
-		MoveingAttribute();
+		updateMoveingAttribute();
 		realseDust();
 		if(this.ticksExisted > 200)
 			this.setDead();
-        BlockPos base = this.getPosition();
-        BlockPos x1 = base.add(0.4, 0, 0);
-        BlockPos x2 = base.add(-0.4, 0, 0);
-        BlockPos y1 = base.add(0, 0.4, 0);
-        BlockPos y2 = base.add(0, -0.4, 0);
-        BlockPos z1 = base.add(0, 0, 0.4);
-        BlockPos z2 = base.add(0, 0, -0.4);
-        if (!this.world.isRemote && (this.stick(x1) || this.stick(x2) || this.stick(y1) || this.stick(y2) || this.stick(z1) || this.stick(z2))) {
+
+        if (!this.world.isRemote && this.stick(this.getEntityBoundingBox())) {
         	this.isStick = true;
         }
         else
@@ -106,10 +101,38 @@ public class TRprojectileBase extends Entity{
         	this.collisionCold = -100;
 	}
 	
-	public boolean stick(BlockPos pos)
-	{
-		return !this.world.isAirBlock(pos) && !(this.world.getBlockState(pos).getBlock() instanceof BlockLiquid);
-	}
+	protected boolean stick(AxisAlignedBB p_70972_1_)
+    {
+        int i = MathHelper.floor(p_70972_1_.minX);
+        int j = MathHelper.floor(p_70972_1_.minY);
+        int k = MathHelper.floor(p_70972_1_.minZ);
+        int l = MathHelper.floor(p_70972_1_.maxX);
+        int i1 = MathHelper.floor(p_70972_1_.maxY);
+        int j1 = MathHelper.floor(p_70972_1_.maxZ);
+        boolean flag = false;
+        
+        for (int k1 = i; k1 <= l; ++k1)
+        {
+            for (int l1 = j; l1 <= i1; ++l1)
+            {
+                for (int i2 = k; i2 <= j1; ++i2)
+                {
+                    BlockPos blockpos = new BlockPos(k1, l1, i2);
+                    IBlockState iblockstate = this.world.getBlockState(blockpos);
+                    Block block = iblockstate.getBlock();
+
+                    if (!block.isAir(iblockstate, this.world, blockpos) && iblockstate.getMaterial() != Material.FIRE)
+                    {
+                        {
+                            flag = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return flag;
+    }
 	
 	public void setAttribute(int Damage, int speed, EntityPlayer player, int id) {
 		this.Speed = speed;
@@ -117,6 +140,12 @@ public class TRprojectileBase extends Entity{
 		this.player = player;
 		this.id = id;
 		this.makeDamage = true;
+		
+		Vec3d QAQ = this.getLookVec();
+		this.x = QAQ.x;
+		this.y = QAQ.y;
+		this.z = QAQ.z;
+		initMoveingAttribute();
 	}
 	
 	private void DamageThings() {
@@ -206,7 +235,13 @@ public class TRprojectileBase extends Entity{
 		return this.getLookVec().z;
 	}
 	
-	protected void MoveingAttribute() {
+	protected void initMoveingAttribute() {
+		this.motionX = this.x * (Speed / 10);
+		this.motionY = this.y * (Speed / 10);
+		this.motionZ = this.z * (Speed / 10);
+	}
+	
+	protected void updateMoveingAttribute() {
 		if(this.isStick && this.collisionCold <= 0)  {
             this.smotionX = this.motionX;
             this.smotionY = this.motionY;
@@ -214,11 +249,13 @@ public class TRprojectileBase extends Entity{
 			this.collisionTimes++;
 			this.collisionCold = 10;
 			onStickinWall(this.id);
-		}else if(this.collisionTimes <= 0){
-			 this.motionX = this.x * (Speed / 10);
-			 this.motionY = this.y * (Speed / 10);
-			 this.motionZ = this.z * (Speed / 10);
 		}
+		
+		if(this.id == 10)
+			this.motionY -= 0.05;
+		
+		if(this.motionY < -0.7)
+			this.motionY = -0.7;
 		
 		 this.posX += this.motionX;
          this.posY += this.motionY;

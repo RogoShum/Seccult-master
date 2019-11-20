@@ -8,6 +8,7 @@ import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.CombatTracker;
@@ -73,5 +74,19 @@ public class ModReclection {
 		Field ManaValue = GuiChest.class.getDeclaredField("lowerChestInventory");
 		ManaValue.setAccessible(true);
 		return ManaValue.get(data);
+	}
+	
+	public static Method getLivingSound(EntityLiving living) throws SecurityException, IllegalArgumentException, IllegalAccessException, NoSuchMethodException
+	{
+		Method m = EntityLiving.class.getDeclaredMethod("getAmbientSound");
+        m.setAccessible(true);
+        return m;
+	}
+
+	public static Method getLivingSound(String s) throws SecurityException, IllegalArgumentException, IllegalAccessException, NoSuchMethodException
+	{
+		Method m = EntityLivingBase.class.getDeclaredMethod(s);
+        m.setAccessible(true);
+        return m;
 	}
 }

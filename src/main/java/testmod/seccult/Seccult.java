@@ -22,6 +22,7 @@ import testmod.seccult.client.gui.GuiElementLoader;
 import testmod.seccult.creativetab.CreativeTabsLoader;
 import testmod.seccult.events.ModEventHandler;
 import testmod.seccult.init.ModBlocks;
+import testmod.seccult.init.ModCrafting;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.items.ItemMagickCore;
@@ -70,9 +71,10 @@ public class Seccult
 	public static void init(FMLInitializationEvent event)
 	{
 		new GuiElementLoader();
+		new ModCrafting();
 		proxy.sphereRender();
 		proxy.init();
-		//DimensionMagic.register();
+		DimensionMagic.register();
 	}
 	
 	@EventHandler

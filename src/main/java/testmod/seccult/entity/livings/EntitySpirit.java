@@ -1,9 +1,6 @@
 package testmod.seccult.entity.livings;
 
 import java.util.List;
-import java.util.UUID;
-
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
@@ -20,16 +17,11 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.items.ItemSoulStone;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
 import testmod.seccult.network.TransPoint;
-import testmod.seccult.potions.PotionAllSeeEye;
 import testmod.seccult.world.gen.DimensionMagic;
 
 public class EntitySpirit extends EntityBase{
@@ -46,6 +38,7 @@ public class EntitySpirit extends EntityBase{
 	private Vec3d pos = new Vec3d(0, 0, 0);
 	
 	private static final DataParameter<NBTTagCompound> NBT = EntityDataManager.<NBTTagCompound>createKey(EntitySpirit.class, DataSerializers.COMPOUND_TAG);
+	private static final DataParameter<Boolean> HAS_OWNER = EntityDataManager.<Boolean>createKey(EntitySpirit.class, DataSerializers.BOOLEAN);
 	public EntitySpirit(World worldIn) {
 		super(worldIn);
 		this.setNoGravity(true);
@@ -148,15 +141,16 @@ public class EntitySpirit extends EntityBase{
 			justFloating();
 		else
 		{
-			if(this.ServeingTime > 0)
+			if(this.ServeingTime >= 0)
 				this.ServeingTime--;
 			
 			if(this.ServeingTime < 0)
 			{
-				this.ServeingTime = 0;
 				this.Owner = null;
+				this.setHasOwner(false);
 				return;
 			}
+			
 			protectOwner();
 		}
 	}
@@ -246,6 +240,7 @@ public class EntitySpirit extends EntityBase{
 	
 	protected void justFloating()
 	{
+		//this.setHasOwner(false);
 		  if(this.rand.nextInt(10) == 0)
 		  {
 		  	this.rotationYaw +=  this.rand.nextInt(20);
@@ -270,7 +265,7 @@ public class EntitySpirit extends EntityBase{
 		this.setNoGravity(true);
 		this.noClip = true;
 		
-		if(this.ticksExisted > 400 && this.dimension != DimensionMagic.SPIRIT_ID)
+		if(this.ticksExisted > 400 && this.dimension != DimensionMagic.SPIRIT_ID && !this.getHasOwner())
 			//this.changeDimension(DimensionMagic.SPIRIT_ID);
 			this.setRelease();
 			
@@ -347,6 +342,7 @@ public class EntitySpirit extends EntityBase{
 	{
 		super.entityInit();
 		this.dataManager.register(NBT, new NBTTagCompound());
+		this.dataManager.register(HAS_OWNER, false);
 	}
 	
 	public void setTag(NBTTagCompound nbt) 
@@ -357,6 +353,16 @@ public class EntitySpirit extends EntityBase{
 	public NBTTagCompound getTag() 
 	{
 		return this.dataManager.get(NBT);
+	}
+	
+	public void setHasOwner(Boolean nbt) 
+	{
+		this.dataManager.set(HAS_OWNER, nbt);
+	}
+	  
+	public Boolean getHasOwner() 
+	{
+		return this.dataManager.get(HAS_OWNER);
 	}
 	  
     public NBTTagList DoubleNBTList(double... numbers)

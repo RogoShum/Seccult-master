@@ -6,12 +6,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import testmod.seccult.Seccult;
 import testmod.seccult.init.ModItems;
-import testmod.seccult.items.armor.MagickArmor.CoreType;
 import testmod.seccult.items.armor.ShadowSky.ModelShadowSkyArmor;
 
 public class ShadowSkyArmor extends MagickArmor {
@@ -31,8 +28,13 @@ public class ShadowSkyArmor extends MagickArmor {
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
 		super.onArmorTick(world, player, itemStack);
-		if(hasArmorSetItem(player) && player.isSneaking())
+		double motion = Math.abs(player.motionX) + Math.abs(player.motionY) + Math.abs(player.motionZ);
+		if(!world.isRemote && hasArmorSetItem(player) && player.isSneaking())
 			player.noClip = true;
+		
+		if(world.isRemote && hasArmorSetItem(player) && player.isSneaking() && motion > 0.5)
+			player.noClip = true;
+
 	}
 	
 	@Override

@@ -24,6 +24,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.api.PlayerDataHandler;
 import testmod.seccult.api.PlayerDataHandler.PlayerData;
+import testmod.seccult.api.PlayerSpellReleaseTool;
 import testmod.seccult.api.accessorie.PlayerAccessorieHandler;
 import testmod.seccult.init.ModDamage;
 import testmod.seccult.init.ModItems;
@@ -63,29 +64,6 @@ public class PlayerDataUpdateEvent {
     {
     	return this.Teleporter;
     }
-    
-	@SubscribeEvent
-	@SideOnly(Side.CLIENT)
-	public void onRenderWorldLast(RenderWorldLastEvent event) {
-		Minecraft mc = Minecraft.getMinecraft();
-
-		float partialTicks = event.getPartialTicks();
-
-		for(EntityPlayer player : mc.world.playerEntities)
-		{
-			if(player.getHeldItemMainhand().getItem() == ModItems.Wand)
-			{
-				ItemWand wand = (ItemWand) player.getHeldItemMainhand().getItem();
-				wand.render(player, partialTicks);
-			}
-			
-			PlayerData data = PlayerDataHandler.get(player);
-			if(data.isMutekiGamer())
-			{
-				QAQ.render(player, partialTicks);
-			}
-		}
-	}
 	
 	@SubscribeEvent
 	public void onPlayerTick(LivingUpdateEvent event) 
@@ -94,6 +72,7 @@ public class PlayerDataUpdateEvent {
 			EntityPlayer player = (EntityPlayer) event.getEntityLiving();
 			PlayerDataHandler.get(player).tick();
 			PlayerAccessorieHandler.get(player).tick();
+			PlayerSpellReleaseTool.get(player).tick();
 		}
 	}
 	
@@ -117,6 +96,7 @@ public class PlayerDataUpdateEvent {
 		if(event.phase == Phase.END) {
 			PlayerDataHandler.cleanup();
 			PlayerAccessorieHandler.cleanup();
+			PlayerSpellReleaseTool.cleanup();
 		}
 	}
 	

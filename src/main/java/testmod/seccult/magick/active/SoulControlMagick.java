@@ -26,6 +26,7 @@ public class SoulControlMagick extends Magick{
 		if(entity instanceof EntitySpirit && this.player instanceof EntityLivingBase)
 		{
 			((EntitySpirit) entity).Owner = (EntityLivingBase) player;
+			((EntitySpirit) entity).setHasOwner(true);
 			((EntitySpirit) entity).ServeingTime = (int)this.strengh * 20;
 		}
 	}

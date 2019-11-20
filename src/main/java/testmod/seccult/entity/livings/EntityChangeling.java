@@ -1,5 +1,6 @@
 package testmod.seccult.entity.livings;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -18,9 +19,14 @@ import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.EntityFlyHelper;
+import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.item.EntityPainting;
+import net.minecraft.entity.passive.EntityFlying;
+import net.minecraft.entity.passive.EntityWaterMob;
+import net.minecraft.entity.passive.EntityZombieHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -30,9 +36,13 @@ import net.minecraft.nbt.NBTTagString;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import scala.reflect.internal.Types.ModuleTypeRef;
+import testmod.seccult.ModReclection;
 import testmod.seccult.Seccult;
 import testmod.seccult.entity.RogoEntityGetData;
 
@@ -152,6 +162,16 @@ public class EntityChangeling extends EntityCreature implements RogoEntityGetDat
 		    	setTag(this.Entity.writeToNBT(entity));
 		    }
 		    
+		    if(this.Entity instanceof EntityFlying && !(this.moveHelper instanceof EntityFlyHelper))
+		    {
+		    	this.moveHelper = new EntityFlyHelper(this);
+		    	this.setNoGravity(true);
+		    }
+		    else if(!(this.Entity instanceof EntityFlying) && this.moveHelper instanceof EntityFlyHelper)
+		    {
+		    	this.moveHelper = new EntityMoveHelper(this);
+		    	this.setNoGravity(false);
+		    }
 		}
 		else if(this.world.isRemote)
 		{
@@ -346,8 +366,84 @@ public class EntityChangeling extends EntityCreature implements RogoEntityGetDat
 	
 	@Override
 	protected SoundEvent getAmbientSound() {
-		//if(this.Entity != null && this.Entity instanceof EntityLiving)
-
+		if(this.Entity instanceof EntityLiving)
+		try {
+			SoundEvent sound = (SoundEvent) ReflectionHelper.findMethod(EntityLiving.class, "getAmbientSound", "func_184639_G").invoke(this.Entity);
+			
+			return sound;
+		} catch (InvocationTargetException | IllegalAccessException ignored) {
+			
+		}
 		return super.getAmbientSound();
+	}
+	
+	@Override
+	protected SoundEvent getDeathSound() {
+		if(this.Entity instanceof EntityLivingBase)
+		try {
+			
+			SoundEvent sound = (SoundEvent) ModReclection.getLivingSound("getDeathSound").invoke(this.Entity);
+			
+			return sound;
+		} catch (IllegalArgumentException | SecurityException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {
+			
+		}
+		return super.getDeathSound();
+	}
+	
+	@Override
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+		if(this.Entity instanceof EntityLivingBase)
+		try {
+			
+			SoundEvent sound = (SoundEvent) ModReclection.getLivingSound("getHurtSound").invoke(this.Entity);
+			
+			return sound;
+		} catch (IllegalArgumentException | SecurityException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {
+			
+		}
+		return super.getHurtSound(damageSourceIn);
+	}
+	
+	@Override
+	protected SoundEvent getFallSound(int heightIn) {
+		if(this.Entity instanceof EntityLivingBase)
+		try {
+			
+			SoundEvent sound = (SoundEvent) ModReclection.getLivingSound("getFallSound").invoke(this.Entity);
+			
+			return sound;
+		} catch (IllegalArgumentException | SecurityException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {
+			
+		}
+		return super.getFallSound(heightIn);
+	}
+	
+	@Override
+	protected SoundEvent getSplashSound() {
+		if(this.Entity instanceof EntityLivingBase)
+		try {
+			
+			SoundEvent sound = (SoundEvent) ModReclection.getLivingSound("getSplashSound").invoke(this.Entity);
+			
+			return sound;
+		} catch (IllegalArgumentException | SecurityException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {
+			
+		}
+		return super.getSplashSound();
+	}
+	
+	@Override
+	protected SoundEvent getSwimSound() {
+		if(this.Entity instanceof EntityLivingBase)
+		try {
+			
+			SoundEvent sound = (SoundEvent) ModReclection.getLivingSound("getSwimSound").invoke(this.Entity);
+			
+			return sound;
+		} catch (IllegalArgumentException | SecurityException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {
+			
+		}
+		return super.getSwimSound();
 	}
 }

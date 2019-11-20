@@ -81,6 +81,25 @@ public class NetworkPlayerAddMagick implements IMessage {
     	SelectorAttribute = SelectorAttributeList;
     	}
     	
+    	if(length == -12451)
+    	{
+    		int[][] MagickThing = new int[1][2];
+    		MagickThing[0][0] = ByteBufUtils.readVarInt(buf, 2);
+    		MagickThing[0][1] = ByteBufUtils.readVarInt(buf, 2);
+    		MagickData = MagickThing;
+    	}
+    	
+    	if(length == -12452)
+    	{
+    		int[][] MagickThing = new int[1][5];
+    		MagickThing[0][0] = ByteBufUtils.readVarInt(buf, 2);
+    		MagickThing[0][1] = ByteBufUtils.readVarInt(buf, 2);
+    		MagickThing[0][2] = ByteBufUtils.readVarInt(buf, 2);
+    		MagickThing[0][3] = ByteBufUtils.readVarInt(buf, 2);
+    		MagickThing[0][4] = ByteBufUtils.readVarInt(buf, 2);
+    		MagickData = MagickThing;
+    	}
+    	
         uleast = buf.readLong();
         ulong = buf.readLong();
         PUUID = new UUID(ulong, uleast);
@@ -108,6 +127,22 @@ public class NetworkPlayerAddMagick implements IMessage {
         	}
     	}
     	
+    	if(length == -12451)
+    	{
+            for(int i = 0; i < 2; i ++)
+            {
+            	ByteBufUtils.writeVarInt(buf, MagickData[0][i], 2);
+            }
+    	}
+    	
+    	if(length == -12452)
+    	{
+            for(int i = 0; i < 5; i ++)
+            {
+            	ByteBufUtils.writeVarInt(buf, MagickData[0][i], 2);
+            }
+    	}
+    	
     	buf.writeLong(PUUID.getLeastSignificantBits());
     	buf.writeLong(PUUID.getMostSignificantBits());
     	
@@ -123,11 +158,23 @@ public class NetworkPlayerAddMagick implements IMessage {
         	PlayerData data = PlayerDataHandler.get(player);
         	if(message.length > 0)
         		data.addMagick(MagickCompiler.compileMagick(message.MagickData, message.Selector, message.SelectorPower, message.SelectorAttribute, message.length, message.doEntity, message.doBlock));
-        	else
+        	else if(message.length > -12450)
         	{
         		NBTTagCompound delete = new NBTTagCompound();
         		delete.setInteger("DELETE", -message.length);
         		data.addMagick(delete);
+        	}
+        	else if(message.length == -12451)
+        	{
+        		NBTTagCompound shift = new NBTTagCompound();
+        		shift.setInteger("SHIFT", 1);
+        		shift.setInteger("one", message.MagickData[0][0]);
+        		shift.setInteger("two", message.MagickData[0][1]);
+        		data.addMagick(shift);
+        	}
+        	else 
+        	{
+        		data.updateSpell(message.MagickData[0][0]==0?false:true, message.MagickData[0][1], message.MagickData[0][2], message.MagickData[0][3]==0?false:true, message.MagickData[0][4]);
         	}
             return null;
         }

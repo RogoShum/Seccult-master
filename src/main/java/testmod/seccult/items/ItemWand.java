@@ -40,7 +40,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.ClientProxy;
 import testmod.seccult.Seccult;
 import testmod.seccult.api.PlayerDataHandler;
+import testmod.seccult.api.PlayerSpellReleaseTool;
 import testmod.seccult.api.PlayerDataHandler.PlayerData;
+import testmod.seccult.api.PlayerSpellReleaseTool.PlayerSpellTool;
 import testmod.seccult.client.gui.GuiElementLoader;
 import testmod.seccult.init.ModBlocks;
 import testmod.seccult.init.ModItems;
@@ -55,16 +57,7 @@ import testmod.seccult.network.TransPoint;
 public class ItemWand extends ItemBase{
 	public static final ResourceLocation wand_prefix = new ResourceLocation(Seccult.MODID, "wandstyle");
 	
-	public NBTTagList MagickList;
-	public int doCircle;
-	private float scale;
-	public float[] staffColor = {1,1,1};
-	private static ResourceLocation sphere = new ResourceLocation("seccult:textures/spell/sphere.png");
-	private static ResourceLocation circle = new ResourceLocation("seccult:textures/spell/circle.png");
-	private static ResourceLocation moon = new ResourceLocation("seccult:textures/spell/moon.png");
-	private static ResourceLocation ball = new ResourceLocation("seccult:textures/spell/ball.png");
-	private static ResourceLocation star = new ResourceLocation("seccult:textures/spell/star.png");
-	private static ResourceLocation square = new ResourceLocation("seccult:textures/spell/square.png");
+	public int cycleTime;
 	
 	public ItemWand(String name) {
 		super(name);
@@ -79,37 +72,25 @@ public class ItemWand extends ItemBase{
 	}
 	
 	@Override
+	public String getItemStackDisplayName(ItemStack stack) {
+		if(stack.hasTagCompound())
+		{
+			return stack.getTagCompound().getString("SpellName");
+		}
+		return super.getItemStackDisplayName(stack);
+	}
+	
+	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, @Nonnull EnumHand hand) {
-			ItemStack stack = player.getHeldItem(hand);
 			player.setActiveHand(hand);
 
-	        if (!world.isRemote && MagickList != null)
+	        if (!world.isRemote && player.isSneaking())
 	        {
-	        	int slot = stack.getTagCompound().getInteger("Slot");
-	            if (player.isSneaking())
-	            {
-	            		stack.getTagCompound().setInteger("Slot", slot + 1);
-	            	if(slot > MagickList.tagCount() - 2)
-	            		stack.getTagCompound().setInteger("Slot", 0);
-	            }
-	            else
-	            {
-	            	MagickCompiler ma = new MagickCompiler();
-	            	ma.pushMagickData(MagickList.getCompoundTagAt(slot), player);
-	            	this.staffColor = ma.getColor();
-	            }
-	            
-	            double[] pos = new double[3], vec = new double[3];
-				pos[0] = player.posX - player.width / 2;
-				pos[1] = player.posY + player.height / 2;
-				pos[2] = player.posZ - player.width / 2;
-				doCircle = 0;
-	            NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, this.staffColor, 0.3F, 100), 
-	            		new TransPoint(player.dimension, pos[0], pos[1], pos[2], 32), world);
-	            
+	        	PlayerSpellReleaseTool.get(player).switchSpell();
 	            return ActionResult.newResult(EnumActionResult.PASS, player.getHeldItem(hand));
 	        }
-
+	        else
+	        	PlayerSpellReleaseTool.get((EntityPlayer)player).releaseSpell();
 	        return ActionResult.newResult(EnumActionResult.FAIL, player.getHeldItem(hand));
 	}
 	
@@ -126,127 +107,15 @@ public class ItemWand extends ItemBase{
 	@Override
 	public void onUsingTick(ItemStack stack, EntityLivingBase player, int count) {
 		super.onUsingTick(stack, player, count);
-		 doCircle++;
-		 
-		 if(!player.world.isRemote && doCircle > 20 && player.ticksExisted % 2 == 0)
-		 {
-			 if (this.MagickList != null)
-		     {
-				 int slot = player.getHeldItemMainhand().getTagCompound().getInteger("Slot");
-				 MagickCompiler ma = new MagickCompiler();
-				 ma.pushMagickData(this.MagickList.getCompoundTagAt(slot), player);
-				 this.staffColor = ma.getColor();
-		     }
-		        
-			 double[] pos = new double[3], vec = new double[3];
-			 pos[0] = player.posX - player.width / 2;
-			 pos[1] = player.posY + player.height / 2;
-			 pos[2] = player.posZ - player.width / 2;
-			 NetworkHandler.getNetwork().sendToAll(new NetworkEffectData(pos, vec, this.staffColor, 0.3F, 100));
-		 }
+		cycleTime++;
+		if(cycleTime > 20 && player instanceof EntityPlayer && player.getHeldItemMainhand() == stack)
+			PlayerSpellReleaseTool.get((EntityPlayer)player).releaseSpell();
 	}
 	
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
+		cycleTime=0;
 		super.onPlayerStoppedUsing(stack, worldIn, entityLiving, timeLeft);
-		doCircle = 0;
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public void render(EntityPlayer player, float partTicks) {
-		RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
-		double x = player.lastTickPosX + (player.posX - player.lastTickPosX) * partTicks - renderManager.viewerPosX;
-		double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * partTicks - renderManager.viewerPosY;
-		double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partTicks - renderManager.viewerPosZ;
-
-		float scale = this.scale += 0.01F;
-		if(scale > 1.5F)
-			scale = 1.5F;
-
-		if(player.isHandActive() && doCircle > 10)
-			renderSpellCircle(doCircle + partTicks, scale, x, y, z, staffColor);
-		else
-			this.scale = 0;
-	}
-
-
-	public static void renderSpellCircle(float time, float s1, double x, double y, double z, float[] colorVal) {
-		TextureManager tex = Minecraft.getMinecraft().getTextureManager();
-		GlStateManager.pushMatrix();
-		GlStateManager.translate(x, y + 0.01, z);
-		GlStateManager.rotate(90F, 1F, 0F, 0F);
-	    GlStateManager.rotate(time, 0, 0, -1);
-		GlStateManager.disableCull();
-		GlStateManager.disableLighting();
-
-		float red = colorVal[0];
-        float green = colorVal[1];
-        float blue = colorVal[2];
-        
-		GlStateManager.pushMatrix();
-	    GlStateManager.enableBlend();
-	    GlStateManager.blendFunc(SourceFactor.SRC_COLOR, DestFactor.ONE_MINUS_CONSTANT_ALPHA);
-	    GlStateManager.color(red, green, blue);
-	    GlStateManager.translate(x, y + 0.01, z);
-	    tex.bindTexture(circle);
-	    Disk disk = new Disk();
-	    disk.setTextureFlag(true);
-	    disk.draw(0, s1 * 1.5F, 16, 16);    
-	    GlStateManager.popMatrix();
-        
-		/*GlStateManager.pushMatrix();
-	    GlStateManager.enableBlend();
-	    GlStateManager.blendFunc(SourceFactor.SRC_COLOR, DestFactor.ONE_MINUS_CONSTANT_ALPHA);
-	    GlStateManager.color(red, green, blue);
-	    GlStateManager.translate(x, y + 0.01, z);
-	    tex.bindTexture(sphere);
-	    Disk disk = new Disk();
-	    disk.setTextureFlag(true);
-	    disk.draw(0, s1 * 1.5F, 16, 16);    
-	    GlStateManager.popMatrix();
-	    
-		GlStateManager.pushMatrix();
-	    GlStateManager.enableBlend();
-	    GlStateManager.blendFunc(SourceFactor.SRC_COLOR, DestFactor.ONE_MINUS_CONSTANT_ALPHA);
-	    GlStateManager.color(red, green, blue);
-	    GlStateManager.translate(x - s1 * 1.2F, y + 0.01, z);
-	    tex.bindTexture(moon);
-	    disk.draw(0, s1, 16, 16);
-	    GlStateManager.popMatrix();
-	    
-		GlStateManager.pushMatrix();
-	    GlStateManager.enableBlend();
-	    GlStateManager.blendFunc(SourceFactor.SRC_COLOR, DestFactor.ONE_MINUS_CONSTANT_ALPHA);
-	    GlStateManager.color(red, green, blue);
-	    GlStateManager.translate(x + s1 * 1.2F, y + 0.01, z);
-	    tex.bindTexture(ball);
-	    disk.draw(0, s1, 16, 16);
-	    GlStateManager.popMatrix();
-	    
-		GlStateManager.pushMatrix();
-	    GlStateManager.enableBlend();
-	    GlStateManager.blendFunc(SourceFactor.SRC_COLOR, DestFactor.ONE_MINUS_CONSTANT_ALPHA);
-	    GlStateManager.color(red, green, blue);
-	    GlStateManager.translate(x, y + 0.01, z);
-	    tex.bindTexture(star);
-	    disk.draw(0, s1, 16, 16);
-	    GlStateManager.popMatrix();
-	    
-	    for(int i = 0; i < 3; ++i)
-	    {
-	    	GlStateManager.pushMatrix();
-	    	GlStateManager.rotate(60 * i, 0, 0, 1);
-	    	GlStateManager.enableBlend();
-	    	GlStateManager.blendFunc(SourceFactor.SRC_COLOR, DestFactor.ONE_MINUS_CONSTANT_ALPHA);
-	    	GlStateManager.color(red, green, blue);
-	    	GlStateManager.translate(x, y + 0.01, z);
-	    	tex.bindTexture(square);
-	    	disk.draw(0, s1 * 1.1F, 16, 16);
-	    	GlStateManager.popMatrix();
-	    }
-		*/
-		GlStateManager.enableCull();
-		GlStateManager.popMatrix();
 	}
 	
 	@Override
@@ -266,27 +135,14 @@ public class ItemWand extends ItemBase{
 		if(!worldIn.isRemote && entityIn instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entityIn;
 			
-			PlayerData data = PlayerDataHandler.get(player);
-			MagickList = data.getAllMagick();
-			
-			if(MagickList != null && !MagickList.hasNoTags()) {
-			NBTTagCompound MagickNBT = MagickList.getCompoundTagAt(stack.getTagCompound().getInteger("Slot"));
-			NBTTagList LoadMagick = MagickNBT.getTagList("Magick", 10);
-			NBTTagCompound Magicknbt = LoadMagick.getCompoundTagAt(0);
-			
-			Magick magick = ModMagicks.getMagickFromName(ModMagicks.GetMagickStringByID(Magicknbt.getInteger("Magick")));
-			if(magick!= null)
+			PlayerSpellTool tool = PlayerSpellReleaseTool.get(player);
+			if(tool!= null)
 			{
-				int color = magick.getColor();
-				stack.getTagCompound().setInteger("MagickColor", color);
-			}
-
-			}
-			else
-			{
-				stack.getTagCompound().setInteger("MagickColor", 0);
+				stack.getTagCompound().setInteger("MagickColor", tool.getSpellColorInt());
+				stack.getTagCompound().setString("SpellName", tool.getMagickName());
 			}
 		}
+		
 		if(entityIn instanceof EntityPlayer && (!hasUUID || (hasUUID && id != entityIn.getUniqueID())))
 		{
 			
@@ -298,8 +154,6 @@ public class ItemWand extends ItemBase{
 			setWandStyle(stack, data.getColor2(), data.getColor3(), data.getColor4());
 			setWandS(stack, data.getWandStyle());
 			setLastPlayerUUID(stack, player.getUniqueID());
-			if(!stack.getTagCompound().hasKey("Slot"))
-				stack.getTagCompound().setInteger("Slot", 0);
 		}
 	}
 
@@ -343,14 +197,11 @@ public class ItemWand extends ItemBase{
 		stack.getTagCompound().setTag("WandColor", list);
 	}
 	
+	@SideOnly(Side.CLIENT)
 	public static int getMagickColor(ItemStack stack)
 	{
-		if(!stack.hasTagCompound())
-			return 1;
-		NBTTagCompound nbt = stack.getTagCompound();
-		if(!nbt.hasKey("MagickColor"))
-			return 1;
-		return nbt.getInteger("MagickColor");
+		PlayerSpellTool tool = PlayerSpellReleaseTool.get(Minecraft.getMinecraft().player);
+		return tool.getSpellColorInt();
 	}
 	
 	public static int getWandStyle(ItemStack stack, int tintIndex)

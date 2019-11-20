@@ -50,7 +50,6 @@ public class NetworPlayerMagickData implements IMessage {
 			switch(type)
 			{
 				case 0:
-
 					ModReclection.PlayerData_MaxManaValue(data, message.vaule[1]);
 					break;
 				case 1:

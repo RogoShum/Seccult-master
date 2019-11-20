@@ -19,6 +19,7 @@ import testmod.seccult.init.ModDamage;
 import testmod.seccult.items.armor.ArmorBase;
 import testmod.seccult.network.NetworPlayerMagickData;
 import testmod.seccult.network.NetworkHandler;
+import testmod.seccult.network.NetworkPlayerTransMagickToClient;
 
 public class PlayerDataHandler {
 	
@@ -574,17 +575,66 @@ public class PlayerDataHandler {
 			return wand;
 		}
 		
+		public void modifiySpellName(int i, String name)
+		{
+			getMagickList().getCompoundTagAt(i).setString("Magick_Name", name);
+		}
+		
+		public void updateSpell(boolean isMagick, int spellSort, int magickSort, boolean isPower, int value)
+		{
+			NBTTagCompound tag = getMagickList().getCompoundTagAt(spellSort);
+			if(isMagick)
+			{
+				NBTTagList magickList = tag.getTagList("Magick", 10); 
+				NBTTagCompound magick = magickList.getCompoundTagAt(magickSort);
+				if(isPower)
+					magick.setInteger("MagickPower", value);
+				else
+					magick.setInteger("MagickAttribute", value);
+			}
+			else
+			{
+				NBTTagList magickList = tag.getTagList("Selector", 10); 
+				NBTTagCompound magick = magickList.getCompoundTagAt(magickSort);
+				if(isPower)
+					magick.setInteger("SelectorPower", value);
+				else
+					magick.setInteger("SelectorAttribute", value);
+			}
+			
+			NBTTagCompound nbt = new NBTTagCompound();
+	        nbt.setTag("M", getMagickList());
+			NetworkHandler.getNetwork().sendTo(new NetworkPlayerTransMagickToClient(nbt), (EntityPlayerMP) player);
+		}
+		
 		public String[] addMagick(NBTTagCompound magick)
 		{
 			String[] string = new String[2];
 			string[0] = "false";
 			string[1] = "unknow";
+			
 			if(magick.hasKey("DELETE"))
 			{
-				if(getMagickList().tagCount() >= magick.getInteger("DELETE"))
+				if(getMagickList().tagCount() > magick.getInteger("DELETE"))
 					getMagickList().removeTag(magick.getInteger("DELETE"));
 				return string;
 			}
+			
+			if(magick.hasKey("SHIFT"))
+			{
+				int one = magick.getInteger("one");
+				int two = magick.getInteger("two");
+				if(getMagickList().tagCount() > one && getMagickList().tagCount() > two)
+				{
+					NBTTagCompound tagOne = getMagickList().getCompoundTagAt(one);
+					NBTTagCompound tagTwo = getMagickList().getCompoundTagAt(two);
+					getMagickList().set(one, tagTwo);
+					getMagickList().set(two, tagOne);
+				}
+				
+				return string;
+			}
+			
 			for(int i = 0; i < getMagickList().tagCount(); i++)
 			{
 				if(getMagickList().get(i).equals(magick))
@@ -643,14 +693,14 @@ public class PlayerDataHandler {
 			return persistentData.getCompoundTag(Seccult.Data);
 		}
 		
-		public NBTTagList getMagickList()
+		protected NBTTagList getMagickList()
 		{
 			return MagickList == null ? MagickList = new NBTTagList(): MagickList;
 		}
 		
 		public NBTTagList getAllMagick()
 		{
-			return getMagickList();
+			return getMagickList().copy();
 		}
 		
 		public NBTTagCompound getMagickAt(int i)
@@ -668,7 +718,6 @@ public class PlayerDataHandler {
 		
 		public void setMutekiGamer(boolean bool)
 		{
-			System.out.println(client + " " + bool);
 			this.mutekiGamer = bool;
 		}
 		

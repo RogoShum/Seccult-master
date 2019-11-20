@@ -26,8 +26,9 @@ public class RenderBlackVelvetHell extends Render<EntityBlackVelvetHell>{
 	    double size = entity.ticksExisted;
 	    if(size > entity.getMySize())
 	    	size = entity.getMySize();
+
 	    GlStateManager.scale(size, size, size);
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 0.5F);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 0.15F);
         GlStateManager.enableNormalize();
         GlStateManager.depthMask(false);
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_CONSTANT_COLOR);
@@ -37,6 +38,23 @@ public class RenderBlackVelvetHell extends Render<EntityBlackVelvetHell>{
 	    GlStateManager.depthMask(true);
         GlStateManager.disableNormalize();
 	    GlStateManager.popMatrix();
+	    
+	    GlStateManager.pushMatrix();
+	    GlStateManager.translate(x, y + entity.height / 2, z);
+	    double sizeee = size + 0.1;
+        GlStateManager.enableBlend();
+    	GlStateManager.depthMask(false);
+    	GlStateManager.enableNormalize();
+    	Minecraft.getMinecraft().getTextureManager().bindTexture(darkPTexture);
+    	GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_CONSTANT_COLOR);
+    	GlStateManager.color(1.0F, 1.0F, 1.0F, (float)entity.ticksExisted / 100);
+    	 GlStateManager.scale(sizeee, sizeee, sizeee);
+    	ClientProxy.callSphere();
+    	GlStateManager.disableNormalize();
+    	GlStateManager.depthMask(true);
+    	GlStateManager.disableBlend();
+    	GlStateManager.popMatrix();
+	    
 	    if(entity.getPrisoner() > 1) {
 	    GlStateManager.pushMatrix();
 	    GlStateManager.translate(x, y + entity.height / 2, z);

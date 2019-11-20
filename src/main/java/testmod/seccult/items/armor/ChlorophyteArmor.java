@@ -93,7 +93,7 @@ public class ChlorophyteArmor extends MagickArmor{
 			attrib.put(SharedMonsterAttributes.ARMOR.getName(), new AttributeModifier(uuid, "Chlorophyte modifier", lightLevel ? 0.5F : 0,  1));
 			attrib.put(SharedMonsterAttributes.ARMOR_TOUGHNESS.getName(), new AttributeModifier(uuid, "Chlorophyte modifier", lightLevel ? 0.5F : 0, 1));
 			attrib.put(SharedMonsterAttributes.KNOCKBACK_RESISTANCE.getName(), new AttributeModifier(uuid, "Chlorophyte modifier", lightLevel ? 0.5F : 0, 1));
-			attrib.put(SharedMonsterAttributes.MAX_HEALTH.getName(), new AttributeModifier(uuid, "Chlorophyte modifier", lightLevel ? 0.1F : 0, 1));
+			attrib.put(SharedMonsterAttributes.MAX_HEALTH.getName(), new AttributeModifier(uuid, "Chlorophyte modifier", lightLevel ? 0.25F : 0, 1));
 		}
 		return attrib;
 	}

@@ -26,7 +26,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.ClientProxy;
 import testmod.seccult.Seccult;
 import testmod.seccult.api.PlayerDataHandler;
+import testmod.seccult.api.PlayerSpellReleaseTool;
 import testmod.seccult.api.PlayerDataHandler.PlayerData;
+import testmod.seccult.api.PlayerSpellReleaseTool.PlayerSpellTool;
 import testmod.seccult.client.FX.FogFX;
 import testmod.seccult.client.FX.LightFX;
 import testmod.seccult.client.FX.StarFX;
@@ -89,22 +91,10 @@ public class HUDHandler {
 			
 			for(int k = 0; k < keyNumber.length; k++)
         	{
-        		if(keyNumber[k].isPressed() && player.getHeldItemMainhand().getItem() == ModItems.Wand)
+        		if(keyNumber[k].isPressed())
         		{
-        			ItemWand wand = (ItemWand) player.getHeldItemMainhand().getItem();
-        			NetworkHandler.getNetwork().sendToAll(new NetworkTransFloat(0, player, 4));
-        			if (wand.MagickList != null)
-        			{
-        		        int limit = wand.MagickList.tagCount();
-        		        if(limit > 9)
-        		        	limit = 9;
-        		        
-        		        if(limit >= k)
-        		        {
         		        	NetworkHandler.getNetwork().sendToServer(new NetworkTransFloat(k, player, 1));
-
-                			wand.doCircle = 0;
-                			
+        		        	PlayerSpellTool tool = PlayerSpellReleaseTool.get(player);
                 			{
                     			for(int c = 0; c < 20 ; c++) {
                     	            double d0 = (double)((float)player.posX + mc.world.rand.nextFloat());
@@ -114,14 +104,12 @@ public class HUDHandler {
                     	            double d4 = (1 - 2*StateManager.rand.nextFloat()) / 2;
                     	            double d5 = (1 - 2*StateManager.rand.nextFloat()) / 2;
                     	        	Particle me = new LightFX(mc.world, (d0 + player.posX) / 2.0D, (d1 + player.posY + player.height / 2) / 2.0D, (d2 + player.posZ) / 2.0D, d3/6, d4/6, d5/6, 0.3F);
-                    	        	me.setRBGColorF(wand.staffColor[0], wand.staffColor[1], wand.staffColor[2]);
+                    	        	me.setRBGColorF(tool.getSpellColor()[0], tool.getSpellColor()[1], tool.getSpellColor()[2]);
                     	        	Particle smoke = new StarFX(mc.world, d0, d1, d2, d3 / 5, d4 / 5, d5 / 5, 0.1F);
                     	        	Minecraft.getMinecraft().effectRenderer.addEffect(me);
                     	        	Minecraft.getMinecraft().effectRenderer.addEffect(smoke);
                     			}
                 			}
-        		        }
-        		    }
         		}
         	}
 			
@@ -161,7 +149,7 @@ public class HUDHandler {
 				}
 			}
 			
-			if(OceanArmor.hasArmorSetItem(player) && player.isOverWater())
+			if(OceanArmor.hasArmorSetItem(player) && player.isInWater())
 			{
 				if(Minecraft.getMinecraft().gameSettings.keyBindForward.isKeyDown())
 				{
@@ -169,8 +157,6 @@ public class HUDHandler {
 					player.motionX = look.x * player.getAIMoveSpeed() * 4;
 					player.motionY = look.y * player.getAIMoveSpeed() * 4;
 					player.motionZ = look.z * player.getAIMoveSpeed() * 4;
-				
-					player.noClip = true;
 				}
 			
 				if(Minecraft.getMinecraft().gameSettings.keyBindBack.isKeyDown())
@@ -179,8 +165,6 @@ public class HUDHandler {
 					player.motionX = -look.x * player.getAIMoveSpeed() * 4;
 					player.motionY = -look.y * player.getAIMoveSpeed() * 4;
 					player.motionZ = -look.z * player.getAIMoveSpeed() * 4;
-				
-					player.noClip = true;
 				}
 			}
 	}

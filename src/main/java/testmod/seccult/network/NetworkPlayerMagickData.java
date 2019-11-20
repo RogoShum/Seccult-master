@@ -15,6 +15,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.api.PlayerDataHandler;
 import testmod.seccult.api.PlayerDataHandler.PlayerData;
+import testmod.seccult.api.PlayerSpellReleaseTool;
 
 public class NetworkPlayerMagickData implements IMessage {
 	private int[] MagickData;
@@ -63,11 +64,10 @@ public class NetworkPlayerMagickData implements IMessage {
         @SideOnly(Side.CLIENT)
         public IMessage onMessage(NetworkPlayerMagickData message, MessageContext ctx) {
         	Minecraft mc = Minecraft.getMinecraft();
-
-        	PlayerData data = PlayerDataHandler.get(mc.player);
-        	data.setMagickData(message.MagickData);
-        	data.setControl(message.ControlAbility);
-        	data.setStrengh(message.ManaStrengh);
+        		PlayerData data = PlayerDataHandler.get(mc.player);
+        		data.setMagickData(message.MagickData);
+        		data.setControl(message.ControlAbility);
+        		data.setStrengh(message.ManaStrengh);
             return null;
         }
 }

@@ -44,7 +44,6 @@ public class SpellButton extends GuiButton{
 		defineAttribute();
 		if(isMagickButton)
 			handleColor(buttonId);
-		
 	}
 	
 	public void defineAttribute()
