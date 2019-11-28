@@ -127,7 +127,7 @@ public class EntityBlackVelvetHell extends Entity{
 			prisoner.posZ = prisoner.prevPosZ;
 			
 			posX = prisoner.posX;
-			posY = prisoner.posY + (prisoner.height / 2);
+			posY = prisoner.posY + prisoner.height / 2;
 			posZ = prisoner.posZ;
 			
 			float size = Math.max(prisoner.width, prisoner.height) * 2;

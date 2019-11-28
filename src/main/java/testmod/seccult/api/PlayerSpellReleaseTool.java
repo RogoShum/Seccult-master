@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTTagList;
 import testmod.seccult.Seccult;
 import testmod.seccult.api.PlayerDataHandler.PlayerData;
 import testmod.seccult.init.ModDamage;
+import testmod.seccult.init.ModItems;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.items.armor.ArmorBase;
 import testmod.seccult.magick.MagickCompiler;
@@ -149,6 +150,8 @@ public class PlayerSpellReleaseTool {
 			if(cycleRealse > 0 && !client)
 			{
 				MagickCompiler ma = new MagickCompiler();
+				if(player.getHeldItemMainhand().getItem() == ModItems.ELDER_WAND || player.getHeldItemOffhand().getItem() == ModItems.ELDER_WAND)
+					ma.dontCost = true;
 	        	ma.pushMagickData(MagickList.getCompoundTagAt(spellSelected), player);
 				cycleRealse--;
 				
@@ -156,13 +159,16 @@ public class PlayerSpellReleaseTool {
 				pos[0] = player.posX - player.width / 2;
 				pos[1] = player.posY + player.height / 2;
 				pos[2] = player.posZ - player.width / 2;
-				NetworkHandler.sendToAllAround(new CNetworkTransFloat(this.SpellColor(), 1, 3), 
+				NetworkHandler.sendToAllAround(new CNetworkTransFloat(this.SpellColor(), player, 1, 3), 
 	            		new TransPoint(player.dimension, pos[0], pos[1], pos[2], 32), player.world);
 	            NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, this.SpellColor(), 0.3F, 100), 
 	            		new TransPoint(player.dimension, pos[0], pos[1], pos[2], 32), player.world);
 			}
 			else if(cycleRealse > 0)
 				cycleRealse-=3;
+			
+			if(data != null && MagickList != data.getAllMagick())
+				MagickList = data.getAllMagick();
 		}
 		
 		public void switchSpell()
@@ -178,14 +184,27 @@ public class PlayerSpellReleaseTool {
 		
 		public void releaseSpell()
 		{
-			cycleRealse++;
 			if(client)
-				cycleRealse+=4;
+				return;
+			cycleRealse++;
+			
+			double[] pos = new double[3];
+			pos[0] = player.posX - player.width / 2;
+			pos[1] = player.posY + player.height / 2;
+			pos[2] = player.posZ - player.width / 2;
+			float cycle[] = new float[1];
+			NetworkHandler.sendToAllAround(new CNetworkTransFloat(cycle, player, 2, 1), 
+            		new TransPoint(player.dimension, pos[0], pos[1], pos[2], 32), player.world);
+		}
+		
+		public void addCycleTime()
+		{
+			cycleRealse+=5;
 		}
 		
 		public void selectSpell(int i)
 		{
-			if(MagickList != null && spellSelected < MagickList.tagCount())
+			if(MagickList != null && i < MagickList.tagCount())
 			{
 				this.spellSelected = i; 
 				sendColor();
@@ -198,7 +217,7 @@ public class PlayerSpellReleaseTool {
 			pos[0] = player.posX - player.width / 2;
 			pos[1] = player.posY + player.height / 2;
 			pos[2] = player.posZ - player.width / 2;
-			NetworkHandler.sendToAllAround(new CNetworkTransFloat(this.SpellColor(), 1, 3), 
+			NetworkHandler.sendToAllAround(new CNetworkTransFloat(this.SpellColor(), player, 1, 3),
             		new TransPoint(player.dimension, pos[0], pos[1], pos[2], 32), player.world);
             NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, this.SpellColor(), 0.3F, 100), 
             		new TransPoint(player.dimension, pos[0], pos[1], pos[2], 32), player.world);

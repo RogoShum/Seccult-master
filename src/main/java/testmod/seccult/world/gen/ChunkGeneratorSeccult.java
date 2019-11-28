@@ -145,7 +145,7 @@ public class ChunkGeneratorSeccult implements IChunkGenerator
                                 {
                                     primer.setBlockState(i * 4 + k2, i2 * 8 + j2, l * 4 + l2, STONE);
                                 }
-                                else if (i2 * 8 + j2 < 120)
+                                else if (i2 * 8 + j2 < 80)
                                 {
                                     primer.setBlockState(i * 4 + k2, i2 * 8 + j2, l * 4 + l2, this.oceanBlock);
                                 }

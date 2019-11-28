@@ -33,9 +33,7 @@ import testmod.seccult.init.ModItems;
 import testmod.seccult.magick.magickState.StateManager;
 
 public class MagickArmor extends ArmorBase{
-	
 
-	
 	public MagickArmor(String name, ArmorMaterial materialIn, int renderIndexIn,
 			EntityEquipmentSlot equipmentSlotIn) {
 		super(name, materialIn, renderIndexIn, equipmentSlotIn);

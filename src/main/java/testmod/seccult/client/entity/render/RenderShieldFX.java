@@ -38,7 +38,6 @@ public class RenderShieldFX extends Render<EntityShieldFX>
     
     public static void renderShield(float scale, float blend)
     {
-    	if(FMLCommonHandler.instance().getSide().equals(Side.SERVER)) return; 
     	GlStateManager.enableBlend();
     	GlStateManager.depthMask(false);
     	GlStateManager.enableNormalize();

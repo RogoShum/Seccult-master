@@ -4,7 +4,10 @@ import java.util.Random;
 
 import net.minecraft.block.BlockCocoa;
 import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.BlockVine;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -22,7 +25,7 @@ import testmod.seccult.util.handlers.TreeHandler.EnumType;
 public class WorldGenSeccultTree extends WorldGenHugeTrees{
 	
 	public WorldGenSeccultTree(boolean notify, EnumType type) {
-		super(notify, 7, 10, ModBlocks.LOGS.getDefaultState().withProperty(Log.VARIANT, type), ModBlocks.LEAVES.getDefaultState().withProperty(Leaf.VARIANT, type));
+		super(notify, 4, 7, ModBlocks.LOGS.getDefaultState().withProperty(Log.VARIANT, type), ModBlocks.LEAVES.getDefaultState().withProperty(Leaf.VARIANT, type));
 	}
 
     void generateLanternFruit(World world, BlockPos pos, Random rand)
@@ -54,9 +57,11 @@ public class WorldGenSeccultTree extends WorldGenHugeTrees{
     	}
     }
 
-    public boolean generate(World worldIn, Random rand, BlockPos position)
+    public boolean generatew(World worldIn, Random rand, BlockPos position)
     {
-        boolean loaded = worldIn.isBlockLoaded(position.add(16, 0, 0));
+    	//if(true)return false;
+    	
+        /*boolean loaded = worldIn.isBlockLoaded(position.add(16, 0, 0));
         boolean loaded2 = worldIn.isBlockLoaded(position.add(0, 0, 16));
         boolean loaded4 = worldIn.isBlockLoaded(position.add(16, 0, 16));
 
@@ -66,7 +71,8 @@ public class WorldGenSeccultTree extends WorldGenHugeTrees{
         
         if(!loaded || !loaded1 || !loaded2 || !loaded3 || !loaded4 || !loaded5)
         	return false;
-        
+        */
+    	
         int i = this.getHeight(rand);
 
         if (!this.ensureGrowable(worldIn, rand, position, i))
@@ -90,11 +96,146 @@ public class WorldGenSeccultTree extends WorldGenHugeTrees{
                     this.setBlockAndNotifyAdequately(worldIn, new BlockPos(k, j - 3 + i1 / 2, l), this.woodMetadata);
                 }
 
+                int j2 = 1 + rand.nextInt(5);
+                int j1 = j;
+                System.out.println("v j2"+j2);
+                System.out.println("v j1"+j1);
+                
+                for (int k1 = j - j2; k1 <= j1; ++k1)
+                {
+                	System.out.println("v k1"+k1);
+                    int l1 = k1 - j1;
+                    this.growLeavesLayer(worldIn, new BlockPos(k, k1, l), 1 - l1);
+                }
+                
+            }
+
+            /*for (int i2 = 0; i2 < i; ++i2)
+            {
+                BlockPos blockpos = position.up(i2);
+
+                if (this.isAirLeaves(worldIn,blockpos))
+                {
+                    this.setBlockAndNotifyAdequately(worldIn, blockpos, this.woodMetadata);
+
+                    if (i2 > 0 && rand.nextInt(40) == 0)
+                    {
+                    	generateLanternFruit(worldIn, blockpos, rand);
+                    }
+                }
+
+                /*if (i2 < i - 1)
+                {
+                    BlockPos blockpos1 = blockpos.east();
+
+                    if (this.isAirLeaves(worldIn,blockpos1))
+                    {
+                        this.setBlockAndNotifyAdequately(worldIn, blockpos1, this.woodMetadata);
+
+                        if (i2 > 0)
+                        {
+                            this.putLantern(worldIn, blockpos1.east());
+                            this.putLantern(worldIn, blockpos1.north());
+                        }
+                    }
+
+                    BlockPos blockpos2 = blockpos.south().east();
+
+                    if (this.isAirLeaves(worldIn,blockpos2))
+                    {
+                        this.setBlockAndNotifyAdequately(worldIn, blockpos2, this.woodMetadata);
+
+                        if (i2 > 0)
+                        {
+                        	this.putLantern(worldIn, blockpos1.east());
+                        	this.putLantern(worldIn, blockpos1.south());
+                        }
+                    }
+
+                    BlockPos blockpos3 = blockpos.south();
+
+                    if (this.isAirLeaves(worldIn,blockpos3))
+                    {
+                        this.setBlockAndNotifyAdequately(worldIn, blockpos3, this.woodMetadata);
+
+                        if (i2 > 0)
+                        {
+                        	this.putLantern(worldIn, blockpos1.west());
+                            this.putLantern(worldIn, blockpos1.south());
+                        }
+                    }
+                    
+                }
+            }*/
+
+            return true;
+        }
+    }
+    
+    @Override
+    protected void growLeavesLayer(World worldIn, BlockPos layerCenter, int width) {
+        int i = width * width;
+        
+        for (int j = -width; j <= width; ++j)
+        {
+            for (int k = -width; k <= width; ++k)
+            {
+                if (j * j + k * k <= i)
+                {
+                    BlockPos blockpos = layerCenter.add(j, 0, k);
+                    IBlockState state = worldIn.getBlockState(blockpos);
+
+                    if (state.getBlock().isAir(state, worldIn, blockpos) || state.getBlock().isLeaves(state, worldIn, blockpos) || state.getBlock() == ModBlocks.LANTERN_VINE)
+                    {
+	            		this.setBlockAndNotifyAdequately(worldIn, blockpos, this.leavesMetadata);
+	            		if(Seccult.rand.nextInt(60) == 0)
+                    		putLantern(worldIn, blockpos.down());
+                    }
+                }
+            }
+        }
+    }
+    
+    private void putLantern(World worldIn, BlockPos blockpos)
+    {
+		int ran = Seccult.rand.nextInt(3)+1;
+		for(int z = 0; z < ran; ++z)
+		{
+			this.setBlockAndNotifyAdequately(worldIn, blockpos.add(0, -z, 0), ModBlocks.LANTERN_VINE.getDefaultState());
+		}
+    }
+
+    public boolean generate(World worldIn, Random rand, BlockPos position)
+    {
+        int i = this.getHeight(rand);
+
+        if (!this.ensureGrowable(worldIn, rand, position, i))
+        {
+            return false;
+        }
+        else
+        {
+            this.createCrown(worldIn, position.up(i), 0);
+
+            for (int j = position.getY() + i - 2 - rand.nextInt(4); j > position.getY() + i / 2; j -= 2 + rand.nextInt(4))
+            {
+                float f = rand.nextFloat() * ((float)Math.PI * 2F);
+                int k = position.getX() + (int)(0.5F + MathHelper.cos(f) * 4.0F);
+                int l = position.getZ() + (int)(0.5F + MathHelper.sin(f) * 4.0F);
+
+                for (int i1 = 0; i1 < 5; ++i1)
+                {
+                    k = position.getX() + (int)(1.5F + MathHelper.cos(f) * (float)i1);
+                    l = position.getZ() + (int)(1.5F + MathHelper.sin(f) * (float)i1);
+                    this.setBlockAndNotifyAdequately(worldIn, new BlockPos(k, j - 3 + i1 / 2, l), this.woodMetadata);
+                }
+
                 int j2 = 1 + rand.nextInt(2);
                 int j1 = j;
 
                 for (int k1 = j - j2; k1 <= j1; ++k1)
                 {
+                	
                     int l1 = k1 - j1;
                     this.growLeavesLayer(worldIn, new BlockPos(k, k1, l), 1 - l1);
                 }
@@ -107,11 +248,8 @@ public class WorldGenSeccultTree extends WorldGenHugeTrees{
                 if (this.isAirLeaves(worldIn,blockpos))
                 {
                     this.setBlockAndNotifyAdequately(worldIn, blockpos, this.woodMetadata);
-
-                    if (i2 > 0 && rand.nextInt(10) == 0)
-                    {
-                    	generateLanternFruit(worldIn, blockpos, rand);
-                    }
+                    if(rand.nextInt(60)==0)
+                    generateLanternFruit(worldIn, blockpos, rand);
                 }
 
                 /*if (i2 < i - 1)
@@ -154,55 +292,30 @@ public class WorldGenSeccultTree extends WorldGenHugeTrees{
                             this.placeVine(worldIn, rand, blockpos3.south(), BlockVine.NORTH);
                         }
                     }
-                    
                 }*/
             }
 
             return true;
         }
     }
-    
-    @Override
-    protected void growLeavesLayer(World worldIn, BlockPos layerCenter, int width) {
-        int i = width * width;
 
-        for (int j = -width; j <= width; ++j)
+    private void placeVine(World p_181632_1_, Random p_181632_2_, BlockPos p_181632_3_, PropertyBool p_181632_4_)
+    {
+        if (p_181632_2_.nextInt(3) > 0 && p_181632_1_.isAirBlock(p_181632_3_))
         {
-            for (int k = -width; k <= width; ++k)
-            {
-                if (j * j + k * k <= i)
-                {
-                    BlockPos blockpos = layerCenter.add(j, 0, k);
-                    IBlockState state = worldIn.getBlockState(blockpos);
-
-                    if (state.getBlock().isAir(state, worldIn, blockpos) || state.getBlock().isLeaves(state, worldIn, blockpos) || state.getBlock() == ModBlocks.LANTERN_VINE)
-                    {
-                    	if(Seccult.rand.nextInt(20) == 0)
-                    		putLantern(worldIn, blockpos);
-	            		this.setBlockAndNotifyAdequately(worldIn, blockpos, this.leavesMetadata);
-                    }
-                }
-            }
+            this.setBlockAndNotifyAdequately(p_181632_1_, p_181632_3_, Blocks.VINE.getDefaultState().withProperty(p_181632_4_, Boolean.valueOf(true)));
         }
     }
-    
-    private void putLantern(World worldIn, BlockPos blockpos)
-    {
-		int ran = Seccult.rand.nextInt(3)+1;
-		for(int z = 0; z < ran; ++z)
-		this.setBlockAndNotifyAdequately(worldIn, blockpos.add(0, -z, 0), ModBlocks.LANTERN_VINE.getDefaultState());
-    }
-    
-    private void createCrown(World worldIn, BlockPos p_175930_2_, int wid)
-    {
-        int i = 2;
 
+    private void createCrown(World worldIn, BlockPos p_175930_2_, int p_175930_3_)
+    {
         for (int j = -2; j <= 0; ++j)
         {
-            this.growLeavesLayerStrict(worldIn, p_175930_2_.up(j), wid + 1 - j);
+            this.growLeavesLayerStrict(worldIn, p_175930_2_.up(j), p_175930_3_ + 1 - j);
         }
     }
-    
+
+    @Override
     protected void growLeavesLayerStrict(World worldIn, BlockPos layerCenter, int width)
     {
         int i = width * width;
@@ -219,11 +332,9 @@ public class WorldGenSeccultTree extends WorldGenHugeTrees{
                     BlockPos blockpos = layerCenter.add(j, 0, k);
                     IBlockState state = worldIn.getBlockState(blockpos);
 
-                    if (state.getBlock().isAir(state, worldIn, blockpos) || state.getBlock().isLeaves(state, worldIn, blockpos) || state.getBlock() == ModBlocks.LANTERN_VINE)
+                    if (state.getBlock().isAir(state, worldIn, blockpos) || state.getBlock().isLeaves(state, worldIn, blockpos))
                     {
-                    	if(Seccult.rand.nextInt(20) == 0)
-                    		putLantern(worldIn, blockpos);
-	            		this.setBlockAndNotifyAdequately(worldIn, blockpos, this.leavesMetadata);
+                        this.setBlockAndNotifyAdequately(worldIn, blockpos, this.leavesMetadata);
                     }
                 }
             }

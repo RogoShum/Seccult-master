@@ -14,6 +14,7 @@ import com.google.common.collect.AbstractIterator;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MovingSound;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -28,8 +29,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -43,6 +46,8 @@ import testmod.seccult.client.FX.PentagonFX;
 import testmod.seccult.client.FX.RainbowFX;
 import testmod.seccult.client.FX.StarFX;
 import testmod.seccult.client.FX.ThunderFX;
+import testmod.seccult.client.entity.render.RenderGatorix;
+import testmod.seccult.client.entity.render.RenderGatorixEvent;
 import testmod.seccult.client.entity.render.RenderHandler;
 import testmod.seccult.entity.EntitySound;
 import testmod.seccult.entity.livings.EntityBase;
@@ -59,6 +64,10 @@ import testmod.seccult.network.NetworkHandler;
 
 public class ClientProxy extends CommonProxy
 {
+    public static boolean rendering = false;
+    public static Entity renderEntity = null;
+    public static Entity backupEntity = null;
+	
 	public static KeyBinding[] keyBindings;
 	
 	public static int sphereIdOutside;
@@ -102,6 +111,48 @@ public class ClientProxy extends CommonProxy
 		}
 	}
 	
+    @SubscribeEvent
+    public void onClientWorldLoad(WorldEvent.Load event)
+    {
+        if(event.getWorld() instanceof WorldClient)
+        {
+        	RenderGatorixEvent.mirrorGlobalRenderer.setWorldAndLoadRenderers((WorldClient) event.getWorld());
+        }
+    }
+
+    @SubscribeEvent
+    public void onClientWorldUnload(WorldEvent.Unload event)
+    {
+        if(event.getWorld() instanceof WorldClient)
+        {
+        	RenderGatorixEvent.clearRegisteredMirrors();
+        }
+    }
+	
+    @SubscribeEvent
+    public void onPrePlayerRender(RenderPlayerEvent.Pre event)
+    {
+        if(!rendering) return;
+
+        if(event.getEntityPlayer() == renderEntity)
+        {
+            backupEntity = Minecraft.getMinecraft().getRenderManager().renderViewEntity;
+            Minecraft.getMinecraft().getRenderManager().renderViewEntity = renderEntity;
+        }
+    }
+
+    @SubscribeEvent
+    public void onPostPlayerRender(RenderPlayerEvent.Post event)
+    {
+        if(!rendering) return;
+
+        if(event.getEntityPlayer() == renderEntity)
+        {
+            Minecraft.getMinecraft().getRenderManager().renderViewEntity = backupEntity;
+            renderEntity = null;
+        }
+    }
+	
 	public void setOutOfWater(EntityPlayer player)
 	{
 		try {
@@ -118,9 +169,14 @@ public class ClientProxy extends CommonProxy
 	{
 		MinecraftForge.EVENT_BUS.register(new HUDHandler());
 		MinecraftForge.EVENT_BUS.register(new EntityRenderHandler());
+		MinecraftForge.EVENT_BUS.register(new RenderGatorixEvent());
 		ItemColoerRegister();
 	}
 
+	public void preInit()
+	{
+		MinecraftForge.EVENT_BUS.register(this);
+	}
 	
 	@SideOnly(Side.CLIENT)
 	private static class BossMusic extends MovingSound {

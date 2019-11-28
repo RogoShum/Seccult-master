@@ -40,6 +40,7 @@ import testmod.seccult.magick.implementation.ImplementationFocused;
 import testmod.seccult.magick.implementation.ImplementationProjectile;
 import testmod.seccult.potions.ModPotions;
 import testmod.seccult.world.gen.DimensionMagic;
+import testmod.seccult.world.gen.TestTeleporter;
 import testmod.seccult.world.gen.plant.WorldGenCave;
 
 public class ItemTerrariaEventThing extends ItemBase{
@@ -146,9 +147,11 @@ public class ItemTerrariaEventThing extends ItemBase{
 	}
 	
 	private void spawnEOW(EntityPlayer player) {
-		double x = player.posX + 40;
-		double y = player.posY - 40;
-		double z = player.posZ + 40;
+		boolean nag = Seccult.rand.nextBoolean();
+		boolean nag_ = Seccult.rand.nextBoolean();
+		double x = nag?player.posX + 65:player.posX - 65;
+		double y = player.posY - 65;
+		double z = nag_?player.posZ + 65:player.posZ - 65;
 		
 		Entity entity = null;
 		 entity = EntityList.createEntityByIDFromName(TEOWres, player.getEntityWorld());

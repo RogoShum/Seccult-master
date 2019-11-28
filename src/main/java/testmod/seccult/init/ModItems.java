@@ -64,8 +64,10 @@ public class ModItems
 	public static final Item YesYourHighness = new ItemYesYourHighness("yesyourhighness");
 	public static final Item EVENT_THING = new ItemTerrariaEventThing("eow");
 	public static final Item EVENT_THING_C = new ItemTerrariaEventThing_C("eoc");
+	public static final Item PORTAL_SUMMONER = new ItemPortalSummoner("portal_summoner");
 	//public static final Item SCP173 = new ItemSCP173("scp173");
 	public static final Item Wand = new ItemWand("wand");
+	public static final Item ELDER_WAND = new ItemWand("elder_wand");
 	public static final Item SoulStone = new ItemSoulStone("soul_stone");
 	public static final Item DummySystem = new ItemDummySystem("dummy_system");
 	public static final Item MagickCore = new ItemMagickCore("magick_core");

@@ -14,6 +14,7 @@ import testmod.seccult.entity.livings.*;
 import testmod.seccult.entity.livings.flying.EntityAirTentacle;
 import testmod.seccult.entity.livings.flying.EntityBird;
 import testmod.seccult.entity.livings.insect.*;
+import testmod.seccult.entity.livings.landCreature.EntityDreamPop;
 import testmod.seccult.entity.livings.water.*;
 import testmod.seccult.entity.projectile.*;
 import testmod.seccult.items.armor.ShadowSkyArmor;
@@ -59,5 +60,8 @@ public class RenderHandler
 		RenderingRegistry.registerEntityRenderingHandler(EntitySpiritContainer.class, m -> new RenderSpiritContainer(m));
 		RenderingRegistry.registerEntityRenderingHandler(EntitySpiritDummy.class, m -> new RenderDummySystem(m));
 		RenderingRegistry.registerEntityRenderingHandler(EntityKingCrimson.class, m -> new RenderKingCrimson(m));
+		RenderingRegistry.registerEntityRenderingHandler(EntityBorderCrosser.class, m -> new RenderBorderCrosser(m));
+		RenderingRegistry.registerEntityRenderingHandler(EntityDreamPop.class, m -> new RenderDreamPop(m));
+		RenderingRegistry.registerEntityRenderingHandler(EntitySpaceGatorix.class, m -> new RenderGatorix(m));
 	}
 }

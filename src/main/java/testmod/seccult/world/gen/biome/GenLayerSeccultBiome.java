@@ -10,7 +10,7 @@ import net.minecraft.world.gen.layer.IntCache;
 import testmod.seccult.world.gen.SeccultBiomeRegistries;
 
 public class GenLayerSeccultBiome extends GenLayer {
-	private static final int RARE_BIOME_CHANCE = 100;
+	private static final int RARE_BIOME_CHANCE = 50;
 	private static final int TYPE_AMOUNT = 3;
 	private static final int AREA = 24;
 	

@@ -1,5 +1,6 @@
 package testmod.seccult.world.gen.biome;
 
+import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.GenLayerVoronoiZoom;
@@ -12,10 +13,10 @@ public class SpiritBiomeProvider extends BiomeProvider{
     public SpiritBiomeProvider(WorldInfo world, long seed) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
     {
         super(world);
-
+        allowedBiomes.clear();
         getBiomesToSpawnIn().clear();
         
-        GenLayer biomes = new GenLayerSpiritBiome(1001L);
+        /*GenLayer biomes = new GenLayerSpiritBiome(1001L);
 		biomes = new GenLayerSpirit(1001L, biomes);
 
 		biomes = new GenLayerZoom(1002L, biomes);
@@ -31,5 +32,28 @@ public class SpiritBiomeProvider extends BiomeProvider{
 
 		ModReclection.BiomeProvider_SetgenBiomes(this, biomes);
 		ModReclection.BiomeProvider_SetbiomeIndexLayer(this, genlayervoronoizoom);
+		*/
+    }
+    
+    @Override
+    public GenLayer[] getModdedBiomeGenerators(WorldType worldType, long seed, GenLayer[] original) {
+    	GenLayer biomes = new GenLayerSpiritBiome(1001L);
+		biomes = new GenLayerSpirit(1001L, biomes);
+
+		biomes = new GenLayerZoom(1002L, biomes);
+		biomes = new GenLayerZoom(1003L, biomes);
+		biomes = new GenLayerZoom(1004L, biomes);
+		biomes = new GenLayerZoom(1005L, biomes);
+		biomes = new GenLayerZoom(1006L, biomes);
+
+		GenLayer biomeIndexLayer = new GenLayerVoronoiZoom(10L, biomes);
+
+		biomes.initWorldGenSeed(seed);
+		biomeIndexLayer.initWorldGenSeed(seed);
+
+        return new GenLayer[]{
+                biomes,
+                biomeIndexLayer
+        };
     }
 }

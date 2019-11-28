@@ -1,5 +1,7 @@
 package testmod.seccult.network;
 
+import java.util.UUID;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -15,14 +17,20 @@ import testmod.seccult.api.PlayerSpellReleaseTool.PlayerSpellTool;
 public class CNetworkTransFloat implements IMessage {
 	private float[] flo;
 	
+	private UUID uuid;
+	private long uuidLeast;
+	private long uuidMost;
+	
 	private int type;
 	private int size;
 	
 	public CNetworkTransFloat() {}
 
-	public CNetworkTransFloat(float[] flo, int type, int size) {
+	public CNetworkTransFloat(float[] flo, Entity player, int type, int size) {
 		this.flo = flo;
 		this.type = type;
+		this.uuidLeast = player.getUniqueID().getLeastSignificantBits();
+		this.uuidMost = player.getUniqueID().getMostSignificantBits();
 		this.size = size;
 	}
 	
@@ -33,6 +41,9 @@ public class CNetworkTransFloat implements IMessage {
 		for(int i = 0; i < this.size; ++i)
 			this.flo[i] = buf.readFloat();
 		this.type = buf.readInt();
+		this.uuidLeast = buf.readLong();
+		this.uuidMost = buf.readLong();
+		this.uuid = new UUID(uuidMost, uuidLeast);
 		
 	}
 
@@ -42,6 +53,8 @@ public class CNetworkTransFloat implements IMessage {
 		for(int i = 0; i < flo.length; ++i)
 			buf.writeFloat(flo[i]);
 		buf.writeInt(type);
+		buf.writeLong(uuidLeast);
+		buf.writeLong(uuidMost);
 		
 	}
 
@@ -52,11 +65,23 @@ public class CNetworkTransFloat implements IMessage {
 		public IMessage onMessage(CNetworkTransFloat message, MessageContext ctx) {
 			Minecraft mc = Minecraft.getMinecraft();
         	EntityPlayer player = mc.player;
+        	
 			switch(message.type)
 			{
 				case 1:
-					PlayerSpellTool tool = PlayerSpellReleaseTool.get(player);
-					tool.setSpellColor(message.flo);
+					player = player.world.getPlayerEntityByUUID(message.uuid);
+					if(player != null && player.getUniqueID().equals(message.uuid))
+					{
+						PlayerSpellTool tool = PlayerSpellReleaseTool.get(player);
+						tool.setSpellColor(message.flo);
+					}
+				case 2:
+					player = player.world.getPlayerEntityByUUID(message.uuid);
+					if(player != null && player.getUniqueID().equals(message.uuid))
+					{
+						PlayerSpellTool tool = PlayerSpellReleaseTool.get(player);
+						tool.addCycleTime();
+					}
 			}
 			
 			return null;

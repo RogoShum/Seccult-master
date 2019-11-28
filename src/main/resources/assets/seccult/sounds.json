@@ -1,5 +1,13 @@
 {
 	"ring": { "sounds":["seccult:ring"], "subtitle": "seccult.subtitle.ring" },
+	"gatorix_spawn": { "sounds":["seccult:gatorix_spawn"], "subtitle": "seccult.subtitle.gatorix_spawn" },
+	"gatorix_flying": { "sounds":["seccult:gatorix_flying"], "subtitle": "seccult.subtitle.gatorix_flying" },
+	"nightmare_living": { "sounds":["seccult:nightmare_living"], "subtitle": "seccult.subtitle.nightmare_living" },
+	"nightmare_death": { "sounds":["seccult:nightmare_death"], "subtitle": "seccult.subtitle.nightmare_death" },
+	"nightmare_hurt": { "sounds":["seccult:nightmare_hurt"], "subtitle": "seccult.subtitle.nightmare_hurt" },
+	"dream_living": { "sounds":["seccult:dream_living"], "subtitle": "seccult.subtitle.dream_living" },
+	"dream_death": { "sounds":["seccult:dream_death"], "subtitle": "seccult.subtitle.dream_death" },
+	"dream_hurt": { "sounds":["seccult:dream_hurt"], "subtitle": "seccult.subtitle.dream_hurt" },
 	"a184": { "sounds":[{"name": "seccult:184", "stream": true}]},
 	"slit": { "sounds":[{"name": "seccult:slit", "stream": true}]},
 	"afterglow": { "sounds":[{"name": "seccult:afterglow", "stream": true}]},

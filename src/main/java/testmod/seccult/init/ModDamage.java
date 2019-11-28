@@ -4,6 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
 
 public class ModDamage {
 	public static final DamageSource normalMagic = new DamageSource("seccult-normal-magick").setMagicDamage();
@@ -54,6 +55,11 @@ public class ModDamage {
     public static DamageSource causeForbiddenEntityDamage(Entity player)
     {
         return new EntityDamageSource(forbiddenMagic.damageType, player);
+    }
+    
+    public static DamageSource causeForbiddenEntityDamage(Entity source, Entity indirectEntityIn)
+    {
+        return new EntityDamageSourceIndirect(forbiddenMagic.damageType, source, indirectEntityIn);
     }
     
     public static DamageSource causeMagickFireDamage(Entity player)

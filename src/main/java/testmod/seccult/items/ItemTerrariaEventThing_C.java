@@ -147,9 +147,11 @@ public class ItemTerrariaEventThing_C extends ItemBase{
 	}
 	
 	private void spawnEOW(EntityPlayer player) {
-		double x = player.posX + 65;
+		boolean nag = Seccult.rand.nextBoolean();
+		boolean nag_ = Seccult.rand.nextBoolean();
+		double x = nag?player.posX + 65:player.posX - 65;
 		double y = player.posY + 65;
-		double z = player.posZ + 65;
+		double z = nag_?player.posZ + 65:player.posZ - 65;
 		
 		Entity entity = null;
 		 entity = EntityList.createEntityByIDFromName(EOCres, player.getEntityWorld());

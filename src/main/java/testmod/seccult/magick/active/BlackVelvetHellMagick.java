@@ -24,7 +24,7 @@ public class BlackVelvetHellMagick extends Magick implements SlayMagic, Attackin
 		{
 			MagickFX();
 			EntityBlackVelvetHell blackvelethell = new EntityBlackVelvetHell(entity.world);
-			blackvelethell.setPosition(entity.posX, entity.posY, entity.posZ);
+			blackvelethell.setPosition(entity.posX, entity.posY + entity.height / 2, entity.posZ);
 			blackvelethell.setPrisoner(entity);
 			if(!entity.world.isRemote)
 				entity.world.spawnEntity(blackvelethell);

@@ -27,4 +27,6 @@ public class CommonProxy
 	public void sphereRender() {}
 	
 	public void init() {}
+	
+	public void preInit() {}
 }

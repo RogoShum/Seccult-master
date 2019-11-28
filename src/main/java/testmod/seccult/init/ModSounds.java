@@ -25,7 +25,14 @@ public class ModSounds {
 	public static final SoundEvent twentyone = Sound("twentyone");
 	public static final SoundEvent storia = Sound("storia");
 	public static final SoundEvent np = Sound("np");
-	
+	public static final SoundEvent dream_living = Sound("dream_living");
+	public static final SoundEvent dream_hurt = Sound("dream_hurt");
+	public static final SoundEvent dream_death = Sound("dream_death");
+	public static final SoundEvent nightmare_living = Sound("nightmare_living");
+	public static final SoundEvent nightmare_hurt = Sound("nightmare_hurt");
+	public static final SoundEvent nightmare_death = Sound("nightmare_death");
+	public static final SoundEvent gatorix_spawn = Sound("gatorix_spawn");
+	public static final SoundEvent gatorix_flying = Sound("gatorix_flying");
 	
 	private static SoundEvent Sound(String name) {
 		ResourceLocation loc = new ResourceLocation(Seccult.MODID, name);
@@ -51,5 +58,13 @@ public class ModSounds {
 		r.register(twentyone);
 		r.register(storia);
 		r.register(np);
+		r.register(dream_living);
+		r.register(dream_hurt);
+		r.register(dream_death);
+		r.register(nightmare_living);
+		r.register(nightmare_hurt);
+		r.register(nightmare_death);
+		r.register(gatorix_spawn);
+		r.register(gatorix_flying);
 	}
 }
