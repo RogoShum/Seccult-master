@@ -67,7 +67,17 @@ public class ItemPortalSummoner extends ItemBase{
 					crosser = new EntityBorderCrosser(player.world, dim);
 					crosser.setPosition(pos.getX()+0.5, pos.getY()+1, pos.getZ()+0.5);
 					if(dim != player.dimension)
-						player.world.spawnEntity(crosser);
+					{
+						List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(player, player.getEntityBoundingBox().grow(20));
+						
+						for(int i = 0; i < list.size(); ++i)
+						{
+							if(list.get(i) instanceof EntitySpaceGatorix)
+								((EntitySpaceGatorix)list.get(i)).setCharged(0.1F);
+						}
+						
+						//player.world.spawnEntity(crosser);
+					}
 					else
 					{
 						EntitySpaceGatorix gatorix = new EntitySpaceGatorix(player.world, player);

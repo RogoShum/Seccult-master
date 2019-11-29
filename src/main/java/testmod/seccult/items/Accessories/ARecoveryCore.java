@@ -8,7 +8,6 @@ import testmod.seccult.events.PlayerDataUpdateEvent;
 import testmod.seccult.magick.MagickCompiler;
 
 public class ARecoveryCore extends ItemAccessories{
-	private NBTTagCompound MAGICK;
 	public ARecoveryCore(String name) {
 		super(name);
 	}

@@ -47,10 +47,39 @@ public class ModItems
 			new int[] {5, 7, 7, 5}, 200, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 18.0F);
 	 
 	//Items
+
 	public static final Item SPA = new ItemBase("spa");
+	
+	public static final Item BLUE_FEATHER = new ItemBase("blue_feather");
+	public static final Item GECKO_TAIL = new ItemBase("gecko_tail");
+	public static final Item GECKO_EYE = new ItemBase("gecko_eye");
+	public static final Item WING = new ItemBase("wing");
+	public static final Item MAGICK_POWER = new ItemBase("magick_power");
+	public static final Item PETAL = new ItemBase("petal");
+	public static final Item REFLECTIVE_CRYSTAL = new ItemBase("refractive_crystal");
+	public static final Item SPACE_COLLOID = new ItemBase("space_colloid");
+	public static final Item MR_THINK = new ItemBase("mr_think");
+
+	public static final Item HYBIRD_RICE = new ItemBase("hybird_rice");
+	public static final Item HYBIRD_WHEAT = new ItemBase("hybird_wheat");
+	public static final Item WINDY_DUST = new ItemBase("windy_dust");
+	public static final Item DIM_KERNEL = new ItemBase("dim_kernel");
+	public static final Item STRAW_HAT = new ItemBase("straw_hat");
+	public static final Item SCARECROW_HEART = new ItemBase("scarecrow_heart");
+	public static final Item MISS_BUEATY = new ItemBase("miss_bueaty");
+	public static final Item CRUEL_SCROLL = new ItemBase("cruel_scroll");
+
+	public static final Item WITCHERED_BRANCHES = new ItemBase("withered_branches");
+	public static final Item RAVEN_FEATHER = new ItemBase("raven_feather");
+	public static final Item RANCID_MARSH = new ItemBase("rancid_marsh");
+	public static final Item MUDDY_WATER = new ItemBase("muddy_water");
+	public static final Item WITCH_KEY = new ItemBase("witch_key");
+	public static final Item BLACK_CAT_FUR = new ItemBase("black_fur");
+	public static final Item DRAGON_BONE = new ItemBase("dragon_bone");
+	public static final Item EYE = new ItemBase("eye");
+	
 	public static final Item Dark_M = new ItemBase("dark_m");
 	public static final Item Blood_M = new ItemBase("blood_m");
-	public static final Item Wing = new ItemBase("wing");
 	public static final Item AirRes = new ItemBase("airres");
 	public static final Item WaterRes = new ItemBase("water_gem");
 	public static final Item Ocean_Enssence = new ItemBase("ocean_enssence");
@@ -103,35 +132,9 @@ public class ModItems
 	public static final ItemPickaxe SPA_PICKAXE = new PickaxeTool("spa_pickaxe", MATERIAL_SPA);
 	
 	//TRWeapon
-	//public static final Item Enchanted_Sword = new EnchantedSword("enchanted_sword");
-	//public static final Item Terraria_Blade = new TerrariaBlade("terraria_blade");
-	//public static final Item Muramasa = new Muramasa("muramasa");
-	//public static final Item Night_Edge = new NightEdge("night_edge");
-	//public static final Item StarFury = new StarFury("starfury");
-	//public static final Item Blade_Of_Grass = new BladeOfGrass("blade_of_grass");
-	//public static final Item Fiery_GreatSword = new FieryGreatSword("fiery_greatsword");
-	//public static final Item Light_Bane = new LightBane("light_bane");
-	//public static final Item Cobalt_Sword = new CobaltSword("cobalt_sword");
-	//public static final Item Palladium_Sword = new PalladiumSword("palladium_sword");
-	//public static final Item Mythril_Sword = new MythrilSword("mythril_sword");
-	//public static final Item Orichalcum_Sword = new OrichalcumSword("orichalcum_sword");
-	//public static final Item Chlorophyte_Saber = new ChlorophyteSaber("chlorophyte_saber");
-	//public static final Item Breaker_Blade = new BreakerBlade("breaker_blade");
-	//public static final Item Adamantite_Sword = new AdamantiteSword("adamantite_sword");
-	//public static final Item Titanium_Sword = new TitaniumSword("titanium_sword");
-	//public static final Item Excalibur = new Excalibur("excalibur");
-	//public static final Item True_Excalibur = new TrueExcalibur("true_excalibur");
-	//public static final Item Chlorophyte_Claymore = new ChlorophyteClaymore("chlorophyte_claymore");
-	//public static final Item The_Horseman_Blade = new TheHorsemanBlade("the_horseman_blade"); 
-	//public static final Item True_Night_Edge = new TrueNightEdge("true_night_edge");
-	//public static final Item Star_Wrath = new StarWrath("star_wrath");
-	//public static final Item Influx_Waver = new InfluxWaver("influx_waver");
 	public static final Item Meowmere = new Meowmere("meowmere");
-	//public static final Item Beam_Sword = new BeamSword("beam_sword");
 	public static final Item Vampire_Knives = new VampireKnives("vampire_knives");
-	//public static final Item Daybreak = new Daybreak("daybreak");
 	public static final Item Solar_Eruption = new SolarEruption("solar_eruption");
-	//public static final Item Scourge_of_the_Corruptor = new ScourgeoftheCorruptor("scourge_of_the_corruptor");
 	public static final Item LastPrism = new LastPrism("last_prism");
 	
 	
@@ -150,10 +153,10 @@ public class ModItems
 	public static final Item SPA_LEGGINGS = new MagickLegs("spa_leggings", ARMOR_MATERIAL_SPA, 1, EntityEquipmentSlot.LEGS);
 	public static final Item SPA_BOOTS = new MagickBoots("spa_boots", ARMOR_MATERIAL_SPA, 1, EntityEquipmentSlot.FEET);
 	
-	//public static final Item SORCERER_HELMET = new SorcererHelmet("sorcerer_helmet", ARMOR_MATERIAL_SORCERER, 1, EntityEquipmentSlot.HEAD);
-	//public static final Item SORCERER_CHEST = new SorcererChest("sorcerer_chest", ARMOR_MATERIAL_SORCERER, 1, EntityEquipmentSlot.CHEST);
-	//public static final Item SORCERER_LEGGINGS = new SorcererLegs("sorcerer_leggings", ARMOR_MATERIAL_SORCERER, 1, EntityEquipmentSlot.LEGS);
-	//public static final Item SORCERER_BOOTS = new SorcererBoot("sorcerer_boots", ARMOR_MATERIAL_SORCERER, 1, EntityEquipmentSlot.FEET);
+	public static final Item SORCERER_HELMET = new SorcererHelmet("sorcerer_helmet", ARMOR_MATERIAL_SORCERER, 1, EntityEquipmentSlot.HEAD);
+	public static final Item SORCERER_CHEST = new SorcererChest("sorcerer_chest", ARMOR_MATERIAL_SORCERER, 1, EntityEquipmentSlot.CHEST);
+	public static final Item SORCERER_LEGGINGS = new SorcererLegs("sorcerer_leggings", ARMOR_MATERIAL_SORCERER, 1, EntityEquipmentSlot.LEGS);
+	public static final Item SORCERER_BOOTS = new SorcererBoot("sorcerer_boots", ARMOR_MATERIAL_SORCERER, 1, EntityEquipmentSlot.FEET);
 	
 	public static final Item CHLOROPHYTE_HELMET = new ChlorophyteHelmet("chlorophyte_helmet", ARMOR_MATERIAL_CHLOROPHYTE, 1, EntityEquipmentSlot.HEAD);
 	public static final Item CHLOROPHYTE_CHEST = new ChlorophyteChest("chlorophyte_chest", ARMOR_MATERIAL_CHLOROPHYTE, 1, EntityEquipmentSlot.CHEST);
@@ -174,7 +177,7 @@ public class ModItems
 	public static final Item A_LAST_STRUGGLE = new ALastStruggle("last_struggle");
 	public static final Item A_MADE_IN_HEAVEN = new AMadeInHeaven("made_in_heaven");
 	public static final Item A_MAGICK_CASTER = new AMagicCaster("magick_caster");
-	//public static final Item RECOVERY_THING = new ARecoveryCore("item_recovery");
+	public static final Item RECOVERY_THING = new ARecoveryCore("item_recovery");
 	//public static final Item VirtulBody = new AVirtulBody("virtul_body");
 	public static final Item CANDY_RING = new ACandyRing("candy_ring");
 	public static final Item Attack_REFRACT = new AAttackRefract("attack_refract");

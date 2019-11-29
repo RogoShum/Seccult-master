@@ -109,7 +109,7 @@ public class EntityButterfly extends EntityFlyable implements IEntityInsect{
 
 	@Override
 	protected Item getDropItem() {
-		return ModItems.Wing;
+		return ModItems.WING;
 	}
 	
 	@Override

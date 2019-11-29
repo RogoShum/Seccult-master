@@ -151,13 +151,14 @@ public class EntityRenderHandler {
 	    GlStateManager.enableBlend();
 	    GlStateManager.blendFunc(SourceFactor.SRC_COLOR, DestFactor.ONE_MINUS_CONSTANT_ALPHA);
 	    GlStateManager.color(red, green, blue);
-	    GlStateManager.translate(x, y + 0.01, z);
 	    tex.bindTexture(circle);
 	    Disk disk = new Disk();
 	    disk.setTextureFlag(true);
 	    disk.draw(0, s1 * 1.5F, 16, 16);    
 	    GlStateManager.popMatrix();
         
+		
+	    
 		/*GlStateManager.pushMatrix();
 	    GlStateManager.enableBlend();
 	    GlStateManager.blendFunc(SourceFactor.SRC_COLOR, DestFactor.ONE_MINUS_CONSTANT_ALPHA);

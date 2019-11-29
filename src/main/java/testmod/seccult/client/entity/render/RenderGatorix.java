@@ -6,6 +6,7 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
@@ -30,7 +31,7 @@ public class RenderGatorix extends Render<EntitySpaceGatorix>
     
     public void doRender(EntitySpaceGatorix entity, double x, double y, double z, float entityYaw, float partialTicks) {
     	int quality = 64;
-    	
+
     	if(!RenderGatorixEvent.registerGatorix.containsKey(entity))
         {
             int newTextureId = GL11.glGenTextures();
@@ -57,7 +58,7 @@ public class RenderGatorix extends Render<EntitySpaceGatorix>
 
             GlStateManager.enableRescaleNormal();
 
-            GlStateManager.translate(x, y + 0.2, z);
+            GlStateManager.translate(x, y + entity.height / 2, z);
             GlStateManager.rotate((-Minecraft.getMinecraft().player.rotationYaw - 90)  * 0.017453292F * (180F / (float)Math.PI), 0.0F, 1.0F, 0.0F);
     	    GlStateManager.rotate(-90F * 0.017453292F * (180F / (float)Math.PI), 1.0F, 0.0F, 0.0F);
     	    GlStateManager.rotate(-Minecraft.getMinecraft().player.rotationPitch * 0.017453292F * (180F / (float)Math.PI), 0.0F, 0.0F, 1.0F);
@@ -65,14 +66,18 @@ public class RenderGatorix extends Render<EntitySpaceGatorix>
         	GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         	float size = 20 - entity.ticksExisted;
         	size *= 0.1F;
-        	if(size < 0.4F)
-        		size = 0.4F;
+        	if(size < entity.height)
+        		size = entity.height;
         	
         	float blend = 1.0F;
         	
-        	if(entity.ticksExisted > 200)
+        	if(entity.height < 0.41F && entity.ticksExisted > 200)
         	{
         		blend -= (float)(entity.ticksExisted - 200) / (float)100;
+        	}
+        	else if(entity.height > 0.41F && entity.ticksExisted > 900)
+        	{
+        		blend -= (float)(entity.ticksExisted - 900) / (float)100;
         	}
         	
         	if(blend < 0.12F)
@@ -112,6 +117,15 @@ public class RenderGatorix extends Render<EntitySpaceGatorix>
         //ParticleRender.renderLightFX(this.renderManager, x, y, z, 2F, 0.5F, new float[] {0F, 0.5F, 0.8F});
         
          super.doRender(entity, x, y, z, entityYaw, partialTicks);
+    }
+    
+    @Override
+    public boolean shouldRender(EntitySpaceGatorix livingEntity, ICamera camera, double camX, double camY,
+    		double camZ) {
+    	if(Minecraft.getMinecraft().getRenderViewEntity() instanceof EntitySpaceGatorix)
+    		return false;
+    	else
+    		return super.shouldRender(livingEntity, camera, camX, camY, camZ);
     }
     
     public void faceEntity(Entity entity, Entity entityIn, float maxYawIncrease, float maxPitchIncrease)

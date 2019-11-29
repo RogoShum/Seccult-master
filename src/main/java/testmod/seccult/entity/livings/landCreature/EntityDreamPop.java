@@ -1,11 +1,8 @@
 package testmod.seccult.entity.livings.landCreature;
 
-import java.util.List;
-
+import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -13,21 +10,12 @@ import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
 import net.minecraft.entity.ai.EntityAIPanic;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAITempt;
-import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.EntityFlyHelper;
-import net.minecraft.entity.monster.EntityShulker;
-import net.minecraft.entity.monster.EntityVex;
-import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityFlying;
-import net.minecraft.entity.passive.EntityParrot;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.Item;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -43,11 +31,12 @@ import testmod.seccult.entity.ai.EntityAIAlertForHelp;
 import testmod.seccult.entity.ai.EntityAIFindBorderCrosser;
 import testmod.seccult.entity.ai.EntityAIHurtByTarget;
 import testmod.seccult.entity.livings.EntitySpaceGatorix;
-import testmod.seccult.entity.livings.flying.EntityBird;
 import testmod.seccult.init.ModSounds;
+import testmod.seccult.world.gen.DimensionMagic;
 
 public class EntityDreamPop extends EntityCreature implements EntityFlying, IRangedAttackMob{
 	private static final DataParameter<Integer> ENTITY_STATE = EntityDataManager.<Integer>createKey(EntityDreamPop.class, DataSerializers.VARINT);
+	
 	private EntityBorderCrosser crosser;
 	
 	public EntityDreamPop(World worldIn) {
@@ -119,6 +108,9 @@ public class EntityDreamPop extends EntityCreature implements EntityFlying, IRan
 
 	        this.getLookHelper().setLookPositionWithEntity(this.getCrosser(), 30.0F, 30.0F);
 		}
+		
+		if(this.dimension == DimensionMagic.MAGIC_ID && this.ticksExisted % 40 == 1)
+			this.heal(2);
 	}
 	
 	public void setCrosser(EntityBorderCrosser crosser)
@@ -129,6 +121,22 @@ public class EntityDreamPop extends EntityCreature implements EntityFlying, IRan
 	public EntityBorderCrosser getCrosser()
 	{
 		return this.crosser;
+	}
+
+	@Override
+	public boolean getCanSpawnHere()
+	{
+		EntityPlayer player = this.world.getClosestPlayerToEntity(this, 32);
+		EntityPlayerMP playerMP = player instanceof EntityPlayerMP ? (EntityPlayerMP)player : null;
+		boolean hasAchievement = false;
+
+		if (playerMP != null && !playerMP.world.isRemote) {
+			PlayerAdvancements Achievement = playerMP.getAdvancements();
+			//if(Achievement.getProgress(advancementIn))
+				hasAchievement = true;
+		}
+		
+		return super.getCanSpawnHere();
 	}
 	
 	@Override
@@ -184,7 +192,7 @@ public class EntityDreamPop extends EntityCreature implements EntityFlying, IRan
 		this.dataManager.set(ENTITY_STATE, id);
 	}
 	  
-	protected int getState() 
+	public int getState() 
 	{
 		return this.dataManager.get(ENTITY_STATE).intValue();
 	}

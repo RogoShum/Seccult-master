@@ -21,6 +21,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import testmod.seccult.Seccult;
+import testmod.seccult.entity.livings.landCreature.EntityDreamPop;
 import testmod.seccult.entity.livings.water.EntityBoneShark;
 import testmod.seccult.entity.livings.water.EntityFish;
 import testmod.seccult.entity.livings.water.EntityJellyfish;
@@ -139,12 +140,18 @@ public class SeccultBiomeRegistries {
 			//BiomeManager.addBiome(BiomeType.WARM, new BiomeManager.BiomeEntry(Oblivion, 50));
 			//BiomeManager.addBiome(BiomeType.WARM, new BiomeManager.BiomeEntry(Oblivion_Skyrim, 50));
 			
-			registerWaterSpawn();
+			registerCreatureSpawn();
 		}
 		
-		private static void registerWaterSpawn()
+		private static void registerCreatureSpawn()
 		{
-			/*EntityRegistry.addSpawn(EntityFish.class, 5, 1, 2, EnumCreatureType.WATER_CREATURE, SeccultBiomeRegistries.mana_froest_Mountain);
+			EntitySpawnPlacementRegistry.setPlacementType(EntityFish.class, SpawnPlacementType.IN_WATER);
+			EntitySpawnPlacementRegistry.setPlacementType(EntityJellyfish.class, SpawnPlacementType.IN_WATER);
+			EntitySpawnPlacementRegistry.setPlacementType(EntityBoneShark.class, SpawnPlacementType.IN_WATER);
+			EntitySpawnPlacementRegistry.setPlacementType(EntityWaterTentacle.class, SpawnPlacementType.IN_WATER);
+			EntitySpawnPlacementRegistry.setPlacementType(EntityRockShellLeviathan.class, SpawnPlacementType.IN_WATER);
+			
+			EntityRegistry.addSpawn(EntityFish.class, 5, 1, 2, EnumCreatureType.WATER_CREATURE, SeccultBiomeRegistries.mana_froest_Mountain);
 			EntityRegistry.addSpawn(EntityFish.class, 5, 2, 4, EnumCreatureType.WATER_CREATURE, SeccultBiomeRegistries.mana_froest_MACICAL);
 			EntityRegistry.addSpawn(EntityFish.class, 5, 1, 2, EnumCreatureType.WATER_CREATURE, SeccultBiomeRegistries.mana_froest_FLOWER);
 			EntityRegistry.addSpawn(EntityFish.class, 5, 1, 2, EnumCreatureType.WATER_CREATURE, SeccultBiomeRegistries.mana_froest_ROOFED);
@@ -152,33 +159,20 @@ public class SeccultBiomeRegistries {
 			EntityRegistry.addSpawn(EntityFish.class, 5, 1, 2, EnumCreatureType.WATER_CREATURE, SeccultBiomeRegistries.mana_Mushroom_Island);
 			EntityRegistry.addSpawn(EntityFish.class, 5, 1, 2, EnumCreatureType.WATER_CREATURE, SeccultBiomeRegistries.mana_Mushroom_Normal);
 			
-			//EntityRegistry.addSpawn(EntityFish.class, 20, 4, 10, EnumCreatureType.WATER_CREATURE, SeccultBiomeRegistries.mana_OceanSide);
-			//EntityRegistry.addSpawn(EntityJellyfish.class, 5, 1, 2, EnumCreatureType.WATER_CREATURE, SeccultBiomeRegistries.mana_OceanSide);
+			EntityRegistry.addSpawn(EntityFish.class, 20, 4, 10, EnumCreatureType.WATER_CREATURE, SeccultBiomeRegistries.mana_OceanSide);
+			EntityRegistry.addSpawn(EntityJellyfish.class, 5, 1, 2, EnumCreatureType.WATER_CREATURE, SeccultBiomeRegistries.mana_OceanSide);
 			
-			//EntityRegistry.addSpawn(EntityFish.class, 20, 6, 15, EnumCreatureType.WATER_CREATURE, SeccultBiomeRegistries.mana_Ocean);
-			//EntityRegistry.addSpawn(EntityJellyfish.class, 5, 3, 5, EnumCreatureType.WATER_CREATURE, SeccultBiomeRegistries.mana_Ocean);
+			EntityRegistry.addSpawn(EntityFish.class, 20, 6, 15, EnumCreatureType.WATER_CREATURE, SeccultBiomeRegistries.mana_Ocean);
+			EntityRegistry.addSpawn(EntityJellyfish.class, 5, 3, 5, EnumCreatureType.WATER_CREATURE, SeccultBiomeRegistries.mana_Ocean);
 			
 			EntityRegistry.addSpawn(EntityFish.class, 20, 10, 20, EnumCreatureType.WATER_CREATURE, SeccultBiomeRegistries.mana_DeepOcean);
 			EntityRegistry.addSpawn(EntityJellyfish.class, 10, 4, 10, EnumCreatureType.WATER_CREATURE, SeccultBiomeRegistries.mana_DeepOcean);
 			
-			//EntityRegistry.addSpawn(EntityBoneShark.class, 5, 2, 4, EnumCreatureType.WATER_CREATURE, SeccultBiomeRegistries.mana_Ocean);
+			EntityRegistry.addSpawn(EntityBoneShark.class, 5, 2, 4, EnumCreatureType.WATER_CREATURE, SeccultBiomeRegistries.mana_Ocean);
 			EntityRegistry.addSpawn(EntityBoneShark.class, 5, 1, 1, EnumCreatureType.WATER_CREATURE, SeccultBiomeRegistries.mana_DeepOcean);
 			
 			EntityRegistry.addSpawn(EntityWaterTentacle.class, 2, 1, 2, EnumCreatureType.WATER_CREATURE, SeccultBiomeRegistries.mana_DeepOcean);
 			EntityRegistry.addSpawn(EntityRockShellLeviathan.class, 1, 1, 1, EnumCreatureType.WATER_CREATURE, SeccultBiomeRegistries.mana_DeepOcean);
-			
-			EntityRegistry.addSpawn(EntityFish.class, 20, 10, 20, EnumCreatureType.WATER_CREATURE, Biomes.OCEAN);
-			EntityRegistry.addSpawn(EntityJellyfish.class, 10, 4, 10, EnumCreatureType.WATER_CREATURE, Biomes.OCEAN);
-			
-			EntityRegistry.addSpawn(EntityBoneShark.class, 1, 2, 4, EnumCreatureType.WATER_CREATURE, Biomes.DEEP_OCEAN);
-			
-			*/
-			
-			EntitySpawnPlacementRegistry.setPlacementType(EntityFish.class, SpawnPlacementType.IN_WATER);
-			EntitySpawnPlacementRegistry.setPlacementType(EntityJellyfish.class, SpawnPlacementType.IN_WATER);
-			EntitySpawnPlacementRegistry.setPlacementType(EntityBoneShark.class, SpawnPlacementType.IN_WATER);
-			EntitySpawnPlacementRegistry.setPlacementType(EntityWaterTentacle.class, SpawnPlacementType.IN_WATER);
-			EntitySpawnPlacementRegistry.setPlacementType(EntityRockShellLeviathan.class, SpawnPlacementType.IN_WATER);
 			
 			BiomeDictionary.Type[] types = {
 					BiomeDictionary.Type.BEACH,
@@ -195,7 +189,7 @@ public class SeccultBiomeRegistries {
 					BiomeDictionary.Type.MAGICAL,
 					BiomeDictionary.Type.MESA,
 					BiomeDictionary.Type.MOUNTAIN,
-					BiomeDictionary.Type.OCEAN,
+					//BiomeDictionary.Type.OCEAN,
 					BiomeDictionary.Type.PLAINS,
 					BiomeDictionary.Type.RARE,
 					BiomeDictionary.Type.RIVER,
@@ -211,11 +205,7 @@ public class SeccultBiomeRegistries {
 					BiomeDictionary.Type.WET
 			};
 			
-			SpawnListEntry spawnFish = new SpawnListEntry(EntityFish.class, 20, 10, 20);
-			SpawnListEntry spawnWaterTentacle = new SpawnListEntry(EntityWaterTentacle.class, 3, 1, 2);
-			SpawnListEntry spawnJellyfish = new SpawnListEntry(EntityJellyfish.class, 10, 4, 10);
-			SpawnListEntry spawnBoneShark = new SpawnListEntry(EntityBoneShark.class, 4, 2, 4);
-			SpawnListEntry spawnRockShellLeviathan = new SpawnListEntry(EntityRockShellLeviathan.class, 2, 1, 1);
+			SpawnListEntry spawnPop = new SpawnListEntry(EntityDreamPop.class, 10, 1, 2);
 
 			for (BiomeDictionary.Type t : types) {
 				Set<Biome> biomes = BiomeDictionary.getBiomes(t);
@@ -225,19 +215,9 @@ public class SeccultBiomeRegistries {
 				while(biomeIterator.hasNext()) {
 					Biome currentBiome = (Biome) biomeIterator.next();
 					
-					currentBiome.getSpawnableList(EnumCreatureType.WATER_CREATURE).add(spawnFish);
-					currentBiome.getSpawnableList(EnumCreatureType.WATER_CREATURE).add(spawnWaterTentacle);
-					currentBiome.getSpawnableList(EnumCreatureType.WATER_CREATURE).add(spawnJellyfish);
-					currentBiome.getSpawnableList(EnumCreatureType.WATER_CREATURE).add(spawnBoneShark);
-					currentBiome.getSpawnableList(EnumCreatureType.WATER_CREATURE).add(spawnRockShellLeviathan);
+					currentBiome.getSpawnableList(EnumCreatureType.AMBIENT).add(spawnPop);
 				}
-				
 			}
-			System.out.println("===============================================");
-			System.out.println("===============================================");
-			System.out.println("Entity Spawn Registerd.");
-			System.out.println("===============================================");
-			System.out.println("===============================================");
 		}
 	}
 }
