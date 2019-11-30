@@ -3,7 +3,7 @@ package testmod.seccult.magick.active;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
 import testmod.seccult.Seccult;
-import testmod.seccult.entity.EntityBloodBeam;
+import testmod.seccult.entity.projectile.EntityBloodBeam;
 import testmod.seccult.init.ModMagicks;
 
 public class LifeAbsorptionMagick extends Magick implements AttackingMagic{

@@ -3,7 +3,7 @@ package testmod.seccult.magick.implementation;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
-import testmod.seccult.entity.EntityIMProjectile;
+import testmod.seccult.entity.projectile.EntityIMProjectile;
 
 public class ImplementationProjectile extends ImplementationStoreable{
 	

@@ -158,6 +158,15 @@ public class ImplementationFocused extends Implementation{
 			return null;
 	}
 	
+	public static BlockPos getBlockMotionAt(Entity e, double finalDistance)
+	{
+		Vec3d vec = new Vec3d(e.motionX, e.motionY, e.motionZ);
+		Vec3d posAir = e.getPositionVector().addVector(0, e.getEyeHeight(), 0).addVector(vec.x * finalDistance, vec.y * finalDistance, vec.z * finalDistance);
+		BlockPos bPos = new BlockPos(posAir);
+		
+		return bPos;
+	}
+	
 	public static Entity getEntityLookedAt(Entity e, double finalDistance){
 		Entity foundEntity = null;
 

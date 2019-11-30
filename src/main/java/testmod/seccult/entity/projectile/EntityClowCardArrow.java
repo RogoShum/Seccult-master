@@ -1,4 +1,4 @@
-package testmod.seccult.entity;
+package testmod.seccult.entity.projectile;
 
 import java.util.List;
 

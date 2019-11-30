@@ -16,8 +16,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import testmod.seccult.entity.EntityBorderCrosser;
 import testmod.seccult.entity.SpiritManager;
-import testmod.seccult.entity.livings.EntitySpaceGatorix;
 import testmod.seccult.entity.livings.EntitySpirit;
+import testmod.seccult.entity.livings.landCreature.EntitySpaceManager;
+import testmod.seccult.entity.projectile.EntitySpaceGatorix;
 import testmod.seccult.magick.implementation.ImplementationFocused;
 import testmod.seccult.world.gen.DimensionMagic;
 
@@ -68,15 +69,10 @@ public class ItemPortalSummoner extends ItemBase{
 					crosser.setPosition(pos.getX()+0.5, pos.getY()+1, pos.getZ()+0.5);
 					if(dim != player.dimension)
 					{
-						List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(player, player.getEntityBoundingBox().grow(20));
-						
-						for(int i = 0; i < list.size(); ++i)
-						{
-							if(list.get(i) instanceof EntitySpaceGatorix)
-								((EntitySpaceGatorix)list.get(i)).setCharged(0.1F);
-						}
-						
-						//player.world.spawnEntity(crosser);
+						EntitySpaceManager gatorix = new EntitySpaceManager(player.world);
+						gatorix.setPosition(pos.getX()+0.5, pos.getY()+1, pos.getZ()+0.5);
+						if(!player.world.isRemote)
+						player.world.spawnEntity(gatorix);
 					}
 					else
 					{

@@ -18,7 +18,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.ClientProxy;
 import testmod.seccult.Seccult;
-import testmod.seccult.entity.livings.EntitySpaceGatorix;
+import testmod.seccult.entity.projectile.EntitySpaceGatorix;
 
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber(modid = Seccult.MODID)

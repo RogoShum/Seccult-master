@@ -11,7 +11,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.Seccult;
 import testmod.seccult.client.entity.model.ModelArrow;
-import testmod.seccult.entity.EntityClowCardArrow;
+import testmod.seccult.entity.projectile.EntityClowCardArrow;
 
 @SideOnly(Side.CLIENT)
 public class RenderClowArrow extends Render<EntityClowCardArrow>

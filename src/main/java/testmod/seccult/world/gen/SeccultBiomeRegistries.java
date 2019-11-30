@@ -108,16 +108,16 @@ public class SeccultBiomeRegistries {
 		
 		private static void spawnBiomes() {
 			BiomeDictionary.addTypes(mana_froest_Mountain, Type.FOREST);
-			BiomeManager.addBiome(BiomeType.WARM, new BiomeManager.BiomeEntry(mana_froest_Mountain, 10));
+			//BiomeManager.addBiome(BiomeType.WARM, new BiomeManager.BiomeEntry(mana_froest_Mountain, 10));
 			
 			BiomeDictionary.addTypes(mana_froest_MACICAL, Type.FOREST);
-			BiomeManager.addBiome(BiomeType.WARM, new BiomeManager.BiomeEntry(mana_froest_MACICAL, 10));
+			//BiomeManager.addBiome(BiomeType.WARM, new BiomeManager.BiomeEntry(mana_froest_MACICAL, 10));
 			
 			BiomeDictionary.addTypes(mana_froest_FLOWER, Type.FOREST);
-			BiomeManager.addBiome(BiomeType.WARM, new BiomeManager.BiomeEntry(mana_froest_FLOWER, 10));
+			//BiomeManager.addBiome(BiomeType.WARM, new BiomeManager.BiomeEntry(mana_froest_FLOWER, 10));
 			
 			BiomeDictionary.addTypes(mana_froest_ROOFED, Type.FOREST);
-			BiomeManager.addBiome(BiomeType.WARM, new BiomeManager.BiomeEntry(mana_froest_ROOFED, 10));
+			//BiomeManager.addBiome(BiomeType.WARM, new BiomeManager.BiomeEntry(mana_froest_ROOFED, 10));
 			
 			BiomeDictionary.addTypes(mana_Mushroom_Cave, Type.MUSHROOM);
 			BiomeDictionary.addTypes(mana_Mushroom_Island, Type.MUSHROOM);
@@ -130,13 +130,13 @@ public class SeccultBiomeRegistries {
 			BiomeDictionary.addTypes(Oblivion_Skyrim, Type.VOID);
 			BiomeDictionary.addTypes(Oblivion_Summerest, Type.END);
 			
-			BiomeManager.addBiome(BiomeType.WARM, new BiomeManager.BiomeEntry(mana_Mushroom_Cave, 5));
-			BiomeManager.addBiome(BiomeType.WARM, new BiomeManager.BiomeEntry(mana_Mushroom_Island, 5));
-			BiomeManager.addBiome(BiomeType.WARM, new BiomeManager.BiomeEntry(mana_Mushroom_Normal, 5));
+			//BiomeManager.addBiome(BiomeType.WARM, new BiomeManager.BiomeEntry(mana_Mushroom_Cave, 5));
+			//BiomeManager.addBiome(BiomeType.WARM, new BiomeManager.BiomeEntry(mana_Mushroom_Island, 5));
+			//BiomeManager.addBiome(BiomeType.WARM, new BiomeManager.BiomeEntry(mana_Mushroom_Normal, 5));
 			
 			//BiomeManager.addBiome(BiomeType.COOL, new BiomeManager.BiomeEntry(mana_OceanSide, 50));
 			//BiomeManager.addBiome(BiomeType.COOL, new BiomeManager.BiomeEntry(mana_Ocean, 50));
-			BiomeManager.addBiome(BiomeType.COOL, new BiomeManager.BiomeEntry(mana_DeepOcean, 100));
+			//BiomeManager.addBiome(BiomeType.COOL, new BiomeManager.BiomeEntry(mana_DeepOcean, 100));
 			//BiomeManager.addBiome(BiomeType.WARM, new BiomeManager.BiomeEntry(Oblivion, 50));
 			//BiomeManager.addBiome(BiomeType.WARM, new BiomeManager.BiomeEntry(Oblivion_Skyrim, 50));
 			
@@ -205,7 +205,7 @@ public class SeccultBiomeRegistries {
 					BiomeDictionary.Type.WET
 			};
 			
-			SpawnListEntry spawnPop = new SpawnListEntry(EntityDreamPop.class, 10, 1, 2);
+			SpawnListEntry spawnPop = new SpawnListEntry(EntityDreamPop.class, 1, 1, 2);
 
 			for (BiomeDictionary.Type t : types) {
 				Set<Biome> biomes = BiomeDictionary.getBiomes(t);

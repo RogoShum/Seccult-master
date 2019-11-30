@@ -11,7 +11,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.Seccult;
 import testmod.seccult.client.entity.model.ModelLightingThing;
-import testmod.seccult.entity.EntityLightingThing;
+import testmod.seccult.entity.projectile.EntityLightingThing;
 
 @SideOnly(Side.CLIENT)
 public class RenderLightingThing extends Render<EntityLightingThing>

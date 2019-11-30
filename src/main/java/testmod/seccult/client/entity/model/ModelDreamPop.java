@@ -4,6 +4,8 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.model.ModelZombie;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.MathHelper;
+import testmod.seccult.entity.livings.landCreature.EntityDreamPop;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
 
@@ -66,11 +68,38 @@ public class ModelDreamPop extends ModelBase {
 
     @Override
     public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) { 
-    	this.head.rotateAngleX = headPitch * 0.017453292F;
+		body.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * limbSwingAmount + 0.2617993877991494F;
+		
+		if(body.rotateAngleX > 0.2617993877991494F)
+			body.rotateAngleX = 0.2617993877991494F;
+		
+		body_layer.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * limbSwingAmount + 0.2617993877991494F;
+		
+		if(body_layer.rotateAngleX > 0.2617993877991494F)
+			body_layer.rotateAngleX = 0.2617993877991494F;
+		
+		this.head.rotateAngleX = headPitch * 0.017453292F - body.rotateAngleX;
 		this.head.rotateAngleY = netHeadYaw * 0.017453292F;
     	
-		this.head_1.rotateAngleX = headPitch * 0.017453292F;
+		this.head_1.rotateAngleX = headPitch * 0.017453292F - body.rotateAngleX;
 		this.head_1.rotateAngleY = netHeadYaw * 0.017453292F;
+		
+		this.hand_l.rotateAngleX = -0.3490658503988659F - body.rotateAngleX;
+		this.hand_l_1.rotateAngleX = -0.3490658503988659F - body.rotateAngleX;
+		this.hand_r.rotateAngleX = -0.3490658503988659F - body.rotateAngleX;
+		this.hand_r_1.rotateAngleX = -0.3490658503988659F - body.rotateAngleX;
+		
+		if(entity instanceof EntityDreamPop)
+		{
+			EntityDreamPop pop = (EntityDreamPop) entity;
+			if(pop.getState() == 1)
+			{
+				this.hand_l.rotateAngleX += -1.0471975511965977;
+				this.hand_l_1.rotateAngleX += -1.0471975511965977;
+				this.hand_r.rotateAngleX += -1.0471975511965977;
+				this.hand_r_1.rotateAngleX += -1.0471975511965977;
+			}
+		}
 		
         GlStateManager.pushMatrix();
         GlStateManager.translate(this.body_layer.offsetX, this.body_layer.offsetY, this.body_layer.offsetZ);

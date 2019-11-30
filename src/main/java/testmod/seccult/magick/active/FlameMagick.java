@@ -38,7 +38,7 @@ public class FlameMagick extends Magick implements AttackingMagic{
 			living.setFire((int) strengh);
 			living.hurtResistantTime = -1;
 			living.attackEntityFrom(ModDamage.causeMagickFlameDamage(player), strengh);
-			living.world.newExplosion(null, living.posX, living.posY, living.posZ, strengh / 2, true, true);
+			living.world.newExplosion(null, living.posX, living.posY, living.posZ, strengh / 2, true, false);
 			living.hurtResistantTime = -1;
 		}
 		}

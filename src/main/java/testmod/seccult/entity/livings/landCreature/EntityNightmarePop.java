@@ -1,8 +1,10 @@
 package testmod.seccult.entity.livings.landCreature;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -15,18 +17,22 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.EntityLookHelper;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateFlying;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import testmod.seccult.entity.ai.EntityAIAlertForHelp;
 import testmod.seccult.entity.ai.EntityAIHurtByTarget;
-import testmod.seccult.entity.livings.EntitySpaceGatorix;
+import testmod.seccult.entity.projectile.EntitySpaceGatorix;
 import testmod.seccult.init.ModSounds;
+import testmod.seccult.magick.implementation.ImplementationFocused;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
 import testmod.seccult.network.TransPoint;
@@ -65,7 +71,31 @@ public class EntityNightmarePop extends EntityDreamPop {
 		this.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).setBaseValue(8.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(1D);
 		this.getEntityAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(1D);
-		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(64.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(24.0D);
+	}
+	
+	@Override
+	public String getName() {
+        if (this.hasCustomName())
+        {
+            return this.getCustomNameTag();
+        }
+        else
+        {
+            String s = EntityList.getEntityString(this);
+
+            if (s == null)
+            {
+                s = "generic";
+            }
+            else
+            {
+            	if(this.hasPartner())
+            		s = s + "_ton";
+            }
+
+            return I18n.translateToLocal("entity." + s + ".name");
+        }
 	}
 	
 	@Override
@@ -106,6 +136,8 @@ public class EntityNightmarePop extends EntityDreamPop {
 					new TransPoint(-12450, pPos[0], pPos[1], pPos[2], 32), world);
 			
 			chargedTime++;
+			if(!this.hasPartner())
+				chargedTime++;
 			
 			if(chargedTime >= chargedLimit || spaceGatorix.isDead)
 				spaceGatorix = null;
@@ -183,7 +215,7 @@ public class EntityNightmarePop extends EntityDreamPop {
 
 			Vec3d pos = getGatorixPos(this.getPositionVector(), Partner_A.getPositionVector(), Partner_B.getPositionVector());
 			gatorix.setPosition(pos.x, pos.y, pos.z);
-			
+			gatorix.setExplosion(true);
 			if(!this.world.isRemote)
 				this.world.spawnEntity(gatorix);
 			
@@ -198,11 +230,14 @@ public class EntityNightmarePop extends EntityDreamPop {
 	{
 		Vec3d pos = posA;
 		
-		if(posB != null)
-			pos = new Vec3d((pos.x + posB.x) / 2, (pos.y + posB.y) / 2, (pos.z + posB.z) / 2);
+		if(posB != null && posC != null)
+			pos = new Vec3d((pos.x + posB.x + posC.x) / 3, (pos.y + posB.y + posC.y) / 3, (pos.z + posB.z + posC.z) / 3);
 		
-		if(posC != null)
-			pos = new Vec3d((pos.x + posC.x) / 2, (pos.y + posC.y) / 2, (pos.z + posC.z) / 2);
+		else if(posB == null && posC != null)
+		pos = new Vec3d((pos.x + posC.x) / 2, (pos.y + posC.y) / 2, (pos.z + posC.z) / 2);
+
+		else if(posC == null && posB != null)
+				pos = new Vec3d((pos.x + posB.x) / 2, (pos.y + posB.y) / 2, (pos.z + posB.z) / 2);
 		
 		return pos;
 	}

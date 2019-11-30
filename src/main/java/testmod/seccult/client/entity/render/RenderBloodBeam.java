@@ -9,7 +9,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.ClientProxy;
 import testmod.seccult.client.FX.LightFX;
-import testmod.seccult.entity.EntityBloodBeam;
+import testmod.seccult.entity.projectile.EntityBloodBeam;
 
 @SideOnly(Side.CLIENT)
 public class RenderBloodBeam extends Render<EntityBloodBeam>

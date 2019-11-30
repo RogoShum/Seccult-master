@@ -1,7 +1,11 @@
 package testmod.seccult.entity.livings.landCreature;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+
 import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IRangedAttackMob;
@@ -12,10 +16,12 @@ import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
 import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.EntityFlyHelper;
+import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityFlying;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -27,11 +33,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import testmod.seccult.entity.EntityBorderCrosser;
 import testmod.seccult.entity.ai.EntityAIMoveToMagick;
+import testmod.seccult.entity.ai.EntityFloatHelper;
+import testmod.seccult.entity.projectile.EntitySpaceGatorix;
 import testmod.seccult.entity.ai.EntityAIAlertForHelp;
 import testmod.seccult.entity.ai.EntityAIFindBorderCrosser;
 import testmod.seccult.entity.ai.EntityAIHurtByTarget;
-import testmod.seccult.entity.livings.EntitySpaceGatorix;
 import testmod.seccult.init.ModSounds;
+import testmod.seccult.magick.implementation.ImplementationFocused;
 import testmod.seccult.world.gen.DimensionMagic;
 
 public class EntityDreamPop extends EntityCreature implements EntityFlying, IRangedAttackMob{
@@ -42,7 +50,7 @@ public class EntityDreamPop extends EntityCreature implements EntityFlying, IRan
 	public EntityDreamPop(World worldIn) {
 		super(worldIn);
 		this.setSize(0.6F, 1F);
-		this.moveHelper = new EntityFlyHelper(this);
+		this.moveHelper = new EntityFloatHelper(this);
 		this.setNoGravity(true);
 	}
 	
@@ -90,7 +98,7 @@ public class EntityDreamPop extends EntityCreature implements EntityFlying, IRan
 		if(this.getRevengeTarget() != null && this.getRevengeTarget().isDead)
 			this.setRevengeTarget(null);
 		
-		if(!this.world.isAirBlock(getPosition().down()) || this.rand.nextInt(100) == 0)
+		if(this.onGround)
 		{
 			this.motionY += 0.15F;
 		}
@@ -111,6 +119,37 @@ public class EntityDreamPop extends EntityCreature implements EntityFlying, IRan
 		
 		if(this.dimension == DimensionMagic.MAGIC_ID && this.ticksExisted % 40 == 1)
 			this.heal(2);
+		
+		List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(2));
+		for(int i = 0; i < list.size(); ++i)
+		{
+			Entity entity = list.get(i);
+			if(!(entity instanceof EntityLivingBase) && !(entity instanceof EntitySpaceGatorix) && !entity.onGround)
+			{
+				BlockPos pos = ImplementationFocused.getBlockMotionAt(entity, 4);
+				for(int c = 2; c < 6; ++c)
+				{
+					if(this.getDistanceSq(pos) < 2)
+						pos = ImplementationFocused.getBlockMotionAt(entity, 2*c);
+				}
+				
+				NBTTagCompound tag = new NBTTagCompound();
+				entity.writeToNBT(tag);
+				tag.setTag("Pos", this.newDoubleNBTList(pos.getX(), pos.getY(), pos.getZ()));
+				entity.setDead();
+				entity.isDead = true;
+				this.world.removeEntityDangerously(entity);
+				try {
+					Entity e = (Entity)entity.getClass().getConstructor(new Class[] { World.class }).newInstance(new Object[] { world });
+					e.readFromNBT(tag);
+					if(!this.world.isRemote)
+					this.world.spawnEntity(e);
+				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+						| InvocationTargetException | NoSuchMethodException | SecurityException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 	
 	public void setCrosser(EntityBorderCrosser crosser)
@@ -219,7 +258,6 @@ public class EntityDreamPop extends EntityCreature implements EntityFlying, IRan
 	
 	@Override
 	public void setSwingingArms(boolean swingingArms) {
-
 	}
 	
 	@Override

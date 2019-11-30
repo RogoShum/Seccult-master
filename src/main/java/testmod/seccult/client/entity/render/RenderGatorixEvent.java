@@ -17,7 +17,7 @@ import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import testmod.seccult.ClientProxy;
-import testmod.seccult.entity.livings.EntitySpaceGatorix;
+import testmod.seccult.entity.projectile.EntitySpaceGatorix;
 
 public class RenderGatorixEvent {
 	

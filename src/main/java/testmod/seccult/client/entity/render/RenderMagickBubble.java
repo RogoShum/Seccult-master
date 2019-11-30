@@ -11,7 +11,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.Seccult;
 import testmod.seccult.client.entity.model.ModelBubble;
-import testmod.seccult.entity.EntityMagickBubble;
+import testmod.seccult.entity.projectile.EntityMagickBubble;
 
 @SideOnly(Side.CLIENT)
 public class RenderMagickBubble extends Render<EntityMagickBubble>

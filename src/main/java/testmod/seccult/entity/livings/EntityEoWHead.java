@@ -9,8 +9,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import testmod.seccult.Seccult;
-import testmod.seccult.entity.EntityLightingThing;
 import testmod.seccult.entity.EntitySound;
+import testmod.seccult.entity.projectile.EntityLightingThing;
 import testmod.seccult.events.BossEventHandler;
 
 public class EntityEoWHead extends EntityEoW{

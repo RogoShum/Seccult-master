@@ -14,6 +14,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import testmod.seccult.entity.projectile.EntityBloodBeam;
 import testmod.seccult.magick.magickState.StateManager;
 import testmod.seccult.potions.ModPotions;
 

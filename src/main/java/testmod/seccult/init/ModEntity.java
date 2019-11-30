@@ -1,13 +1,7 @@
 package testmod.seccult.init;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import testmod.seccult.Seccult;
 import testmod.seccult.entity.*;
@@ -15,8 +9,7 @@ import testmod.seccult.entity.livings.*;
 import testmod.seccult.entity.livings.flying.EntityAirTentacle;
 import testmod.seccult.entity.livings.flying.EntityBird;
 import testmod.seccult.entity.livings.insect.*;
-import testmod.seccult.entity.livings.landCreature.EntityDreamPop;
-import testmod.seccult.entity.livings.landCreature.EntityNightmarePop;
+import testmod.seccult.entity.livings.landCreature.*;
 import testmod.seccult.entity.livings.water.*;
 import testmod.seccult.entity.projectile.*;
 
@@ -72,8 +65,9 @@ public class ModEntity
 		registerEntityWithoutEgg("spirit_dummy", EntitySpiritDummy.class, id++, distance, 1, true);
 		registerEntityWithoutEgg("king_crimson", EntityKingCrimson.class, id++, distance, 1, true);
 		registerEntityWithoutEgg("sound", EntitySound.class, id++, distance, 1, true);
-		registerEntityWithoutEgg("broderCrosser", EntityBorderCrosser.class, id++, distance, 1, true);
+		registerEntityWithoutEgg("broder_crosser", EntityBorderCrosser.class, id++, distance, 1, true);
 		registerEntityWithoutEgg("gatorix", EntitySpaceGatorix.class, id++, distance, 1, true);
+		registerEntityWithoutEgg("space_manager", EntitySpaceManager.class, id++, distance, 1, true);
 	}
 	
 	public static void registerEntity(String name, Class<? extends Entity> entity, int id, int range, int updateFrequency, boolean svu, int color1, int color2) 

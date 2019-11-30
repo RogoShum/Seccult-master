@@ -30,7 +30,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import testmod.seccult.entity.livings.EntitySpaceGatorix;
+import testmod.seccult.entity.projectile.EntitySpaceGatorix;
 
 @SideOnly(Side.CLIENT)
 public class MirrorRenderGlobal extends RenderGlobal

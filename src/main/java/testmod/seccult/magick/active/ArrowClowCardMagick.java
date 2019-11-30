@@ -1,6 +1,6 @@
 package testmod.seccult.magick.active;
 
-import testmod.seccult.entity.EntityClowCardArrow;
+import testmod.seccult.entity.projectile.EntityClowCardArrow;
 import testmod.seccult.init.ModMagicks;
 
 public class ArrowClowCardMagick extends Magick implements AttackingMagic{
