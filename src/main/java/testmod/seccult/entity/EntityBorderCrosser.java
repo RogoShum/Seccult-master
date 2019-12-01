@@ -21,7 +21,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.world.gen.TestTeleporter;
 
-public class EntityBorderCrosser extends Entity{
+public class EntityBorderCrosser extends Entity implements ISpaceEntity{
 	private static final DataParameter<Integer> TICK = EntityDataManager.<Integer>createKey(EntityBorderCrosser.class, DataSerializers.VARINT);
 	private static final DataParameter<Float> Prisoner = EntityDataManager.<Float>createKey(EntityBorderCrosser.class, DataSerializers.FLOAT);
 

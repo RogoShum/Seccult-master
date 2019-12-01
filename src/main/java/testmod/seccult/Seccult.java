@@ -64,7 +64,6 @@ public class Seccult
 		proxy.entityRender();
 		proxy.preInit();
 		MinecraftForge.EVENT_BUS.register(new ModFX());
-		
 		TileEntity.register("tileGenerator", tileGenerator.class);
 	}
 	

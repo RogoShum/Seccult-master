@@ -28,6 +28,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import testmod.seccult.entity.ISpaceEntity;
 import testmod.seccult.entity.ai.EntityAIAlertForHelp;
 import testmod.seccult.entity.ai.EntityAIHurtByTarget;
 import testmod.seccult.entity.projectile.EntitySpaceGatorix;
@@ -37,7 +38,7 @@ import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
 import testmod.seccult.network.TransPoint;
 
-public class EntityNightmarePop extends EntityDreamPop {
+public class EntityNightmarePop extends EntityDreamPop implements ISpaceEntity{
 
 	private EntityNightmarePop Partner_A;
 	private EntityNightmarePop Partner_B;
@@ -71,6 +72,7 @@ public class EntityNightmarePop extends EntityDreamPop {
 		this.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).setBaseValue(8.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(1D);
 		this.getEntityAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(1D);
+		this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.5D);
 		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(24.0D);
 	}
 	

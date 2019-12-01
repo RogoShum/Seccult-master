@@ -20,7 +20,7 @@ public class BlackVelvetHellMagick extends Magick implements SlayMagic, Attackin
 
 	@Override
 	void toEntity() {
-		if(entity != null && entity instanceof EntityLivingBase && player != null)
+		if(entity != null && player != null)
 		{
 			MagickFX();
 			EntityBlackVelvetHell blackvelethell = new EntityBlackVelvetHell(entity.world);

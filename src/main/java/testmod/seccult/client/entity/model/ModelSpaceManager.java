@@ -34,7 +34,7 @@ public class ModelSpaceManager extends ModelBase {
         this.left_1.setRotationPoint(6.0F, 0.0F, 0.5F);
         this.left_1.addBox(-2.0F, -8.0F, 0.0F, 4, 8, 1, 0.0F);
         this.setRotateAngle(left_1, -0.8651597102135892F, 0.0F, 1.5707963267948966F);
-        this.up_3 = new ModelRenderer(this, 0, 22);
+        this.up_3 = new ModelRenderer(this, 32, 22);
         this.up_3.setRotationPoint(0.0F, -6.7F, 0.0F);
         this.up_3.addBox(-3.0F, -8.0F, 0.0F, 6, 8, 2, 0.0F);
         this.setRotateAngle(up_3, 1.8212510744560826F, 0.0F, 0.0F);
@@ -42,7 +42,7 @@ public class ModelSpaceManager extends ModelBase {
         this.body.setRotationPoint(0.0F, -12.0F, 0.0F);
         this.body.addBox(-6.0F, -6.0F, 0.0F, 12, 12, 1, 0.0F);
         this.setRotateAngle(body, 0.2617993877991494F, 0.0F, 0.0F);
-        this.left_3 = new ModelRenderer(this, 16, 41);
+        this.left_3 = new ModelRenderer(this, 48, 41);
         this.left_3.setRotationPoint(0.0F, -6.7F, 0.0F);
         this.left_3.addBox(-3.0F, -8.0F, 0.0F, 6, 8, 2, 0.0F);
         this.setRotateAngle(left_3, 1.0927506446736497F, 0.0F, 0.0F);
@@ -52,7 +52,7 @@ public class ModelSpaceManager extends ModelBase {
         this.left_2 = new ModelRenderer(this, 16, 41);
         this.left_2.setRotationPoint(0.0F, -3.0F, -0.5F);
         this.left_2.addBox(-3.0F, -8.0F, 0.0F, 6, 8, 2, 0.0F);
-        this.down_3 = new ModelRenderer(this, 16, 22);
+        this.down_3 = new ModelRenderer(this, 48, 22);
         this.down_3.setRotationPoint(0.0F, -6.7F, 0.0F);
         this.down_3.addBox(-3.0F, -8.0F, 0.0F, 6, 8, 2, 0.0F);
         this.setRotateAngle(down_3, 0.8196066167365371F, 0.0F, 0.0F);
@@ -60,7 +60,7 @@ public class ModelSpaceManager extends ModelBase {
         this.down_1.setRotationPoint(0.0F, 6.0F, 0.5F);
         this.down_1.addBox(-2.0F, -8.0F, 0.0F, 4, 8, 1, 0.0F);
         this.setRotateAngle(down_1, -0.22759093446006054F, 0.0F, -3.141592653589793F);
-        this.right_3 = new ModelRenderer(this, 0, 41);
+        this.right_3 = new ModelRenderer(this, 32, 41);
         this.right_3.setRotationPoint(0.0F, -6.7F, 0.0F);
         this.right_3.addBox(-3.0F, -8.0F, 0.0F, 6, 8, 2, 0.0F);
         this.setRotateAngle(right_3, 1.0927506446736497F, 0.0F, 0.0F);
@@ -102,15 +102,15 @@ public class ModelSpaceManager extends ModelBase {
     	this.head.rotateAngleX = headPitch * 0.017453292F;
 		this.head.rotateAngleY = netHeadYaw * 0.017453292F;
 		
-		left_1.rotateAngleX = MathHelper.cos(limbSwing * 0.1662F) * limbSwingAmount -0.8651597102135892F + this.head.rotateAngleX / 3;
-		right_1.rotateAngleX = MathHelper.cos(limbSwing * 0.1662F) * limbSwingAmount -0.8651597102135892F + this.head.rotateAngleX / 3;
-		up_1.rotateAngleX = MathHelper.cos(limbSwing * 0.1662F) * -limbSwingAmount -0.9105382707654417F + this.head.rotateAngleX / 3;
-		down_1.rotateAngleX = MathHelper.cos(limbSwing * 0.1662F) * -limbSwingAmount -0.22759093446006054F + this.head.rotateAngleX / 3;
+		left_1.rotateAngleX = MathHelper.cos(limbSwing * 0.1662F) * limbSwingAmount * 0.5F -0.8651597102135892F + this.head.rotateAngleX / 4;
+		right_1.rotateAngleX = MathHelper.cos(limbSwing * 0.1662F) * limbSwingAmount * 0.5F -0.8651597102135892F + this.head.rotateAngleX / 4;
+		up_1.rotateAngleX = MathHelper.cos(limbSwing * 0.1662F) * -limbSwingAmount * 0.5F -0.9105382707654417F + this.head.rotateAngleX / 4;
+		down_1.rotateAngleX = MathHelper.cos(limbSwing * 0.1662F) * -limbSwingAmount * 0.1F -0.22759093446006054F + this.head.rotateAngleX / 4;
 		
-		left_3.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * limbSwingAmount + 1.0927506446736497F + this.head.rotateAngleX / 2;
-		right_3.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * limbSwingAmount + 1.0927506446736497F + this.head.rotateAngleX / 2;
-		up_3.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * -limbSwingAmount + 1.8212510744560826F + this.head.rotateAngleX / 2;
-		down_3.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * -limbSwingAmount + 1.0927506446736497F + this.head.rotateAngleX / 2;
+		left_3.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * limbSwingAmount * 0.5F + 1.0927506446736497F + this.head.rotateAngleX / 2;
+		right_3.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * limbSwingAmount * 0.5F + 1.0927506446736497F + this.head.rotateAngleX / 2;
+		up_3.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * -limbSwingAmount * 0.5F + 1.8212510744560826F + this.head.rotateAngleX / 2;
+		down_3.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * -limbSwingAmount * 0.1F + 1.0927506446736497F + this.head.rotateAngleX / 2;
 		
         GlStateManager.pushMatrix();
         GlStateManager.translate(this.body.offsetX, this.body.offsetY, this.body.offsetZ);

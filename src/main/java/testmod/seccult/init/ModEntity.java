@@ -36,6 +36,7 @@ public class ModEntity
 		registerEntity("rockshellleviathan", EntityRockShellLeviathan.class, id++, distance, 1, true, 13223074, 0);
 		registerEntity("dream_pop", EntityDreamPop.class, id++, distance, 1, true, 13223074, 0);
 		registerEntity("nightmare_pop", EntityNightmarePop.class, id++, distance, 1, true, 13223074, 0);
+		registerEntity("space_manager", EntitySpaceManager.class, id++, distance, 1, true, 0, 13223074);
 		registerEntityWithoutEgg("scp173", EntitySCP173.class, id++, 128, 1, true);
 		registerEntityWithoutEgg("laserbeam", EntityLaserBeamBase.class, id++, 128, 1, true);
 		registerEntityWithoutEgg("advancelaserbeam", EntityAdvanceLaser.class, id++, 128, 1, true);
@@ -67,7 +68,9 @@ public class ModEntity
 		registerEntityWithoutEgg("sound", EntitySound.class, id++, distance, 1, true);
 		registerEntityWithoutEgg("broder_crosser", EntityBorderCrosser.class, id++, distance, 1, true);
 		registerEntityWithoutEgg("gatorix", EntitySpaceGatorix.class, id++, distance, 1, true);
-		registerEntityWithoutEgg("space_manager", EntitySpaceManager.class, id++, distance, 1, true);
+		registerEntityWithoutEgg("void", EntityVoid.class, id++, distance, 1, true);
+		registerEntityWithoutEgg("barrier", EntityBarrier.class, id++, distance, 1, true);
+		registerEntityWithoutEgg("alter_space", EntityAlterSpace.class, id++, distance, 1, true);
 	}
 	
 	public static void registerEntity(String name, Class<? extends Entity> entity, int id, int range, int updateFrequency, boolean svu, int color1, int color2) 

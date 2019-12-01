@@ -18,6 +18,7 @@ public class RenderSpaceManager extends RenderLiving<EntitySpaceManager>
 	public RenderSpaceManager(RenderManager renderManager) 
 	{
 		super(renderManager, new ModelSpaceManager(), 0.0F);
+		this.addLayer(new LayerSpaceManager());
 	}
 
 	@Override

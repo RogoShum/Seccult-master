@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,13 +13,18 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
+import testmod.seccult.entity.EntityBarrier;
 import testmod.seccult.entity.EntityBorderCrosser;
+import testmod.seccult.entity.EntityVoid;
 import testmod.seccult.entity.SpiritManager;
 import testmod.seccult.entity.livings.EntitySpirit;
 import testmod.seccult.entity.livings.landCreature.EntitySpaceManager;
+import testmod.seccult.entity.projectile.EntityAlterSpace;
 import testmod.seccult.entity.projectile.EntitySpaceGatorix;
+import testmod.seccult.entity.projectile.EntityAlterSpace.AlterType;
 import testmod.seccult.magick.implementation.ImplementationFocused;
 import testmod.seccult.world.gen.DimensionMagic;
 
@@ -69,14 +75,20 @@ public class ItemPortalSummoner extends ItemBase{
 					crosser.setPosition(pos.getX()+0.5, pos.getY()+1, pos.getZ()+0.5);
 					if(dim != player.dimension)
 					{
-						EntitySpaceManager gatorix = new EntitySpaceManager(player.world);
-						gatorix.setPosition(pos.getX()+0.5, pos.getY()+1, pos.getZ()+0.5);
-						if(!player.world.isRemote)
-						player.world.spawnEntity(gatorix);
+						Entity entity = ImplementationFocused.getEntityLookedAt(player, 32);
+						if(entity instanceof EntityLivingBase)
+						{
+						EntityAlterSpace gatorix = new EntityAlterSpace(world, player, (EntityLivingBase)entity, entity.height * 1.5F, entity.width * 4F, AlterType.Barrier);
+						gatorix.shoot(player.getLookVec().x, player.getLookVec().y, player.getLookVec().z, 0, 0);
+						if(!world.isRemote)
+							world.spawnEntity(gatorix);
+						}
 					}
 					else
 					{
-						EntitySpaceGatorix gatorix = new EntitySpaceGatorix(player.world, player);
+						EntityBarrier gatorix = new EntityBarrier(player.world, new Vec3d(pos.getX(), pos.getY() + 1, pos.getZ())
+								, 2, 8);
+						if(!player.world.isRemote)
 						player.world.spawnEntity(gatorix);
 					}
 				}

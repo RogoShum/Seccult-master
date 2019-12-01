@@ -45,13 +45,14 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import testmod.seccult.entity.ISpaceEntity;
 import testmod.seccult.entity.livings.landCreature.EntityDreamPop;
 import testmod.seccult.entity.livings.landCreature.EntityNightmarePop;
 import testmod.seccult.entity.livings.landCreature.EntitySpaceManager;
 import testmod.seccult.init.ModDamage;
 import testmod.seccult.init.ModSounds;
 
-public class EntitySpaceGatorix extends EntityThrowable {
+public class EntitySpaceGatorix extends EntityThrowable implements ISpaceEntity {
 	private static final DataParameter<Float> GATORIX_STATE = EntityDataManager.<Float>createKey(EntitySpaceGatorix.class, DataSerializers.FLOAT);
 	private float damage = 25;
 	private EntityLivingBase victim;
@@ -208,9 +209,9 @@ public class EntitySpaceGatorix extends EntityThrowable {
             for (int l = 0; l < list.size(); ++l)
             {
                 Entity entity = list.get(l);
-                if(entity instanceof EntitySpaceGatorix)
+                if(entity instanceof EntityAlterSpace || entity instanceof EntitySpaceGatorix)
                 	this.applyEntityCollision(entity);
-                else if(!(entity instanceof EntityDreamPop) && !(entity instanceof EntitySpaceManager) && ( entity instanceof EntityThrowable || (entity.height+entity.width) / 2 <= this.height))
+                else if(!(entity instanceof ISpaceEntity) && ( entity instanceof EntityThrowable || (entity.height+entity.width) / 2 <= this.height))
                 {
                 	if(!(entity instanceof EntityPlayer) || !((EntityPlayer)entity).isCreative())
                 		entity.setDead();
@@ -326,7 +327,7 @@ public class EntitySpaceGatorix extends EntityThrowable {
 	{
 		if (!this.world.isRemote && result.entityHit != null)
         {
-			if(result.entityHit instanceof EntityDreamPop || result.entityHit instanceof EntitySpaceManager)
+			if(result.entityHit instanceof ISpaceEntity)
 				return;
 			
 			if(this.ExistedLimit < 500 && this.ticksExisted > 200)

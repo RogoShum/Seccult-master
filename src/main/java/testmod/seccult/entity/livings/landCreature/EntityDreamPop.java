@@ -30,8 +30,10 @@ import net.minecraft.pathfinding.PathNavigateFlying;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import testmod.seccult.entity.EntityBorderCrosser;
+import testmod.seccult.entity.ISpaceEntity;
 import testmod.seccult.entity.ai.EntityAIMoveToMagick;
 import testmod.seccult.entity.ai.EntityFloatHelper;
 import testmod.seccult.entity.projectile.EntitySpaceGatorix;
@@ -42,7 +44,7 @@ import testmod.seccult.init.ModSounds;
 import testmod.seccult.magick.implementation.ImplementationFocused;
 import testmod.seccult.world.gen.DimensionMagic;
 
-public class EntityDreamPop extends EntityCreature implements EntityFlying, IRangedAttackMob{
+public class EntityDreamPop extends EntityCreature implements EntityFlying, IRangedAttackMob, ISpaceEntity{
 	private static final DataParameter<Integer> ENTITY_STATE = EntityDataManager.<Integer>createKey(EntityDreamPop.class, DataSerializers.VARINT);
 	
 	private EntityBorderCrosser crosser;
@@ -56,7 +58,30 @@ public class EntityDreamPop extends EntityCreature implements EntityFlying, IRan
 	
 	@Override
 	protected void initEntityAI() {
-		this.tasks.addTask(1, new EntityAIPanic(this, 2.0F));
+		this.tasks.addTask(1, new EntityAIPanic(this, 2.0F)
+				{
+					@Override
+					protected boolean findRandomPosition() {
+						if(crosser != null)
+						{
+							Vec3d vec3d = crosser.getPositionVector();
+							this.randPosX = vec3d.x;
+							this.randPosY = vec3d.y;
+							this.randPosZ = vec3d.z;
+							return true;
+						}
+						return super.findRandomPosition();
+					}
+					
+					@Override
+					public void startExecuting() {
+						if(crosser != null)
+						{
+							 this.creature.getMoveHelper().setMoveTo(this.randPosX, this.randPosY, this.randPosZ, this.speed);
+						}
+						super.startExecuting();
+					}
+				});
 		this.tasks.addTask(3, new EntityAIMoveToMagick(this));
 		this.tasks.addTask(4, new EntityAIMoveTowardsRestriction(this, 1.0D));
 		this.tasks.addTask(5, new EntityAIAvoidEntity<>(this, EntityPlayer.class, 2.0F, 0.8F, 1.33F));
@@ -105,16 +130,11 @@ public class EntityDreamPop extends EntityCreature implements EntityFlying, IRan
 		
 		if(this.crosser != null)
 		{
-	    	if (this.getCrosser().getDistance(this) >= 32F || !this.canEntityBeSeen(this.getCrosser()))
 	        {
-	            this.getNavigator().clearPath();
-	        }
-	        else
-	        {
-	            this.getNavigator().tryMoveToEntityLiving(this.getCrosser(), 2D);
+	            this.moveHelper.setMoveTo(this.crosser.posX, this.crosser.posY, this.crosser.posZ, 2);
 	        }
 
-	        this.getLookHelper().setLookPositionWithEntity(this.getCrosser(), 30.0F, 30.0F);
+	        this.getLookHelper().setLookPositionWithEntity(this.crosser, 30.0F, 30.0F);
 		}
 		
 		if(this.dimension == DimensionMagic.MAGIC_ID && this.ticksExisted % 40 == 1)
@@ -124,7 +144,7 @@ public class EntityDreamPop extends EntityCreature implements EntityFlying, IRan
 		for(int i = 0; i < list.size(); ++i)
 		{
 			Entity entity = list.get(i);
-			if(!(entity instanceof EntityLivingBase) && !(entity instanceof EntitySpaceGatorix) && !entity.onGround)
+			if(!(entity instanceof EntityLivingBase) && !(entity instanceof ISpaceEntity) && !entity.onGround)
 			{
 				BlockPos pos = ImplementationFocused.getBlockMotionAt(entity, 4);
 				for(int c = 2; c < 6; ++c)
