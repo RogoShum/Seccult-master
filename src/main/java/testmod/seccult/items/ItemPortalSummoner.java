@@ -86,10 +86,14 @@ public class ItemPortalSummoner extends ItemBase{
 					}
 					else
 					{
-						EntityBarrier gatorix = new EntityBarrier(player.world, new Vec3d(pos.getX(), pos.getY() + 1, pos.getZ())
-								, 2, 8);
-						if(!player.world.isRemote)
-						player.world.spawnEntity(gatorix);
+						Entity entity = ImplementationFocused.getEntityLookedAt(player, 32);
+						if(entity instanceof EntityLivingBase)
+						{
+						EntityAlterSpace gatorix = new EntityAlterSpace(world, player, (EntityLivingBase)entity, entity.height * 1.5F, entity.width * 4F, AlterType.Void);
+						gatorix.shoot(player.getLookVec().x, player.getLookVec().y, player.getLookVec().z, 0, 0);
+						if(!world.isRemote)
+							world.spawnEntity(gatorix);
+						}
 					}
 				}
 				

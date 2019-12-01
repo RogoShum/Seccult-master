@@ -41,7 +41,9 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.common.DimensionManager;
 import testmod.seccult.entity.EntityBarrier;
+import testmod.seccult.entity.EntityBorderCrosser;
 import testmod.seccult.entity.ISpaceEntity;
 import testmod.seccult.entity.ai.EntityAIAlertForHelp;
 import testmod.seccult.entity.ai.EntityAIFightBack;
@@ -102,7 +104,7 @@ public class EntitySpaceManager extends EntityCreature implements EntityFlying, 
 	
 	@Override
 	protected void initEntityAI() {
-		this.tasks.addTask(0, new EntityAIFightBack(this, 1, 50, 8));
+		this.tasks.addTask(0, new EntityAIFightBack(this, 1, 50, 24));
 		this.tasks.addTask(1, new EntityAIAttackRanged(this, 1, 60, 4));
 		this.tasks.addTask(2, new EntityAIMoveTowardsRestriction(this, 1.0D));
 		this.tasks.addTask(3, new EntityAIWatchClosest(this, EntityPlayer.class, 6F));
@@ -417,6 +419,15 @@ public class EntitySpaceManager extends EntityCreature implements EntityFlying, 
 			amount = 25;
 		}
 		
+		if(this.getHealth() < this.getMaxHealth() / 2 && this.getRevengeTarget() != null && this.rand.nextInt(30) == 0)
+		{
+			EntityNightmarePop pop = new EntityNightmarePop(getEntityWorld());
+			pop.setPosition(this.posX + 3 - this.rand.nextInt(3), this.posY + 3 - this.rand.nextInt(3), this.posZ + 3 - this.rand.nextInt(3));
+			pop.setAttackTarget(getRevengeTarget());
+			if(!this.world.isRemote)
+				world.spawnEntity(pop);
+		}
+
 		return super.attackEntityFrom(source, amount);
 	}
 	
@@ -458,14 +469,37 @@ public class EntitySpaceManager extends EntityCreature implements EntityFlying, 
 
 		List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(target, target.getEntityBoundingBox());
 		
+		boolean teleport = false;
+		
 		for(Entity entity : list)
 		{
 			if(entity instanceof EntityBarrier)
 			{
 				type = AlterType.Void;
+				teleport = true;
 				break;
 			}
 		}
+
+		if(this.getHealth() < this.getMaxHealth() / 5 && teleport && this.rand.nextInt(5) == 0)
+		{
+			EntityBorderCrosser crosser = null;
+			Integer[] dims = DimensionManager.getStaticDimensionIDs();
+			int getDim = this.dimension;
+			for(int dim : dims)
+			{
+				if(dim != this.dimension);
+				getDim = dim;
+			}
+			
+			crosser = new EntityBorderCrosser(world, getDim);
+			crosser.setPosition(target.posX, target.posY, target.posZ);
+			if(!this.world.isRemote)
+				world.spawnEntity(crosser);
+		}
+		
+		if(this.getHealth() < this.getMaxHealth() / 3 && this.rand.nextInt(5) == 0)
+			type = AlterType.TerrainTrans;
 		
 		EntityAlterSpace gatorix = new EntityAlterSpace(getEntityWorld(), this, target,  target.height * 1.5F, target.width * 4F, type);
 		gatorix.shoot(this.getLookVec().x, this.getLookVec().y, this.getLookVec().z, 0, 0);

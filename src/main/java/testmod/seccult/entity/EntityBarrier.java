@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.annotation.Nullable;
 
@@ -41,14 +42,13 @@ public class EntityBarrier extends Entity implements ISpaceEntity{
 
 	public EntityBarrier(World worldIn, Vec3d vec, float height, float width) {
 		this(worldIn);
-		this.setPositionAndUpdate(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
 		if(!worldIn.isRemote)
 		{
 			this.setHeight(height);
 			this.setWidth(width);
 			this.setPos(new BlockPos(vec));
 		}
-		
+		this.setPosition(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
 		if(this.width != this.getWidth() || this.height != this.getHeight())
 			this.setSize(getWidth(), getHeight());
 	}

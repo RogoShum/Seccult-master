@@ -7,6 +7,8 @@ import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -25,7 +27,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class EntityVoid extends Entity implements ISpaceEntity{
 	private static final DataParameter<Float> HEIGHT = EntityDataManager.<Float>createKey(EntityVoid.class, DataSerializers.FLOAT);
 	private static final DataParameter<Float> WIDTH = EntityDataManager.<Float>createKey(EntityVoid.class, DataSerializers.FLOAT);
-	private static final DataParameter<BlockPos> BLOCKPOS = EntityDataManager.<BlockPos>createKey(EntityBarrier.class, DataSerializers.BLOCK_POS);
+	private static final DataParameter<BlockPos> BLOCKPOS = EntityDataManager.<BlockPos>createKey(EntityVoid.class, DataSerializers.BLOCK_POS);
 	
 	public EntityVoid(World worldIn) {
 		super(worldIn);
@@ -36,14 +38,13 @@ public class EntityVoid extends Entity implements ISpaceEntity{
 
 	public EntityVoid(World worldIn, Vec3d vec, float height, float width) {
 		this(worldIn);
-		this.setPositionAndUpdate(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
 		if(!worldIn.isRemote)
 		{
 			this.setHeight(height);
 			this.setWidth(width);
 			this.setPos(new BlockPos(vec));
 		}
-		
+		this.setPosition(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
 		if(this.width != this.getWidth() || this.height != this.getHeight())
 			this.setSize(getWidth(), getHeight());
 	}
@@ -113,7 +114,12 @@ public class EntityVoid extends Entity implements ISpaceEntity{
                     d1 = d1 * (double)(1.0F - this.entityCollisionReduction);
                     if(this.ticksExisted % 10 == 0)
                     {
+                    	entityIn.hurtResistantTime = -1;
                     	entityIn.attackEntityFrom(DamageSource.OUT_OF_WORLD, 2);
+        				if(entityIn instanceof EntityLivingBase)
+        				{
+        					((EntityLivingBase)entityIn).getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(((EntityLivingBase)entityIn).getHealth());
+        				}
                     }
                     entityIn.addVelocity(-d0, 0.0D, -d1);
 

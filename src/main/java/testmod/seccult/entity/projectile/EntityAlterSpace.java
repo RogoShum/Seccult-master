@@ -1,16 +1,20 @@
 package testmod.seccult.entity.projectile;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.entity.RenderWitherSkull;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.entity.projectile.EntityWitherSkull;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -50,6 +54,8 @@ public class EntityAlterSpace extends EntityThrowable implements ISpaceEntity{
 		this.alterHeight = height;
 		this.alterWidth = width;
 		this.type = type;
+		if(!this.world.isRemote)
+			this.setState(this.type.getVaule());
 		this.ExistedLimit = 300;
 	}
 	
@@ -89,20 +95,9 @@ public class EntityAlterSpace extends EntityThrowable implements ISpaceEntity{
 	public void onUpdate() {
 		super.onUpdate();
 		
-		if(!this.world.isRemote)
+		if(!this.world.isRemote && this.type != null)
 		{
-			if(this.type == AlterType.Barrier)
-				this.setState(AlterType.Barrier.getVaule());
-			else if(this.type == AlterType.Void)
-				this.setState(AlterType.Void.getVaule());
-			else if(this.type == AlterType.TerrainTrans)
-				this.setState(AlterType.TerrainTrans.getVaule());
-		}
-		
-		if(this.getState() != 0)
-		{
-			this.setSize(this.getState(), this.getState());
-			this.ExistedLimit = 1000;
+			this.setState(this.type.getVaule());
 		}
 		
 		if(this.ticksExisted == 1)
@@ -163,12 +158,53 @@ public class EntityAlterSpace extends EntityThrowable implements ISpaceEntity{
 		else if(this.type.getVaule() == AlterType.Void.getVaule())
 		{
 			EntityVoid entityVoid = new EntityVoid(getEntityWorld(), new Vec3d(x, y, z), alterHeight, alterWidth);
-			entityVoid.setPositionAndUpdate(x, y, z);
 			entity = entityVoid;
 		}
 		else if(this.type.getVaule() == AlterType.TerrainTrans.getVaule())
 		{
+			Iterable<BlockPos> pos = BlockPos.getAllInBox((int)x - this.rand.nextInt(5) - (int)alterWidth, (int)y - this.rand.nextInt(5) - (int)alterHeight, (int)z - this.rand.nextInt(5) - (int)alterWidth
+					, (int)x + this.rand.nextInt(5) + (int)alterWidth, (int)y + this.rand.nextInt(5) + (int)alterHeight, (int)z + this.rand.nextInt(5) + (int)alterWidth);
 			
+			List<Entity> entityList = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow((int)alterHeight + this.rand.nextInt(5)));
+
+			int posX = 64 - this.rand.nextInt(128);
+			int posY = 64 - this.rand.nextInt(128);
+			int posZ = 64 - this.rand.nextInt(128);
+
+			for(BlockPos blockPos: pos)
+			{
+				IBlockState state = this.world.getBlockState(blockPos.add(posX, posY, posZ));
+				this.world.setBlockState(blockPos.add(posX, posY, posZ), this.world.getBlockState(blockPos));
+				this.world.setBlockState(blockPos, state);
+			}
+
+			for(Entity transEntity : entityList)
+			{
+				if(!(transEntity instanceof ISpaceEntity))
+					transEntity.setPositionAndUpdate(transEntity.posX + posX, transEntity.posY + posY, transEntity.posZ + posZ);
+			}
+
+			this.world.playSound((EntityPlayer)null, this.getPosition(), ModSounds.gatorix_spawn, SoundCategory.NEUTRAL, 3F, 1F);
+			this.world.playSound((EntityPlayer)null, this.getPosition(), SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.NEUTRAL, 2F, 1F);
+			
+			this.world.playSound((EntityPlayer)null, this.getPosition().add(posX, posY, posZ), ModSounds.gatorix_spawn, SoundCategory.NEUTRAL, 3F, 1F);
+			this.world.playSound((EntityPlayer)null, this.getPosition().add(posX, posY, posZ), SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.NEUTRAL, 2F, 1F);
+
+	        if (this.world.isRemote)
+	        {
+	            for (int i = 0; i < 4; ++i)
+	            {
+	                this.world.spawnParticle(EnumParticleTypes.PORTAL, this.posX + posX + (this.rand.nextDouble() - 0.5D) * x + this.rand.nextInt(5) + (int)alterWidth, this.posY + posY + this.rand.nextDouble() * y + this.rand.nextInt(5) + (int)alterHeight - 0.25D, this.posZ + posZ + (this.rand.nextDouble() - 0.5D) * z + this.rand.nextInt(5) + (int)alterWidth, (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
+	            }
+	        }
+	        
+	        if (this.world.isRemote)
+	        {
+	            for (int i = 0; i < 4; ++i)
+	            {
+	                this.world.spawnParticle(EnumParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * x + this.rand.nextInt(5) + (int)alterWidth, this.posY + this.rand.nextDouble() * y + this.rand.nextInt(5) + (int)alterHeight - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * z + this.rand.nextInt(5) + (int)alterWidth, (this.rand.nextDouble() - 0.5D) * 2.0D, -this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) * 2.0D);
+	            }
+	        }
 		}
 		
 		if(entity != null)

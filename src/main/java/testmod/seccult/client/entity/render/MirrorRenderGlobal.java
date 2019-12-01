@@ -41,20 +41,8 @@ public class MirrorRenderGlobal extends RenderGlobal
     }
 
     @Override
-    public void renderClouds(float partialTicks, int pass, double p_180447_3_, double p_180447_5_, double p_180447_7_)
-    {
-        if(true)
-            super.renderClouds(partialTicks, pass, p_180447_3_, p_180447_5_, p_180447_7_);
-    }
-
-    @Override
     public void playRecord(SoundEvent soundIn, BlockPos pos)
     {
-    }
-
-    @Override
-    public void renderSky(float partialTicks, int pass) {
-    	super.renderSky(partialTicks, pass);
     }
     
     @Override

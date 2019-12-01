@@ -58,16 +58,24 @@ public class RenderAlterSpace extends Render<EntityAlterSpace>
     		
     		if(entity.getState() == AlterType.Barrier.getVaule())
     		{
+    			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
     			entity.world.spawnParticle(EnumParticleTypes.TOTEM, entity.posX, entity.posY + 0.3, entity.posZ, 0, 0, 0);
     			Minecraft.getMinecraft().getTextureManager().bindTexture(darkTexture);
     			GlStateManager.color(0.0F, 0.6F, 0.0F, blend * 0.5F);
     		}
     		
+    		if(entity.getState() == AlterType.TerrainTrans.getVaule())
+    		{
+    			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+    			entity.world.spawnParticle(EnumParticleTypes.PORTAL, entity.posX, entity.posY + 0.3, entity.posZ, 0, 0, 0);
+    			Minecraft.getMinecraft().getTextureManager().bindTexture(darkTexture);
+    			GlStateManager.color(0.65F, 0.1F, 0.6F, blend * 0.5F);
+    		}
+    		
             GlStateManager.translate(x, y + entity.height / 2, z);
     	    GlStateManager.depthMask(false);
-    	    GlStateManager.rotate(entity.ticksExisted * 10, 0, 1, 1);
+    	    GlStateManager.rotate(entity.ticksExisted * 30, 0, 1, 1);
     	    GlStateManager.enableBlend();
-        	GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         	
         	GlStateManager.pushMatrix();
         	GlStateManager.scale(size, size, size);

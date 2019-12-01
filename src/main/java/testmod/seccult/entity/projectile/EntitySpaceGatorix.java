@@ -20,6 +20,7 @@ import net.minecraft.enchantment.EnchantmentProtection;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -214,7 +215,24 @@ public class EntitySpaceGatorix extends EntityThrowable implements ISpaceEntity 
                 else if(!(entity instanceof ISpaceEntity) && ( entity instanceof EntityThrowable || (entity.height+entity.width) / 2 <= this.height))
                 {
                 	if(!(entity instanceof EntityPlayer) || !((EntityPlayer)entity).isCreative())
-                		entity.setDead();
+                	{
+                		if(this.thrower != null)
+            			{
+                			entity.attackEntityFrom(ModDamage.causeForbiddenEntityDamage(this, this.thrower), damage);
+            				if((entity.height+entity.width) / 2 <= this.height && entity instanceof EntityLivingBase)
+            				{
+            					((EntityLivingBase)entity).getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(((EntityLivingBase)entity).getHealth());
+            				}
+            			}
+            			else
+            			{
+            				entity.attackEntityFrom(ModDamage.causeForbiddenEntityDamage(this), damage);
+            				if((entity.height+entity.width) / 2 <= this.height && entity instanceof EntityLivingBase)
+            				{
+            					((EntityLivingBase)entity).getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(((EntityLivingBase)entity).getHealth());
+            				}
+            			}
+                	}
                 	if(entity == this.victim)
                 		this.setDead();
                 }
@@ -343,9 +361,23 @@ public class EntitySpaceGatorix extends EntityThrowable implements ISpaceEntity 
 			
 			result.entityHit.hurtResistantTime = -1;
 			if(this.thrower != null)
+			{
+				result.entityHit.hurtResistantTime = -1;
 				result.entityHit.attackEntityFrom(ModDamage.causeForbiddenEntityDamage(this, this.thrower), damage);
+				if((result.entityHit.height+result.entityHit.width) / 2 <= this.height && result.entityHit instanceof EntityLivingBase)
+				{
+					((EntityLivingBase)result.entityHit).getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(((EntityLivingBase)result.entityHit).getHealth());
+				}
+			}
 			else
+			{
+				result.entityHit.hurtResistantTime = -1;
 				result.entityHit.attackEntityFrom(ModDamage.causeForbiddenEntityDamage(this), damage);
+				if((result.entityHit.height+result.entityHit.width) / 2 <= this.height && result.entityHit instanceof EntityLivingBase)
+				{
+					((EntityLivingBase)result.entityHit).getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(((EntityLivingBase)result.entityHit).getHealth());
+				}
+			}
 			if(result.entityHit instanceof Entity && (result.entityHit.height+result.entityHit.width) / 2 <= this.height && (result.entityHit instanceof EntityPlayer && !((EntityPlayer)result.entityHit).isCreative()))
 				result.entityHit.setDead();
 			if(result.entityHit == this.victim)
@@ -410,7 +442,6 @@ public class EntitySpaceGatorix extends EntityThrowable implements ISpaceEntity 
 	{
 	    /** whether or not this explosion spawns smoke particles */
 	    private final boolean damagesTerrain;
-	    private final Random random;
 	    private final World world;
 	    private final double x;
 	    private final double y;
@@ -426,7 +457,6 @@ public class EntitySpaceGatorix extends EntityThrowable implements ISpaceEntity 
 	    public SpaceExplosion(World worldIn, Entity entityIn, double x, double y, double z, float size,
 				boolean damagesTerrain) {
 	    	super(worldIn, entityIn, x, y, z, 0, false, false);
-	        this.random = new Random();
 	        this.affectedBlockPositions = Lists.<BlockPos>newArrayList();
 	        this.playerKnockbackMap = Maps.<EntityPlayer, Vec3d>newHashMap();
 	        this.world = worldIn;
@@ -445,8 +475,7 @@ public class EntitySpaceGatorix extends EntityThrowable implements ISpaceEntity 
 	    public void doExplosionA()
 	    {
 	        Set<BlockPos> set = Sets.<BlockPos>newHashSet();
-	        int i = 16;
-
+	        
 	        for (int j = 0; j < 16; ++j)
 	        {
 	            for (int k = 0; k < 16; ++k)
