@@ -49,6 +49,7 @@ import testmod.seccult.client.FX.ThunderFX;
 import testmod.seccult.client.entity.render.RenderGatorix;
 import testmod.seccult.client.entity.render.RenderGatorixEvent;
 import testmod.seccult.client.entity.render.RenderHandler;
+import testmod.seccult.client.textlib.TextLib;
 import testmod.seccult.entity.EntitySound;
 import testmod.seccult.entity.livings.EntityBase;
 import testmod.seccult.entity.livings.IBossBase;

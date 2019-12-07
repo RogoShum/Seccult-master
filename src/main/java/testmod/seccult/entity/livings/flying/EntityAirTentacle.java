@@ -8,6 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -24,7 +25,7 @@ import testmod.seccult.init.ModMagicks;
 import testmod.seccult.items.ItemMagickable;
 import testmod.seccult.entity.livings.water.EntityRockShellLeviathan.DamageReduce;
 
-public class EntityAirTentacle extends EntityFlyable{
+public class EntityAirTentacle extends EntityFlyable implements IMob{
 
 	private EntityLivingBase target; 
 	private List<DamageReduce> damageList = new ArrayList<DamageReduce>();

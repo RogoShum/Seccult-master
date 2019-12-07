@@ -18,7 +18,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.entity.EntityVoid;
 
 @SideOnly(Side.CLIENT)
-public class RenderVoid extends Render<Entity>
+public class RenderBarrier extends Render<Entity>
 {
 	private static final ResourceLocation END_SKY_TEXTURE = new ResourceLocation("textures/environment/end_sky.png");
 	private static final ResourceLocation END_PORTAL_TEXTURE = new ResourceLocation("textures/entity/end_portal.png");
@@ -36,7 +36,7 @@ public class RenderVoid extends Render<Entity>
 	    }
 	};
 	
-	public RenderVoid(RenderManager renderManager) 
+	public RenderBarrier(RenderManager renderManager) 
 	{
 		super(renderManager);
 	}
@@ -57,8 +57,9 @@ public class RenderVoid extends Render<Entity>
 		GlStateManager.enableNormalize();
 		GlStateManager.depthMask(false);
 		GlStateManager.enableBlend();
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 0.7F);
-		this.bindEntityTexture(entity);
+			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_CONSTANT_COLOR);
+			GlStateManager.color(0.5F, 1.0F, 0.6F, 0.12F);
+			mc.getTextureManager().bindTexture(darkTexture);
 		GlStateManager.scale(entity.width, entity.height, entity.width);
 		model.render(entity, 0, 0, 0, 0, 0, 0.065F);
 		GlStateManager.disableBlend();
@@ -70,6 +71,6 @@ public class RenderVoid extends Render<Entity>
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity)
 	{
-		return END_PORTAL_TEXTURE;
+		return null;
 	}
 }

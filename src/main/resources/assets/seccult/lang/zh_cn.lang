@@ -43,6 +43,7 @@ item.effect_refract.name=转移戒指-药水效果
 item.friendship_ring.name=友谊戒指
 item.medusa_head.name=美杜莎头颅
 item.knowledge_scroll.name=知识卷轴
+item.notebook.name=自动书记
 
 item.dark_m.name=黑暗碎片
 item.blood_m.name=血腥碎片
@@ -348,6 +349,30 @@ spell_electro_introduction=东方的雷电道术，造成强力打击
 
 spell_posion_name=毒魔法
 spell_posion_introduction=喷射毒液，使生物中毒
+
+note_base=自动书记
+note_category_introduce=介绍
+note_category_material=材料
+note_category_item=物品
+note_category_tool=工具
+note_category_creature=生物
+note_category_daedra=魔神
+note_category_biome=环境
+note_category_holy_equipment=圣器
+
+item_notebook_base=自动书记是通过与大气中流动的魔法直接连接，而自动解读周围事物的道具。
+item_notebook_1=当触发到一些特殊事件或道具时，自动书记会进行解读，并记录到笔记中。
+item_notebook_2=书中的笔记是跟随道具，如果这本书记丢了的话，就需要重新合成并记录。
+
+item_magick_core_base=魔法核心是通过魔法木作为媒介，将魔力灌注到内部的魔力道具，可以存储魔法的核心力量。
+item_magick_core_use_1=使用魔法核心需要将核心放在附魔权杖上，然后通过不断地对祭坛使用魔法，将魔法从祭坛导入到核心中。
+item_magick_core_use_2=需要注意的是，魔法核心一次只能导入一种魔法的力量，如果在完成之前导入另一种魔法，前一种魔法的力量会被覆盖掉。
+
+item_magick_core_base=魔法核心是通过魔法木作为媒介，将魔力灌注到内部的魔力道具，可以存储魔法的核心力量。
+item_magick_core_use_1=使用魔法核心需要将核心放在附魔权杖上，然后通过不断地对祭坛使用魔法，将魔法从祭坛导入到核心中。
+item_magick_core_use_2=需要注意的是，魔法核心一次只能导入一种魔法的力量，如果在完成之前导入另一种魔法，前一种魔法的力量会被覆盖掉。
+
+item_effect_refract_base=转移戒指-药水效果 是圣器之一，当佩戴者身上具有负面药水效果，并且周围有其他生物时，佩戴者身上所有的负面药水效果会随机转移到周围的一个生物身上。
 
 //sound
 seccult.subtitle.ring=铃铃铃

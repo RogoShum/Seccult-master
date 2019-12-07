@@ -1,6 +1,8 @@
 package testmod.seccult.entity.livings;
 
 import java.util.List;
+
+import net.minecraft.client.gui.spectator.categories.TeleportToTeam;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
@@ -23,6 +25,7 @@ import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
 import testmod.seccult.network.TransPoint;
 import testmod.seccult.world.gen.DimensionMagic;
+import testmod.seccult.world.gen.TestTeleporter;
 
 public class EntitySpirit extends EntityBase{
 	public EntityLivingBase living;
@@ -266,8 +269,13 @@ public class EntitySpirit extends EntityBase{
 		this.noClip = true;
 		
 		if(this.ticksExisted > 400 && this.dimension != DimensionMagic.SPIRIT_ID && !this.getHasOwner())
-			//this.changeDimension(DimensionMagic.SPIRIT_ID);
-			this.setRelease();
+		{
+			if(!this.world.isRemote)
+				this.changeDimension(DimensionMagic.SPIRIT_ID, new TestTeleporter(this.getServer().getWorld(this.dimension)));
+			else
+				this.setDead();
+		}
+			//this.setRelease();
 			
 		List<Entity> entity = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(64));
 		

@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,7 +27,7 @@ import testmod.seccult.magick.active.TeleportMagick;
 import testmod.seccult.network.NetworkEntityMoving;
 import testmod.seccult.network.NetworkHandler;
 
-public class EntityBoneShark extends EntityWaterCreature{
+public class EntityBoneShark extends EntityWaterCreature implements IMob{
 	private List<DamageReduce> damageList = new ArrayList<DamageReduce>();
 	private int swimingTime;
 	private int warningTime;

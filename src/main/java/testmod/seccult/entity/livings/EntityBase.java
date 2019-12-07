@@ -7,6 +7,7 @@ import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItemFrame;
@@ -32,7 +33,7 @@ import testmod.seccult.magick.active.ControllerMagic;
 import testmod.seccult.magick.active.DefenceMagic;
 import testmod.seccult.magick.active.Magick;
 
-public class EntityBase extends EntityLiving implements EntityUsingMagicHelper{
+public class EntityBase extends EntityCreature implements EntityUsingMagicHelper{
 	protected float swing;
 	protected boolean swingUp;	
 	
@@ -57,7 +58,6 @@ public class EntityBase extends EntityLiving implements EntityUsingMagicHelper{
 		super(worldIn);
 	}
 
-	
     protected void entityInit()
     {
         super.entityInit();
@@ -131,7 +131,6 @@ public class EntityBase extends EntityLiving implements EntityUsingMagicHelper{
 	public void onUpdate() {
 		super.onUpdate();
 		doSwing();
-
 	}
 	
 	public boolean canSeeTarget(Entity e)
@@ -275,11 +274,11 @@ public class EntityBase extends EntityLiving implements EntityUsingMagicHelper{
         boolean flag = false;
         boolean flag1 = false;
 
-        for (int k1 = i; k1 <= l; ++k1)
+        for (int k1 = i; k1 < l; ++k1)
         {
-            for (int l1 = j; l1 <= i1; ++l1)
+            for (int l1 = j; l1 < i1; ++l1)
             {
-                for (int i2 = k; i2 <= j1; ++i2)
+                for (int i2 = k; i2 < j1; ++i2)
                 {
                     BlockPos blockpos = new BlockPos(k1, l1, i2);
                     IBlockState iblockstate = this.world.getBlockState(blockpos);

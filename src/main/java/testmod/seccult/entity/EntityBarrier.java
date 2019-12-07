@@ -32,6 +32,7 @@ public class EntityBarrier extends Entity implements ISpaceEntity{
 	private static final DataParameter<BlockPos> BLOCKPOS = EntityDataManager.<BlockPos>createKey(EntityBarrier.class, DataSerializers.BLOCK_POS);
 	
 	private Set<Entity> entityList = new HashSet<Entity>();
+	private EntityBorderCrosser crosser;
 	
 	public EntityBarrier(World worldIn) {
 		super(worldIn);
@@ -53,9 +54,17 @@ public class EntityBarrier extends Entity implements ISpaceEntity{
 			this.setSize(getWidth(), getHeight());
 	}
 	
+	public void setCrosser(EntityBorderCrosser crosser)
+	{
+		this.crosser = crosser;
+	}
+	
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+		
+		if(this.crosser != null && crosser.ticksExisted > 90)
+			this.setDead();
 		
 		if(this.width != this.getWidth() || this.height != this.getHeight())
 			this.setSize(getWidth(), getHeight());
@@ -100,7 +109,7 @@ public class EntityBarrier extends Entity implements ISpaceEntity{
 				it.remove();
 		}
 		
-		if(this.ticksExisted > 6000)
+		if(this.ticksExisted > 6000 || (this.entityList.isEmpty() && this.ticksExisted > 300))
 			this.setDead();
 		
         if (this.world.isRemote && this.ticksExisted % 3 == 0)

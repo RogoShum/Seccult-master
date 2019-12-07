@@ -79,8 +79,6 @@ public class BossEventHandler {
 						cloesE = true;
 				}
 				
-				
-				
 				if(cloesE && !this.playerList.contains(plMP))
 				{
 					this.playerList.add(plMP);

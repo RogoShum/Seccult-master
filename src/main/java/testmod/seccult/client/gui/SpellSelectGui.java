@@ -244,9 +244,9 @@ public class SpellSelectGui extends GuiScreen
         else
         {
             super.keyTyped(typedChar, keyCode);
-            if(keyCode == Keyboard.KEY_E)
-            {
-            	
+            if (keyCode == Keyboard.KEY_ESCAPE || keyCode == this.mc.gameSettings.keyBindInventory.getKeyCode()) {
+                this.mc.displayGuiScreen(null);
+                this.mc.setIngameFocus();
             }
         }
     }

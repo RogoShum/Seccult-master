@@ -10,6 +10,7 @@ import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.item.EntityPainting;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.network.datasync.DataParameter;
@@ -27,7 +28,7 @@ import testmod.seccult.events.BossEventHandler;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.init.ModSounds;
 
-public class EntityEoC extends EntityBase implements IBossBase{
+public class EntityEoC extends EntityBase implements IBossBase, IMob{
 	protected EntityLivingBase ene;
 	protected double eneX;
 	protected double eneY;

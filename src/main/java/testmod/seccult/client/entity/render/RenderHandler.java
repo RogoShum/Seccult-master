@@ -66,7 +66,7 @@ public class RenderHandler
 		RenderingRegistry.registerEntityRenderingHandler(EntitySpaceGatorix.class, m -> new RenderGatorix(m));
 		RenderingRegistry.registerEntityRenderingHandler(EntitySpaceManager.class, m -> new RenderSpaceManager(m));
 		RenderingRegistry.registerEntityRenderingHandler(EntityVoid.class, m -> new RenderVoid(m));
-		RenderingRegistry.registerEntityRenderingHandler(EntityBarrier.class, m -> new RenderVoid(m));
+		RenderingRegistry.registerEntityRenderingHandler(EntityBarrier.class, m -> new RenderBarrier(m));
 		RenderingRegistry.registerEntityRenderingHandler(EntityAlterSpace.class, m -> new RenderAlterSpace(m));
 	}
 }

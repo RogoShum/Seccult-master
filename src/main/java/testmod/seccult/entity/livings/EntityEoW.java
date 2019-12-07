@@ -11,6 +11,7 @@ import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.item.EntityPainting;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
@@ -32,7 +33,7 @@ import testmod.seccult.magick.magickState.StateManager;
 import testmod.seccult.util.ChunkCoordinates;
 import testmod.seccult.util.MathHelper.MathHelper;
 
-public class EntityEoW extends EntityBase implements IBossBase{
+public class EntityEoW extends EntityBase implements IBossBase, IMob{
 	private static final DataParameter<Integer> EOW_VARIANT = EntityDataManager.<Integer>createKey(EntityEoW.class, DataSerializers.VARINT);
 	ResourceLocation EOWres = new ResourceLocation("seccult:eaterofworlds");
 	

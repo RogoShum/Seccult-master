@@ -39,6 +39,7 @@ import testmod.seccult.entity.ai.EntityFloatHelper;
 import testmod.seccult.entity.projectile.EntitySpaceGatorix;
 import testmod.seccult.entity.ai.EntityAIAlertForHelp;
 import testmod.seccult.entity.ai.EntityAIFindBorderCrosser;
+import testmod.seccult.entity.ai.EntityAIFloatRandom;
 import testmod.seccult.entity.ai.EntityAIHurtByTarget;
 import testmod.seccult.init.ModSounds;
 import testmod.seccult.magick.implementation.ImplementationFocused;
@@ -58,7 +59,7 @@ public class EntityDreamPop extends EntityCreature implements EntityFlying, IRan
 	
 	@Override
 	protected void initEntityAI() {
-		this.tasks.addTask(1, new EntityAIPanic(this, 2.0F)
+		this.tasks.addTask(0, new EntityAIPanic(this, 2.0F)
 				{
 					@Override
 					protected boolean findRandomPosition() {
@@ -82,14 +83,14 @@ public class EntityDreamPop extends EntityCreature implements EntityFlying, IRan
 						super.startExecuting();
 					}
 				});
-		this.tasks.addTask(3, new EntityAIMoveToMagick(this));
-		this.tasks.addTask(4, new EntityAIMoveTowardsRestriction(this, 1.0D));
-		this.tasks.addTask(5, new EntityAIAvoidEntity<>(this, EntityPlayer.class, 2.0F, 0.8F, 1.33F));
-		this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 6F));
-		this.tasks.addTask(8, new EntityAILookIdle(this));
-		this.targetTasks.addTask(0, new EntityAIFindBorderCrosser(this));
-		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, new Class[] {EntityDreamPop.class, EntityNightmarePop.class}));
-		this.targetTasks.addTask(2, new EntityAIAlertForHelp(this, new Class[] {EntityNightmarePop.class}));
+		this.tasks.addTask(1, new EntityAIMoveToMagick(this));
+		this.tasks.addTask(2, new EntityAIFloatRandom(this));
+		this.tasks.addTask(3, new EntityAIAvoidEntity<>(this, EntityPlayer.class, 2.0F, 0.8F, 1.33F));
+		this.tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 6F));
+		this.tasks.addTask(5, new EntityAILookIdle(this));
+		this.targetTasks.addTask(1, new EntityAIFindBorderCrosser(this));
+		this.targetTasks.addTask(2, new EntityAIHurtByTarget(this, true, new Class[] {EntityDreamPop.class, EntityNightmarePop.class}));
+		this.targetTasks.addTask(3, new EntityAIAlertForHelp(this, new Class[] {EntityNightmarePop.class}));
 	}
 
 	@Override

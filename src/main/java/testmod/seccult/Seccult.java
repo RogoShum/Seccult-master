@@ -19,6 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.blocks.tileEntity.tileGenerator;
 import testmod.seccult.client.FX.ModFX;
 import testmod.seccult.client.gui.GuiElementLoader;
+import testmod.seccult.client.textlib.TextLib;
 import testmod.seccult.creativetab.CreativeTabsLoader;
 import testmod.seccult.events.ModEventHandler;
 import testmod.seccult.init.ModBlocks;
@@ -65,6 +66,7 @@ public class Seccult
 		proxy.preInit();
 		MinecraftForge.EVENT_BUS.register(new ModFX());
 		TileEntity.register("tileGenerator", tileGenerator.class);
+		TextLib.init();
 	}
 	
 	@EventHandler

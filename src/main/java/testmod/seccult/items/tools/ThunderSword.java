@@ -32,9 +32,9 @@ public class ThunderSword  extends ItemMagickable
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
 		
-		if(entityIn instanceof EntityLiving)
+		if(entityIn instanceof EntityLivingBase)
 		{
-			EntityLiving living = (EntityLiving) entityIn;
+			EntityLivingBase living = (EntityLivingBase) entityIn;
 		
 			if(living.getHeldItemMainhand() == stack)
 			{
@@ -44,20 +44,6 @@ public class ThunderSword  extends ItemMagickable
 			if(living.getHeldItemOffhand() == stack)
 			{
 				preAttack(stack, living, EnumHand.OFF_HAND);
-			}
-		}
-		else if(entityIn instanceof EntityPlayer)
-		{
-			EntityPlayer player = (EntityPlayer) entityIn;
-			
-			if(player.getHeldItemMainhand() == stack)
-			{
-				preAttack(stack, player, EnumHand.MAIN_HAND);
-			}
-			
-			if(player.getHeldItemOffhand() == stack)
-			{
-				preAttack(stack, player, EnumHand.OFF_HAND);
 			}
 		}
 	}

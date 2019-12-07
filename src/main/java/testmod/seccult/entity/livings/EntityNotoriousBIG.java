@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntitySnowball;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,7 +17,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 
-public class EntityNotoriousBIG extends EntityStand{
+public class EntityNotoriousBIG extends EntityStand  implements IMob{
 	private static final DataParameter<Float> Size = EntityDataManager.<Float>createKey(EntityNotoriousBIG.class, DataSerializers.FLOAT);
 	private static final DataParameter<Boolean> Tail = EntityDataManager.<Boolean>createKey(EntityNotoriousBIG.class, DataSerializers.BOOLEAN);
 

@@ -13,6 +13,7 @@ public class GuiElementLoader implements IGuiHandler
 	public static final int GUI_DEMO = 1;
 	public static final int GUI_Accessories = 2;
 	public static final int GUI_SpellSelect = 3;
+	public static final int GUI_NoteBook = 4;
 
     public GuiElementLoader()
     {
@@ -30,6 +31,7 @@ public class GuiElementLoader implements IGuiHandler
             return new AccessoriesContainer(player);
         case GUI_SpellSelect:
             return new SpellSelect(player);
+
         default:
             return null;
         }
@@ -46,6 +48,8 @@ public class GuiElementLoader implements IGuiHandler
             return new AccessoriesGui(new AccessoriesContainer(player));
         case GUI_SpellSelect:
             return new SpellSelectGui(player);
+        case GUI_NoteBook:
+            return new GuiNoteBook(player, player.getHeldItemMainhand());
         default:
             return null;
         }

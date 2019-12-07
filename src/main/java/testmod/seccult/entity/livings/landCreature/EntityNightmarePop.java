@@ -30,6 +30,7 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import testmod.seccult.entity.ISpaceEntity;
 import testmod.seccult.entity.ai.EntityAIAlertForHelp;
+import testmod.seccult.entity.ai.EntityAIFloatRandom;
 import testmod.seccult.entity.ai.EntityAIHurtByTarget;
 import testmod.seccult.entity.projectile.EntitySpaceGatorix;
 import testmod.seccult.init.ModSounds;
@@ -52,11 +53,11 @@ public class EntityNightmarePop extends EntityDreamPop implements ISpaceEntity{
 
 	@Override
 	protected void initEntityAI() {
-		this.tasks.addTask(1, new EntityAIAttackRanged(this, 1, 60, 4));
-		this.tasks.addTask(2, new EntityAIFollowPatner(this, 1.0D, 3F, 15F));
-		this.tasks.addTask(3, new EntityAIMoveTowardsRestriction(this, 1.0D));
-		this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 6F));
-		this.tasks.addTask(8, new EntityAILookIdle(this));
+		this.tasks.addTask(0, new EntityAIAttackRanged(this, 1, 60, 4));
+		this.tasks.addTask(1, new EntityAIFollowPatner(this, 1.0D, 3F, 15F));
+		this.tasks.addTask(2, new EntityAIFloatRandom(this));
+		this.tasks.addTask(3, new EntityAIWatchClosest(this, EntityPlayer.class, 6F));
+		this.tasks.addTask(4, new EntityAILookIdle(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, new Class[] {EntityNightmarePop.class}));
 		this.targetTasks.addTask(2, new EntityAIAlertForHelp(this, new Class[] {EntityNightmarePop.class}));
 		this.targetTasks.addTask(3, new EntityAINightmareFindPartner(this));

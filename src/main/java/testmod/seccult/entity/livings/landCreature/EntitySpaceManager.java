@@ -6,9 +6,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
@@ -17,18 +15,13 @@ import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackRanged;
 import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
-import net.minecraft.entity.ai.EntityFlyHelper;
-import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityVex;
-import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityFlying;
-import net.minecraft.entity.passive.EntityParrot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -48,6 +41,7 @@ import testmod.seccult.entity.ISpaceEntity;
 import testmod.seccult.entity.ai.EntityAIAlertForHelp;
 import testmod.seccult.entity.ai.EntityAIFightBack;
 import testmod.seccult.entity.ai.EntityAIFindCloestMonster;
+import testmod.seccult.entity.ai.EntityAIFloatRandom;
 import testmod.seccult.entity.ai.EntityAIHurtByTarget;
 import testmod.seccult.entity.ai.EntityFloatHelper;
 import testmod.seccult.entity.ai.IFightBackMob;
@@ -66,7 +60,7 @@ public class EntitySpaceManager extends EntityCreature implements EntityFlying, 
 	
 	public EntitySpaceManager(World worldIn) {
 		super(worldIn);
-		this.setSize(3F, 3F);
+		this.setSize(2F, 3F);
 		this.moveHelper = new EntityFloatHelper(this);
 		this.isImmuneToFire = true;
 		this.noClip = true;
@@ -101,19 +95,19 @@ public class EntitySpaceManager extends EntityCreature implements EntityFlying, 
 		DamageType.add(DamageSource.OUT_OF_WORLD.getDamageType());
 		DamageType.add(DamageSource.STARVE.getDamageType());
 	}
-	
+
 	@Override
 	protected void initEntityAI() {
-		this.tasks.addTask(0, new EntityAIFightBack(this, 1, 50, 24));
-		this.tasks.addTask(1, new EntityAIAttackRanged(this, 1, 60, 4));
-		this.tasks.addTask(2, new EntityAIMoveTowardsRestriction(this, 1.0D));
+		this.tasks.addTask(0, new EntityAIFightBack(this, 1, 50, 12));
+		this.tasks.addTask(1, new EntityAIAttackRanged(this, 1, 60, 8));
+		this.tasks.addTask(2, new EntityAIFloatRandom(this));
 		this.tasks.addTask(3, new EntityAIWatchClosest(this, EntityPlayer.class, 6F));
 		this.tasks.addTask(4, new EntityAILookIdle(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, new Class[] {EntitySpaceManager.class}));
 		this.targetTasks.addTask(2, new EntityAIHurtByTarget(this, true, new Class[] {EntityNightmarePop.class}));
 		this.targetTasks.addTask(3, new EntityAIAlertForHelp(this, new Class[] {EntitySpaceManager.class}));
 		this.targetTasks.addTask(4, new EntityAIAlertForHelp(this, new Class[] {EntityNightmarePop.class}));
-        this.targetTasks.addTask(5, new EntityAIFindCloestMonster(this, EntityCreeper.class, true));
+        this.targetTasks.addTask(5, new EntityAIFindCloestMonster<EntityMob>(this, EntityMob.class, true));
 	}
 
 	@Override
@@ -268,7 +262,8 @@ public class EntitySpaceManager extends EntityCreature implements EntityFlying, 
 					teleportEntity(victim, entity.posX, entity.posY, entity.posZ);
 				}*/
 				if((entity instanceof EntityThrowable && ((EntityThrowable) entity).getThrower() != null) 
-						|| (entity instanceof EntityArrow && ((EntityArrow) entity).shootingEntity != null))
+						|| (entity instanceof EntityArrow && ((EntityArrow) entity).shootingEntity != null)
+						|| (entity instanceof EntityFireball && ((EntityFireball) entity).shootingEntity != null))
 				{
 					Entity living = null;
 					if(entity instanceof EntityThrowable)
@@ -276,12 +271,17 @@ public class EntitySpaceManager extends EntityCreature implements EntityFlying, 
 						EntityThrowable throwable = (EntityThrowable) entity;
 						living = throwable.getThrower();
 					}
-					else
+					else if(entity instanceof EntityArrow)
 					{
 						EntityArrow arrow = (EntityArrow) entity;
 						living = arrow.shootingEntity;
 					}
-
+					else if(entity instanceof EntityFireball)
+					{
+						EntityArrow arrow = (EntityArrow) entity;
+						living = arrow.shootingEntity;
+					}
+					
 					float finalDistance = 3;
 					
 					Vec3d vec = new Vec3d(-entity.motionX, -entity.motionY, -entity.motionZ);
@@ -396,6 +396,15 @@ public class EntitySpaceManager extends EntityCreature implements EntityFlying, 
 		if(chance < 1)
 			chance = 1;
 		
+		if(chance > 5)
+			chance = 6;
+		
+		if((target.ticksExisted > 400 && this.rand.nextInt(10) == 0) || this.gatorix.size() > 4)
+		{
+			fightEntityBack(target, distanceFactor);
+			return;
+		}
+		
 		for(int i = 0; i < chance; ++i)
 		{
 			EntitySpaceGatorix gatorix = new EntitySpaceGatorix(getEntityWorld(), this, target);
@@ -469,19 +478,19 @@ public class EntitySpaceManager extends EntityCreature implements EntityFlying, 
 
 		List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(target, target.getEntityBoundingBox());
 		
-		boolean teleport = false;
+		EntityBarrier barrier = null;
 		
 		for(Entity entity : list)
 		{
 			if(entity instanceof EntityBarrier)
 			{
 				type = AlterType.Void;
-				teleport = true;
+				barrier = (EntityBarrier) entity;
 				break;
 			}
 		}
 
-		if(this.getHealth() < this.getMaxHealth() / 5 && teleport && this.rand.nextInt(5) == 0)
+		if(this.getHealth() < this.getMaxHealth() / 5 && barrier != null && this.rand.nextInt(5) == 0)
 		{
 			EntityBorderCrosser crosser = null;
 			Integer[] dims = DimensionManager.getStaticDimensionIDs();
@@ -494,6 +503,7 @@ public class EntitySpaceManager extends EntityCreature implements EntityFlying, 
 			
 			crosser = new EntityBorderCrosser(world, getDim);
 			crosser.setPosition(target.posX, target.posY, target.posZ);
+			barrier.setCrosser(crosser);
 			if(!this.world.isRemote)
 				world.spawnEntity(crosser);
 		}
@@ -501,9 +511,42 @@ public class EntitySpaceManager extends EntityCreature implements EntityFlying, 
 		if(this.getHealth() < this.getMaxHealth() / 3 && this.rand.nextInt(5) == 0)
 			type = AlterType.TerrainTrans;
 		
-		EntityAlterSpace gatorix = new EntityAlterSpace(getEntityWorld(), this, target,  target.height * 1.5F, target.width * 4F, type);
+		EntityAlterSpace gatorix = new EntityAlterSpace(getEntityWorld(), this, target,  target.height * 1.25F, target.width * 1.5F, type);
 		gatorix.shoot(this.getLookVec().x, this.getLookVec().y, this.getLookVec().z, 0, 0);
 		if(!this.world.isRemote)
 			this.world.spawnEntity(gatorix);
+	}
+	
+	@Override
+	protected void onDeathUpdate() {
+		/*if(this.world != null && !this.world.isRemote) {
+			EntitySpaceManager newManager = new EntitySpaceManager(world);
+			newManager.setPosition(this.posX + 5 - this.rand.nextInt(10), this.posY + 5 - this.rand.nextInt(10), this.posZ + 5 - this.rand.nextInt(10));
+
+			this.world.spawnEntity(newManager);
+			deathTime++;
+		}*/
+		super.onDeathUpdate();
+	}
+	
+	@Override
+	protected void finalize() throws Throwable {
+		super.finalize();
+		if(this.world != null && !this.world.isRemote) 
+		{
+			if(this.getHealth() > 0)
+			{
+				this.isDead = false;
+				this.deathTime = 0;
+				this.world.spawnEntity(this);
+			}
+			else
+			{
+				EntitySpaceManager newManager = new EntitySpaceManager(world);
+				newManager.setPosition(this.posX + 5 - this.rand.nextInt(10), this.posY + 5 - this.rand.nextInt(10), this.posZ + 5 - this.rand.nextInt(10));
+				this.world.spawnEntity(newManager);
+				deathTime++;
+			}
+		}
 	}
 }

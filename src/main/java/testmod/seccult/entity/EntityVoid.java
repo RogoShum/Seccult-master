@@ -9,6 +9,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -115,14 +116,16 @@ public class EntityVoid extends Entity implements ISpaceEntity{
                     if(this.ticksExisted % 10 == 0)
                     {
                     	entityIn.hurtResistantTime = -1;
-                    	entityIn.attackEntityFrom(DamageSource.OUT_OF_WORLD, 2);
-        				if(entityIn instanceof EntityLivingBase)
+                    	
+                    	if(entityIn instanceof EntityPlayer)
+                    		entityIn.attackEntityFrom(DamageSource.OUT_OF_WORLD, 2);
+                    	else if(entityIn instanceof EntityLivingBase)
         				{
+                    		((EntityLivingBase)entityIn).setHealth(((EntityLivingBase)entityIn).getHealth() - 2);
         					((EntityLivingBase)entityIn).getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(((EntityLivingBase)entityIn).getHealth());
         				}
                     }
                     entityIn.addVelocity(-d0, 0.0D, -d1);
-
     }
 	
     @SideOnly(Side.CLIENT)

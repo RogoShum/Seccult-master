@@ -158,7 +158,7 @@ public class EntitySpaceGatorix extends EntityThrowable implements ISpaceEntity 
 		
 		if(victim != null)
 		{
-			Moveto(victim.posX, victim.posY, victim.posZ, 0.02);
+			Moveto(victim.posX, victim.posY + victim.height / 2, victim.posZ, 0.02);
 			if(this.victim.isDead)
 				this.victim = null;
 		}
@@ -272,7 +272,7 @@ public class EntitySpaceGatorix extends EntityThrowable implements ISpaceEntity 
     
 	protected void Moveto(double x, double y, double z, double speed) {
 	       this.motionX += (Math.signum(x - this.posX) - this.motionX) * speed;
-	       this.motionY += (Math.signum(y - this.posY) - this.motionY) * speed;
+	       this.motionY += (Math.signum(y - this.posY + this.height / 2) - this.motionY) * speed;
 	       this.motionZ += (Math.signum(z - this.posZ) - this.motionZ) * speed;
 	       
 	       this.posX += this.motionX;

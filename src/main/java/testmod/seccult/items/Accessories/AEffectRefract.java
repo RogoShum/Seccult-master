@@ -14,7 +14,9 @@ import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import testmod.seccult.Seccult;
+import testmod.seccult.client.textlib.TextLib;
 import testmod.seccult.init.ModItems;
+import testmod.seccult.items.ItemNoteBook;
 
 @Mod.EventBusSubscriber(modid = Seccult.MODID)
 public class AEffectRefract extends ItemAccessories{
@@ -26,6 +28,7 @@ public class AEffectRefract extends ItemAccessories{
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
 		super.onArmorTick(world, player, itemStack);
+		ItemNoteBook.setNewNote(TextLib.Category.HolyEquipment, player, TextLib.Item.EFFECT_REFLECT_base);
 	}
 	
 	@SubscribeEvent

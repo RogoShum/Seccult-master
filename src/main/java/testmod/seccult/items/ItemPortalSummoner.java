@@ -3,11 +3,13 @@
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.swing.plaf.DimensionUIResource;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -32,7 +34,8 @@ public class ItemPortalSummoner extends ItemBase{
 
 	public ItemPortalSummoner(String name) {
 		super(name);
-		this.maxStackSize = 10;
+		this.maxStackSize = 1;
+		this.setMaxDamage(10);
 	}
 
 	@Override
@@ -41,10 +44,10 @@ public class ItemPortalSummoner extends ItemBase{
 		{
 			int[] dims = stack.getTagCompound().getIntArray("Dimensions");
 			int dim = dims[stack.getTagCompound().getInteger("DimSlot")];
-		
+
 			return "Dimension " + String.valueOf(dim);
 		}
-		
+
 		return super.getItemStackDisplayName(stack);
 	}
 	
@@ -75,25 +78,13 @@ public class ItemPortalSummoner extends ItemBase{
 					crosser.setPosition(pos.getX()+0.5, pos.getY()+1, pos.getZ()+0.5);
 					if(dim != player.dimension)
 					{
-						Entity entity = ImplementationFocused.getEntityLookedAt(player, 32);
-						if(entity instanceof EntityLivingBase)
-						{
-						EntityAlterSpace gatorix = new EntityAlterSpace(world, player, (EntityLivingBase)entity, entity.height * 1.5F, entity.width * 4F, AlterType.Barrier);
-						gatorix.shoot(player.getLookVec().x, player.getLookVec().y, player.getLookVec().z, 0, 0);
-						if(!world.isRemote)
-							world.spawnEntity(gatorix);
-						}
+						world.spawnEntity(crosser);
 					}
 					else
 					{
-						Entity entity = ImplementationFocused.getEntityLookedAt(player, 32);
-						if(entity instanceof EntityLivingBase)
-						{
-						EntityAlterSpace gatorix = new EntityAlterSpace(world, player, (EntityLivingBase)entity, entity.height * 1.5F, entity.width * 4F, AlterType.Void);
-						gatorix.shoot(player.getLookVec().x, player.getLookVec().y, player.getLookVec().z, 0, 0);
-						if(!world.isRemote)
-							world.spawnEntity(gatorix);
-						}
+						Integer[] dimensions = DimensionManager.getStaticDimensionIDs();
+						for(int i : dimensions)
+						this.addDimensions(i, stack);
 					}
 				}
 				
@@ -106,6 +97,18 @@ public class ItemPortalSummoner extends ItemBase{
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
 		addDimensions(entityIn.dimension, stack);
+	}
+	
+	public void spawnPro(World world, EntityPlayer player)
+	{
+		Entity entity = ImplementationFocused.getEntityLookedAt(player, 32);
+		if(entity instanceof EntityLivingBase)
+		{
+		EntityAlterSpace gatorix = new EntityAlterSpace(world, player, (EntityLivingBase)entity, entity.height * 1.5F, entity.width * 4F, AlterType.Barrier);
+		gatorix.shoot(player.getLookVec().x, player.getLookVec().y, player.getLookVec().z, 0, 0);
+		if(!world.isRemote)
+			world.spawnEntity(gatorix);
+		}
 	}
 	
 	public void addDimensions(int i, ItemStack stack)

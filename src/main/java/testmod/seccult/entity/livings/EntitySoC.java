@@ -4,11 +4,12 @@ import java.util.List;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
-public class EntitySoC extends EntityBase{
+public class EntitySoC extends EntityBase implements IMob{
 
 	private EntityLivingBase player;
 	private int CoolDown = 0;

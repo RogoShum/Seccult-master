@@ -39,7 +39,7 @@ public class RenderAlterSpace extends Render<EntityAlterSpace>
     
     public void doRender(EntityAlterSpace entity, double x, double y, double z, float entityYaw, float partialTicks) {
 
-    	float size =  entity.height / 2;
+    	float size = 0.01F;
     	float blend = 1.0F;
 
     	int i = 15728880;
@@ -58,7 +58,6 @@ public class RenderAlterSpace extends Render<EntityAlterSpace>
     		
     		if(entity.getState() == AlterType.Barrier.getVaule())
     		{
-    			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
     			entity.world.spawnParticle(EnumParticleTypes.TOTEM, entity.posX, entity.posY + 0.3, entity.posZ, 0, 0, 0);
     			Minecraft.getMinecraft().getTextureManager().bindTexture(darkTexture);
     			GlStateManager.color(0.0F, 0.6F, 0.0F, blend * 0.5F);
@@ -66,26 +65,25 @@ public class RenderAlterSpace extends Render<EntityAlterSpace>
     		
     		if(entity.getState() == AlterType.TerrainTrans.getVaule())
     		{
-    			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
     			entity.world.spawnParticle(EnumParticleTypes.PORTAL, entity.posX, entity.posY + 0.3, entity.posZ, 0, 0, 0);
     			Minecraft.getMinecraft().getTextureManager().bindTexture(darkTexture);
     			GlStateManager.color(0.65F, 0.1F, 0.6F, blend * 0.5F);
     		}
-    		
+    		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
             GlStateManager.translate(x, y + entity.height / 2, z);
     	    GlStateManager.depthMask(false);
     	    GlStateManager.rotate(entity.ticksExisted * 30, 0, 1, 1);
     	    GlStateManager.enableBlend();
         	
         	GlStateManager.pushMatrix();
-        	GlStateManager.scale(size, size, size);
+        	GlStateManager.scale(size + Seccult.rand.nextFloat() / 2, size + Seccult.rand.nextFloat() / 2, size + Seccult.rand.nextFloat() / 2);
         	Sphere sphere = new Sphere();
         	sphere.draw(1, 4, 2);
         	GlStateManager.popMatrix();
         	
         	GlStateManager.pushMatrix();
         	GlStateManager.rotate(90, 1, 0, 1);
-        	GlStateManager.scale(size, size, size);
+        	GlStateManager.scale(size + Seccult.rand.nextFloat() / 2, size + Seccult.rand.nextFloat() / 2, size + Seccult.rand.nextFloat() / 2);
         	Sphere sphere2 = new Sphere();
         	sphere2.draw(1, 4, 2);
         	GlStateManager.popMatrix();

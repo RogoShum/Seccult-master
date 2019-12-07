@@ -47,7 +47,8 @@ public class ModItems
 			new int[] {5, 7, 7, 5}, 200, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 18.0F);
 	 
 	//Items
-
+	public static final Item NOTEBOOK = new ItemNoteBook("notebook");
+	
 	public static final Item SPA = new ItemBase("spa");
 	
 	public static final Item BLUE_FEATHER = new ItemBase("blue_feather");

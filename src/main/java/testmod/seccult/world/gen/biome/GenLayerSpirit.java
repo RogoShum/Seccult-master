@@ -27,14 +27,10 @@ public class GenLayerSpirit extends GenLayer {
 		int input[] = parent.getInts(nx, nz, nwidth, ndepth);
 		int output[] = IntCache.getIntCache(width * depth);
 		
-		int skyrim        = Biome.getIdForBiome(SeccultBiomeRegistries.Oblivion_Skyrim);
+		int oblivion        = Biome.getIdForBiome(SeccultBiomeRegistries.Oblivion);
 		int summerest            = Biome.getIdForBiome(SeccultBiomeRegistries.Oblivion_Summerest);
 		
-		int voids        = Biome.getIdForBiome(Biomes.VOID);
-		
-		int oceanSide          = Biome.getIdForBiome(SeccultBiomeRegistries.mana_OceanSide);
-		int ocean          = Biome.getIdForBiome(SeccultBiomeRegistries.mana_Ocean);
-		int deepOcean          = Biome.getIdForBiome(SeccultBiomeRegistries.mana_DeepOcean);
+		int voids        = Biome.getIdForBiome(SeccultBiomeRegistries.Oblivion_Skyrim);
 		
 		for (int dz = 0; dz < depth; dz++) {
 			for (int dx = 0; dx < width; dx++) {
@@ -45,11 +41,7 @@ public class GenLayerSpirit extends GenLayer {
 				int down   = input[dx + 1 + (dz + 2) * nwidth];
 				int center = input[dx + 1 + (dz + 1) * nwidth];
 				
-				if (isKey(summerest, center, right, left, up, down)) {
-					output[dx + dz * width] = ocean;
-				} else if (isKey(deepOcean, center, right, left, up, down)) {
-					output[dx + dz * width] = oceanSide;
-				} else if (isKey(skyrim, center, right, left, up, down)) {
+				if (isKey(oblivion, center, right, left, up, down)) {
 					output[dx + dz * width] = voids;
 				} else {
 					output[dx + dz * width] = center;
