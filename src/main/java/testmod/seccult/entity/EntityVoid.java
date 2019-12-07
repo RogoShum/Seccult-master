@@ -63,7 +63,9 @@ public class EntityVoid extends Entity implements ISpaceEntity{
 			this.destroyBlocksInAABB(getEntityBoundingBox());
 		collideWithNearbyEntities();
 		
-		if(this.ticksExisted > 4000)
+		List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox());
+		
+		if(this.ticksExisted > 4000 || (list.isEmpty() && this.ticksExisted > 2000))
 			this.setDead();
 		
         if (this.world.isRemote)
@@ -121,7 +123,12 @@ public class EntityVoid extends Entity implements ISpaceEntity{
                     		entityIn.attackEntityFrom(DamageSource.OUT_OF_WORLD, 2);
                     	else if(entityIn instanceof EntityLivingBase)
         				{
-                    		((EntityLivingBase)entityIn).setHealth(((EntityLivingBase)entityIn).getHealth() - 2);
+                    		if(((EntityLivingBase)entityIn).getHealth() <= 0)
+                    		{
+                    			entityIn.setDead();
+                    		}
+                    		
+                    		((EntityLivingBase)entityIn).setHealth(((EntityLivingBase)entityIn).getHealth() - (this.height + this.width) / 2);
         					((EntityLivingBase)entityIn).getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(((EntityLivingBase)entityIn).getHealth());
         				}
                     }

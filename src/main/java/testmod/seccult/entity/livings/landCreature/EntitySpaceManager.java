@@ -37,6 +37,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import testmod.seccult.entity.EntityBarrier;
 import testmod.seccult.entity.EntityBorderCrosser;
+import testmod.seccult.entity.EntityVoid;
 import testmod.seccult.entity.ISpaceEntity;
 import testmod.seccult.entity.ai.EntityAIAlertForHelp;
 import testmod.seccult.entity.ai.EntityAIFightBack;
@@ -199,6 +200,14 @@ public class EntitySpaceManager extends EntityCreature implements EntityFlying, 
 		if(this.dimension == DimensionMagic.MAGIC_ID && this.ticksExisted % 20 == 0)
 			this.setHealth(2 + this.getHealth());
 		
+		if(this.getAttackTarget() != null && this.getDistance(getAttackTarget()) > 30)
+		{
+			Vec3d vec = getAttackTarget().getPositionVector().add(getAttackTarget().getLookVec().scale(3));
+			
+			this.teleportEntity(this, vec.x, vec.y, vec.z);
+			this.faceEntity(getAttackTarget(), 360, 360);
+		}
+		
 		removeBadEffect();
 		reflectProjectile();
 	}
@@ -278,7 +287,7 @@ public class EntitySpaceManager extends EntityCreature implements EntityFlying, 
 					}
 					else if(entity instanceof EntityFireball)
 					{
-						EntityArrow arrow = (EntityArrow) entity;
+						EntityFireball arrow = (EntityFireball) entity;
 						living = arrow.shootingEntity;
 					}
 					
@@ -490,6 +499,19 @@ public class EntitySpaceManager extends EntityCreature implements EntityFlying, 
 			}
 		}
 
+		int voidAmount = 0;
+		
+		for(Entity entity : list)
+		{
+			if(entity instanceof EntityVoid)
+			{
+				++voidAmount;
+			}
+		}
+		
+		if(voidAmount > 5)
+			return;
+		
 		if(this.getHealth() < this.getMaxHealth() / 5 && barrier != null && this.rand.nextInt(5) == 0)
 		{
 			EntityBorderCrosser crosser = null;

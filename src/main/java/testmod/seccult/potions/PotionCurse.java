@@ -49,7 +49,7 @@ public class PotionCurse extends PotionMod{
 				((EntityLivingBase) entities.get(randEntity)).addPotionEffect(new PotionEffect(ModPotions.curse, living.getActivePotionEffect(ModPotions.curse).getDuration() + 200, Seccult.rand.nextInt(6) + 1));
 				break;
 			case 6:
-				StateManager.setState(entities.get(randEntity), StateManager.FROZEN, 100 * mult, 5);
+				StateManager.setState(living, StateManager.FROZEN, 100 * mult, 5);
 				break;
 			case 7:
 				if(living instanceof EntityPlayer)

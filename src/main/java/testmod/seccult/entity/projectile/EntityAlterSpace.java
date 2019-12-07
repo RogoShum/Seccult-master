@@ -119,11 +119,8 @@ public class EntityAlterSpace extends EntityThrowable implements ISpaceEntity{
 		}
 		else
 		{
-			this.releaseSpaceEnergy(this);
+			this.setDead();
 		}
-		
-		if(this.ticksExisted > ExistedLimit)
-			this.releaseSpaceEnergy(this);
 		
 		if(!this.world.isRemote)
 		collideWithNearbyEntities();
