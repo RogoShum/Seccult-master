@@ -71,6 +71,7 @@ public class GuiNoteBook extends GuiScreen {
     	this.readingPlayer = player;
         this.book = book;
         this.categoryComponents = ItemNoteBook.getAllCategories(book);
+        book.getTagCompound().removeTag("Note_New_Knowladge");
     }
 
     /**
@@ -170,7 +171,7 @@ public class GuiNoteBook extends GuiScreen {
         this.updateButton = true;
     	
         this.buttonNextPage.visible = this.currPage < this.bookTotalPages;
-        this.buttonPreviousPage.visible = this.itemTagList != null || !this.ItemButtonList.isEmpty();
+        this.buttonPreviousPage.visible = this.currPage > -1;
 
         updateItemIcon();
     }
@@ -230,9 +231,8 @@ public class GuiNoteBook extends GuiScreen {
                 }
             	else if(this.itemTagList != null)
             	{
-            		this.bookTotalPages = this.itemsComponents.length;
+            		this.bookTotalPages = this.itemsComponents.length - 1;
             		this.currPage = this.currPageCache;
-            		this.bookTotalPages = this.bookTotalPagesCache;
                 	this.itemTagList=null;
             	}
                 else if(!this.ItemButtonList.isEmpty())
@@ -616,6 +616,10 @@ public class GuiNoteBook extends GuiScreen {
                 }
 
                 this.drawTexturedModalRect(this.x, this.y, i, j, 16, 16);
+                FontRenderer fontrenderer = mc.fontRenderer;
+                int s = ModMagicks.BlackVelvetHellMagickColor;
+
+                this.drawCenteredString(fontrenderer, I18n.format(buttonString), this.x + this.width / 2, this.y + this.height + 2, s);
             }
         }
     }

@@ -43,17 +43,21 @@ public class ItemNoteBook extends ItemBase{
 		});
 	}
 
+	@Override
+	public String getItemStackDisplayName(ItemStack stack) {
+		setNewNote(TextLib.Category.Introduce, stack, TextLib.Item.NoteBook_base);
+		setNewNote(TextLib.Category.Introduce, stack, TextLib.Item.NoteBook_1);
+		setNewNote(TextLib.Category.Introduce, stack, TextLib.Item.NoteBook_2);
+		return super.getItemStackDisplayName(stack);
+	}
+	
 	@Nonnull
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, @Nonnull EnumHand hand) {
 		ItemStack stack = player.getHeldItem(hand);
 			player.setActiveHand(hand);
-			
-			setNewNote(TextLib.Category.Introduce, stack, TextLib.Item.NoteBook_base);
-			setNewNote(TextLib.Category.Introduce, stack, TextLib.Item.NoteBook_1);
-			setNewNote(TextLib.Category.Introduce, stack, TextLib.Item.NoteBook_2);
-			
-			if(hasNewKnowladge(stack))
+
+			if(stack.getTagCompound().hasKey("Note_New_Knowladge"))
 				stack.getTagCompound().removeTag("Note_New_Knowladge");
 			
 			if(world.isRemote)
@@ -70,7 +74,7 @@ public class ItemNoteBook extends ItemBase{
 			ItemStack stack = player.inventory.mainInventory.get(i);
 			if(stack.getItem() == ModItems.NOTEBOOK)
 			{
-				setNewNote(TextLib.Category.Introduce, stack, item);
+				setNewNote(cate, stack, item);
 			}
 		}
 	}
@@ -82,7 +86,7 @@ public class ItemNoteBook extends ItemBase{
 			ItemStack stack = player.inventory.mainInventory.get(i);
 			if(stack.getItem() == ModItems.NOTEBOOK)
 			{
-				setNewNote(TextLib.Category.Introduce, stack, itemName, string);
+				setNewNote(cate, stack, itemName, string);
 			}
 		}
 	}
@@ -191,7 +195,7 @@ public class ItemNoteBook extends ItemBase{
 	public static boolean hasNewKnowladge(ItemStack stack)
 	{
 		boolean b = false;
-		if(stack.hasTagCompound() && stack.getTagCompound().hasKey("Note_New_Knowladge"))
+		if(stack.hasTagCompound() && stack.getTagCompound().hasKey("Note_New_Knowladge") && stack.getTagCompound().getBoolean("Note_New_Knowladge"))
 			b = true;
 		return b;
 	}
