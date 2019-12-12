@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import testmod.seccult.client.FX.LightFX;
+import testmod.seccult.entity.livings.EntityLight;
 import testmod.seccult.entity.livings.EntityStand;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;
@@ -213,6 +213,8 @@ public class EntityLmr extends Entity
     
     protected void Ref(Entity hitEntity)
     {
+    	if(hitEntity instanceof EntityLight)
+    		return;
       Entity shooter = this.shootingEntity;
       if(!(hitEntity == shooter) && hitEntity instanceof EntityLivingBase)
       {

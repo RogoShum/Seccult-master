@@ -52,11 +52,15 @@ public class ModItems
 	public static final Item SPA = new ItemBase("spa");
 	
 	public static final Item BLUE_FEATHER = new ItemBase("blue_feather");
+	public static final Item YELLOW_FEATHER = new ItemBase("yellow_feather");
+	public static final Item MAGENTA_FEATHER = new ItemBase("magenta_feather");
 	public static final Item GECKO_TAIL = new ItemBase("gecko_tail");
 	public static final Item GECKO_EYE = new ItemBase("gecko_eye");
 	public static final Item WING = new ItemBase("wing");
-	public static final Item MAGICK_POWER = new ItemBase("magick_power");
-	public static final Item PETAL = new ItemBase("petal");
+	public static final Item MAGICK_POWER = new ItemBase("magick_powder");
+	public static final Item B_PETAL = new ItemBase("blue_petal");
+	public static final Item Y_PETAL = new ItemBase("yellow_petal");
+	public static final Item M_PETAL = new ItemBase("magenta_petal");
 	public static final Item REFLECTIVE_CRYSTAL = new ItemBase("refractive_crystal");
 	public static final Item SPACE_COLLOID = new ItemBase("space_colloid");
 	public static final Item MR_THINK = new ItemBase("mr_think");
@@ -78,6 +82,7 @@ public class ModItems
 	public static final Item BLACK_CAT_FUR = new ItemBase("black_fur");
 	public static final Item DRAGON_BONE = new ItemBase("dragon_bone");
 	public static final Item EYE = new ItemBase("eye");
+	public static final Item ALL_METAL = new ItemBase("all_metal");
 	
 	public static final Item Dark_M = new ItemBase("dark_m");
 	public static final Item Blood_M = new ItemBase("blood_m");

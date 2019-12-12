@@ -8,7 +8,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.ClientProxy;
-import testmod.seccult.client.FX.LightFX;
+import testmod.seccult.client.FX.ModFX;
+import testmod.seccult.client.FX.ParticleFX;
 import testmod.seccult.entity.projectile.EntityBloodBeam;
 
 @SideOnly(Side.CLIENT)
@@ -25,9 +26,10 @@ public class RenderBloodBeam extends Render<EntityBloodBeam>
 	public void doRender(EntityBloodBeam entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 		renderCycle(x, y + entity.height / 2, z, 0.2F);
-			LightFX fx = new LightFX(entity.world, entity.posX, entity.posY, entity.posZ, 0, 0, 0, 1);
-			fx.setRBGColorF(1, 0, 0);
-			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+		ParticleFX fx = new ParticleFX(ParticleFX.ParticleType.Light, entity.posX, entity.posY, entity.posZ, 0, 0, 0, 1);
+		fx.setRBGColorF(1, 0, 0);
+		ModFX.addPar(fx);
+			
 	}
 	
 	public void renderCycle(double x, double y, double z, float scale)

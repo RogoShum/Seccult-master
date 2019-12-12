@@ -7,6 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import testmod.seccult.Seccult;
@@ -24,7 +25,7 @@ public class ModBlocks
 	public static final Block LOGS = new Log("log");
 	public static final Block PLANKS = new Planks("planks");
 	public static final Block LEAVES = new Leaf("leaves");
-	public static final IPlantable SAPLINGS = new Sapling("sapling");
+	public static final Block SAPLINGS = new Sapling("sapling");
 	public static final Block SPELLPROGRAMMER = new SpellProgrammer("spellprogrammer");
 	public static final BlockPortal PORTAL = new BlockPortal();
 	public static final Block OreSpawn = new BlockOreSpawn("ore_spawn", Material.WOOD);
@@ -55,5 +56,6 @@ public class ModBlocks
 	{
 		GameRegistry.registerTileEntity(tileKillerQueen.class, Seccult.MODID + ":killer_queen");
 		GameRegistry.registerTileEntity(tileEnchantingStaff.class, Seccult.MODID + ":enchanting_staff");
+		TileEntity.register(Seccult.MODID + "tileGenerator", tileGenerator.class);
 	}
 }

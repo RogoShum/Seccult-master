@@ -81,7 +81,7 @@ public class TRMagickProjectile extends TRprojectileBase{
 		{	
 			Particle a = new PropraFX(this.world, X , Y, Z, this.lookX(), this.lookY(), this.lookZ());
 			switch(this.ticksExisted % 9) {
-			case 0:			
+			case 0:
 				a.setRBGColorF(1, 0.1F, 0.5F);
 				Minecraft.getMinecraft().effectRenderer.addEffect(a);
 			break;

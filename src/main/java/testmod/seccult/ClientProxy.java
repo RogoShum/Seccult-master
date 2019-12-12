@@ -39,13 +39,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import testmod.seccult.client.FX.ATFX;
 import testmod.seccult.client.FX.FrozenBlockFX;
-import testmod.seccult.client.FX.LightFX;
-import testmod.seccult.client.FX.PentagonFX;
-import testmod.seccult.client.FX.RainbowFX;
-import testmod.seccult.client.FX.StarFX;
-import testmod.seccult.client.FX.ThunderFX;
+import testmod.seccult.client.FX.ModFX;
+import testmod.seccult.client.FX.PThunderFX;
+import testmod.seccult.client.FX.ParticleFX;
 import testmod.seccult.client.entity.render.RenderGatorix;
 import testmod.seccult.client.entity.render.RenderGatorixEvent;
 import testmod.seccult.client.entity.render.RenderHandler;
@@ -408,7 +405,7 @@ public class ClientProxy extends CommonProxy
 	public void SeccultFX(double[] pos, double[] vec, float[] color, float scale, int type)
 	{
 		Minecraft mc = Minecraft.getMinecraft();
-    	Particle par = null;
+		ParticleFX par = null;
     	
     	double x = pos[0];
     	double y = pos[1];
@@ -425,15 +422,15 @@ public class ClientProxy extends CommonProxy
 		switch(type)
     	{
     		case 0:
-    			par = new LightFX(mc.world,x,y,z, xx, yy, zz, scale);
+    			par = new ParticleFX(ParticleFX.ParticleType.Light,x,y,z, xx, yy, zz, scale);
     			par.setRBGColorF(r, g, b);
     			break;
     		case 1:
-    			par = new StarFX(mc.world,x,y,z, xx, yy, zz, scale);
+    			par = new ParticleFX(ParticleFX.ParticleType.Star,x,y,z, xx, yy, zz, scale);
     			par.setRBGColorF(r, g, b);
     			break;
     		case 2:
-    			par = new PentagonFX(mc.world,x,y,z, xx, yy, zz, scale);
+    			par = new ParticleFX(ParticleFX.ParticleType.Pentagon,x,y,z, xx, yy, zz, scale);
     			par.setRBGColorF(r, g, b);
     			break;
     		case 3:
@@ -446,7 +443,7 @@ public class ClientProxy extends CommonProxy
     		    }
     			break;
     		case 4:
-    			par = new ThunderFX(mc.world,x,y,z, xx, yy, zz, r, g, scale);
+    			par = new PThunderFX(x,y,z, xx, yy, zz, r, g, scale);
     			break;
     		case 5:
     			int distancec = (int) scale;
@@ -474,9 +471,9 @@ public class ClientProxy extends CommonProxy
     				double motionY = 1.8F - 2*mc.world.rand.nextFloat();
     				double motionZ = 0.25F - 0.5 * mc.world.rand.nextFloat();
     				
-    				Particle big = new LightFX(mc.world, tx, ty, tz, motionX / 50, motionY / 50, motionZ / 50, 1.0F + mc.world.rand.nextFloat());
+    				ParticleFX big = new ParticleFX(ParticleFX.ParticleType.Light, tx, ty, tz, motionX / 50, motionY / 50, motionZ / 50, 1.0F + mc.world.rand.nextFloat());
     		    	big.setRBGColorF(r, g, b);
-    		    	Minecraft.getMinecraft().effectRenderer.addEffect(big);
+    		    	ModFX.addPar(big);
     			}
 
     			for (int i = 0; i < distanceee; i++) {
@@ -488,25 +485,25 @@ public class ClientProxy extends CommonProxy
     				double motionY = 0.8F - mc.world.rand.nextFloat();
     				double motionZ = 0.5F - mc.world.rand.nextFloat();
     				
-    				Particle big = new LightFX(mc.world, tx, ty, tz, motionX / 50, motionY / 50, motionZ / 50, 0.5F);
+    				ParticleFX big = new ParticleFX(ParticleFX.ParticleType.Light, tx, ty, tz, motionX / 50, motionY / 50, motionZ / 50, 0.5F);
     		    	big.setRBGColorF(1, 1, 1);
     		    	
-    		    	Particle bigW = new LightFX(mc.world, tx, ty, tz, motionX / 100, motionY / 50, motionZ / 100, 0.8F);
+    		    	ParticleFX bigW = new ParticleFX(ParticleFX.ParticleType.Light, tx, ty, tz, motionX / 100, motionY / 50, motionZ / 100, 0.8F);
     		    	bigW.setRBGColorF(0.8F, 0.7F, 0.1F);
     		    	
     		    	//Particle aa = new LightFX(mc.world, tx, ty, tz, motionX / 50, motionY / 50, motionZ / 50, 0.6F + mc.world.rand.nextFloat());
     		    	//aa.setRBGColorF(r, g, b);
-    		    	//Minecraft.getMinecraft().effectRenderer.addEffect(aa);
-    		    	Minecraft.getMinecraft().effectRenderer.addEffect(bigW);
-    		    	Minecraft.getMinecraft().effectRenderer.addEffect(big);
+    		    	//ModFX.addPar(aa);
+    		    	ModFX.addPar(bigW);
+    		    	ModFX.addPar(big);
     			}
     			
     			break;
     		case 7:
-    			Minecraft.getMinecraft().effectRenderer.addEffect(new ATFX(mc.world, x, y, z));
+    			par = new ParticleFX(ParticleFX.ParticleType.ATField, x, y, z, 0, 0, 0, 2);
     			break;
     		case 8:
-    			Minecraft.getMinecraft().effectRenderer.addEffect(new RainbowFX(mc.world, x, y, z));
+    			par = new ParticleFX(ParticleFX.ParticleType.Rainbow, x, y, z, 0, 0, 0, 2);
     			break;
     		case 100:
     			for(int i = 0; i < 20 ; i++) {
@@ -516,11 +513,11 @@ public class ClientProxy extends CommonProxy
     	            double d3 = (1 - 2*StateManager.rand.nextFloat()) / 2;
     	            double d4 = (1 - 2*StateManager.rand.nextFloat()) / 2;
     	            double d5 = (1 - 2*StateManager.rand.nextFloat()) / 2;
-    	        	Particle me = new LightFX(mc.world, (d0 +x) / 2.0D, (d1 +y) / 2.0D, (d2 +z) / 2.0D, d3/6, d4/6, d5/6, scale);
+    	            ParticleFX me = new ParticleFX(ParticleFX.ParticleType.Light, (d0 +x) / 2.0D, (d1 +y) / 2.0D, (d2 +z) / 2.0D, d3/6, d4/6, d5/6, scale);
     	        	me.setRBGColorF(r, g, b);
-    	        	Particle smoke = new StarFX(mc.world, d0, d1, d2, d3 / 5, d4 / 5, d5 / 5, scale / 3);
-    	        	Minecraft.getMinecraft().effectRenderer.addEffect(me);
-    	        	Minecraft.getMinecraft().effectRenderer.addEffect(smoke);
+    	        	ParticleFX smoke = new ParticleFX(ParticleFX.ParticleType.Star, d0, d1, d2, d3 / 5, d4 / 5, d5 / 5, scale / 3);
+    	        	ModFX.addPar(me);
+    	        	ModFX.addPar(smoke);
     			}
 
     			break;
@@ -535,9 +532,9 @@ public class ClientProxy extends CommonProxy
     				double motionY = 1 - 2*mc.world.rand.nextFloat();
     				double motionZ = 1 - 2*mc.world.rand.nextFloat();
     				
-    				Particle big = new PentagonFX(mc.world, tx, ty, tz, motionX / 25, motionY / 25, motionZ / 25, 0.4F);
+    				ParticleFX big = new ParticleFX(ParticleFX.ParticleType.Pentagon, tx, ty, tz, motionX / 25, motionY / 25, motionZ / 25, 0.4F);
     		    	big.setRBGColorF(r, g, b);
-    		    	Minecraft.getMinecraft().effectRenderer.addEffect(big);
+    		    	ModFX.addPar(big);
     			}
     			break;
     		case 102:
@@ -548,10 +545,10 @@ public class ClientProxy extends CommonProxy
     			       double d3 = (1 - 2*StateManager.rand.nextFloat()) / 2;
     			       double d4 = (1 - 2*StateManager.rand.nextFloat()) / 2;
     			       double d5 = (1 - 2*StateManager.rand.nextFloat()) / 2;
-    			    	Particle big = new LightFX(mc.world, d0, d1, d2, -d3 / 20, -d4 / 20, -d5 / 20, scale / 2);
+    			       ParticleFX big = new ParticleFX(ParticleFX.ParticleType.Light, d0, d1, d2, -d3 / 20, -d4 / 20, -d5 / 20, scale / 2);
     			    	big.setRBGColorF(r, g, b);
     			    	big.setMaxAge(60);
-    			    	Minecraft.getMinecraft().effectRenderer.addEffect(big);
+    			    	ModFX.addPar(big);
     				}
     			break;
     		case 103:
@@ -562,10 +559,10 @@ public class ClientProxy extends CommonProxy
     				motionX = motionX * scale / 4;
     				motionY = motionY * scale / 4;
     				motionZ = motionZ * scale / 4;
-    				Particle big = new LightFX(mc.world, x, y, z, motionX / 4, motionY / 4, motionZ / 4, scale * 5);
+    				ParticleFX big = new ParticleFX(ParticleFX.ParticleType.Light, x, y, z, motionX / 4, motionY / 4, motionZ / 4, scale * 5);
     		    	big.setRBGColorF(r, g, b);
     				big.setMaxAge(10);
-    		    	Minecraft.getMinecraft().effectRenderer.addEffect(big);
+    		    	ModFX.addPar(big);
     			}
     			break;
     		case 104:
@@ -576,9 +573,9 @@ public class ClientProxy extends CommonProxy
     						float randF = mc.world.rand.nextFloat()*2;
     						if(randF > 1.85 || randF < 0.15)
     						{
-    						Particle cc = new LightFX(mc.world, pos2.getX(), pos2.getY(), pos2.getZ(), xx, yy, zz, (scale2) / 6  * randF);
-    						cc.setRBGColorF(r, g, b);
-        					Minecraft.getMinecraft().effectRenderer.addEffect(cc);
+    							ParticleFX cc = new ParticleFX(ParticleFX.ParticleType.Light, pos2.getX(), pos2.getY(), pos2.getZ(), xx, yy, zz, (scale2) / 6  * randF);
+    							cc.setRBGColorF(r, g, b);
+    							ModFX.addPar(cc);
     						}
     				}
     			break;
@@ -596,16 +593,16 @@ public class ClientProxy extends CommonProxy
     				motionX = motionX * scale / 3;
     				motionY = motionY * scale / 3;
     				motionZ = motionZ * scale / 3;
-    				Particle big = new PentagonFX(mc.world, x, y, z, motionX / 4, motionY / 4, motionZ / 4, scale * 5);
+    				ParticleFX big = new ParticleFX(ParticleFX.ParticleType.Pentagon, x, y, z, motionX / 4, motionY / 4, motionZ / 4, scale * 5);
     		    	big.setRBGColorF(r, g, b);
-    		    	Minecraft.getMinecraft().effectRenderer.addEffect(big);
+    		    	ModFX.addPar(big);
     			}
 				
 			break;	
     }
 
     	if(par != null)
-		mc.effectRenderer.addEffect(par);
+    		ModFX.addPar(par);
 	}
 	
 	public static Iterable<BlockPos> getAllInBox(final double x1, final double y1, final double z1, final double x2, final double y2, final double z2)

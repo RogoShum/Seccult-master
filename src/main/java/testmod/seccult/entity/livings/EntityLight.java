@@ -25,12 +25,15 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import testmod.seccult.client.FX.ATFX;
+import testmod.seccult.client.FX.ParticleFX;
 import testmod.seccult.client.FX.SuperLaserBeamFX;
 import testmod.seccult.entity.EntityLmr;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.items.ItemMagickable;
 import testmod.seccult.magick.ImplementationHandler;
+import testmod.seccult.network.NetworkEffectData;
+import testmod.seccult.network.NetworkHandler;
+import testmod.seccult.network.TransPoint;
 import testmod.seccult.util.ChunkCoordinates;
 import testmod.seccult.util.MathHelper.MathHelper;
 
@@ -333,11 +336,14 @@ public class EntityLight extends EntityMob
 	      hitEntity.motionZ = -z * 10;
      }
     }
-    
-    @SideOnly(Side.CLIENT)
     protected void ref_fx(Entity hitEntity)
     {
-    	Minecraft.getMinecraft().effectRenderer.addEffect(new ATFX(this.world, hitEntity.posX, hitEntity.posY, hitEntity.posZ));
+    	double[] vec = {0, 0, 0};
+		double[] pos = {hitEntity.posX, hitEntity.posY + hitEntity.height / 2, hitEntity.posZ};
+		float[] color = {1F, 0.9F, 0.5F};
+		
+    	NetworkHandler.sendToAllAround(new NetworkEffectData(pos, vec, color, 1, 7)
+				, new TransPoint(hitEntity.dimension, hitEntity.posX, hitEntity.posY, hitEntity.posZ, 32), hitEntity.world);
     }
        private boolean isSuitableTarget(EntityLivingBase par1EntityLiving)
        {

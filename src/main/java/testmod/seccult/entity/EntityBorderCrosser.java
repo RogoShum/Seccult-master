@@ -17,8 +17,13 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.ForgeChunkManager.LoadingCallback;
+import net.minecraftforge.common.ForgeChunkManager.Ticket;
+import net.minecraftforge.common.ForgeChunkManager.Type;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import testmod.seccult.Seccult;
 import testmod.seccult.world.gen.TestTeleporter;
 
 public class EntityBorderCrosser extends Entity implements ISpaceEntity{
@@ -27,6 +32,7 @@ public class EntityBorderCrosser extends Entity implements ISpaceEntity{
 
 	public int tick;
 	private int dimensionId;
+	private Ticket ticket;
 	
 	public EntityBorderCrosser(World worldIn) {
 		super(worldIn);
@@ -40,21 +46,30 @@ public class EntityBorderCrosser extends Entity implements ISpaceEntity{
 
 	public EntityBorderCrosser(World worldIn, int dimensionId)
 	{
-		super(worldIn);
+		this(worldIn);
 		this.dimensionId = dimensionId;
-		this.setSize(5.0F, 5.0F);
-		this.setNoGravity(true);
-		this.noClip = true;
-		this.collided = false;
-		this.isImmuneToFire = true;
-		this.setEntityInvulnerable(true);
+		this.ticket = ForgeChunkManager.requestTicket(Seccult.instance, world, Type.ENTITY);
+		if(!this.world.isRemote && this.ticket != null)
+		{
+			this.ticket.bindEntity(this);
+			ForgeChunkManager.forceChunk(ticket, this.world.getChunkFromBlockCoords(getPosition()).getPos());
+		}
 	}
+
 	
 	@Override
 	public boolean isEntityAlive() {if(this.tick < 120) this.isDead = false; return true;}
 	
 	@Override
-	public void setDead() {if(this.tick >= 120) this.isDead = true;}
+	public void setDead() 
+	{
+		if(this.tick >= 120) 
+		{
+			this.isDead = true;
+			if(!this.world.isRemote && this.ticket != null)
+			ForgeChunkManager.unforceChunk(this.ticket, this.world.getChunkFromBlockCoords(getPosition()).getPos());
+		}
+	}
 	
 	@Override
 	protected void entityInit() {
@@ -85,7 +100,7 @@ public class EntityBorderCrosser extends Entity implements ISpaceEntity{
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
- 
+		
 		if(this.ticksExisted == 1)
 			this.world.playSound((EntityPlayer)null, new BlockPos(this.posX, this.posY, this.posZ), SoundEvents.ENTITY_ENDEREYE_DEATH, SoundCategory.NEUTRAL, 2.0F, 2.0F);
 		
@@ -97,7 +112,7 @@ public class EntityBorderCrosser extends Entity implements ISpaceEntity{
 		for(int i = 0; i < entities.size(); ++i)
 		{
 			Entity entity = entities.get(i);
-			if(entity instanceof EntityBorderCrosser)
+			if(entity instanceof EntityBorderCrosser || entity instanceof EntityBarrier)
 				entities.remove(i);
 		}
 		

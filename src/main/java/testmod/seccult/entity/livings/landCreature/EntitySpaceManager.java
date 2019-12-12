@@ -123,7 +123,7 @@ public class EntitySpaceManager extends EntityCreature implements EntityFlying, 
 		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1D);
 	}
-	
+
 	@Override
 	public void onUpdate() {
 		this.noClip = true;
@@ -554,7 +554,7 @@ public class EntitySpaceManager extends EntityCreature implements EntityFlying, 
 	@Override
 	protected void finalize() throws Throwable {
 		super.finalize();
-		if(this.world != null && !this.world.isRemote) 
+		if(this.world != null) 
 		{
 			if(this.getHealth() > 0)
 			{
@@ -562,7 +562,7 @@ public class EntitySpaceManager extends EntityCreature implements EntityFlying, 
 				this.deathTime = 0;
 				this.world.spawnEntity(this);
 			}
-			else
+			else if(!this.world.isRemote)
 			{
 				EntitySpaceManager newManager = new EntitySpaceManager(world);
 				newManager.setPosition(this.posX + 5 - this.rand.nextInt(10), this.posY + 5 - this.rand.nextInt(10), this.posZ + 5 - this.rand.nextInt(10));

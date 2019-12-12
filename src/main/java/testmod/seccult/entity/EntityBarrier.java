@@ -21,10 +21,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.ForgeChunkManager.Ticket;
+import net.minecraftforge.common.ForgeChunkManager.Type;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import testmod.seccult.Seccult;
 import testmod.seccult.magick.active.MoveMagick;
 import testmod.seccult.magick.magickState.StateManager;
+import testmod.seccult.world.gen.TestTeleporter;
 
 public class EntityBarrier extends Entity implements ISpaceEntity{
 	private static final DataParameter<Float> HEIGHT = EntityDataManager.<Float>createKey(EntityBarrier.class, DataSerializers.FLOAT);
@@ -33,6 +38,7 @@ public class EntityBarrier extends Entity implements ISpaceEntity{
 	
 	private Set<Entity> entityList = new HashSet<Entity>();
 	private EntityBorderCrosser crosser;
+	private Ticket ticket;
 	
 	public EntityBarrier(World worldIn) {
 		super(worldIn);
@@ -52,6 +58,21 @@ public class EntityBarrier extends Entity implements ISpaceEntity{
 		this.setPosition(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
 		if(this.width != this.getWidth() || this.height != this.getHeight())
 			this.setSize(getWidth(), getHeight());
+		
+		this.ticket = ForgeChunkManager.requestTicket(Seccult.instance, world, Type.ENTITY);
+		if(!this.world.isRemote && this.ticket != null)
+		{
+			this.ticket.bindEntity(this);
+			ForgeChunkManager.forceChunk(ticket, this.world.getChunkFromBlockCoords(getPosition()).getPos());
+		}
+	}
+	
+	@Override
+	public void setDead() {
+		super.setDead();
+		
+		if(!this.world.isRemote && this.ticket != null)
+			ForgeChunkManager.unforceChunk(this.ticket, this.world.getChunkFromBlockCoords(getPosition()).getPos());
 	}
 	
 	public void setCrosser(EntityBorderCrosser crosser)
@@ -76,20 +97,20 @@ public class EntityBarrier extends Entity implements ISpaceEntity{
 		{
 			Entity entity = it.next();
 			
-			if(this.getEntityBoundingBox().minX > entity.getEntityBoundingBox().minX && entity.motionX < 0)
+			if(this.getEntityBoundingBox().minX > entity.getEntityBoundingBox().minX)
 				entity.motionX = 0.1;
-			if(this.getEntityBoundingBox().maxX < entity.getEntityBoundingBox().maxX && entity.motionX > 0)
+			if(this.getEntityBoundingBox().maxX < entity.getEntityBoundingBox().maxX)
 				entity.motionX = -0.1;
-			if(this.getEntityBoundingBox().minY > entity.getEntityBoundingBox().minY && entity.motionY < 0)
+			if(this.getEntityBoundingBox().minY > entity.getEntityBoundingBox().minY)
 			{
 				entity.motionY = 0.0;
 				entity.onGround = true;
 			}
-			if(this.getEntityBoundingBox().maxY < entity.getEntityBoundingBox().maxY && entity.motionY > 0)
+			if(this.getEntityBoundingBox().maxY < entity.getEntityBoundingBox().maxY)
 				entity.motionY = -0.1;
-			if(this.getEntityBoundingBox().minZ > entity.getEntityBoundingBox().minZ && entity.motionZ < 0)
+			if(this.getEntityBoundingBox().minZ > entity.getEntityBoundingBox().minZ)
 				entity.motionZ = 0.1;
-			if(this.getEntityBoundingBox().maxZ < entity.getEntityBoundingBox().maxZ && entity.motionZ > 0)
+			if(this.getEntityBoundingBox().maxZ < entity.getEntityBoundingBox().maxZ)
 				entity.motionZ = -0.1;
 			
 			if(!(this.getEntityBoundingBox().maxX > entity.posX && entity.posX > this.getEntityBoundingBox().minX &&
@@ -101,7 +122,7 @@ public class EntityBarrier extends Entity implements ISpaceEntity{
 			
 			if(entity.dimension != this.dimension)
 			{
-				entity.changeDimension(dimension);
+				entity.changeDimension(dimension, new TestTeleporter(this.getServer().getWorld(this.dimension)));
 				entity.setPositionAndUpdate(this.posX, this.posY, this.posZ);
 			}
 			

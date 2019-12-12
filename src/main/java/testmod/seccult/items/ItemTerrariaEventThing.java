@@ -26,7 +26,6 @@ import net.minecraft.world.World;
 import testmod.seccult.Seccult;
 import testmod.seccult.api.PlayerDataHandler;
 import testmod.seccult.api.PlayerDataHandler.PlayerData;
-import testmod.seccult.client.FX.ThunderFX;
 import testmod.seccult.entity.EntityAdvanceLaser;
 import testmod.seccult.entity.EntityShieldFX;
 import testmod.seccult.entity.SpiritManager;

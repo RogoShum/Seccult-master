@@ -14,8 +14,6 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.Seccult;
-import testmod.seccult.client.FX.PropraFX;
-import testmod.seccult.client.FX.RainbowFX;
 import testmod.seccult.items.TRprojectile.TRprojectileID;
 import testmod.seccult.network.NetworkEffectData;
 import testmod.seccult.network.NetworkHandler;

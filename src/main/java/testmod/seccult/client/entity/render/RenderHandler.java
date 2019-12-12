@@ -37,7 +37,7 @@ public class RenderHandler
 		RenderingRegistry.registerEntityRenderingHandler(EntityDummy.class, m -> new RenderDummy(m));
 		RenderingRegistry.registerEntityRenderingHandler(EntityChangeling.class, m -> new RenderChangeling(m));
 		RenderingRegistry.registerEntityRenderingHandler(EntityLmr.class, m -> new RenderLmr(m));
-		RenderingRegistry.registerEntityRenderingHandler(EntityIMProjectile.class, m -> new RenderLmr(m));
+		RenderingRegistry.registerEntityRenderingHandler(EntityIMProjectile.class, m -> new RenderIMProjectile(m));
 		RenderingRegistry.registerEntityRenderingHandler(EntityIMCircle.class, m -> new RenderIMCircle(m));
 		RenderingRegistry.registerEntityRenderingHandler(EntityClowCardArrow.class, m -> new RenderClowArrow(m));
 		RenderingRegistry.registerEntityRenderingHandler(EntityTimeManager.class, m -> new RenderTimeManager(m));

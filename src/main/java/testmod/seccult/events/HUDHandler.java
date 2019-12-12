@@ -30,8 +30,8 @@ import testmod.seccult.api.PlayerSpellReleaseTool;
 import testmod.seccult.api.PlayerDataHandler.PlayerData;
 import testmod.seccult.api.PlayerSpellReleaseTool.PlayerSpellTool;
 import testmod.seccult.client.FX.FogFX;
-import testmod.seccult.client.FX.LightFX;
-import testmod.seccult.client.FX.StarFX;
+import testmod.seccult.client.FX.ModFX;
+import testmod.seccult.client.FX.ParticleFX;
 import testmod.seccult.client.gui.GuiElementLoader;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.items.ItemWand;
@@ -103,11 +103,11 @@ public class HUDHandler {
                     	            double d3 = (1 - 2*StateManager.rand.nextFloat()) / 2;
                     	            double d4 = (1 - 2*StateManager.rand.nextFloat()) / 2;
                     	            double d5 = (1 - 2*StateManager.rand.nextFloat()) / 2;
-                    	        	Particle me = new LightFX(mc.world, (d0 + player.posX) / 2.0D, (d1 + player.posY + player.height / 2) / 2.0D, (d2 + player.posZ) / 2.0D, d3/6, d4/6, d5/6, 0.3F);
+                    	            ParticleFX me = new ParticleFX(ParticleFX.ParticleType.Light, (d0 + player.posX) / 2.0D, (d1 + player.posY + player.height / 2) / 2.0D, (d2 + player.posZ) / 2.0D, d3/6, d4/6, d5/6, 0.3F);
                     	        	me.setRBGColorF(tool.getSpellColor()[0], tool.getSpellColor()[1], tool.getSpellColor()[2]);
-                    	        	Particle smoke = new StarFX(mc.world, d0, d1, d2, d3 / 5, d4 / 5, d5 / 5, 0.1F);
-                    	        	Minecraft.getMinecraft().effectRenderer.addEffect(me);
-                    	        	Minecraft.getMinecraft().effectRenderer.addEffect(smoke);
+                    	        	ParticleFX smoke = new ParticleFX(ParticleFX.ParticleType.Star, d0, d1, d2, d3 / 5, d4 / 5, d5 / 5, 0.1F);
+                    	        	ModFX.addPar(me);
+                    	        	ModFX.addPar(smoke);
                     			}
                 			}
         		}

@@ -8,7 +8,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.Seccult;
-import testmod.seccult.client.FX.LightFX;
+import testmod.seccult.client.FX.ModFX;
+import testmod.seccult.client.FX.ParticleFX;
 import testmod.seccult.client.entity.model.ModelDummySystem;
 import testmod.seccult.entity.livings.EntitySpiritDummy;
 import testmod.seccult.magick.active.Magick;
@@ -33,9 +34,9 @@ public class RenderDummySystem extends RenderLiving<EntitySpiritDummy>
 			Magick magick = entity.getLeftHandMagick();
 			Vec3d handVec = entity.getLookVec().rotateYaw(0.45F);
 			Vec3d left = entity.getPositionVector().addVector(handVec.x, handVec.y + entity.getEyeHeight(), handVec.z);
-			LightFX light = new LightFX(entity.world, left.x, left.y, left.z, 0, 0.02D, 0, 1.5F);
+			ParticleFX light = new ParticleFX(ParticleFX.ParticleType.Light, left.x, left.y, left.z, 0, 0.02D, 0, 1.5F);
 			light.setRBGColorF(magick.getRGB()[0], magick.getRGB()[1], magick.getRGB()[2]);
-			Minecraft.getMinecraft().effectRenderer.addEffect(light);
+			ModFX.addPar(light);
 		}
 		
 		if(entity.getRightHandMagick() != null)
@@ -43,9 +44,9 @@ public class RenderDummySystem extends RenderLiving<EntitySpiritDummy>
 			Magick magick = entity.getRightHandMagick();
 			Vec3d handVec = entity.getLookVec().rotateYaw(-0.45F);
 			Vec3d left = entity.getPositionVector().addVector(handVec.x, handVec.y + entity.getEyeHeight(), handVec.z);
-			LightFX light = new LightFX(entity.world, left.x, left.y, left.z, 0, 0.02D, 0, 1.5F);
+			ParticleFX light = new ParticleFX(ParticleFX.ParticleType.Light, left.x, left.y, left.z, 0, 0.02D, 0, 1.5F);
 			light.setRBGColorF(magick.getRGB()[0], magick.getRGB()[1], magick.getRGB()[2]);
-			Minecraft.getMinecraft().effectRenderer.addEffect(light);
+			ModFX.addPar(light);
 		}
 	}
 	

@@ -13,7 +13,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import testmod.seccult.client.FX.LightFX;
+import testmod.seccult.client.FX.ModFX;
+import testmod.seccult.client.FX.ParticleFX;
 import testmod.seccult.entity.livings.EntitySpiritContainer;
 
 @SideOnly(Side.CLIENT)
@@ -70,9 +71,9 @@ public class RenderSpiritContainer extends RenderLivingBase<EntitySpiritContaine
 	    	    }
 	    	    else
 	    	    {
-	    	    	LightFX par = new LightFX(entity.world, entity.posX, entity.posY + entity.height / 2, entity.posZ, 0, 0, 0, 2F);
+	    	    	ParticleFX par = new ParticleFX(ParticleFX.ParticleType.Light, entity.posX, entity.posY + entity.height / 2, entity.posZ, 0, 0, 0, 2F);
         			par.setRBGColorF(0.5F, 0.7F, 1);
-        			Minecraft.getMinecraft().effectRenderer.addEffect(par);
+        			ModFX.addPar(par);
 	    	    }
         	}
 	    }

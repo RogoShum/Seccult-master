@@ -9,7 +9,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import testmod.seccult.client.FX.PropraFX;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.items.TRprojectile.TRprojectileID;
 import testmod.seccult.network.NetworkEffectData;

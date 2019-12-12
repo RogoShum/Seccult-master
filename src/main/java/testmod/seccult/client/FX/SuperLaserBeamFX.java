@@ -39,7 +39,7 @@ public class SuperLaserBeamFX extends Particle {
         this.posX = player.posX;
         this.posY = player.posY;
         this.posZ = player.posZ;
-        this.setParticleTexture(LightFX.test2);
+        this.setParticleTexture(ModFX.Light);
     }
 
     public SuperLaserBeamFX(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn) {

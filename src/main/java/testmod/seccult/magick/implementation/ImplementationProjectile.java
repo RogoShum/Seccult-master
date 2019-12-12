@@ -25,7 +25,7 @@ public class ImplementationProjectile extends ImplementationStoreable{
 					projec.shoot(IMentity.getLookVec().x * 0.1, IMentity.getLookVec().y * 0.1, IMentity.getLookVec().z * 0.1, base, addtion);
 					projec.setData(LoadMagick, LoadSelect, this.doEntity, this.doBlock);
 					projec.setColor(this.color[0], this.color[1], this.color[2]);
-					projec.setScale(scale);
+					projec.setRender(scale);
 					player.world.spawnEntity(projec);
 				}
 			}

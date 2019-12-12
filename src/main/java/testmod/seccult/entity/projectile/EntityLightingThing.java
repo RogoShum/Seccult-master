@@ -17,7 +17,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import testmod.seccult.client.FX.LightFX;
 import testmod.seccult.entity.livings.water.EntityRockShellLeviathan;
 import testmod.seccult.magick.active.TeleportMagick;
 import testmod.seccult.network.NetworkEffectData;

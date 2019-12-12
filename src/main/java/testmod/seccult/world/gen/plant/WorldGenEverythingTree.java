@@ -10,6 +10,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
+import net.minecraftforge.common.IPlantable;
 import testmod.seccult.blocks.Leaf;
 import testmod.seccult.blocks.Log;
 import testmod.seccult.init.ModBlocks;
@@ -78,7 +79,7 @@ public class WorldGenEverythingTree extends WorldGenAbstractTree
             {
                 IBlockState state = worldIn.getBlockState(position.down());
 
-                if (state.getBlock().canSustainPlant(state, worldIn, position.down(), net.minecraft.util.EnumFacing.UP, ModBlocks.SAPLINGS) && position.getY() < worldIn.getHeight() - i - 1)
+                if (state.getBlock().canSustainPlant(state, worldIn, position.down(), net.minecraft.util.EnumFacing.UP, (IPlantable) ModBlocks.SAPLINGS) && position.getY() < worldIn.getHeight() - i - 1)
                 {
                     state.getBlock().onPlantGrow(state, worldIn, position.down(), position);
                     int k2 = 3;

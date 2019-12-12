@@ -23,7 +23,6 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.Seccult;
-import testmod.seccult.client.FX.PentagonFX;
 import testmod.seccult.events.ModEventHandler;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.init.ModMagicks;

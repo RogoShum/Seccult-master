@@ -30,7 +30,7 @@ public class FrozenBlockFX extends Particle {
         this.posZ = posZIn;
         this.particleMaxAge = (int) maxage;
         this.particleScale = 20;
-        this.setParticleTexture(LightFX.test2);
+        this.setParticleTexture(ModFX.Light);
     }
 
     public FrozenBlockFX(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn) {
