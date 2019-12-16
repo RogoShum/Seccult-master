@@ -26,19 +26,12 @@ import testmod.seccult.init.ModItems;
 import testmod.seccult.items.IMagickable;
 import testmod.seccult.util.registerModel;
 
-public class BlockEnchantingStaff extends BlockContainer implements registerModel{
-	private final String name;
+public class BlockEnchantingStaff extends BlockTileEntity{
 	protected static final AxisAlignedBB UNPRESSED_AABB = new AxisAlignedBB(0.3D, 0.0D, 0.3D, 0.7D, 0.6D, 0.7D);
 	
-	public BlockEnchantingStaff(String name) {
-		super(Material.IRON);
-		this.name = name;
-		setSoundType(SoundType.METAL);
-		setRegistryName(name);
-		setUnlocalizedName(name);
-		this.setCreativeTab(CreativeTabsLoader.tab);
-		ModBlocks.BLOCKS.add(this);
-		ModItems.ITEMS.add(new ItemBlock(this).setRegistryName(this.getRegistryName()));
+	public BlockEnchantingStaff(String name, Material materialIn) {
+		super(name, materialIn);
+		setSoundType(SoundType.STONE);
 	}
 
 	@Override
@@ -92,11 +85,5 @@ public class BlockEnchantingStaff extends BlockContainer implements registerMode
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.MODEL;
-	}
-	
-	@Override
-	public void registerModels() 
-	{
-		Seccult.proxy.registerVariantRenderer(Item.getItemFromBlock(this), 0, this.name, "inventory");
 	}
 }

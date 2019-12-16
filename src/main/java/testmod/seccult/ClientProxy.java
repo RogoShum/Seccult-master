@@ -39,6 +39,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import testmod.seccult.blocks.tileEntity.tileMagickCrafting;
 import testmod.seccult.client.FX.FrozenBlockFX;
 import testmod.seccult.client.FX.ModFX;
 import testmod.seccult.client.FX.PThunderFX;
@@ -47,6 +48,7 @@ import testmod.seccult.client.entity.render.RenderGatorix;
 import testmod.seccult.client.entity.render.RenderGatorixEvent;
 import testmod.seccult.client.entity.render.RenderHandler;
 import testmod.seccult.client.textlib.TextLib;
+import testmod.seccult.client.tileEntity.render.RenderMagickCrafting;
 import testmod.seccult.entity.EntitySound;
 import testmod.seccult.entity.livings.EntityBase;
 import testmod.seccult.entity.livings.IBossBase;
@@ -168,6 +170,7 @@ public class ClientProxy extends CommonProxy
 		MinecraftForge.EVENT_BUS.register(new HUDHandler());
 		MinecraftForge.EVENT_BUS.register(new EntityRenderHandler());
 		MinecraftForge.EVENT_BUS.register(new RenderGatorixEvent());
+		ClientRegistry.bindTileEntitySpecialRenderer(tileMagickCrafting.class, new RenderMagickCrafting());
 		ItemColoerRegister();
 	}
 

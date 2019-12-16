@@ -10,6 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
@@ -24,6 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.Seccult;
+import testmod.seccult.entity.livings.EntityBase;
 import testmod.seccult.init.ModSounds;
 import testmod.seccult.items.armor.MagickArmor;
 
@@ -60,6 +62,12 @@ public class ItemSoulStone extends ItemBase{
 		
 		if(stack.getItem() != null && stack.getItem() instanceof ItemSoulStone && living != null)
 		{
+			if(living instanceof EntityPlayer)
+			{
+				 stack.getTagCompound().setString("playerSoul", living.getName());
+			}
+			
+			
 			 ResourceLocation className = EntityList.getKey(living.getClass());
 			 if(className != null) 
 			 {
@@ -106,6 +114,11 @@ public class ItemSoulStone extends ItemBase{
 					return living;
 				}
 			}
+			else if (nbt != null && nbt.hasKey("playerSoul"))
+			{
+				EntityBase mp = new EntityBase(world);
+				mp.setCustomNameTag(nbt.getString("playerSoul"));
+			}
 		}
 		return null;
 	}
@@ -113,6 +126,7 @@ public class ItemSoulStone extends ItemBase{
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		worldIn.playSound((EntityPlayer)null, new BlockPos(playerIn.posX, playerIn.posY, playerIn.posZ), ModSounds.gatorix_spawn, SoundCategory.NEUTRAL, 2.0F, 2.0F);
+		
 		return new ActionResult<ItemStack>(EnumActionResult.PASS, playerIn.getHeldItem(handIn));
 	}
 }

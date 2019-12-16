@@ -15,7 +15,6 @@ import net.minecraft.world.WorldServer;
 import testmod.seccult.api.PlayerDataHandler;
 import testmod.seccult.api.PlayerDataHandler.PlayerData;
 import testmod.seccult.events.ModEventHandler;
-import testmod.seccult.events.PlayerDataUpdateEvent;
 import testmod.seccult.init.ModMagicks;
 import testmod.seccult.magick.active.ElectroMagick;
 import testmod.seccult.magick.active.FlameMagick;
@@ -275,6 +274,7 @@ public class MagickCompiler {
 			imples.setAttribute(implesattributeBase, implesattributeAddtion);
 			imples.setEntity(entity);
 			imples.setBlock(block);
+
 			if(imples instanceof ImplementationStoreable)
 			{
 				NBTTagList NewList = new NBTTagList();

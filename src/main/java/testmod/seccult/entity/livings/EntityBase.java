@@ -57,7 +57,7 @@ public class EntityBase extends EntityCreature implements EntityUsingMagicHelper
 	public EntityBase(World worldIn) {
 		super(worldIn);
 	}
-
+	
     protected void entityInit()
     {
         super.entityInit();

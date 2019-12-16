@@ -15,6 +15,7 @@ import testmod.seccult.blocks.*;
 import testmod.seccult.blocks.tileEntity.tileEnchantingStaff;
 import testmod.seccult.blocks.tileEntity.tileGenerator;
 import testmod.seccult.blocks.tileEntity.tileKillerQueen;
+import testmod.seccult.blocks.tileEntity.tileMagickCrafting;
 
 public class ModBlocks 
 {
@@ -48,13 +49,15 @@ public class ModBlocks
 	public static final Block Mush_Gen = new BlockGenerator();
 	
 	//tile
-	public static final Block KILLER_QUEEN = new BlockKillerQueen("killer_queen");
-	public static final Block Enchanting_Staff = new BlockEnchantingStaff("enchanting_staff");
+	public static final Block KILLER_QUEEN = new BlockKillerQueen("killer_queen", Material.IRON);
+	public static final Block Enchanting_Staff = new BlockEnchantingStaff("enchanting_staff", Material.ROCK);
+	public static final Block MAGICK_CRAFTING = new BlockMagickCrafting("magick_crafting", Material.WOOD);
 
 	@SuppressWarnings("deprecation")
 	public static void tile()
 	{
 		GameRegistry.registerTileEntity(tileKillerQueen.class, Seccult.MODID + ":killer_queen");
+		GameRegistry.registerTileEntity(tileMagickCrafting.class, Seccult.MODID + ":magick_crafting");
 		GameRegistry.registerTileEntity(tileEnchantingStaff.class, Seccult.MODID + ":enchanting_staff");
 		TileEntity.register(Seccult.MODID + "tileGenerator", tileGenerator.class);
 	}

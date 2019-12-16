@@ -2,17 +2,24 @@ package testmod.seccult.events;
 
 import org.lwjgl.util.glu.Disk;
 
+import com.google.common.collect.ImmutableList;
+
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import testmod.seccult.api.PlayerDataHandler;
@@ -31,6 +38,25 @@ public class EntityRenderHandler {
 	private static ResourceLocation square = new ResourceLocation("seccult:textures/spell/square.png");
 	
 	public EntityRenderHandler() {}
+	public static int ticksInGame = 0;
+	public static float partialTicks = 0;
+	public static float delta = 0;
+	public static float total = 0;
+
+	private static void calcDelta() {
+		float oldTotal = total;
+		total = ticksInGame + partialTicks;
+		delta = total - oldTotal;
+	}
+
+	@SubscribeEvent
+	public void renderTick(RenderTickEvent event) {
+		if(event.phase == Phase.START)
+			partialTicks = event.renderTickTime;
+		else {
+			calcDelta();
+		}
+	}
 	
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
@@ -43,6 +69,18 @@ public class EntityRenderHandler {
 		}
 	}
 
+	@SubscribeEvent
+	public void clientTickEnd(ClientTickEvent event) {
+		if(event.phase == Phase.END) {
+			GuiScreen gui = Minecraft.getMinecraft().currentScreen;
+			if(gui == null || !gui.doesGuiPauseGame()) {
+				ticksInGame++;
+				partialTicks = 0;
+			}
+			calcDelta();
+		}
+	}
+	
 	/*@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onStaffParticle(RenderPlayerEvent.Post event)

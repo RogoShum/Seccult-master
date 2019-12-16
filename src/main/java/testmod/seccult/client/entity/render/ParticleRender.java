@@ -28,7 +28,7 @@ public class ParticleRender {
         Entity entity = Minecraft.getMinecraft().player;
         
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);
-		
+        
 		x -= entity.posX;
 		y -= entity.posY;
 		z -= entity.posZ;

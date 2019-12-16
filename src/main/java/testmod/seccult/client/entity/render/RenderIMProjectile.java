@@ -33,7 +33,7 @@ public class RenderIMProjectile extends Render<EntityIMProjectile>{
 
             ParticleFX me = new ParticleFX(ParticleFX.ParticleType.Light, entity.posX, entity.posY, entity.posZ, d0, d1, d2, entity.getMySize());
         	me.setRBGColorF(red, green, blue);
-
+        	me.setMaxAge(10);
         	ModFX.addPar(me);
     	}
 	}

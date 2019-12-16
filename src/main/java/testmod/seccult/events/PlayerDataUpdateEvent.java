@@ -11,12 +11,17 @@ import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
@@ -26,6 +31,7 @@ import testmod.seccult.api.PlayerDataHandler;
 import testmod.seccult.api.PlayerDataHandler.PlayerData;
 import testmod.seccult.api.PlayerSpellReleaseTool;
 import testmod.seccult.api.accessorie.PlayerAccessorieHandler;
+import testmod.seccult.blocks.tileEntity.tileMagickCrafting;
 import testmod.seccult.init.ModDamage;
 import testmod.seccult.init.ModItems;
 import testmod.seccult.items.ItemWand;
@@ -117,6 +123,31 @@ public class PlayerDataUpdateEvent {
 		{
 			EntityPlayer player = (EntityPlayer)event.getSource().getTrueSource();
 			PlayerDataHandler.get(player).levelUpper();
+		}
+	}
+	
+	@SubscribeEvent
+	public void onInteract(PlayerInteractEvent event)
+	{
+		EntityPlayer player = event.getEntityPlayer();
+		BlockPos pos = event.getPos();
+		World world = event.getWorld();
+		if(player.isSneaking() && player.world.getTileEntity(pos) instanceof tileMagickCrafting)
+		{
+			tileMagickCrafting tile = (tileMagickCrafting) player.world.getTileEntity(pos);
+			if(player.getHeldItem(event.getHand()).isEmpty())
+			{
+				ItemStack stack = tile.getItemStack();
+				if(stack == null)
+					return;
+				EntityItem item = new EntityItem(world, pos.getX(), pos.getY() + 0.5, pos.getZ(), stack);
+				if(!world.isRemote)
+					world.spawnEntity(item);
+			}
+			else if(player.getHeldItem(event.getHand()).getItem() == ModItems.SoulStone)
+			{
+				
+			}
 		}
 	}
 	

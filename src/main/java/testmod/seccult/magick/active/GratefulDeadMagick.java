@@ -30,30 +30,22 @@ public class GratefulDeadMagick extends Magick implements ControllerMagic{
 
 	@Override
 	void toBlock() {
-		for(int i = 0; i < attribute * strengh; ++i)
-		{
-			ItemStack stack = new ItemStack(Items.DYE);
-			stack.setItemDamage(EnumDyeColor.WHITE.getDyeDamage());
-			ItemDye.applyBonemeal(stack, player.world, block);
 		
-		/*Block b = this.player.world.getBlockState(block).getBlock();
-        if (b instanceof IGrowable)
-        {
-            IGrowable igrowable = (IGrowable)b;
+		IBlockState iblockstate = player.world.getBlockState(block);
 
-            if (igrowable.canGrow(player.world, block, player.world.getBlockState(block), player.world.isRemote))
-            {
-                if (!player.world.isRemote)
-                {
-                    if (igrowable.canUseBonemeal(player.world, player.world.rand, block, player.world.getBlockState(block)))
-                    {
-                        igrowable.grow(player.world, player.world.rand, block, player.world.getBlockState(block));
-                    }
-                }
-            }
-        }*/
-		}
-		
+		 if (iblockstate.getBlock() instanceof IGrowable)
+		 {
+			 IGrowable igrowable = (IGrowable)iblockstate.getBlock();
+
+			 if (igrowable.canGrow(player.world, block, iblockstate, player.world.isRemote))
+			 {
+				 for(int i = 0; i < attribute * strengh; ++i)
+				 {
+					 igrowable.grow(player.world, player.world.rand, block, iblockstate);
+				 }
+	         }
+		 }
+
 		if(player.world.getTileEntity(block) != null)
 		{
 			TileEntity tile = player.world.getTileEntity(block);

@@ -50,6 +50,7 @@ public class ModItems
 	public static final Item NOTEBOOK = new ItemNoteBook("notebook");
 	
 	public static final Item SPA = new ItemBase("spa");
+	public static final Item ANTI_MAGICK = new ItemBase("antimagick_powder");
 	
 	public static final Item BLUE_FEATHER = new ItemBase("blue_feather");
 	public static final Item YELLOW_FEATHER = new ItemBase("yellow_feather");
@@ -103,6 +104,7 @@ public class ModItems
 	//public static final Item SCP173 = new ItemSCP173("scp173");
 	public static final Item Wand = new ItemWand("wand");
 	public static final Item ELDER_WAND = new ItemWand("elder_wand");
+	public static final Item GROWER = new ItemGrower("grower");
 	public static final Item SoulStone = new ItemSoulStone("soul_stone");
 	public static final Item DummySystem = new ItemDummySystem("dummy_system");
 	public static final Item MagickCore = new ItemMagickCore("magick_core");

@@ -33,18 +33,11 @@ import testmod.seccult.items.ItemSoulStone;
 import testmod.seccult.items.armor.MagickArmor;
 import testmod.seccult.util.registerModel;
 
-public class BlockKillerQueen extends BlockContainer implements registerModel{
-	private final String name;
-	
-	public BlockKillerQueen(String name) {
-		super(Material.IRON);
-		this.name = name;
+public class BlockKillerQueen extends BlockTileEntity{
+
+	public BlockKillerQueen(String name, Material materialIn) {
+		super(name, materialIn);
 		setSoundType(SoundType.METAL);
-		setRegistryName(name);
-		setUnlocalizedName(name);
-		this.setCreativeTab(CreativeTabsLoader.tab);
-		ModBlocks.BLOCKS.add(this);
-		ModItems.ITEMS.add(new ItemBlock(this).setRegistryName(this.getRegistryName()));
 	}
 
 	@Override
@@ -96,11 +89,5 @@ public class BlockKillerQueen extends BlockContainer implements registerModel{
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.MODEL;
-	}
-	
-	@Override
-	public void registerModels() 
-	{
-		Seccult.proxy.registerVariantRenderer(Item.getItemFromBlock(this), 0, this.name, "inventory");
 	}
 }
