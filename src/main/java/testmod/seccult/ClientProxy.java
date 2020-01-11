@@ -172,6 +172,7 @@ public class ClientProxy extends CommonProxy
 		MinecraftForge.EVENT_BUS.register(new RenderGatorixEvent());
 		ClientRegistry.bindTileEntitySpecialRenderer(tileMagickCrafting.class, new RenderMagickCrafting());
 		ItemColoerRegister();
+		MinecraftForge.EVENT_BUS.register(new ModFX());
 	}
 
 	public void preInit()

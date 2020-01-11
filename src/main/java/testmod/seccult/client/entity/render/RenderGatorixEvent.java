@@ -79,7 +79,7 @@ public class RenderGatorixEvent {
                     int heightBackup = mc.displayHeight;
                     mc.renderGlobal = mirrorGlobalRenderer;
                     mc.setRenderViewEntity(entity);
-                    float fov = 32 - mc.player.getDistance(entity) * 1.2F;
+                    float fov = 32 - mc.player.getDistance(entity) * 2F;
                     if(fov < 0)
                     	fov = 0;
 

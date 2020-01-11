@@ -69,7 +69,6 @@ public class Seccult
 		ModBlocks.tile();
 		proxy.entityRender();
 		proxy.preInit();
-		MinecraftForge.EVENT_BUS.register(new ModFX());
 		TextLib.init();
 		
 		LoadingCallback callBack = new LoadingCallback() {

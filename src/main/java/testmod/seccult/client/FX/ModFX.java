@@ -33,6 +33,7 @@ import testmod.seccult.client.entity.render.ParticleRender;
 import testmod.seccult.client.entity.render.RenderGatorixEvent;
 
 @Mod.EventBusSubscriber(Side.CLIENT)
+@SideOnly(Side.CLIENT)
 public class ModFX {
 	private static final List<ParticleFX> particles = new ArrayList<ParticleFX>();
 	private static RenderManager renderer = Minecraft.getMinecraft().getRenderManager();
@@ -95,6 +96,7 @@ public class ModFX {
         }
 	}
 	
+	@SideOnly(Side.CLIENT)
 	public static void addPar(ParticleFX par)
 	{
 		particles.add(par);

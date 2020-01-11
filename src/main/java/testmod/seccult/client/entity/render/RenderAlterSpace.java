@@ -25,7 +25,6 @@ import testmod.seccult.entity.projectile.EntityAlterSpace.AlterType;
 import testmod.seccult.entity.projectile.EntitySpaceGatorix;
 
 @SideOnly(Side.CLIENT)
-@Mod.EventBusSubscriber(modid = Seccult.MODID)
 public class RenderAlterSpace extends Render<EntityAlterSpace>
 {   
 	private static final ResourceLocation END_PORTAL_TEXTURE = new ResourceLocation("textures/entity/end_portal.png");

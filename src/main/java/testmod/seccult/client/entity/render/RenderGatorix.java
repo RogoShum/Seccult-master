@@ -21,7 +21,6 @@ import testmod.seccult.Seccult;
 import testmod.seccult.entity.projectile.EntitySpaceGatorix;
 
 @SideOnly(Side.CLIENT)
-@Mod.EventBusSubscriber(modid = Seccult.MODID)
 public class RenderGatorix extends Render<EntitySpaceGatorix>
 {   
     public RenderGatorix(RenderManager manager) {
@@ -88,7 +87,7 @@ public class RenderGatorix extends Render<EntitySpaceGatorix>
         	GlStateManager.scale(size, size, size);
         	ClientProxy.callSphere();
         	GlStateManager.popMatrix();
-        	size+=0.05F;
+        	/*size+=0.05F;
         	GlStateManager.pushMatrix();
         	GlStateManager.color(1.0F, 1.0F, 1.0F, blend / 2);
         	GlStateManager.scale(size, size, size);
@@ -106,7 +105,7 @@ public class RenderGatorix extends Render<EntitySpaceGatorix>
         	GlStateManager.scale(size, size, size);
         	ClientProxy.callSphere();
         	GlStateManager.popMatrix();
-
+        	 */
         	//GlStateManager.depthMask(true);
             GlStateManager.disableRescaleNormal();
             GlStateManager.disableBlend();

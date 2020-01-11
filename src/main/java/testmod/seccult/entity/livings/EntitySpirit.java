@@ -270,10 +270,10 @@ public class EntitySpirit extends EntityBase{
 		
 		if(this.ticksExisted > 400 && this.dimension != DimensionMagic.SPIRIT_ID && !this.getHasOwner())
 		{
-			if(!this.world.isRemote)
-				this.changeDimension(DimensionMagic.SPIRIT_ID, new TestTeleporter(this.getServer().getWorld(this.dimension)));
-			else
-				this.setDead();
+			//if(!this.world.isRemote)
+				//this.changeDimension(DimensionMagic.SPIRIT_ID, new TestTeleporter(this.getServer().getWorld(this.dimension)));
+			//else
+				this.isDead = true;
 		}
 			//this.setRelease();
 			

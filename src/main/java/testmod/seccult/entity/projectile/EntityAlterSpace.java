@@ -57,6 +57,7 @@ public class EntityAlterSpace extends EntityThrowable implements ISpaceEntity{
 		if(!this.world.isRemote)
 			this.setState(this.type.getVaule());
 		this.ExistedLimit = 300;
+		//this.noClip = true;
 	}
 	
 	public void setVictim(EntityLivingBase victim)
@@ -116,10 +117,6 @@ public class EntityAlterSpace extends EntityThrowable implements ISpaceEntity{
 			Moveto(victim.posX, victim.posY + victim.height / 2, victim.posZ, 0.04);
 			if(this.victim.isDead)
 				this.victim = null;
-		}
-		else
-		{
-			this.setDead();
 		}
 		
 		if(!this.world.isRemote)
@@ -235,6 +232,16 @@ public class EntityAlterSpace extends EntityThrowable implements ISpaceEntity{
                 Entity entity = list.get(l);
                 if(entity instanceof EntityAlterSpace || entity instanceof EntitySpaceGatorix)
                 	this.applyEntityCollision(entity);
+                
+                if(entity == this.victim)
+                {
+            		if (!this.world.isRemote)
+                    {
+            			if(!(victim instanceof ISpaceEntity))
+            				this.releaseSpaceEnergy(victim);
+            			this.setDead();
+                    }
+                }
             }
         }
     }
@@ -291,11 +298,11 @@ public class EntityAlterSpace extends EntityThrowable implements ISpaceEntity{
 			this.setDead();
         }
 		
-		if (!this.world.isRemote && result.getBlockPos() != null)
+		/*if (!this.world.isRemote && result.getBlockPos() != null)
         {
 				this.releaseSpaceEnergy(result.getBlockPos());
 			this.setDead();
-        }
+        }*/
 	}
 	
     protected float getGravityVelocity()

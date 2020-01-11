@@ -2,15 +2,25 @@ package testmod.seccult.items;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.DimensionManager;
 import testmod.seccult.api.PlayerDataHandler;
 import testmod.seccult.api.PlayerDataHandler.PlayerData;
+import testmod.seccult.entity.EntityBorderCrosser;
+import testmod.seccult.entity.livings.EntityLight;
+import testmod.seccult.entity.projectile.EntityAlterSpace;
+import testmod.seccult.entity.projectile.EntityAlterSpace.AlterType;
+import testmod.seccult.entity.projectile.EntitySpaceGatorix;
+import testmod.seccult.magick.implementation.ImplementationFocused;
 import testmod.seccult.network.NetworkHandler;
 import testmod.seccult.network.NetworkMutekiGamer;
 
@@ -46,7 +56,6 @@ public class ItemYesYourHighness extends ItemBase{
 				NetworkHandler.getNetwork().sendToAll(new NetworkMutekiGamer(1, player, 1));
 				data.setMutekiGamer(true);
 			}
-
 			return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
 	}
 }

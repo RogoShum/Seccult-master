@@ -215,6 +215,7 @@ public class EntityDreamPop extends EntityCreature implements EntityFlying, IRan
 			night.setPositionAndRotation(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
 			night.setAttackTarget((EntityLivingBase)source.getTrueSource());
 			night.ticksExisted = 55;
+			if(!this.world.isRemote)
 			this.world.spawnEntity(night);
 		}
 		else if(amount >= 20)
@@ -223,6 +224,7 @@ public class EntityDreamPop extends EntityCreature implements EntityFlying, IRan
 			EntityNightmarePop night = new EntityNightmarePop(getEntityWorld());
 			night.setPositionAndRotation(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
 			night.ticksExisted = 55;
+			if(!this.world.isRemote)
 			this.world.spawnEntity(night);
 		}
 		
